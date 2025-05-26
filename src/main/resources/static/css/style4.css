@@ -2872,14 +2872,11 @@ body.active #mobile-nav {
 }
 
 .prs_upcom_movie_box_wrapper {
-	float: left;
-	width: 100%;
-	margin-bottom: 10px;
+	margin: 30px;
 }
 
 .prs_upcom_movie_img_box {
 	float: left;
-	width: 100%;
 	position: relative;
 	overflow: hidden;
 }
@@ -3029,7 +3026,6 @@ body.active #mobile-nav {
 
 .prs_upcom_movie_content_box {
 	float: left;
-	width: 100%;
 	background: #ffffff;
 	padding: 20px;
 	-webkit-border-bottom-right-radius: 10px;

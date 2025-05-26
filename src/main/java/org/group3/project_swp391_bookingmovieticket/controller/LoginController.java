@@ -24,7 +24,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String LoginController(Model model) {
-        System.out.println("LoginControllerGetMapping");
         model.addAttribute("userDTO", new UserDTO());
         return "home";
     }

@@ -2785,14 +2785,11 @@ pre {
 }
 
 .prs_upcom_movie_box_wrapper {
-	float: left;
-	width: 100%;
 	margin-bottom: 10px;
 }
 
 .prs_upcom_movie_img_box {
 	float: left;
-	width: 100%;
 	position: relative;
 	overflow: hidden;
 }
@@ -2946,7 +2943,6 @@ pre {
 
 .prs_upcom_movie_content_box {
 	float: left;
-	width: 100%;
 	background: #ffffff;
 	padding: 20px;
 	-webkit-border-bottom-right-radius: 10px;
@@ -8422,7 +8418,8 @@ pre {
 	float: left;
 	width: 100%;
 	text-align: center;
-	padding-top: 80px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
 
 .prs_upcome_tabs_wrapper ul {

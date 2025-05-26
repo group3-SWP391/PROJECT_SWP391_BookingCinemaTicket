@@ -45,6 +45,7 @@ Author: Webstrot
     <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{/css/slick-theme.css}"/>
     <!-- favicon links -->
     <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+
 </head>
 
 <body>
@@ -54,10 +55,6 @@ Author: Webstrot
         <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
     </div>
 </div>
-
-<!-- color picker start -->
-<header lang="vi" th:include="fragments/colorPick :: colorPick"></header>
-<!-- color picker end -->
 
 <!-- prs navigation Start -->
 <header lang="vi" th:include="fragments/navigation :: navigation"></header>
@@ -71,1702 +68,78 @@ Author: Webstrot
 <div class="prs_upcom_slider_main_wrapper">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-12">
                 <div class="prs_heading_section_wrapper">
-                    <h2>Upcoming Movies</h2>
+                    <h2>Movie selection</h2>
                 </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-12">
                 <div class="prs_upcome_tabs_wrapper">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a th:href="@{noen}" aria-controls="best" role="tab"
-                                                                  data-toggle="tab">Upcoming Movies</a>
-                        </li>
-                        <li role="presentation"><a th:href="@{none}" aria-controls="hot" role="tab"
-                                                   data-toggle="tab">Relesed Movies</a>
-                        </li>
-                        <li role="presentation"><a th:href="@{none}" aria-controls="trand" role="tab"
-                                                   data-toggle="tab">Best of library</a>
-                        </li>
+                        <li role="presentation"><a th:href="@{none}" aria-controls="best" role="tab" data-toggle="tab">Now showing</a></li>
+                        <li role="presentation"><a th:href="@{none}" aria-controls="hot" role="tab" data-toggle="tab">Coming soon</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane fade in active" id="best">
-                    <div class="prs_upcom_slider_slides_wrapper">
-                        <div class="owl-carousel owl-theme">
-                            <div class="item">
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_first">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up1.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_second">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up2.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up3.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up4.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="cc_featured_second_section">
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up5.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up6.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up7.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up8.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_first">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up8.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_second">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up7.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up6.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up5.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="cc_featured_second_section">
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up4.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up3.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up2.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up1.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-12 tab-content">
+                <div role="tabpanel" id="best" class="tab-pane active">
+                    <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
                     <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div th:each="movie : ${movieAll}" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                            <div class="prs_upcom_movie_box_wrapper" style="height: 100%; display: flex; flex-direction: column;">
+                                <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
+                                    <img th:src="${movie.smallImageURL}" alt="movie_img"
+                                         style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;" />
+                                    <div class="prs_upcom_movie_img_overlay"></div>
+                                    <div class="prs_upcom_movie_img_btn_wrapper">
+                                        <ul>
+                                            <li><a th:href="@{none}">View Trailer</a></li>
+                                            <li><a th:href="@{none}">View Details</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
+                                    <div class="prs_upcom_movie_content_box_inner">
+                                        <h2 th:text="${movie.name}" style="font-size: 1.1rem; font-weight: bold; height: 40px">
+                                            Movie name
+                                        </h2>
+                                        <div style="font-size: 0.9rem; color: #333;">
+                                            <p>
+                                                <strong>Thể loại:</strong> <span th:text="${movie.categories}">Movie category</span>
+                                            </p>
+                                            <p>
+                                                <strong>Thời lượng:</strong>
+                                                <span th:text="${movie.duration + ' minutes'}">Movie duration</span>
+                                            </p>
+                                            <p>
+                                                <strong>Khởi chiếu:</strong>
+                                                <span th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- hết mỗi phim -->
+                    </div> <!-- hết row -->
+                    <div class="row mt-3">
+                        <div class="col-12">
                             <div class="prs_animate_btn1 prs_upcom_main_wrapper">
                                 <ul>
-                                    <li><a th:href="@{none}" class="button button--tamaya prs_upcom_main_btn"
-                                           data-text="view all"><span>View All</span></a>
+                                    <li>
+                                        <a th:href="@{none}" class="button button--tamaya prs_upcom_main_btn" data-text="view all">
+                                            <span>View All</span>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="hot">
-                    <div class="prs_upcom_slider_slides_wrapper">
-                        <div class="owl-carousel owl-theme">
-                            <div class="item">
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_first">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up8.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_second">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up7.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up6.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up5.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="cc_featured_second_section">
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up4.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up3.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up2.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up1.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_first">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up1.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_second">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up2.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up3.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up4.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="cc_featured_second_section">
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up5.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up6.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up7.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up8.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="prs_animate_btn1 prs_upcom_main_wrapper">
-                                <ul>
-                                    <li><a th:href="@{none}" class="button button--tamaya prs_upcom_main_btn"
-                                           data-text="view all"><span>View All</span></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="trand">
-                    <div class="prs_upcom_slider_slides_wrapper">
-                        <div class="owl-carousel owl-theme">
-                            <div class="item">
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_first">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up1.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_second">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up2.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up3.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up4.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="cc_featured_second_section">
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up5.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up6.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up7.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up7.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_first">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up1.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prs_upcom_slide_second">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up2.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up4.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                        <div class="prs_upcom_movie_box_wrapper">
-                                            <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images/content/up5.jpg}" alt="movie_img"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a>
-                                                        </li>
-                                                        <li><a th:href="@{none}">View Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="prs_upcom_movie_content_box">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                    <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                    <i class="fa fa-star-o"></i>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box_inner_icon">
-                                                    <ul>
-                                                        <li><a th:href="@{movie_booking.html}"><i
-                                                                class="flaticon-cart-of-ecommerce"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="cc_featured_second_section">
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up4.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up3.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up2.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 hidden-sm hidden-xs">
-                                            <div class="prs_upcom_movie_box_wrapper">
-                                                <div class="prs_upcom_movie_img_box">
-                                                    <img th:src="@{/images/content/up1.jpg}" alt="movie_img"/>
-                                                    <div class="prs_upcom_movie_img_overlay"></div>
-                                                    <div class="prs_upcom_movie_img_btn_wrapper">
-                                                        <ul>
-                                                            <li><a th:href="@{none}">View Trailer</a>
-                                                            </li>
-                                                            <li><a th:href="@{none}">View Details</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="prs_upcom_movie_content_box">
-                                                    <div class="prs_upcom_movie_content_box_inner">
-                                                        <h2><a th:href="@{none}">Busting Car</a></h2>
-                                                        <p>Drama , Acation</p> <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prs_upcom_movie_content_box_inner_icon">
-                                                        <ul>
-                                                            <li><a th:href="@{movie_booking.html}"><i
-                                                                    class="flaticon-cart-of-ecommerce"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="prs_animate_btn1 prs_upcom_main_wrapper">
-                                <ul>
-                                    <li><a th:href="@{none}" class="button button--tamaya prs_upcom_main_btn"
-                                           data-text="view all"><span>View All</span></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div> <!-- hết tab-panel -->
+            </div> <!-- hết tab-content -->
+        </div> <!-- hết row chính -->
+    </div> <!-- hết container -->
 </div>
+
 <!-- prs upcomung Slider End -->
 
 <!-- prs video section Start -->
@@ -1800,7 +173,8 @@ Author: Webstrot
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="prs_upcome_tabs_wrapper">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a th:href="@{#best1}" aria-controls="best" role="tab"
+                        <li role="presentation" class="active"><a th:href="@{#best1}" aria-controls="best"
+                                                                  role="tab"
                                                                   data-toggle="tab">Upcoming Movies</a>
                         </li>
                         <li role="presentation"><a th:href="@{#hot1}" aria-controls="hot" role="tab"
@@ -3308,7 +1682,8 @@ Author: Webstrot
                             </div>
                             <div class="prs_upcom_movie_content_box_inner_icon">
                                 <ul>
-                                    <li><a th:href="@{movie_booking.html}"><i class="flaticon-cart-of-ecommerce"></i></a>
+                                    <li><a th:href="@{movie_booking.html}"><i
+                                            class="flaticon-cart-of-ecommerce"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -3345,7 +1720,8 @@ Author: Webstrot
                             </div>
                             <div class="prs_upcom_movie_content_box_inner_icon">
                                 <ul>
-                                    <li><a th:href="@{movie_booking.html}"><i class="flaticon-cart-of-ecommerce"></i></a>
+                                    <li><a th:href="@{movie_booking.html}"><i
+                                            class="flaticon-cart-of-ecommerce"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -3382,7 +1758,8 @@ Author: Webstrot
                             </div>
                             <div class="prs_upcom_movie_content_box_inner_icon">
                                 <ul>
-                                    <li><a th:href="@{movie_booking.html}"><i class="flaticon-cart-of-ecommerce"></i></a>
+                                    <li><a th:href="@{movie_booking.html}"><i
+                                            class="flaticon-cart-of-ecommerce"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -3419,7 +1796,8 @@ Author: Webstrot
                             </div>
                             <div class="prs_upcom_movie_content_box_inner_icon">
                                 <ul>
-                                    <li><a th:href="@{movie_booking.html}"><i class="flaticon-cart-of-ecommerce"></i></a>
+                                    <li><a th:href="@{movie_booking.html}"><i
+                                            class="flaticon-cart-of-ecommerce"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -3456,7 +1834,8 @@ Author: Webstrot
                             </div>
                             <div class="prs_upcom_movie_content_box_inner_icon">
                                 <ul>
-                                    <li><a th:href="@{movie_booking.html}"><i class="flaticon-cart-of-ecommerce"></i></a>
+                                    <li><a th:href="@{movie_booking.html}"><i
+                                            class="flaticon-cart-of-ecommerce"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -3493,7 +1872,8 @@ Author: Webstrot
                             </div>
                             <div class="prs_upcom_movie_content_box_inner_icon">
                                 <ul>
-                                    <li><a th:href="@{movie_booking.html}"><i class="flaticon-cart-of-ecommerce"></i></a>
+                                    <li><a th:href="@{movie_booking.html}"><i
+                                            class="flaticon-cart-of-ecommerce"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -3530,7 +1910,8 @@ Author: Webstrot
                             </div>
                             <div class="prs_upcom_movie_content_box_inner_icon">
                                 <ul>
-                                    <li><a th:href="@{movie_booking.html}"><i class="flaticon-cart-of-ecommerce"></i></a>
+                                    <li><a th:href="@{movie_booking.html}"><i
+                                            class="flaticon-cart-of-ecommerce"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -3552,7 +1933,7 @@ Author: Webstrot
 <!-- prs footer Wrapper End -->
 
 <!-- st login wrapper Start -->
-<div  class="modal fade st_pop_form_wrapper" id="myModal" role="dialog">
+<div class="modal fade st_pop_form_wrapper" id="myModal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -3568,7 +1949,8 @@ Author: Webstrot
                     <input type="password" placeholder="Password" th:field="*{password}">
                 </div>
                 <div class="st_form_pop_fp float_left">
-                    <h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a></h3>
+                    <h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot
+                        Password?</a></h3>
                 </div>
                 <div class="st_form_pop_login_btn float_left">
                     <button type="submit" class="btn btn-primary">Log in</button>
@@ -3584,7 +1966,8 @@ Author: Webstrot
                 <div class="st_form_pop_signin_btn float_left">
                     <h4>Don’t have an account? <a th:href="@{none}" data-toggle="modal" data-target="#myModa3"
                                                   target="_blank">Sign Up</a></h4>
-                    <h5>I agree to the <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy Policy</a></h5>
+                    <h5>I agree to the <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy
+                        Policy</a></h5>
                 </div>
             </form>
         </div>
@@ -3614,37 +1997,39 @@ Author: Webstrot
             <div class="st_pop_form_heading_wrapper float_left">
                 <h3>Sign Up</h3>
             </div>
-<!--            <form th:action="@{/login}" th:object="${userDTO}" method="post">-->
-<!--                <div class="st_profile_input float_left">-->
-<!--                    <label>Phone</label>-->
-<!--                    <input type="number" placeholder="Phone" th:field="*{phone}">-->
-<!--                </div>-->
-<!--                <div class="st_profile__pass_input st_profile__pass_input_pop float_left">-->
-<!--                    <input type="password" placeholder="Password" th:field="*{password}">-->
-<!--                </div>-->
-<!--                <div class="st_form_pop_fp float_left">-->
-<!--                    <h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a></h3>-->
-<!--                </div>-->
-<!--                <div class="st_form_pop_login_btn float_left">-->
-<!--                    <button type="submit" class="btn btn-primary">Sign Up</button>-->
-<!--                </div>-->
-<!--                <div class="st_form_pop_or_btn float_left">-->
-<!--                    <h4>or</h4>-->
-<!--                </div>-->
-<!--                <div class="st_form_pop_facebook_btn float_left"><a th:href="@{none}"><i class="fab fa-facebook-f"></i> Connect-->
-<!--                    with Facebook</a>-->
-<!--                </div>-->
-<!--                <div class="st_form_pop_gmail_btn float_left"><a th:href="@{none}"><i class="fab fa-google-plus-g"></i> Connect-->
-<!--                    with Google</a>-->
-<!--                </div>-->
-<!--                <div class="st_form_pop_signin_btn st_form_pop_signin_btn_signup float_left">-->
-<!--                    <h5>I agree to the <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy Policy</a></h5>-->
-<!--                </div>-->
-<!--            </form>-->
+            <!--            <form th:action="@{/login}" th:object="${userDTO}" method="post">-->
+            <!--                <div class="st_profile_input float_left">-->
+            <!--                    <label>Phone</label>-->
+            <!--                    <input type="number" placeholder="Phone" th:field="*{phone}">-->
+            <!--                </div>-->
+            <!--                <div class="st_profile__pass_input st_profile__pass_input_pop float_left">-->
+            <!--                    <input type="password" placeholder="Password" th:field="*{password}">-->
+            <!--                </div>-->
+            <!--                <div class="st_form_pop_fp float_left">-->
+            <!--                    <h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a></h3>-->
+            <!--                </div>-->
+            <!--                <div class="st_form_pop_login_btn float_left">-->
+            <!--                    <button type="submit" class="btn btn-primary">Sign Up</button>-->
+            <!--                </div>-->
+            <!--                <div class="st_form_pop_or_btn float_left">-->
+            <!--                    <h4>or</h4>-->
+            <!--                </div>-->
+            <!--                <div class="st_form_pop_facebook_btn float_left"><a th:href="@{none}"><i class="fab fa-facebook-f"></i> Connect-->
+            <!--                    with Facebook</a>-->
+            <!--                </div>-->
+            <!--                <div class="st_form_pop_gmail_btn float_left"><a th:href="@{none}"><i class="fab fa-google-plus-g"></i> Connect-->
+            <!--                    with Google</a>-->
+            <!--                </div>-->
+            <!--                <div class="st_form_pop_signin_btn st_form_pop_signin_btn_signup float_left">-->
+            <!--                    <h5>I agree to <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy Policy</a></h5>-->
+            <!--                </div>-->
+            <!--            </form>-->
         </div>
     </div>
 </div>
 <!-- st login wrapper End -->
+
+
 <!--main js file start-->
 <script th:src="@{/js/jquery_min.js}"></script>
 <script th:src="@{/js/modernizr.js}"></script>
@@ -3671,6 +2056,21 @@ Author: Webstrot
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
+<script>
+    $(document).ready(function () {
+        $(".owl-carousel").owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            dots: false,
+            responsive: {
+                0: { items: 1 },
+                600: { items: 2 },
+                1000: { items: 4 }
+            }
+        });
+    });
+</script>
 <!--main js file end-->
 </body>
 

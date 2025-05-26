@@ -2088,7 +2088,8 @@ body.active #mobile-nav {
 	float: left;
 	width: 100%;
 	text-align: center;
-	padding-top: 80px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
 
 .prs_upcome_tabs_wrapper ul {
@@ -2179,9 +2180,7 @@ body.active #mobile-nav {
 }
 
 .prs_upcom_movie_box_wrapper {
-	float: left;
-	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: 50px;
 }
 
 .prs_upcom_movie_img_box {
@@ -2336,7 +2335,6 @@ body.active #mobile-nav {
 
 .prs_upcom_movie_content_box {
 	float: left;
-	width: 100%;
 	background: #ffffff;
 	padding: 20px;
 	-webkit-border-bottom-right-radius: 10px;
