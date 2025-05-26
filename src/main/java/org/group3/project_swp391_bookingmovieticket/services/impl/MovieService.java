@@ -42,4 +42,12 @@ public class MovieService implements IMovieService {
     public void remove(Integer id) {
 
     }
+
+    @Override
+    public List<MovieDTO> findByMovieName(String movieName) {
+        return movieRepository.findByNameContainingIgnoreCase(movieName)
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
 }
