@@ -23,13 +23,13 @@ public class LoginController {
     private UserService userService;
 
     @GetMapping("/login")
-    public String LoginController(Model model) {
+    public String userLoginGet(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "home";
     }
 
     @PostMapping("/login")
-    public String LoginController(@ModelAttribute UserDTO userDTO,
+    public String userLoginPost(@ModelAttribute UserDTO userDTO,
                                   Model model, HttpServletRequest request) {
         User user = new User();
         user.setPhone(userDTO.getPhone());

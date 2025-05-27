@@ -17,8 +17,11 @@ public class HomeController {
     private MovieService movieService;
 
     @GetMapping
-    public String displayHomePage(Model model) {
+    public String displayHomePage(Model model, HttpServletRequest request) {
+        request.getSession().setAttribute("movieAllLargeImageURL", movieService.findAll());
+        model.addAttribute("categoryAll", movieService.getMovieCategories());
         model.addAttribute("movieAll", movieService.findAll());
+        model.addAttribute("movieByCategory", movieService.findAll());
         model.addAttribute("userDTO", new UserDTO());
         return "home";
     }

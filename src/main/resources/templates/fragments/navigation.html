@@ -53,13 +53,6 @@
                 </div>
                 <div class="product-heading">
                     <div class="con">
-                        <select>
-                            <option>All Categories</option>
-                            <option>Movie</option>
-                            <option>Video</option>
-                            <option>Music</option>
-                            <option>TV-Show</option>
-                        </select>
                         <form th:action="@{/movie/search}" method="get" class="search-form" style="display: inline-block">
                             <input type="text" name="movieNameSearch" placeholder="Search movie name....." class="search-input" />
                             <button type="submit" class="search-btn">

@@ -1,13 +1,13 @@
 package org.group3.project_swp391_bookingmovieticket.dtos;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import lombok.Data;
+
 @Data
-public class MovieDTO {
+public class MovieDTO  {
 
     private int id;
     private String name;
