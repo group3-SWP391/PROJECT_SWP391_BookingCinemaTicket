@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manager Dashboard</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f6f9;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin: 0;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .card {
+            padding: 25px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #34495e;
+        }
+
+        .card p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<h1>Xin chào <span th:text="${user.fullName}">Manager</span> 👋</h1>
+
+<div class="dashboard">
+    <div class="card">
+        <h2>Tổng doanh thu</h2>
+        <p th:text="${#numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</p>
+    </div>
+    <div class="card">
+        <h2>Số vé đã bán</h2>
+        <p th:text="${tickets}">0</p>
+    </div>
+    <div class="card">
+        <h2>Tổng số phim</h2>
+        <p th:text="${movieCount}">0</p>
+    </div>
+    <div class="card">
+        <h2>Tổng số lịch chiếu</h2>
+        <p th:text="${scheduleCount}">0</p>
+    </div>
+</div>
+
+<div class="footer">
+    &copy; 2025 Show2Sell Cinema Admin Panel
+</div>
+</body>
+</html>

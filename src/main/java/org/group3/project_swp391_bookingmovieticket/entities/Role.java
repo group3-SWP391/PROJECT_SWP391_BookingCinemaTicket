@@ -8,7 +8,6 @@ import lombok.Data;
 @Table(name = "roles")
 public class Role {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

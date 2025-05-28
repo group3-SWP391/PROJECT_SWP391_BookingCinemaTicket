@@ -9,12 +9,11 @@ import lombok.Data;
 public class User {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username", unique = true, nullable = false)
-    private String username;
+    @Column(name = "phone", unique = true, nullable = false)
+    private String phone;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -22,8 +21,8 @@ public class User {
     @Column(name = "full_name", nullable = false)
     private String fullname;
 
-    @Column(name = "phone", nullable = true)
-    private String phone;
+    @Column(name = "username")
+    private String username;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
