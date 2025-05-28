@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class MovieDTO {
 
-    private int id;
+    private Integer id;
     private String name;
     private String smallImageURL;
     private String shortDescription;
@@ -166,11 +166,11 @@ public class MovieDTO {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }

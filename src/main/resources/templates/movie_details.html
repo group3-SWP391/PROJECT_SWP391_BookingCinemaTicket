@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie-Details</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="description" content="Movie Pro" />
+    <meta name="keywords" content="Movie Pro" />
+    <meta name="author" content="" />
+    <meta name="MobileOptimized" content="320" />
+    <!-- Template styles -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}" />
+</head>
+<body>
+<!-- Preloader Start -->
+<div id="preloader">
+    <div id="status">
+        <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader" />
+    </div>
+</div>
+<!-- Navigation Start -->
+<header lang="vi" th:replace="fragments/navigation :: navigation"></header>
+<!-- Navigation End -->
+
+<!-- Slider Start -->
+<header lang="vi" th:replace="fragments/slider :: slider"></header>
+<!-- Slider End -->
+
+<!-- Title Wrapper Start -->
+<div class="prs_title_main_sec_wrapper">
+    <div class="prs_title_img_overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="prs_title_heading_wrapper">
+                    <h2>Thể loại phim</h2>
+                    <ul>
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li> > Movie Category</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Title Wrapper End -->
+<div class="container">
+    <h1 th:text="${movie.name}">Tên phim</h1>
+    <img th:src="${movie.smallImageURL}" alt="Poster" style="width: 300px; height: auto;" />
+    <p><strong>Thể loại:</strong> <span th:text="${movie.categories}">Thể loại</span></p>
+    <p><strong>Thời lượng:</strong> <span th:text="${movie.duration + ' minutes'}">Thời lượng</span></p>
+    <p><strong>Khởi chiếu:</strong> <span th:text="${#temporals.format(movie.releaseDate, 'yyyy-MM-dd')}">Ngày khởi chiếu</span></p>
+    <a th:href="${movie.trailerURL}" target="_blank">Xem Trailer</a>
+    <br/>
+    <a th:href="@{/movie-category}">Quay lại danh sách phim</a>
+</div>
+<div class="container">
+    <div th:if="${movie != null}">
+        <h1 th:text="${movie.name}">Tên phim</h1>
+        <img th:src="${movie.smallImageURL}" alt="Poster" style="width: 300px; height: auto;" />
+        <p><strong>Thể loại:</strong> <span th:text="${movie.categories}">Thể loại</span></p>
+        <p><strong>Thời lượng:</strong> <span th:text="${movie.duration != null} ? ${movie.duration + ' minutes'} : 'Không xác định'">Thời lượng</span></p>
+        <p><strong>Khởi chiếu:</strong> <span th:text="${movie.releaseDate != null} ? ${#temporals.format(movie.releaseDate, 'yyyy-MM-dd')} : 'Không xác định'">Ngày khởi chiếu</span></p>
+        <a th:href="${movie.trailerURL != null} ? ${movie.trailerURL} : '#'" target="_blank">Xem Trailer</a>
+        <br/>
+    </div>
+    <div th:if="${movie == null}">
+        <h2>Không tìm thấy phim</h2>
+        <p>Xin lỗi, chúng tôi không thể tìm thấy thông tin phim bạn yêu cầu.</p>
+    </div>
+    <a th:href="@{/movie-category}">Quay lại danh sách phim</a>
+</div>
+<!-- Partner Slider Start -->
+<div class="prs_patner_main_section_wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="prs_heading_section_wrapper">
+                    <h2>Our Patner’s</h2>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="prs_pn_slider_wraper">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item">
+                            <div class="prs_pn_img_wrapper">
+                                <img th:src="@{/images/content/p1.jpg}" alt="patner_img" />
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="prs_pn_img_wrapper">
+                                <img th:src="@{/images/content/p2.jpg}" alt="patner_img" />
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="prs_pn_img_wrapper">
+                                <img th:src="@{/images/content/p3.jpg}" alt="patner_img" />
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="prs_pn_img_wrapper">
+                                <img th:src="@{/images/content/p4.jpg}" alt="patner_img" />
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="prs_pn_img_wrapper">
+                                <img th:src="@{/images/content/p5.jpg}" alt="patner_img" />
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="prs_pn_img_wrapper">
+                                <img th:src="@{/images/content/p6.jpg}" alt="patner_img" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Partner Slider End -->
+
+
+<!-- Newsletter Wrapper Start -->
+<div class="prs_newsletter_wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                <div class="prs_newsletter_text">
+                    <h3>Get update sign up now !</h3>
+                </div>
+            </div>
+            <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+                <div class="prs_newsletter_field">
+                    <input type="text" placeholder="Enter Your Email" />
+                    <button type="submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Newsletter Wrapper End -->
+<!-- prs footer Wrapper Start -->
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- prs footer Wrapper End -->
+
+<!-- Main JS Files -->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/jquery.countTo.js}"></script>
+<script th:src="@{/js/jquery.inview.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+</body>
+
+</html>

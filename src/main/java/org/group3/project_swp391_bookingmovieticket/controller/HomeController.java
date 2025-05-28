@@ -1,6 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -135,5 +138,16 @@ public class HomeController {
         return "seat_booking";
     }
 
+    // Trang Movie Details
+    @GetMapping("/movie-details")
+    public String movieDetails(@RequestParam("id") int id, Model model) {
+        Optional<MovieDTO> movieOptional = movieService.findById(id);
+        if (movieOptional.isEmpty()) {
+            return "error/404"; // Chuyển hướng đến trang lỗi nếu không tìm thấy phim
+        }
+        model.addAttribute("movie", movieOptional.get());
+        model.addAttribute("userDTO", new UserDTO());
+        return "movie_details";
+    }
 
 }

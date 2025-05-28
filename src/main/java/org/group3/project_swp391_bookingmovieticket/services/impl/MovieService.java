@@ -30,7 +30,11 @@ public class MovieService implements IMovieService {
 
     @Override
     public Optional<MovieDTO> findById(Integer id) {
-        return Optional.empty();
+        if (id == null) {
+            return Optional.empty();
+        }
+        return movieRepository.findById(id)
+                .map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 
     @Override

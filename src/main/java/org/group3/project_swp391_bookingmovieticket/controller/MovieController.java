@@ -2,7 +2,6 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.Movie;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -62,12 +61,10 @@ public class MovieController {
         } else {
             movies = movieService.getMovieByCategory(categoryName);
         }
-        // Log the trailerURL for debugging
         movies.forEach(movie -> System.out.println("Trailer URL for " + movie.getName() + ": " + movie.getTrailerURL()));
         return movies;
     }
 
-    // Phương thức đã được cập nhật để lọc phim theo thể loại
     @GetMapping("/movie-category")
     public String displayMovieCategory(@RequestParam(value = "categoryName", required = false) String categoryName,
                                        Model model) {
@@ -81,6 +78,4 @@ public class MovieController {
         model.addAttribute("userDTO", new UserDTO());
         return "movie_category";
     }
-
-
 }
