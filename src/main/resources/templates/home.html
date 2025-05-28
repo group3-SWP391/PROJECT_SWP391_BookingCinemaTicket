@@ -76,19 +76,16 @@ Author: Webstrot
             <div class="col-12">
                 <div class="prs_upcome_tabs_wrapper">
                     <ul class="nav nav-tabs" role="tablist">
-<<<<<<< HEAD
                         <li role="presentation" id="tab-now-showing">
                             <a href="#" onclick="loadMovies('now-showing', this); return false;">Now showing</a>
                         </li>
                         <li role="presentation" id="tab-comming-soon">
                             <a href="#" onclick="loadMovies('comming-soon', this); return false;">Coming soon</a>
                         </li>
-=======
                         <li role="presentation"><a th:href="@{none}" aria-controls="best" role="tab" data-toggle="tab">Now
                             showing</a></li>
                         <li role="presentation"><a th:href="@{none}" aria-controls="hot" role="tab" data-toggle="tab">Coming
                             soon</a></li>
->>>>>>> 076b1a6e2f871776af23ba40892fb6e79166c0b4
                     </ul>
                 </div>
             </div>
@@ -134,12 +131,9 @@ Author: Webstrot
                             </div>
                         </div> <!-- hết mỗi phim -->
                     </div> <!-- hết row -->
-<<<<<<< HEAD
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
                          style="display: flex; justify-content: center;">
-=======
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
->>>>>>> 076b1a6e2f871776af23ba40892fb6e79166c0b4
                         <div class="pager_wrapper gc_blog_pagination">
                             <ul class="pagination">
                                 <li><a href="#"><i class="flaticon-left-arrow"></i></a>
@@ -515,9 +509,17 @@ Author: Webstrot
                                     <div class="prs_upcom_movie_content_box_inner">
                                         <h2 style="font-size: 1.1rem; font-weight: bold; height: 40px;">${movie.name || 'No Title'}</h2>
                                         <div style="font-size: 0.9rem; color: #333;">
-                                            <p><strong>Thể loại:</strong> <span>${movie.categories || 'N/A'}</span></p>
-                                            <p><strong>Thời lượng:</strong> <span>${movie.duration ? movie.duration + ' minutes' : 'N/A'}</span></p>
-                                            <p><strong>Khởi chiếu:</strong> <span>${movie.releaseDate || 'N/A'}</span></p>
+                                            <p>
+                                                <strong>Thể loại:</strong> <span th:text="${movie.categories}">Movie category</span>
+                                            </p>
+                                            <p>
+                                                <strong>Thời lượng:</strong>
+                                                <span th:text="${movie.duration + ' minutes'}">Movie duration</span>
+                                            </p>
+                                            <p>
+                                                <strong>Khởi chiếu:</strong>
+                                                <span th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -532,10 +534,6 @@ Author: Webstrot
     });
 </script>
 
-=======
->>>>>>> 076b1a6e2f871776af23ba40892fb6e79166c0b4
+</div>
 </body>
-
-
-<!-- Mirrored from www.webstrot.com/html/moviepro/html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:10:33 GMT -->
 </html>
