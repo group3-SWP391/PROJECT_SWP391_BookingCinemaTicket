@@ -50,7 +50,7 @@ public class Movie {
     @Column(name = "language")
     private String language;
 
-    @Column(name = "trailerURL", length = 1000)
+    @Column(name = "trailerurl", length = 1000)
     private String trailerURL;
 
     @Column(name = "rated")

@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/")
@@ -15,10 +17,12 @@ public class HomeController {
     @Autowired
     private MovieService movieService;
 
-    // Trang chủ
     @GetMapping
-    public String displayHomePage(Model model) {
+    public String displayHomePage(Model model, HttpServletRequest request) {
+        request.getSession().setAttribute("movieAllLargeImageURL", movieService.findAll());
+        model.addAttribute("categoryAll", movieService.getMovieCategories());
         model.addAttribute("movieAll", movieService.findAll());
+        model.addAttribute("movieByCategory", movieService.findAll());
         model.addAttribute("userDTO", new UserDTO());
         return "home";
     }
@@ -93,12 +97,22 @@ public class HomeController {
         return "movie_booking";
     }
 
-    // Trang Movie Category
     @GetMapping("/movie-category")
-    public String movieCategory(Model model) {
+    public String displayMovieCategory(@RequestParam(value = "categoryName", required = false) String categoryName, Model model) {
+        if (categoryName == null || categoryName.trim().isEmpty() || categoryName.equalsIgnoreCase("movieAll")) {
+            model.addAttribute("movieByCategory", movieService.findAll());
+        } else {
+            model.addAttribute("movieByCategory", movieService.getMovieByCategory(categoryName));
+        }
+
+        // Add other required attributes
+        model.addAttribute("categoryAll", movieService.getMovieCategories());
         model.addAttribute("userDTO", new UserDTO());
+
+        // Return the Thymeleaf template name
         return "movie_category";
     }
+
 
     // Trang Movie Single
     @GetMapping("/movie-single")
@@ -120,4 +134,6 @@ public class HomeController {
         model.addAttribute("userDTO", new UserDTO());
         return "seat_booking";
     }
+
+
 }

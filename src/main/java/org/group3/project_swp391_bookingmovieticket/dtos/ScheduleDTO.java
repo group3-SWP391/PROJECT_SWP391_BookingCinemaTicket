@@ -2,11 +2,12 @@ package org.group3.project_swp391_bookingmovieticket.dtos;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
-public class ScheduleDTO {
+public class ScheduleDTO  {
     private int id;
     private LocalDate startDate;
     private LocalTime startTime;

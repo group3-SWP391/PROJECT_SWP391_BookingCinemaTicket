@@ -42,4 +42,43 @@ public class MovieService implements IMovieService {
     public void remove(Integer id) {
 
     }
+
+    @Override
+    public List<MovieDTO> findByMovieName(String movieName) {
+        return movieRepository.findByNameContainingIgnoreCase(movieName)
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getMovieCategories() {
+        return movieRepository.getMovieCategories();
+    }
+
+    @Override
+    public List<MovieDTO> getNowShowingMovies() {
+        return movieRepository.findMovieIsShowing()
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MovieDTO> getCommingSoonMovies() {
+        return movieRepository.findMovieCommingSoon()
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MovieDTO> getMovieByCategory(String categoryName) {
+        return movieRepository.getMovieByCategory(categoryName)
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
 }
