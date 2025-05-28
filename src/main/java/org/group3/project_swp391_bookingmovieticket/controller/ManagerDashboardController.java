@@ -1,7 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
-import org.group3.project_swp391_bookingmovieticket.model.*;
-import org.group3.project_swp391_bookingmovieticket.repository.*;
+import org.group3.project_swp391_bookingmovieticket.entities.*;
+import org.group3.project_swp391_bookingmovieticket.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,20 +15,20 @@ import java.security.Principal;
 public class ManagerDashboardController {
 
     @Autowired
-    private UserRepository userRepository;
+    private IUserRepository userRepository;
 
     @Autowired
-    private ScheduleRepository scheduleRepository;
+    private IScheduleRepository scheduleRepository;
 
     @Autowired
-    private MovieRepository movieRepository;
+    private IMovieRepository movieRepository;
 
     @Autowired
-    private BillRepository billRepository;
+    private IBillRepository billRepository;
 
     @GetMapping
     public String index(Model model, Principal principal) {
-        User user = userRepository.findByUsername(principal.getName());
+        User user = userRepository.findByUsername(principal.getName()).orElse(null);
         model.addAttribute("user", user);
         return "dashboard/index";
     }

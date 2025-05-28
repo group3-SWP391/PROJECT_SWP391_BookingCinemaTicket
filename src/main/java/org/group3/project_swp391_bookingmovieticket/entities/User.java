@@ -3,8 +3,6 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Set;
-
 @Entity
 @Data
 @Table(name = "[user]")
@@ -30,6 +28,4 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
-
-
 }
