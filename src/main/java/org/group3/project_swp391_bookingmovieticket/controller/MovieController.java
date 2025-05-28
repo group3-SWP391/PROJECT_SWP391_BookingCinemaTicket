@@ -2,7 +2,6 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.Movie;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -56,12 +55,28 @@ public class MovieController {
 
     @GetMapping(value = "/category", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<MovieDTO> getMoviesByCategory(@RequestParam(value = "categoryName", required = false) String categoryName) {
+    public List<MovieDTO> getMoviesByCategory(@RequestParam(value = "categoryName", required = false)
+                                              String categoryName) {
         if (categoryName == null || categoryName.trim().isEmpty() || categoryName.equalsIgnoreCase("movieAll")) {
             return movieService.findAll();
         } else {
             return movieService.getMovieByCategory(categoryName);
         }
+    }
+
+    @GetMapping(value = "/detail")
+    public String displayMovieDetail(@RequestParam(value = "movieId", required = false) Integer movieId,
+                                     Model model) {
+        if (movieId == null) {
+            model.addAttribute("categoryAll", movieService.getMovieCategories());
+            model.addAttribute("movieByCategory", movieService.findAll());
+            model.addAttribute("userDTO", new UserDTO());
+            return "home";
+        }
+        model.addAttribute("movieAll", movieService.findAll());
+        model.addAttribute("movieDetail", movieService.findMovieById(movieId));
+        model.addAttribute("userDTO", new UserDTO());
+        return "movie_detail";
     }
 
 }

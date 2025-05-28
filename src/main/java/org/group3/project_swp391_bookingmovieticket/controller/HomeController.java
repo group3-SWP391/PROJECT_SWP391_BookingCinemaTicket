@@ -23,4 +23,16 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/contact")
+    public String displayContactPage(Model model) {
+        model.addAttribute("userDTO", new UserDTO());
+        return "contact";
+    }
+
+    @GetMapping("/event")
+    public String displayEventPage(Model model) {
+        model.addAttribute("userDTO", new UserDTO());
+        return "event_single";
+    }
+
 }

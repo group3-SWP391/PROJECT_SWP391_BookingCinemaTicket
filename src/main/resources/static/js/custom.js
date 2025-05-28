@@ -620,7 +620,7 @@
                     youtube: {
                         index: 'youtube.com/',
                         id: 'v=',
-                        src: 'https://www.youtube.com/embed/ryzOXAO0Ss0'
+                        src: 'https://www.youtube.com/embed/%id%?autoplay=1'
                     }
                 }
             }

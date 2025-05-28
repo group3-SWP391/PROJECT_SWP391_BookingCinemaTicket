@@ -12,4 +12,5 @@ public interface IMovieService extends IGeneralService<MovieDTO>{
     List<MovieDTO> getNowShowingMovies();
     List<MovieDTO> getCommingSoonMovies();
     List<MovieDTO> getMovieByCategory(String categoryName);
+    MovieDTO findMovieById(Integer id);
 }

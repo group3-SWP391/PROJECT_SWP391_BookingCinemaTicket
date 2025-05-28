@@ -1,6 +1,5 @@
 package org.group3.project_swp391_bookingmovieticket.dtos;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,12 +19,12 @@ public class MovieDTO  {
     private String categories;
     private LocalDate releaseDate;
     private int duration;
-    private String trailerURL;
+    private String trailerURLWatchLink;
     private String language;
     private String rated;
     private Integer isShowing;
     private List<ScheduleDTO> schedules;
     private Long total;
     private Long totalTicket;
-
+    private String format;
 }

@@ -98,8 +98,8 @@ Author: Webstrot
                                     <div class="prs_upcom_movie_img_overlay"></div>
                                     <div class="prs_upcom_movie_img_btn_wrapper">
                                         <ul>
-                                            <li><a th:href="@{none}">View Trailer</a></li>
-                                            <li><a th:href="@{none}">View Details</a></li>
+                                            <li><a title='title' rel='external' class="test-popup-link" th:href="${movie.trailerURLWatchLink}">View Trailer</a></li>
+                                            <li><a th:href="@{/movie/detail(movieId=${movie.id})}">View Details</a></li>
                                         </ul>
                                     </div>
                                 </div>

@@ -50,14 +50,17 @@ public class Movie {
     @Column(name = "language")
     private String language;
 
-    @Column(name = "trailerURL", length = 1000)
-    private String trailerURL;
+    @Column(name = "trailerurl_watch_link", length = 1000)
+    private String trailerURLWatchLink;
 
     @Column(name = "rated")
     private String rated;
 
     @Column(name = "is_showing")
     private boolean isShowing;
+
+    @Column(name = "format")
+    private String format;
 
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;

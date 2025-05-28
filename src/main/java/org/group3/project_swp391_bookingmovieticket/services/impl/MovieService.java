@@ -1,6 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.Movie;
 import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IMovieService;
 import org.modelmapper.ModelMapper;
@@ -79,6 +80,14 @@ public class MovieService implements IMovieService {
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public MovieDTO findMovieById(Integer id) {
+        Movie movie = movieRepository.findMovieById(id);
+        if (movie == null) return null;
+        return modelMapper.map(movie, MovieDTO.class);
+    }
+
 
 
 }

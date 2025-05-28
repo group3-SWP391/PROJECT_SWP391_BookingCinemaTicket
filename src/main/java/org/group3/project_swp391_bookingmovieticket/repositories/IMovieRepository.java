@@ -23,5 +23,6 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     @Query("SELECT m FROM Movie m WHERE m.categories LIKE %:categoryName%")
     List<Movie> getMovieByCategory(@Param("categoryName") String categoryName);
 
+    Movie findMovieById(Integer id);
 
 }

@@ -15,15 +15,14 @@
                             <div class="clearfix"></div>
                             <ul class="dl-menu">
                                 <li class="parent"><a th:href="@{/}">Home</a></li>
-                                <li class="parent"><a th:href="@{none}">theater</a></li>
-                                <li class="parent"><a th:href="@{none}">movie</a>
+                                <li class="parent"><a th:href="@{none}">theater</a>
                                     <ul class="lg-submenu">
-                                        <li><a th:href="@{none}">Now showing</a></li>
-                                        <li><a th:href="@{none}">Coming soon</a></li>
+                                        <li><a th:href="@{none}">none</a></li>
+                                        <li><a th:href="@{none}">none</a></li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{none}">event</a></li>
-                                <li class="parent"><a th:href="@{none}">contact</a></li>
+                                <li class="parent"><a th:href="@{/event}">event</a></li>
+                                <li class="parent"><a th:href="@{/contact}">contact</a></li>
                             </ul>
                         </div>
                         <!--dl-menuwrapper -->
@@ -53,8 +52,10 @@
                 </div>
                 <div class="product-heading">
                     <div class="con">
-                        <form th:action="@{/movie/search}" method="get" class="search-form" style="display: inline-block">
-                            <input type="text" name="movieNameSearch" placeholder="Search movie name....." class="search-input" />
+                        <form th:action="@{/movie/search}" method="get" class="search-form"
+                              style="display: inline-block">
+                            <input type="text" name="movieNameSearch" placeholder="Search movie name....."
+                                   class="search-input"/>
                             <button type="submit" class="search-btn">
                                 <i class="flaticon-tool"></i>
                             </button>

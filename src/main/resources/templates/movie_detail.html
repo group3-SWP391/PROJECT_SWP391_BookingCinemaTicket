@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Movie Pro
+Version: 1.0.0
+Author: Webstrot
+
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js}"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js}"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--[endif]-->
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_single_second.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:14:41 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8"/>
+    <title>Movie Pro Responsive HTML Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Movie Pro"/>
+    <meta name="keywords" content="Movie Pro"/>
+    <meta name="author" content=""/>
+    <meta name="MobileOptimized" content="320"/>
+    <!--Template style -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+    <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{none}"/>
+    <!-- favicon links -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+</head>
+
+<body>
+<!-- preloader Start -->
+<div id="preloader">
+    <div id="status">
+        <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
+    </div>
+</div>
+
+
+<!-- prs navigation Start -->
+<header lang="vi" th:include="fragments/navigation :: navigation"></header>
+<!-- prs navigation End -->
+
+<!-- prs video top Start -->
+<div class="prs_top_video_section_wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="st_video_slider_inner_wrapper float_left"  th:style="'background-image: url(' + ${movieDetail.largeImageURL} + '); background-position: center 0; background-size: cover; background-repeat: no-repeat;'">>
+                    <div class="st_video_slider_overlay"></div>
+                    <div class="st_video_slide_sec float_left">
+                        <a rel='external' th:href="${movieDetail.trailerURLWatchLink}" title='title'
+                           class="test-popup-link">
+                            <img th:src="@{/images/index_III/icon.png}" alt="img">
+                        </a>
+                        <h3 th:text="${movieDetail.name}">Movie name</h3>
+                        <p th:text="${movieDetail.language}">Movie language</p>
+                        <h4 th:text="${movieDetail.categories}">Movie category</h4>
+                        <h6 th:text="${movieDetail.format}" style="color: white; margin-top: 10px">Movie format</h6>
+                    </div>
+                    <div class="st_video_slide_social float_left">
+                        <div class="st_slider_rating_btn_heart st_slider_rating_btn_heart_5th">
+                            <h5><i class="fa fa-heart"></i> 85%</h5>
+                            <h4>52,291 votes</h4>
+                        </div>
+                        <div class="st_video_slide_social_left float_left">
+                            <ul>
+                                <li><a th:href="@{none}"><i class="fa fa-facebook-f"></i></a>
+                                </li>
+                                <li><a th:href="@{none}"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                                <li><a th:href="@{none}"><i class="fa fa-youtube"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="st_video_slide_social_right float_left">
+                            <ul>
+                                <li th:text="${movieDetail.releaseDate.toString()}" data-animation="animated fadeInUp"
+                                    class=""><i class="far fa-calendar-alt"></i>
+                                    releaseDate
+                                </li>
+                                <li th:text="${movieDetail.duration + ' minutes'}" data-animation="animated fadeInUp"
+                                    class=""><i class="far fa-clock"></i> 2 hrs
+                                    duration
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- prs video top End -->
+
+<!-- st slider rating wrapper Start -->
+<div class="st_slider_rating_main_wrapper float_left">
+    <div class="container">
+        <div class="st_slider_rating_left">
+            <div class="st_rating_box">
+                <fieldset class="rating">
+                    <h3>3</h3>
+                    <input type="radio" name="rating" value="5"/>
+                    <label class="full" title="5 stars"></label>
+                    <input type="radio" name="rating" value="4 and a half"/>
+                    <label class="half" title="4.5 stars"></label>
+                    <input type="radio" name="rating" value="4"/>
+                    <label class="full" title="4 stars"></label>
+                    <input type="radio" name="rating" value="3 and a half"/>
+                    <label class="half" title="3.5 stars"></label>
+                    <input type="radio" name="rating" value="3"/>
+                    <label class="full" title="3 stars"></label>
+                    <input type="radio" name="rating" value="2 and a half"/>
+                    <label class="half" title="2.5 stars"></label>
+                    <input type="radio" name="rating" value="2"/>
+                    <label class="full" title="2 stars"></label>
+                    <input type="radio" name="rating" value="1 and a half"/>
+                    <label class="half" title="1.5 stars"></label>
+                    <input type="radio" name="rating" value="1"/>
+                    <label class="full" title="1 star"></label>
+                    <input type="radio" name="rating" value="half"/>
+                    <label class="half" title="0.5 stars"></label>
+                </fieldset>
+                <h4>CRITICS RATING</h4>
+            </div>
+            <div class="st_rating_box st_rating_box2">
+                <fieldset class="rating">
+                    <h3>4.5&nbsp;&nbsp;</h3>
+                    <input type="radio" name="rating" value="5"/>
+                    <label class="full" title="5 stars"></label>
+                    <input type="radio" name="rating" value="4 and a half"/>
+                    <label class="half" title="4.5 stars"></label>
+                    <input type="radio" name="rating" value="4"/>
+                    <label class="full" title="4 stars"></label>
+                    <input type="radio" name="rating" value="3 and a half"/>
+                    <label class="half" title="3.5 stars"></label>
+                    <input type="radio" name="rating" value="3"/>
+                    <label class="full" title="3 stars"></label>
+                    <input type="radio" name="rating" value="2 and a half"/>
+                    <label class="half" title="2.5 stars"></label>
+                    <input type="radio" name="rating" value="2"/>
+                    <label class="full" title="2 stars"></label>
+                    <input type="radio" name="rating" value="1 and a half"/>
+                    <label class="half" title="1.5 stars"></label>
+                    <input type="radio" name="rating" value="1"/>
+                    <label class="full" title="1 star"></label>
+                    <input type="radio" name="rating" value="half"/>
+                    <label class="half" title="0.5 stars"></label>
+                </fieldset>
+                <h4>USERS RATING</h4>
+            </div>
+            <div class="st_rating_box st_rating_box2">
+                <fieldset class="rating">
+                    <h3>0&nbsp;&nbsp;</h3>
+                    <input type="radio" name="rating" value="5"/>
+                    <label class="full" title="5 stars"></label>
+                    <input type="radio" name="rating" value="4 and a half"/>
+                    <label class="half" title="4.5 stars"></label>
+                    <input type="radio" name="rating" value="4"/>
+                    <label class="full" title="4 stars"></label>
+                    <input type="radio" name="rating" value="3 and a half"/>
+                    <label class="half" title="3.5 stars"></label>
+                    <input type="radio" name="rating" value="3"/>
+                    <label class="full" title="3 stars"></label>
+                    <input type="radio" name="rating" value="2 and a half"/>
+                    <label class="half" title="2.5 stars"></label>
+                    <input type="radio" name="rating" value="2"/>
+                    <label class="full" title="2 stars"></label>
+                    <input type="radio" name="rating" value="1 and a half"/>
+                    <label class="half" title="1.5 stars"></label>
+                    <input type="radio" name="rating" value="1"/>
+                    <label class="full" title="1 star"></label>
+                    <input type="radio" name="rating" value="half"/>
+                    <label class="half" title="0.5 stars"></label>
+                </fieldset>
+                <h4>RATE IT</h4>
+            </div>
+        </div>
+        <div class="st_slider_rating_right">
+            <div class="st_slider_rating_btn prs_animate_btn1">
+                <ul>
+                    <li data-animation="animated fadeInUp"><a th:href="@{none}"
+                                                              class="button button--tamaya prs_upcom_main_btn"
+                                                              data-text="book now"><span>book
+									now</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="st_slider_rating_btn_heart">
+                <h5><i class="fa fa-heart"></i> 85%</h5>
+                <h4>52,291 votes</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- st slider rating wrapper End -->
+
+<!-- st slider sidebar wrapper Start -->
+<div class="st_slider_index_sidebar_main_wrapper st_slider_index_sidebar_main_wrapper_md float_left">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                <div class="st_indx_slider_main_container float_left">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="prs_upcome_tabs_wrapper prs_upcome_tabs_wrapper_mss float_left">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation" class="active"><a href="#home"
+                                                                                      aria-controls="best" role="tab"
+                                                                                      data-toggle="tab">Summary</a>
+                                            </li>
+                                            <li role="presentation"><a href="#menu2" aria-controls="trand"
+                                                                       role="tab" data-toggle="tab">Behind The
+                                                Scenes</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="tab-content">
+                                        <div id="home" class="tab-pane active">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="st_md_summ_pera float_left">
+                                                        <h5>SYNOPSIS</h5>
+                                                        <p th:text="${movieDetail.longDescription}"> longDescription</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="st_md_summ_client_slider float_left">
+                                                        <p>CAST</p>
+                                                        <div class="owl-carousel owl-theme">
+                                                            <div class="item">
+                                                                <div class="st_summ_slider_cont float_left">
+                                                                    <img th:src="@{/images/content/c1.jpg}" alt="img">
+                                                                    <h4><a th:href="@{none}">Jason Momoa</a></h4>
+                                                                    <h5>Actor</h5>
+                                                                    <h6>As Arthur</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="item">
+                                                                <div class="st_summ_slider_cont float_left">
+                                                                    <img th:src="@{/images/content/c2.jpg}" alt="img">
+                                                                    <h4><a th:href="@{none}">Nicole Kidman</a></h4>
+                                                                    <h5>Actor</h5>
+                                                                    <h6>As Arthur</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="item">
+                                                                <div class="st_summ_slider_cont float_left">
+                                                                    <img th:src="@{/images/content/c3.jpg}" alt="img">
+                                                                    <h4><a th:href="@{none}">Willem Dafoe</a></h4>
+                                                                    <h5>Actor</h5>
+                                                                    <h6>As Arthur</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="item">
+                                                                <div class="st_summ_slider_cont float_left">
+                                                                    <img th:src="@{/images/content/c4.jpg}" alt="img">
+                                                                    <h4><a th:href="@{none}">Amber Heard</a></h4>
+                                                                    <h5>Actor</h5>
+                                                                    <h6>As Arthur</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="menu2" class="tab-pane fade">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
+                                                        <img th:src="@{/images/content/movie_single/sc1.jpg}"
+                                                             alt="scene_img">
+                                                        <div class="prs_ms_scene_img_overlay"><a
+                                                                href="images/content/movie_single/sc1.jpg"
+                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
+                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
+                                                        <img th:src="@{/images/content/movie_single/sc2.jpg}"
+                                                             alt="scene_img">
+                                                        <div class="prs_ms_scene_img_overlay"><a
+                                                                href="images/content/movie_single/sc2.jpg"
+                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
+                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
+                                                        <img th:src="@{/images/content/movie_single/sc3.jpg}"
+                                                             alt="scene_img">
+                                                        <div class="prs_ms_scene_img_overlay"><a
+                                                                href="images/content/movie_single/sc3.jpg"
+                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
+                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
+                                                        <img th:src="@{/images/content/movie_single/sc4.jpg}"
+                                                             alt="scene_img">
+                                                        <div class="prs_ms_scene_img_overlay"><a
+                                                                href="images/content/movie_single/sc4.jpg"
+                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
+                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
+                                                        <img th:src="@{/images/content/movie_single/sc5.jpg}"
+                                                             alt="scene_img">
+                                                        <div class="prs_ms_scene_img_overlay"><a
+                                                                href="images/content/movie_single/sc5.jpg"
+                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
+                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
+                                                        <img th:src="@{/images/content/movie_single/sc6.jpg}"
+                                                             alt="scene_img">
+                                                        <div class="prs_ms_scene_img_overlay"><a
+                                                                href="images/content/movie_single/sc6.jpg"
+                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
+                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 50px;">
+                            <div class="ne_busness_main_slider_wrapper float_left">
+                                <div
+                                        class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
+                                    <h2>TRENDING STORIES</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 tab-content" id="movieListContainerCategory">
+                            <div role="tabpanel" class="tab-pane active">
+                                <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
+                                <div class="row">
+                                    <div th:each="movie : ${movieAll}" class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                        <div class="prs_upcom_movie_box_wrapper"
+                                             style="height: 100%; display: flex; flex-direction: column;">
+                                            <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
+                                                <img th:src="${movie.smallImageURL}" alt="movie_img"
+                                                     style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+                                                <div class="prs_upcom_movie_img_overlay"></div>
+                                                <div class="prs_upcom_movie_img_btn_wrapper">
+                                                    <ul>
+                                                        <li><a th:href="@{none}">View Trailer</a></li>
+                                                        <li><a th:href="@{none}">View Details</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
+                                                <div class="prs_upcom_movie_content_box_inner">
+                                                    <h2 th:text="${movie.name}"
+                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px">
+                                                        Movie name
+                                                    </h2>
+                                                    <div style="font-size: 0.9rem; color: #333;">
+                                                        <p>
+                                                            <strong>Thể loại:</strong> <span th:text="${movie.categories}">Movie category</span>
+                                                        </p>
+                                                        <p>
+                                                            <strong>Thời lượng:</strong>
+                                                            <span th:text="${movie.duration + ' minutes'}">Movie duration</span>
+                                                        </p>
+                                                        <p>
+                                                            <strong>Khởi chiếu:</strong>
+                                                            <span th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- hết mỗi phim -->
+                                </div> <!-- hết row -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                     style="display: flex; justify-content: center;">
+                                    <div class="pager_wrapper gc_blog_pagination">
+                                        <ul class="pagination">
+                                            <li><a href="#"><i class="flaticon-left-arrow"></i></a>
+                                            </li>
+                                            <li><a href="#">1</a>
+                                            </li>
+                                            <li><a href="#">2</a>
+                                            </li>
+                                            <li><a href="#">3</a>
+                                            </li>
+                                            <li><a href="#">4</a>
+                                            </li>
+                                            <li><a href="#"><i class="flaticon-right-arrow"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div> <!-- hết tab-panel -->
+                        </div>                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                <div class="st_ind_sidebar_right_wrapper float_left">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="st_ind_sidebar_md_textbox float_left">
+                                <p>Highest grossing movie in Mumbai in last 24 hours</p> <a th:href="@{none}">Know Box
+                                Office
+                                Report</a>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="st_ind_sidebar_md_textbox_btn float_left">
+                                <ul>
+                                    <li><a th:href="@{none}">Corporate booking &nbsp; <i
+                                            class="fas fa-long-arrow-alt-right"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="st_ind_sidebar_advertiz st_ind_sidebar_advertiz_md float_left">
+                                <a th:href="@{none}">
+                                    <img th:src="@{/images/index_III/add.png}" alt="img">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="st_ind_sidebar_advertiz_social st_video_slide_social_left  float_left">
+                                <h3>Profiles</h3>
+                                <ul>
+                                    <li><a th:href="@{none}"><i class="fa fa-facebook-f"></i></a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{none}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                <path
+                                                        d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li><a th:href="@{none}"><i class="fa fa-linkedin"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- st slider sidebar wrapper End -->
+
+<!-- prs footer Wrapper Start -->
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- prs footer Wrapper End -->
+
+<!-- st login wrapper Start -->
+<div class="modal fade st_pop_form_wrapper" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="st_pop_form_heading_wrapper float_left">
+                <h3>Log in</h3>
+            </div>
+            <div class="st_profile_input float_left">
+                <label>Email / Mobile Number</label>
+                <input type="text">
+            </div>
+            <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
+                <input type="password" placeholder="Password">
+            </div>
+            <div class="st_form_pop_fp float_left">
+                <h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a>
+                </h3>
+            </div>
+            <div class="st_form_pop_login_btn float_left"><a
+                    href="https://webstrot.com/html/moviepro/html/page-1-7_profile_settings.html">LOGIN</a>
+            </div>
+            <div class="st_form_pop_or_btn float_left">
+                <h4>or</h4>
+            </div>
+            <div class="st_form_pop_facebook_btn float_left"><a th:href="@{none}"> Connect with Facebook</a>
+            </div>
+            <div class="st_form_pop_gmail_btn float_left"><a th:href="@{none}"> Connect with Google</a>
+            </div>
+            <div class="st_form_pop_signin_btn float_left">
+                <h4>Don’t have an account? <a th:href="@{none}" data-toggle="modal" data-target="#myModa3"
+                                              target="_blank">Sign Up</a></h4>
+                <h5>I agree to the <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy Policy</a>
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade st_pop_form_wrapper" id="myModa2" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="st_pop_form_heading_wrapper st_pop_form_heading_wrapper_fpass float_left">
+                <h3>Forgot Password</h3>
+                <p>We can help! All you need to do is enter your email ID and follow the instructions!</p>
+            </div>
+            <div class="st_profile_input float_left">
+                <label>Email Address</label>
+                <input type="text">
+            </div>
+            <div class="st_form_pop_fpass_btn float_left"><a th:href="@{none}">Verify</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade st_pop_form_wrapper" id="myModa3" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="st_pop_form_heading_wrapper float_left">
+                <h3>Sign Up</h3>
+            </div>
+            <div class="st_profile_input float_left">
+                <label>Email / Mobile Number</label>
+                <input type="text">
+            </div>
+            <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
+                <input type="password" placeholder="Password">
+            </div>
+            <div class="st_form_pop_fp float_left">
+                <h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a>
+                </h3>
+            </div>
+            <div class="st_form_pop_login_btn float_left"><a
+                    href="https://webstrot.com/html/moviepro/html/page-1-7_profile_settings.html">LOGIN</a>
+            </div>
+            <div class="st_form_pop_or_btn float_left">
+                <h4>or</h4>
+            </div>
+            <div class="st_form_pop_facebook_btn float_left"><a th:href="@{none}"><i class="fab fa-facebook-f"></i>
+                Connect
+                with Facebook</a>
+            </div>
+            <div class="st_form_pop_gmail_btn float_left"><a th:href="@{none}"><i class="fab fa-google-plus-g"></i>
+                Connect
+                with Google</a>
+            </div>
+            <div class="st_form_pop_signin_btn st_form_pop_signin_btn_signup float_left">
+                <h5>I agree to the <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy Policy</a>
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- st login wrapper End -->
+
+<!--main js file start-->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<!--main js file end-->
+</body>
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_single_second.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:14:51 GMT -->
+</html>
