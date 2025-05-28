@@ -22,6 +22,7 @@ CREATE TABLE [user] (
     password VARCHAR(255),
     phone VARCHAR(255),
     username VARCHAR(255)
+    CONSTRAINT FK_user_role FOREIGN KEY (role_id) REFERENCES roles(id);
 );
 
 CREATE TABLE bill (
@@ -35,14 +36,6 @@ CREATE TABLE bill (
 CREATE TABLE roles (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name VARCHAR(255)
-);
-
-CREATE TABLE users_roles (
-    user_id INT,
-    role_id INT,
-    PRIMARY KEY (user_id, role_id),
-    CONSTRAINT FK_users_roles_user FOREIGN KEY (user_id) REFERENCES [user](id),
-    CONSTRAINT FK_users_roles_roles FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 CREATE TABLE reset_password_token (
