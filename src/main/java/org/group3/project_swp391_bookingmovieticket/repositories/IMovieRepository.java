@@ -8,8 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+import java.util.List;
+
 public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> findByNameContainingIgnoreCase(String movieName);
+<<<<<<< HEAD
 
     @Query("SELECT DISTINCT m.categories FROM Movie m")
     List<String>getMovieCategories();
@@ -24,4 +27,6 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> getMovieByCategory(@Param("categoryName") String categoryName);
 
 
+=======
+>>>>>>> 076b1a6e2f871776af23ba40892fb6e79166c0b4
 }

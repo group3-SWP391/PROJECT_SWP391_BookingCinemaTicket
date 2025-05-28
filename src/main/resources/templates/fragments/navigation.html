@@ -22,20 +22,8 @@
                                         <li><a th:href="@{none}">Coming soon</a></li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{/movie-category}">Movies Category</a>
-                                    <ul class="lg-submenu">
-                                        <li><a th:href="@{/movie/movie-category(categoryName='Tất cả')}">Tất cả</a></li>
-                                        <li><a th:href="@{/movie/movie-category(categoryName='Hành động')}">Hành động</a></li>
-                                        <li><a th:href="@{/movie/movie-category(categoryName='Khoa học viễn tưởng')}">Khoa học viễn tưởng</a></li>
-                                        <li><a th:href="@{/movie/movie-category(categoryName='Tình cảm')}">Tình cảm</a></li>
-                                        <li><a th:href="@{/movie/movie-category(categoryName='Phiêu lưu')}">Phiêu lưu</a></li>
-                                        <li><a th:href="@{/movie/movie-category(categoryName='Hài')}">Hài</a></li>
-                                        <li><a th:href="@{/movie/movie-category(categoryName='Hoạt hình')}">Hoạt hình</a></li>
-                                        <li><a th:href="@{/movie/movie-category(categoryName='Phim tài liệu')}">Phim tài liệu</a></li>
-                                    </ul>
-                                </li>
                                 <li class="parent"><a th:href="@{none}">event</a></li>
-                                <li class="parent"><a th:href="@{/contact}">contact</a></li>
+                                <li class="parent"><a th:href="@{none}">contact</a></li>
                             </ul>
                         </div>
                         <!--dl-menuwrapper -->
@@ -65,12 +53,15 @@
                 </div>
                 <div class="product-heading">
                     <div class="con">
-                        <form th:action="@{/movie/search}" method="get" class="search-form" style="display: inline-block">
-                            <input type="text" name="movieNameSearch" placeholder="Search movie name....." class="search-input" />
-                            <button type="submit" class="search-btn">
-                                <i class="flaticon-tool"></i>
-                            </button>
-                        </form>
+                        <select>
+                            <option>All Categories</option>
+                            <option>Movie</option>
+                            <option>Video</option>
+                            <option>Music</option>
+                            <option>TV-Show</option>
+                        </select>
+                        <input type="text" placeholder="Search Movie , Video , Music">
+                        <button type="submit"><i class="flaticon-tool"></i>
                         </button>
                     </div>
                 </div>

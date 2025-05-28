@@ -50,6 +50,7 @@ public class MovieService implements IMovieService {
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());
     }
+<<<<<<< HEAD
 
     @Override
     public List<String> getMovieCategories() {
@@ -81,4 +82,6 @@ public class MovieService implements IMovieService {
     }
 
 
+=======
+>>>>>>> 076b1a6e2f871776af23ba40892fb6e79166c0b4
 }
