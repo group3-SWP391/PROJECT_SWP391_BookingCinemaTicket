@@ -11,4 +11,6 @@ public interface IUserService extends IGeneralService<User> {
     Optional<User> findByUsernameAndPassword(String username, String password);
 
     Optional<User> findByPhoneAndPassword(String username, String password);
+
+    void save(User user);
 }

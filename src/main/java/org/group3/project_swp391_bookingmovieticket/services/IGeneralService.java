@@ -11,5 +11,7 @@ public interface IGeneralService<T> {
     void update(T t);
 
     void remove(Integer id);
+
+
 }
 
