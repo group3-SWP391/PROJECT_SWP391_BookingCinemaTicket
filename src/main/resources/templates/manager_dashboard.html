@@ -1,3 +1,5 @@
+<!--    <body>-->
+<!--    <h1>"Xin chào"</h1>-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -60,12 +62,17 @@
     </style>
 </head>
 <body>
-<h1>Xin chào <span th:text="${user.fullName}">Manager</span> 👋</h1>
+
+<!-- ✅ Dùng session.userLogin.fullname nhưng có kiểm tra null -->
+<h1>
+    Xin chào
+    <span th:text="${session.userLogin != null ? session.userLogin.fullname : 'Manager'}">Manager</span> 👋
+</h1>
 
 <div class="dashboard">
     <div class="card">
         <h2>Tổng doanh thu</h2>
-        <p th:text="${#numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</p>
+        <p th:text="${revenue != null ? #numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}">0 VNĐ</p>
     </div>
     <div class="card">
         <h2>Số vé đã bán</h2>
@@ -84,5 +91,8 @@
 <div class="footer">
     &copy; 2025 Show2Sell Cinema Admin Panel
 </div>
+
 </body>
 </html>
+
+

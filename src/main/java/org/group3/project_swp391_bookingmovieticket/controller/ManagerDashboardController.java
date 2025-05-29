@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -26,13 +25,23 @@ public class ManagerDashboardController {
     @Autowired
     private IBillRepository billRepository;
 
-    @GetMapping
-    public String index(Model model, Principal principal) {
-        // Lấy user bằng số điện thoại (phone) thay vì username
-        User user = userRepository.findByPhone(principal.getName()).orElse(null);
-        model.addAttribute("user", user);
+    @GetMapping()
+    public String index(Model model, HttpSession session) {
+//        String phone = (String) session.getAttribute("phone");
+//        if (phone == null) {
+//            return "redirect:/login";
+//        }
 
-        double totalRevenue = billRepository.sumTotalPrice();
+        User user =(User) session.getAttribute("userLogin");
+        if (user == null) {
+            System.out.println("user failed in");
+            return "redirect:/login";
+        } else {
+            System.out.println("user logged in");
+        }
+
+        Double totalRevenue = billRepository.sumTotalPrice();
+        model.addAttribute("revenue", totalRevenue != null ? totalRevenue : 0.0);
         long totalTickets = billRepository.countTicketsSold();
         long totalMovies = movieRepository.count();
         long totalSchedules = scheduleRepository.count();
@@ -42,7 +51,20 @@ public class ManagerDashboardController {
         model.addAttribute("movieCount", totalMovies);
         model.addAttribute("scheduleCount", totalSchedules);
 
-        return "dashboard/managerdashboard";
+        return "manager_dashboard";
     }
 }
 
+//import org.springframework.stereotype.Controller;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//
+//@Controller
+//@RequestMapping("/dashboard")
+//public class ManagerDashboardController {
+//
+//    @GetMapping
+//    public String index() {
+//        return "manager_dashboard";
+//    }
+//}

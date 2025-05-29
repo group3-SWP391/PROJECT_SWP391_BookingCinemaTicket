@@ -287,7 +287,7 @@
                                        data-target="#myModal"><span>sign up</span></a>
                                 </div>
                                 <div th:if="${session.userLogin != null}">
-                                    <a style="background: #1b1b1b" class="btn" th:href="@{none}">
+                                    <a style="background: #1b1b1b" class="btn" th:href="@{/dashboard}">
                                         <span style="color: white" th:text="${session.userLogin.fullname}">User</span>
                                     </a>
                                     <a style="background: #1b1b1b;" class="btn" th:href="@{/log-out}">

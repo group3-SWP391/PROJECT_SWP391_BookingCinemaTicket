@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 public interface IBillRepository extends JpaRepository<Bill, Integer> {
 
     @Query("SELECT SUM(b.price) FROM Bill b")
-    double sumTotalPrice();
+    Double sumTotalPrice(); // sửa double -> Double
 
     @Query("SELECT COUNT(t) FROM Ticket t")
     long countTicketsSold();
+
 }
