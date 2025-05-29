@@ -12,6 +12,8 @@ public interface IGeneralService<T> {
 
     void remove(Integer id);
 
+    void save(T t);
+
 
 }
 

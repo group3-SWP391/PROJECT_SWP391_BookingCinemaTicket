@@ -29,4 +29,9 @@ public class RoleService implements IRoleService {
     public void remove(Integer id) {
 
     }
+
+    @Override
+    public void save(Role role) {
+
+    }
 }
