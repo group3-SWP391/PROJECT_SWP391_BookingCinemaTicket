@@ -3,96 +3,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Manager Dashboard</title>
     <meta charset="UTF-8">
+    <title>Manager Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f4f6f9;
-        }
-
-        h1 {
-            text-align: center;
+        .card-metric {
+            background-color: #fff;
+            border-radius: 10px;
             padding: 20px;
-            background: #2c3e50;
-            color: white;
-            margin: 0;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 30px;
-        }
-
-        .card {
-            padding: 25px;
-            border-radius: 12px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             transition: transform 0.2s ease-in-out;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
+        .card-metric:hover {
+            transform: translateY(-4px);
         }
-
-        .card h2 {
-            font-size: 18px;
-            margin-bottom: 12px;
-            color: #34495e;
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
         }
-
-        .card p {
-            font-size: 24px;
+        .card-title {
+            font-weight: 500;
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .card-value {
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #2ecc71;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 14px;
-            color: #999;
         }
     </style>
 </head>
 <body>
+<!-- Main Content -->
+<div class="container py-4">
+    <div class="dashboard-header mb-4">
+        <h2>
+            Xin chào
+            <span th:text="${session.userLogin != null ? session.userLogin.fullname : 'Manager'}">Manager</span> 👋
+        </h2>
+        <p class="text-muted">Dưới đây là thông tin tổng quan về hệ thống của bạn</p>
+    </div>
 
-<!-- ✅ Dùng session.userLogin.fullname nhưng có kiểm tra null -->
-<h1>
-    Xin chào
-    <span th:text="${session.userLogin != null ? session.userLogin.fullname : 'Manager'}">Manager</span> 👋
-</h1>
-
-<div class="dashboard">
-    <div class="card">
-        <h2>Tổng doanh thu</h2>
-        <p th:text="${revenue != null ? #numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}">0 VNĐ</p>
-    </div>
-    <div class="card">
-        <h2>Số vé đã bán</h2>
-        <p th:text="${tickets}">0</p>
-    </div>
-    <div class="card">
-        <h2>Tổng số phim</h2>
-        <p th:text="${movieCount}">0</p>
-    </div>
-    <div class="card">
-        <h2>Tổng số lịch chiếu</h2>
-        <p th:text="${scheduleCount}">0</p>
+    <div class="row g-4 justify-content-center">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card-metric text-center">
+                <div class="card-icon text-success"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="card-title">Tổng doanh thu</div>
+                <div class="card-value text-success"
+                     th:text="${#numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card-metric text-center">
+                <div class="card-icon text-primary"><i class="fas fa-ticket-alt"></i></div>
+                <div class="card-title">Số vé đã bán</div>
+                <div class="card-value text-primary" th:text="${tickets}">0</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card-metric text-center">
+                <div class="card-icon text-warning"><i class="fas fa-film"></i></div>
+                <div class="card-title">Tổng số phim</div>
+                <div class="card-value text-warning" th:text="${movieCount}">0</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card-metric text-center">
+                <div class="card-icon text-danger"><i class="fas fa-calendar-alt"></i></div>
+                <div class="card-title">Tổng số lịch chiếu</div>
+                <div class="card-value text-danger" th:text="${scheduleCount}">0</div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="footer">
-    &copy; 2025 Show2Sell Cinema Admin Panel
-</div>
-
+<!-- Script for loading effect (optional) -->
+<script>
+    window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+        if (preloader) preloader.style.display = 'none';
+    });
+</script>
 </body>
 </html>
+
+
+
+
 
 
