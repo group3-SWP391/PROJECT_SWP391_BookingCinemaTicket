@@ -32,12 +32,6 @@ public class Movie {
     @Column(name = "long_description", length = 1000)
     private String longDescription;
 
-    @Column(name = "director")
-    private String director;
-
-    @Column(name = "actors")
-    private String actors;
-
     @Column(name = "categories")
     private String categories;
 
@@ -62,7 +56,17 @@ public class Movie {
     @Column(name = "format")
     private String format;
 
+    @Column(name = "views")
+    private int views;
+
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;
+
+    @ManyToOne
+    @JoinColumn(name = "director_id", referencedColumnName = "id")
+    private Director director;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MovieActor> movieActors;
 
 }

@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,10 @@ public class HomeController {
     private MovieService movieService;
 
     @GetMapping
-    public String displayHomePage(Model model) {
-        model.addAttribute("categoryAll", movieService.getMovieCategories());
-        model.addAttribute("movieAll", movieService.findAll());
+    public String displayHomePage(Model model, HttpServletRequest request) {
+        request.getSession().setAttribute("categoryAll", movieService.getMovieCategories());
+        request.getSession().setAttribute("imageLargeMovieAll", movieService.findAll());
+        model.addAttribute("movieNowShowing", movieService.findMovieNowShowing());
         model.addAttribute("userDTO", new UserDTO());
         return "home";
     }

@@ -21,6 +21,13 @@
                                         <li><a th:href="@{none}">none</a></li>
                                     </ul>
                                 </li>
+                                <li class="parent"><a th:href="@{none}">category</a>
+                                    <ul class="lg-submenu">
+                                        <li th:each="category: ${session.categoryAll}">
+                                            <a th:href="@{/movie/category/return-view(categoryName=${category})}" th:text="${category}">movie category name</a>
+                                        </li>
+                                    </ul>
+                                </li>
                                 <li class="parent"><a th:href="@{/event}">event</a></li>
                                 <li class="parent"><a th:href="@{/contact}">contact</a></li>
                             </ul>

@@ -70,13 +70,13 @@ Author: Webstrot
         <div class="row">
             <div class="col-12">
                 <div class="prs_heading_section_wrapper">
-                    <h2>Movie selection</h2>
+                    <h2 style="color: #ff4444">Movie selection</h2>
                 </div>
             </div>
             <div class="col-12">
                 <div class="prs_upcome_tabs_wrapper">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" id="tab-now-showing">
+                        <li role="presentation" id="tab-now-showing" class="active">
                             <a href="#" onclick="loadMovies('now-showing', this); return false;">Now showing</a>
                         </li>
                         <li role="presentation" id="tab-comming-soon">
@@ -89,7 +89,7 @@ Author: Webstrot
                 <div role="tabpanel" id="best" class="tab-pane active">
                     <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
                     <div class="row" id="movieListContainer">
-                        <div th:each="movie : ${movieAll}" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div th:each="movie : ${movieNowShowing}" class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <div class="prs_upcom_movie_box_wrapper"
                                  style="height: 100%; display: flex; flex-direction: column;">
                                 <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">

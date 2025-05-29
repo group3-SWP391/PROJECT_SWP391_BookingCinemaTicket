@@ -25,4 +25,7 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
 
     Movie findMovieById(Integer id);
 
+    @Query("SELECT m FROM Movie m WHERE m.isShowing = true")
+    List<Movie> findMovieNowShowing();
+
 }

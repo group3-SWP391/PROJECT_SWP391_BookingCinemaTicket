@@ -88,6 +88,11 @@ public class MovieService implements IMovieService {
         return modelMapper.map(movie, MovieDTO.class);
     }
 
-
-
+    @Override
+    public List<MovieDTO> findMovieNowShowing() {
+        return movieRepository.findMovieNowShowing()
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
 }
