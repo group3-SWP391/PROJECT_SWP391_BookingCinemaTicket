@@ -43,7 +43,7 @@ public class EmployeeController {
 
 
         }
-        return "admin/error";
+        return "admin/error1";
     }
 
 
