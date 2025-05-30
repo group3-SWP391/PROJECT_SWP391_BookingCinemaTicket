@@ -1,7 +1,9 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import jakarta.transaction.Transactional;
+import org.group3.project_swp391_bookingmovieticket.entities.Bill;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.repositories.IBillRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.IUserRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
+    @Autowired
+    private IBillRepository iBillRepository;
+
     @Override
     @Transactional
     public void save(User user) {
@@ -19,6 +24,25 @@ public class UserService implements IUserService {
 
     }
 
+    @Override
+    @Transactional
+    public void delete(int id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+             if(iBillRepository.existsById(id)){
+                 throw new IllegalArgumentException("Cannot delete because they have existing bills.");
+
+             }else{
+                 userRepository.deleteById(id);
+             }
+
+        }else{
+            throw new IllegalArgumentException(" With id "+ id + " not found");
+        }
+
+
+
+    }
 
 
     @Autowired

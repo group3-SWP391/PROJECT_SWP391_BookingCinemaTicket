@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -31,4 +32,19 @@ public class EmployeeController {
         iUserService.save(user);
         return "redirect:/admin/employee";
     }
+    @GetMapping("/employee/delete/{id}")
+    public String delete(@PathVariable int id, Model model){
+        try {
+            iUserService.delete(id);
+            return "redirect:/admin/employee";
+
+        }catch (IllegalArgumentException iae){
+            model.addAttribute("error", iae.getMessage());
+
+
+        }
+        return "admin/error";
+    }
+
+
 }

@@ -30,8 +30,5 @@ public class RoleService implements IRoleService {
 
     }
 
-    @Override
-    public void save(Role role) {
 
-    }
 }
