@@ -2,6 +2,7 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.entities.Role;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.services.IRoleService;
 import org.group3.project_swp391_bookingmovieticket.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,18 +12,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Optional;
+
 @Controller
 public class EmployeeController {
     @Autowired
     private IUserService iUserService;
+    @Autowired
+    private IRoleService iRoleService;
 
     @GetMapping("/add/employee")
     public String addEmployeePage(Model model){
-        Role role = new Role();
-        role.setId(4);
-        role.setName("employee");
+        Optional<Role> role =  iRoleService.findByName("employee");
+        Role role1 = role.get();
         User user = new User();
-        user.setRole(role);
+        user.setRole(role1);
         model.addAttribute("employee", user);
         return "admin/add-employee";
 
