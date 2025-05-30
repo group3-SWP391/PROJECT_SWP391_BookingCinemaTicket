@@ -49,6 +49,28 @@ public class EmployeeController {
         }
         return "admin/error1";
     }
+    @GetMapping("/employee/showfromupdate/{id}")
+    public String showFormForUpdate(@PathVariable int id, Model model){
+        try {
+            Optional<User> user = iUserService.getUserByID(id);
+            model.addAttribute("employee", user.get());
+            return "admin/update-employee";
+
+        }catch (IllegalArgumentException iae){
+            model.addAttribute("error", iae.getMessage());
+
+
+        }
+        return "admin/error";
+    }
+    @PostMapping("/employee/update")
+    public String updateCustomer(@ModelAttribute("employee") User user){
+        iUserService.save(user);
+        return "redirect:/admin/employee";
+
+    }
+
+
 
 
 }

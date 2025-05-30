@@ -44,6 +44,20 @@ public class UserService implements IUserService {
 
     }
 
+    @Override
+    public Optional<User> getUserByID(int id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            return user;
+        }
+        throw new IllegalArgumentException(" With id "+ id + " not found");
+
+
+
+    }
+
+
+
 
     @Autowired
     private IUserRepository userRepository;

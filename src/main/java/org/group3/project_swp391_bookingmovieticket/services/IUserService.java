@@ -16,5 +16,9 @@ public interface IUserService extends IGeneralService<User> {
 
     void delete(int id);
 
+    Optional<User> getUserByID(int id);
+
+
+
 
 }

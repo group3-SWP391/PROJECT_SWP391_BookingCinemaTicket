@@ -170,7 +170,7 @@
         <td th:text="${user.fullname}">fullname</td>
         <td th:text="${user.phone}">phone</td>
         <td width="210px" height="90px" >
-          <a th:href="@{'/user/edit/' + ${user.id}}" class="btn btn-warning btn-sm" title="Edit">
+          <a th:href="@{'/user/showformupdate/' + ${user.id}}" class="btn btn-warning btn-sm" title="Edit">
             <i class="fas fa-edit icon"></i> Edit
           </a>
           <a
