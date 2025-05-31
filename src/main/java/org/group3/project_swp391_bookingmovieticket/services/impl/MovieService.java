@@ -1,6 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.Movie;
 import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IMovieService;
 import org.modelmapper.ModelMapper;
@@ -30,11 +31,17 @@ public class MovieService implements IMovieService {
 
     @Override
     public Optional<MovieDTO> findById(Integer id) {
-        if (id == null) {
-            return Optional.empty();
-        }
-        return movieRepository.findById(id)
-                .map(movie -> modelMapper.map(movie, MovieDTO.class));
+// tim phim tromg cơ sở dữ liệu bằng id
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+
+        // lay phim tu optional
+        Movie movie = movieOptional.get();
+
+        // Chuyển doi từ Movie (entity) sang MovieDTO
+        MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
+
+        // Tra ve MovieDTO duoc bọc trong optional
+        return Optional.of(movieDTO);
     }
 
     @Override

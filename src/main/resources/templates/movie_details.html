@@ -67,26 +67,12 @@
     <p><strong>Thể loại:</strong> <span th:text="${movie.categories}">Thể loại</span></p>
     <p><strong>Thời lượng:</strong> <span th:text="${movie.duration + ' minutes'}">Thời lượng</span></p>
     <p><strong>Khởi chiếu:</strong> <span th:text="${#temporals.format(movie.releaseDate, 'yyyy-MM-dd')}">Ngày khởi chiếu</span></p>
+    <p><strong>Tóm tắt:</strong> <span th:text="${movie.longDescription}">Tóm tắt</span></p>
     <a th:href="${movie.trailerURL}" target="_blank">Xem Trailer</a>
     <br/>
     <a th:href="@{/movie-category}">Quay lại danh sách phim</a>
 </div>
-<div class="container">
-    <div th:if="${movie != null}">
-        <h1 th:text="${movie.name}">Tên phim</h1>
-        <img th:src="${movie.smallImageURL}" alt="Poster" style="width: 300px; height: auto;" />
-        <p><strong>Thể loại:</strong> <span th:text="${movie.categories}">Thể loại</span></p>
-        <p><strong>Thời lượng:</strong> <span th:text="${movie.duration != null} ? ${movie.duration + ' minutes'} : 'Không xác định'">Thời lượng</span></p>
-        <p><strong>Khởi chiếu:</strong> <span th:text="${movie.releaseDate != null} ? ${#temporals.format(movie.releaseDate, 'yyyy-MM-dd')} : 'Không xác định'">Ngày khởi chiếu</span></p>
-        <a th:href="${movie.trailerURL != null} ? ${movie.trailerURL} : '#'" target="_blank">Xem Trailer</a>
-        <br/>
-    </div>
-    <div th:if="${movie == null}">
-        <h2>Không tìm thấy phim</h2>
-        <p>Xin lỗi, chúng tôi không thể tìm thấy thông tin phim bạn yêu cầu.</p>
-    </div>
-    <a th:href="@{/movie-category}">Quay lại danh sách phim</a>
-</div>
+
 <!-- Partner Slider Start -->
 <div class="prs_patner_main_section_wrapper">
     <div class="container">
