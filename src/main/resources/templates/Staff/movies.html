@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách phim</title>
+  <style>
+    ul { list-style: none; padding: 0; }
+    li { margin-bottom: 10px; }
+    a { margin-left: 10px; }
+  </style>
+</head>
+<body>
+<h1>Phim</h1>
+<a th:href="@{/dashboard/movies/add}">Thêm phim</a>
+<ul>
+  <li th:each="m : ${movies}">
+    <span th:text="${m.name}">Tên phim</span>
+    <a th:href="@{'/dashboard/movies/edit/' + ${m.id}}">Sửa</a>
+    <a th:href="@{'/dashboard/movies/delete/' + ${m.id}}"
+       onclick="return confirm('Bạn có chắc muốn xoá phim này?');">Xoá</a>
+    <a th:href="@{'/dashboard/movies/' + ${m.id} + '/schedules'}">Xem lịch chiếu</a>
+  </li>
+</ul>
+</body>
+</html>

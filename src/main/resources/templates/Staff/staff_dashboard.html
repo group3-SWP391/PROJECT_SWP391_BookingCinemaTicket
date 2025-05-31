@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Staff Dashboard</title>
+</head>
+<body>
+<h1>Chào mừng đến với trang quản lý của nhân viên</h1>
+
+<div>
+  <p>Doanh thu: <span th:text="${revenue}">0</span> VNĐ</p>
+  <p>Số lượng vé đã bán: <span th:text="${tickets}">0</span></p>
+  <p>Tổng số phim: <span th:text="${movieCount}">0</span></p>
+  <p>Tổng số lịch chiếu: <span th:text="${scheduleCount}">0</span></p>
+</div>
+
+<nav>
+  <ul>
+    <li><a th:href="@{/dashboard/movies}">🎬 Quản lý phim</a></li>
+    <li><a th:href="@{/dashboard/schedules}">🗓 Xem lịch chiếu</a></li>
+  </ul>
+</nav>
+</body>
+</html>

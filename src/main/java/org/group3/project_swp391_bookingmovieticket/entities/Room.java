@@ -1,16 +1,19 @@
 package org.group3.project_swp391_bookingmovieticket.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
+@Table(name = "room")
 @Data
-@Table(name = "roles")
-public class Role {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(name = "name", unique = true, nullable = false)
     private String name;
+    // Thêm các trường khác nếu cần
 }

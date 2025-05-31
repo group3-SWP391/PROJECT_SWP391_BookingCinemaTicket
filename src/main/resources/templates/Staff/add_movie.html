@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thêm phim mới</title>
+</head>
+<body>
+<h1>Thêm phim mới</h1>
+<form th:action="@{/dashboard/movies/add}" th:object="${movie}" method="post">
+  <label>Tên phim: <input type="text" th:field="*{name}" /></label><br/>
+  <label>Diễn viên: <input type="text" th:field="*{actors}" /></label><br/>
+  <label>Thể loại: <input type="text" th:field="*{categories}" /></label><br/>
+  <label>Đạo diễn: <input type="text" th:field="*{director}" /></label><br/>
+  <label>Thời lượng (phút): <input type="number" th:field="*{duration}" /></label><br/>
+  <label>Ngôn ngữ: <input type="text" th:field="*{language}" /></label><br/>
+  <!-- Thêm các trường khác tương ứng nếu muốn -->
+  <button type="submit">Lưu</button>
+</form>
+<a th:href="@{/dashboard/movies}">Quay lại danh sách phim</a>
+</body>
+</html>

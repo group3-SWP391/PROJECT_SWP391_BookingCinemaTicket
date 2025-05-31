@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Lịch chiếu</title>
+</head>
+<body>
+<h1>Lịch chiếu phim</h1>
+<table border="1">
+  <tr>
+    <th>Tên phim</th>
+    <th>Phòng chiếu</th>
+    <th>Ngày bắt đầu</th>
+    <th>Giờ bắt đầu</th>
+  </tr>
+  <tr th:each="schedule : ${schedules}">
+    <td th:text="${schedule.movie.name}"></td>
+    <td th:text="${schedule.room.name}"></td>
+    <td th:text="${schedule.startDate}"></td>
+    <td th:text="${schedule.startTime}"></td>
+  </tr>
+</table>
+</body>
+</html>
