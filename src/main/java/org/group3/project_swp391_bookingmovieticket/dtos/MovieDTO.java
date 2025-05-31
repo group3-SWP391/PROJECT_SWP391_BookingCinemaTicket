@@ -22,7 +22,7 @@ public class MovieDTO  {
     private String trailerURLWatchLink;
     private String language;
     private String rated;
-    private Integer isShowing;
+    private Integer statusShowing;
     private List<ScheduleDTO> schedules;
     private Long total;
     private Long totalTicket;

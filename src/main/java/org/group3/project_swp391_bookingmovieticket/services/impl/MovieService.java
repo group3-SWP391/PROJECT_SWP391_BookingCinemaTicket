@@ -58,22 +58,6 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<MovieDTO> getNowShowingMovies() {
-        return movieRepository.findMovieIsShowing()
-                .stream()
-                .map(movie -> modelMapper.map(movie, MovieDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MovieDTO> getCommingSoonMovies() {
-        return movieRepository.findMovieCommingSoon()
-                .stream()
-                .map(movie -> modelMapper.map(movie, MovieDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<MovieDTO> getMovieByCategory(String categoryName) {
         return movieRepository.getMovieByCategory(categoryName)
                 .stream()
@@ -91,6 +75,22 @@ public class MovieService implements IMovieService {
     @Override
     public List<MovieDTO> findMovieNowShowing() {
         return movieRepository.findMovieNowShowing()
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MovieDTO> findMovieComingSoon() {
+        return movieRepository.findMovieComingSoon()
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MovieDTO> findMovieByViewDesc() {
+        return movieRepository.findMovieByViewDesc()
                 .stream()
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());

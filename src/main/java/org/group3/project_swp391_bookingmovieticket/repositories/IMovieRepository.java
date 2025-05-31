@@ -14,18 +14,17 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     @Query("SELECT DISTINCT m.categories FROM Movie m")
     List<String>getMovieCategories();
 
-    @Query("SELECT m FROM Movie m WHERE m.isShowing = true")
-    List<Movie> findMovieIsShowing();
-
-    @Query("SELECT m FROM Movie m WHERE m.isShowing = false ")
-    List<Movie> findMovieCommingSoon();
+    @Query("SELECT m FROM Movie m WHERE m.statusShowing = 0")
+    List<Movie> findMovieComingSoon();
 
     @Query("SELECT m FROM Movie m WHERE m.categories LIKE %:categoryName%")
     List<Movie> getMovieByCategory(@Param("categoryName") String categoryName);
 
     Movie findMovieById(Integer id);
 
-    @Query("SELECT m FROM Movie m WHERE m.isShowing = true")
+    @Query("SELECT m FROM Movie m WHERE m.statusShowing = 1")
     List<Movie> findMovieNowShowing();
 
+    @Query(value = "SELECT TOP 8 * FROM movie m WHERE m.is_showing = 1 ORDER BY m.views DESC", nativeQuery = true)
+    List<Movie> findMovieByViewDesc();
 }

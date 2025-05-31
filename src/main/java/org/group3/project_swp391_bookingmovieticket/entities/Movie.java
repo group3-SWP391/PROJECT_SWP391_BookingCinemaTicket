@@ -27,7 +27,7 @@ public class Movie {
     private String largeImageURL;
 
     @Column(name = "short_description", length = 1000)
-    private String shoerDescription;
+    private String shortDescription;
 
     @Column(name = "long_description", length = 1000)
     private String longDescription;
@@ -51,7 +51,7 @@ public class Movie {
     private String rated;
 
     @Column(name = "is_showing")
-    private boolean isShowing;
+    private int statusShowing;
 
     @Column(name = "format")
     private String format;

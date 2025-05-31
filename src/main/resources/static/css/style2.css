@@ -1895,7 +1895,7 @@ body.active #mobile-nav {
 .prs_upcom_slider_main_wrapper {
 	float: left;
 	width: 100%;
-	padding-top: 95px;
+	padding-top: 50px;
 	padding-bottom: 94px;
 	background: #f6f6f6;
 }
@@ -3228,6 +3228,7 @@ body.active #mobile-nav {
 }
 
 .prs_feature_img_cont {
+	height: 165px;
 	float: left;
 	width: 100%;
 	padding: 30px;

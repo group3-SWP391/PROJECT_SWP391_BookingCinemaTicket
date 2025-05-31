@@ -41,20 +41,7 @@ public class MovieController {
 //        return "home";
 //    }
 
-    @GetMapping(value = "/now-showing", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<MovieDTO> getNowShowingMovies() {
-        return movieService.getNowShowingMovies();
-    }
-
-    @GetMapping(value = "/comming-soon", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<MovieDTO> getCommingSoonMovies() {
-        return movieService.getCommingSoonMovies();
-    }
-
-
-    @GetMapping(value = "/category", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/category/return-json", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<MovieDTO> getMoviesByCategory(@RequestParam(value = "categoryName", required = false)
                                               String categoryName) {
@@ -70,8 +57,7 @@ public class MovieController {
                                      Model model) {
         // cần testing lại xem có null đc kh, back về home đc kh
         if (movieId == null) {
-            model.addAttribute("categoryAll", movieService.getMovieCategories());
-            model.addAttribute("movieNowShowing", movieService.findMovieNowShowing());
+            model.addAttribute("movieHighView", movieService.findMovieByViewDesc());
             model.addAttribute("userDTO", new UserDTO());
             return "home";
         }
@@ -89,6 +75,27 @@ public class MovieController {
         model.addAttribute("movieByCategory", movieService.getMovieByCategory(categoryName.trim()));
         model.addAttribute("userDTO",  new UserDTO());
         return "movie_category";
+    }
+
+    @GetMapping(value = "/showing")
+    public String getMoviesShowing(@RequestParam(value = "status", required = false)
+                                              String status, Model model) {
+        if (status == null || status.trim().isEmpty()) {
+            model.addAttribute("movieHighView", movieService.findMovieByViewDesc());
+            model.addAttribute("userDTO", new UserDTO());
+            return "home";
+        } else {
+            if (status.equalsIgnoreCase("now-showing")) {
+                model.addAttribute("movieShowing", movieService.findMovieNowShowing());
+                model.addAttribute("userDTO", new UserDTO());
+                model.addAttribute("status", "Now-showing");
+            } else if (status.equalsIgnoreCase("coming-soon")) {
+                model.addAttribute("movieShowing", movieService.findMovieComingSoon());
+                model.addAttribute("userDTO", new UserDTO());
+                model.addAttribute("status", "Coming-soon");
+            }
+        }
+        return "movie_showing";
     }
 
 
