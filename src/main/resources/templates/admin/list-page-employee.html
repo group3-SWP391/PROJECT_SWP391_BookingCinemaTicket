@@ -149,10 +149,15 @@
   <a href="/admin" class="btn btn-secondary mb-3 ms-3">
     ← Back
   </a>
-  <div style="display: flex; align-items: center; margin: 10px 0;">
-    <input type="text" placeholder="Search..." style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; width: 200px; outline: none;">
-    <span style="margin-left: -25px; color: #666;">🔍</span>
-  </div>
+  <form action="/employee/search" method="get" style="display: flex; align-items: center; margin: 10px 0;">
+    <input type="text" name="keyword" placeholder="Search..." th:value="${keyword}"
+           style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; width: 200px; outline: none;">
+    <button type="submit" style="margin-left: -30px; background: none; border: none; cursor: pointer; color: #666;">
+      🔍
+    </button>
+  </form>
+  <h2 th:text="${message}"></h2>
+
 
   <div class="card">
     <table class="table table-bordered table-striped">
@@ -184,6 +189,7 @@
         </td>
       </tr>
       </tbody>
+
     </table>
   </div>
 

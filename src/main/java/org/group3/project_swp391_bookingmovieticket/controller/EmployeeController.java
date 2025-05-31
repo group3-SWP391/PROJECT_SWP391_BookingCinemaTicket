@@ -7,11 +7,10 @@ import org.group3.project_swp391_bookingmovieticket.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -69,6 +68,32 @@ public class EmployeeController {
         return "redirect:/admin/employee";
 
     }
+    @GetMapping("employee/search")
+    public String searchUsers(@RequestParam String keyword, Model model) {
+        try{
+            Optional<List<User>> userList = iUserService.findByUserNameIgnoreCase(keyword);
+            model.addAttribute("keyword", keyword);
+            if(userList.isPresent()){
+                List<User> users = new ArrayList<>();
+                for(User user: userList.get()){
+                    if(user.getRole().getName().equalsIgnoreCase("Employee")){
+                        users.add(user);
+                    }
+                }
+                model.addAttribute("list", users);
+            }else{
+                model.addAttribute("message", "No user found with this keyword"+keyword);
+            }
+            return "admin/list-page-employee";
+
+
+        }catch (IllegalArgumentException iae){
+            model.addAttribute("error", iae.getMessage());
+        }
+        return "admin/error1";
+
+    }
+
 
 
 
