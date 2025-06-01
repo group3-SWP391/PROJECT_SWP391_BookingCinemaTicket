@@ -1,7 +1,9 @@
 package org.group3.project_swp391_bookingmovieticket.repositories;
 
 
+import org.group3.project_swp391_bookingmovieticket.entities.Director;
 import org.group3.project_swp391_bookingmovieticket.entities.Movie;
+import org.group3.project_swp391_bookingmovieticket.entities.MovieActor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +29,14 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query(value = "SELECT TOP 8 * FROM movie m WHERE m.is_showing = 1 ORDER BY m.views DESC", nativeQuery = true)
     List<Movie> findMovieByViewDesc();
+
+    @Query(value = "SELECT m FROM Movie m WHERE m.categories LIKE %:categoryName%")
+    List<Movie> findMovieSameCategory(@Param("categoryName") String categoryName);
+
+    @Query("SELECT ma FROM MovieActor ma WHERE ma.movie.id = :movieId")
+    List<MovieActor> findAllActorByMovieId(@Param("movieId") Integer movieId);
+
+    @Query("SELECT d FROM Movie m JOIN m.director d WHERE m.id = :movieId")
+    Director findDirectorByMovieId(@Param("movieId") Integer movieId);
+
 }

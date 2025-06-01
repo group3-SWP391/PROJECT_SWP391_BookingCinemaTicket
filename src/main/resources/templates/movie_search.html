@@ -137,17 +137,17 @@
                                                             <div class="prs_upcom_movie_content_box"
                                                                  style="flex-grow: 1; margin-top: 10px;">
                                                                 <div class="prs_upcom_movie_content_box_inner">
-                                                                    <h2 th:text="${movie.name}"
-                                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px">
-                                                                        Movie name</h2>
+                                                                    <h3 style="font-size: 1.1rem; font-weight: bold; height: 40px">
+                                                                        <strong>Movie name:</strong> <span
+                                                                            th:text="${movie.name}"></span></h3>
                                                                     <div style="font-size: 0.9rem; color: #333;">
-                                                                        <p><strong>Thể loại:</strong> <span
+                                                                        <p><strong>Category:</strong> <span
                                                                                 th:text="${movie.categories}">Movie category</span>
                                                                         </p>
-                                                                        <p><strong>Thời lượng:</strong> <span
+                                                                        <p><strong>Duration:</strong> <span
                                                                                 th:text="${movie.duration + ' minutes'}">Movie duration</span>
                                                                         </p>
-                                                                        <p><strong>Khởi chiếu:</strong> <span
+                                                                        <p><strong>Date:</strong> <span
                                                                                 th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
                                                                         </p>
                                                                     </div>

@@ -221,135 +221,34 @@ Author: Webstrot
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="prs_upcome_tabs_wrapper prs_upcome_tabs_wrapper_mss float_left">
-                                        <ul class="nav nav-tabs" role="tablist">
-                                            <li role="presentation" class="active"><a href="#home"
-                                                                                      aria-controls="best" role="tab"
-                                                                                      data-toggle="tab">Summary</a>
-                                            </li>
-                                            <li role="presentation"><a href="#menu2" aria-controls="trand"
-                                                                       role="tab" data-toggle="tab">Behind The
-                                                Scenes</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
                                     <div class="tab-content">
                                         <div id="home" class="tab-pane active">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="st_md_summ_pera float_left">
-                                                        <h5>SYNOPSIS</h5>
+                                                        <h2 style="padding-bottom: -20px; color: #ff4444; font-weight: bold">SUMMARY</h2>
                                                         <p th:text="${movieDetail.longDescription}"> longDescription</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
+                                                    <div class="st_md_summ_pera float_left">
+                                                        <h4 style="padding-bottom: 20px; color: #ff4444">Director</h4>
+                                                        <img th:src="@{/images/content/c1.jpg}" alt="img">
+                                                        <p th:text="${directorByMovie.name}" style="padding-top: 10px; font-weight: 700; color: black;"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
                                                     <div class="st_md_summ_client_slider float_left">
-                                                        <p>CAST</p>
+                                                        <h4 style="padding-bottom: 20px; font-weight: bold; color: #ff4444">Cast</h4>
                                                         <div class="owl-carousel owl-theme">
-                                                            <div class="item">
+                                                            <div class="item" th:each="movieActor : ${actorByMovie}">
                                                                 <div class="st_summ_slider_cont float_left">
                                                                     <img th:src="@{/images/content/c1.jpg}" alt="img">
-                                                                    <h4><a th:href="@{none}">Jason Momoa</a></h4>
+                                                                    <h4><a th:href="@{none}" th:text="${movieActor.actor.name}" style="color: black"></a></h4>
                                                                     <h5>Actor</h5>
-                                                                    <h6>As Arthur</h6>
+                                                                    <h6>As <span th:text="${movieActor.nameInMovie}"></span></h6>
                                                                 </div>
                                                             </div>
-                                                            <div class="item">
-                                                                <div class="st_summ_slider_cont float_left">
-                                                                    <img th:src="@{/images/content/c2.jpg}" alt="img">
-                                                                    <h4><a th:href="@{none}">Nicole Kidman</a></h4>
-                                                                    <h5>Actor</h5>
-                                                                    <h6>As Arthur</h6>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item">
-                                                                <div class="st_summ_slider_cont float_left">
-                                                                    <img th:src="@{/images/content/c3.jpg}" alt="img">
-                                                                    <h4><a th:href="@{none}">Willem Dafoe</a></h4>
-                                                                    <h5>Actor</h5>
-                                                                    <h6>As Arthur</h6>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item">
-                                                                <div class="st_summ_slider_cont float_left">
-                                                                    <img th:src="@{/images/content/c4.jpg}" alt="img">
-                                                                    <h4><a th:href="@{none}">Amber Heard</a></h4>
-                                                                    <h5>Actor</h5>
-                                                                    <h6>As Arthur</h6>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="menu2" class="tab-pane fade">
-                                            <div class="row">
-                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
-                                                        <img th:src="@{/images/content/movie_single/sc1.jpg}"
-                                                             alt="scene_img">
-                                                        <div class="prs_ms_scene_img_overlay"><a
-                                                                href="images/content/movie_single/sc1.jpg"
-                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
-                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
-                                                        <img th:src="@{/images/content/movie_single/sc2.jpg}"
-                                                             alt="scene_img">
-                                                        <div class="prs_ms_scene_img_overlay"><a
-                                                                href="images/content/movie_single/sc2.jpg"
-                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
-                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
-                                                        <img th:src="@{/images/content/movie_single/sc3.jpg}"
-                                                             alt="scene_img">
-                                                        <div class="prs_ms_scene_img_overlay"><a
-                                                                href="images/content/movie_single/sc3.jpg"
-                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
-                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
-                                                        <img th:src="@{/images/content/movie_single/sc4.jpg}"
-                                                             alt="scene_img">
-                                                        <div class="prs_ms_scene_img_overlay"><a
-                                                                href="images/content/movie_single/sc4.jpg"
-                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
-                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
-                                                        <img th:src="@{/images/content/movie_single/sc5.jpg}"
-                                                             alt="scene_img">
-                                                        <div class="prs_ms_scene_img_overlay"><a
-                                                                href="images/content/movie_single/sc5.jpg"
-                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
-                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div class="prs_ms_scene_slider_img prs_ms_scene_slider_img22">
-                                                        <img th:src="@{/images/content/movie_single/sc6.jpg}"
-                                                             alt="scene_img">
-                                                        <div class="prs_ms_scene_img_overlay"><a
-                                                                href="images/content/movie_single/sc6.jpg"
-                                                                class="venobox info" data-title="PORTFOLIO TITTLE"
-                                                                data-gall="gall12"><i class="flaticon-tool"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -361,9 +260,8 @@ Author: Webstrot
                         </div>
                         <div class="col-md-12" style="margin-top: 50px;">
                             <div class="ne_busness_main_slider_wrapper float_left">
-                                <div
-                                        class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
-                                    <h2>TRENDING STORIES</h2>
+                                <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
+                                    <h2 style="font-size: 27px; color: #ff4444; padding-bottom: 15px;">Relate movie</h2>
                                 </div>
                             </div>
                         </div>
@@ -371,7 +269,7 @@ Author: Webstrot
                             <div role="tabpanel" class="tab-pane active">
                                 <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
                                 <div class="row">
-                                    <div th:each="movie : ${movieAll}" class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                    <div th:each="movie : ${movieSameCategory}" class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="prs_upcom_movie_box_wrapper"
                                              style="height: 100%; display: flex; flex-direction: column;">
                                             <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
@@ -380,8 +278,13 @@ Author: Webstrot
                                                 <div class="prs_upcom_movie_img_overlay"></div>
                                                 <div class="prs_upcom_movie_img_btn_wrapper">
                                                     <ul>
-                                                        <li><a th:href="@{none}">View Trailer</a></li>
-                                                        <li><a th:href="@{none}">View Details</a></li>
+                                                        <li><a title='title' rel='external'
+                                                               class="test-popup-link"
+                                                               th:href="${movie.trailerURLWatchLink}">View
+                                                            Trailer</a></li>
+                                                        <li>
+                                                            <a th:href="@{/movie/detail(movieId=${movie.id})}">View
+                                                                Details</a></li>
                                                     </ul>
                                                 </div>
                                             </div>

@@ -3,6 +3,7 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -66,6 +67,7 @@ public class Movie {
     @JoinColumn(name = "director_id", referencedColumnName = "id")
     private Director director;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieActor> movieActors;
 

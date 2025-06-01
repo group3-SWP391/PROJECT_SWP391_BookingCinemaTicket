@@ -44,15 +44,15 @@ public class MovieController {
     @GetMapping(value = "/detail")
     public String displayMovieDetail(@RequestParam(value = "movieId", required = false) Integer movieId,
                                      Model model) {
-        // cần testing lại xem có null đc kh, back về home đc kh
         if (movieId == null) {
             model.addAttribute("movieHighView", movieService.findMovieByViewDesc());
             model.addAttribute("userDTO", new UserDTO());
             return "home";
         }
-        // cần load 1 list movie cùng thể loại với movie đang ở detail
-        model.addAttribute("movieAll", movieService.findAll());
-
+        MovieDTO movieDetail = movieService.findMovieById(movieId);
+        model.addAttribute("movieSameCategory", movieService.findMovieSameCategory(movieDetail.getCategories()));
+        model.addAttribute("actorByMovie", movieService.findAllActorByMovieId(movieId));
+        model.addAttribute("directorByMovie", movieService.findDirectorByMovieId(movieId));
         model.addAttribute("movieDetail", movieService.findMovieById(movieId));
         model.addAttribute("userDTO", new UserDTO());
         return "movie_detail";

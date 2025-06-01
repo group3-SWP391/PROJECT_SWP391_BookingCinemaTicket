@@ -15,7 +15,7 @@
                             <div class="clearfix"></div>
                             <ul class="dl-menu">
                                 <li class="parent"><a th:href="@{/}">Home</a></li>
-                                <li class="parent"><a th:href="@{none}">Movie</a>
+                                <li class="parent"><a>Movie</a>
                                     <ul class="lg-submenu">
                                         <li><a th:href="@{/movie/showing(status='now-showing')}">Now-showing</a></li>
                                         <li><a th:href="@{/movie/showing(status='coming-soon')}">Coming-soon</a></li>
@@ -27,7 +27,7 @@
                                         <li><a th:href="@{none}">none</a></li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{none}">category</a>
+                                <li class="parent"><a>category</a>
                                     <ul class="lg-submenu">
                                         <li th:each="category: ${session.categoryAll}">
                                             <a th:href="@{/movie/category/return-view(categoryName=${category})}" th:text="${category}">movie category name</a>

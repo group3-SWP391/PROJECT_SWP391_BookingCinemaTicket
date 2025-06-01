@@ -1,7 +1,9 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.Director;
 import org.group3.project_swp391_bookingmovieticket.entities.Movie;
+import org.group3.project_swp391_bookingmovieticket.entities.MovieActor;
 import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IMovieService;
 import org.modelmapper.ModelMapper;
@@ -94,5 +96,23 @@ public class MovieService implements IMovieService {
                 .stream()
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MovieDTO> findMovieSameCategory(String categoryName) {
+        return movieRepository.findMovieSameCategory(categoryName)
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MovieActor> findAllActorByMovieId(int movieId) {
+        return movieRepository.findAllActorByMovieId(movieId);
+    }
+
+    @Override
+    public Director findDirectorByMovieId(int movieId) {
+        return movieRepository.findDirectorByMovieId(movieId);
     }
 }
