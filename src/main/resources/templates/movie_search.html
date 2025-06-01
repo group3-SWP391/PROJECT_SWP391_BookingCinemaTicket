@@ -2,7 +2,7 @@
 <html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Movie-Categories</title>
+    <title>Movie-Search</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="description" content="Movie Pro"/>
     <meta name="keywords" content="Movie Pro"/>
@@ -55,7 +55,7 @@
                 <div class="prs_title_heading_wrapper">
                     <ul>
                         <li><a th:href="@{/}">Home</a></li>
-                        <li> > Category</li>
+                        <li> > Search</li>
                     </ul>
                 </div>
             </div>
@@ -113,7 +113,7 @@
                                             <div role="tabpanel" class="tab-pane active">
                                                 <!-- Sử dụng row + col để tạo lưới -->
                                                 <div class="row" id="movieListContainerCategory">
-                                                    <div th:each="movie : ${movieByCategory}"
+                                                    <div th:each="movie : ${movieSearch}"
                                                          class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mb-4">
                                                         <div class="prs_upcom_movie_box_wrapper"
                                                              style="height: 100%; display: flex; flex-direction: column;">
@@ -302,7 +302,7 @@
 <script th:src="@{/js/custom.js}"></script>
 
 <script th:inline="javascript">
-    var movieShowingData = /*[[${movieByCategory}]]*/ [];
+    var movieShowingData = /*[[${movieSearch}]]*/ [];
 </script>
 
 <!-- js for choose category -->

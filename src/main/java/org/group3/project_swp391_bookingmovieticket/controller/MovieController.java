@@ -27,29 +27,18 @@ public class MovieController {
     }
 
     // chưa fix cần sang trang riêng
-//    @GetMapping("/search")
-//    public String displayAllMovies(@RequestParam(value = "movieNameSearch", required = false) String movieNameSearch,
-//                                   Model model) {
-//        if (movieNameSearch == null || movieNameSearch.trim().isEmpty()) {
-//            model.addAttribute("movieNowShowing", movieService.findMovieNowShowing());
-//        } else {
-//            model.addAttribute("movieAll", movieService.findByMovieName(movieNameSearch));
-//        }
-//        model.addAttribute("categoryAll", movieService.getMovieCategories());
-//        model.addAttribute("movieByCategory", movieService.findAll());
-//        model.addAttribute("userDTO", new UserDTO());
-//        return "home";
-//    }
-
-    @GetMapping(value = "/category/return-json", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<MovieDTO> getMoviesByCategory(@RequestParam(value = "categoryName", required = false)
-                                              String categoryName) {
-        if (categoryName == null || categoryName.trim().isEmpty() || categoryName.equalsIgnoreCase("movieAll")) {
-            return movieService.findAll();
+    @GetMapping("/search")
+    public String displayAllMovies(@RequestParam(value = "movieNameSearch", required = false) String movieNameSearch,
+                                   Model model) {
+        if (movieNameSearch == null || movieNameSearch.trim().isEmpty() || movieNameSearch.trim().equalsIgnoreCase(" ")) {
+            model.addAttribute("movieHighView", movieService.findMovieByViewDesc());
+            model.addAttribute("userDTO", new UserDTO());
+            return "home";
         } else {
-            return movieService.getMovieByCategory(categoryName);
+            model.addAttribute("movieSearch", movieService.findByMovieName(movieNameSearch));
+            model.addAttribute("userDTO", new UserDTO());
         }
+        return "movie_search";
     }
 
     @GetMapping(value = "/detail")
@@ -87,14 +76,13 @@ public class MovieController {
         } else {
             if (status.equalsIgnoreCase("now-showing")) {
                 model.addAttribute("movieShowing", movieService.findMovieNowShowing());
-                model.addAttribute("userDTO", new UserDTO());
                 model.addAttribute("status", "Now-showing");
             } else if (status.equalsIgnoreCase("coming-soon")) {
                 model.addAttribute("movieShowing", movieService.findMovieComingSoon());
-                model.addAttribute("userDTO", new UserDTO());
                 model.addAttribute("status", "Coming-soon");
             }
         }
+        model.addAttribute("userDTO", new UserDTO());
         return "movie_showing";
     }
 
