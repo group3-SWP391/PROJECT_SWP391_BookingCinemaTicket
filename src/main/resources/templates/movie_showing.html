@@ -138,8 +138,10 @@
                                                                  style="flex-grow: 1; margin-top: 10px;">
                                                                 <div class="prs_upcom_movie_content_box_inner">
                                                                     <h2
-                                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px">
-                                                                        Movie name: <a th:href="@{/movie/detail(movieId=${movie.id})}" th:text="${movie.name}"></a></h2>
+                                                                            style="font-size: 1.1rem; font-weight: bold; height: 40px">
+                                                                        Movie name: <a
+                                                                            th:href="@{/movie/detail(movieId=${movie.id})}"
+                                                                            th:text="${movie.name}"></a></h2>
                                                                     <div style="font-size: 0.9rem; color: #333;">
                                                                         <p><strong>Thể loại:</strong> <span
                                                                                 th:text="${movie.categories}">Movie category</span>
@@ -296,25 +298,44 @@
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/movie_showing.js}"></script>
+
+<!-- Thuộc tính th:inline="javascript" là chỉ dẫn của Thymeleaf cho biết
+bên trong thẻ này có chứa mã JavaScript, và Thymeleaf sẽ xử lý inline expression
+đặc biệt phù hợp với JavaScript. -->
+<script th:inline="javascript">
+    var movieShowingData = /*[[${movieShowing}]]*/ [];
+</script>
+
 <script>
     function loadMovies(categoryName) {
-        fetch('/movie/category/return-json?categoryName=' + encodeURIComponent(categoryName))
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
-            .then(movies => {
-                const container = document.getElementById('movieListContainerCategory');
-                container.innerHTML = ''; // Xóa nội dung cũ
+        let filteredMovies;
+        // trả về true thì đc add vào list false thì không add vào list
+        filteredMovies = movieShowingData.filter(movie => {
+            // Nếu categories là chuỗi, so sánh chính xác hoặc chứa categoryName
+            if (typeof movie.categories === 'string') {
+                // So sánh bằng hoặc kiểm tra chứa categoryName (tuỳ bạn muốn chính xác hay không)
+                // return movie.categories === categoryName;
+                return movie.categories.includes(categoryName);
+            }
+            return false;
+        });
+        renderMovies(filteredMovies);
+    }
 
-                movies.forEach(movie => {
-                    const div = document.createElement('div');
-                    div.className = 'col-lg-4 col-md-4 col-sm-4 col-xs-12 mb-4';
-                    div.innerHTML = `
+    function renderMovies(movies) {
+        const container = document.getElementById('movieListContainerCategory');
+        container.innerHTML = ''; // Xóa nội dung phim cũ
+
+        movies.forEach(movie => {
+            const div = document.createElement('div');
+            div.className = 'col-lg-4 col-md-4 col-sm-4 col-xs-12 mb-4';
+
+            div.innerHTML = `
           <div class="prs_upcom_movie_box_wrapper" style="height: 100%; display: flex; flex-direction: column;">
             <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
               <img src="${movie.smallImageURL || ''}" alt="movie_img"
-                style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+                   style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
               <div class="prs_upcom_movie_img_overlay"></div>
               <div class="prs_upcom_movie_img_btn_wrapper">
                 <ul>
@@ -336,13 +357,9 @@
               </div>
             </div>
           </div>`;
-                    container.appendChild(div);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading movies:', error);
-                alert('Không thể tải danh sách phim.');
-            });
+
+            container.appendChild(div);
+        });
     }
 
 </script>
