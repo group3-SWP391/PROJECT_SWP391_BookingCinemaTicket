@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+    <link rel="stylesheet" href="/css/nice-select.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <script src="/js/jquery.nice-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/en.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .card-metric {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 20px 10px 15px 10px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
+        .card-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .card-title {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+        .card-value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        .dashboard-header h2 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+        .dashboard-header p {
+            margin-bottom: 0;
+        }
+        .flatpickr-input {
+            background: #fff !important;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding-left: 38px !important;
+            font-size: 16px;
+            color: #333;
+            height: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: border 0.2s;
+        }
+        .flatpickr-input:focus {
+            border: 1.5px solid #198754;
+            outline: none;
+        }
+        .month-picker-wrapper {
+            position: relative;
+        }
+        .month-picker-wrapper .calendar-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 18px;
+            pointer-events: none;
+        }
+        .nice-select {
+            float: none !important;
+            display: block !important;
+            width: 100% !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            box-sizing: border-box;
+            vertical-align: middle;
+        }
+        .filter-row .col-xs-12,
+        .filter-row .col-sm-4 {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .filter-label {
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        #monthlyRevenueChart {
+            width: 100% !important;
+            height: 600px !important;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="dashboard-header" style="margin-bottom: 25px;">
+            <h2>
+                Hello <span th:text="${session.userLogin != null ? session.userLogin.fullname : 'Manager'}">Manager</span> <span style="font-size: 1.2em;">👋</span>
+            </h2>
+            <p class="text-muted">Overview information about your system</p>
+        </div>
+
+        <!-- Metrics Cards -->
+        <div class="row" style="margin-bottom: 30px;">
+            <div class="col-xs-12 col-sm-6 col-lg-3">
+                <div class="card-metric text-center panel panel-success">
+                    <div class="card-icon" style="color: #28a745;"><i class="fa fa-money"></i></div>
+                    <div class="card-title">Total Revenue</div>
+                    <div class="card-value" style="color: #28a745;" th:text="${revenue != null ? #numbers.formatDecimal(revenue, 2, 'COMMA', 0, 'POINT') + ' $' : '0 $'}">0 $</div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3">
+                <div class="card-metric text-center panel panel-primary">
+                    <div class="card-icon" style="color: #337ab7;"><i class="fa fa-ticket"></i></div>
+                    <div class="card-title">Tickets Sold</div>
+                    <div class="card-value" style="color: #337ab7;" th:text="${tickets}">0</div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3">
+                <div class="card-metric text-center panel panel-warning">
+                    <div class="card-icon" style="color: #f0ad4e;"><i class="fa fa-film"></i></div>
+                    <div class="card-title">Total Movies</div>
+                    <div class="card-value" style="color: #f0ad4e;" th:text="${movieCount}">0</div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3">
+                <div class="card-metric text-center panel panel-danger">
+                    <div class="card-icon" style="color: #d9534f;"><i class="fa fa-calendar"></i></div>
+                    <div class="card-title">Total Schedules</div>
+                    <div class="card-value" style="color: #d9534f;" th:text="${scheduleCount}">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="row filter-row" style="margin-bottom: 30px;">
+            <div class="col-xs-12 col-sm-4">
+                <label for="monthPicker" class="filter-label">Select Month</label>
+                <div class="month-picker-wrapper" style="display: flex; align-items: center;">
+                    <span class="calendar-icon"><i class="fa fa-calendar"></i></span>
+                    <input id="monthPicker" class="form-control flatpickr-input" placeholder="Select Month" readonly>
+                    <button type="button" id="clearMonthBtn" class="btn btn-default" style="margin-left: 8px; height: 40px;">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <label for="movieSelect" class="filter-label">Select Movie</label>
+                <select id="movieSelect" name="movie" class="form-control">
+                    <option value="">All</option>
+                    <option th:each="m : ${movies}" th:value="${m.id}" th:text="${m.name}">Movie</option>
+                </select>
+            </div>
+            <!--
+            <div class="col-xs-12 col-sm-4" style="margin-bottom: 10px;">
+                <label>Select Cinema</label>
+                <select name="cinema" class="form-control">
+                    <option value="">All</option>
+                    <option th:each="c : ${cinemas}" th:value="${c.id}" th:text="${c.name}">Cinema</option>
+                </select>
+            </div>
+            -->
+        </div>
+
+        <!-- Add this after your filters section -->
+        <div style="margin-bottom: 40px; width: 100%; height: 600px;">
+            <h5 style="margin-bottom: 15px;">Monthly Revenue Overview (Last 12 Months)</h5>
+            <canvas id="monthlyRevenueChart" height="600" style="width: 100%;"></canvas>
+        </div>
+
+        <!-- Revenue by Movie -->
+        <div style="margin-bottom: 40px;">
+            <h5 style="margin-bottom: 15px;">Revenue by Movie</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Movie Name</th>
+                        <th>Revenue ($)</th>
+                        <th>Tickets Sold</th>
+                        <th>Last Show Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="m : ${movieRevenueList}">
+                        <td th:text="${m.name}"></td>
+                        <td th:text="${#numbers.formatDecimal(m.totalRevenue, 0, 'COMMA', 0, 'POINT') + ' $'}"></td>
+                        <td th:text="${m.ticketSold}"></td>
+                        <td th:text="${m.lastShowDate}"></td>
+                        <td><a th:href="@{/admin/movie/{id}(id=${m.id})}" class="btn btn-xs btn-primary">Details</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            let selectedMonthIndex = null; // <-- Move this to the top!
+
+            // Initialize nice select and flatpickr
+            $('#movieSelect').niceSelect();
+            flatpickr("#monthPicker", {
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "F Y"
+                    })
+                ],
+                locale: "en"
+            });
+
+            // Get the movie revenue data from Thymeleaf
+            const movieRevenueListJson = /*[[${movieRevenueListJson}]]*/ '[]';
+            console.log('Raw movieRevenueListJson from Thymeleaf:', movieRevenueListJson);
+
+            let movieRevenueList = [];
+            try {
+                if (movieRevenueListJson && movieRevenueListJson !== '[]') {
+                    movieRevenueList = JSON.parse(movieRevenueListJson);
+                    console.log('Parsed movieRevenueList:', movieRevenueList);
+                }
+            } catch (e) {
+                console.error('Error parsing JSON:', e);
+            }
+
+            // Create labels for last 12 months
+            const months = [];
+            const currentDate = new Date();
+            for (let i = 11; i >= 0; i--) {
+                const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+                months.push(date.toLocaleString('en-US', { month: 'short', year: 'numeric' }));
+            }
+            console.log('Months labels:', months);
+
+            // Calculate total revenue for each month
+            const totalMonthlyRevenue = new Array(12).fill(0);
+
+            if (movieRevenueList && movieRevenueList.length > 0) {
+                movieRevenueList.forEach(movie => {
+                    if (movie.monthlyRevenue && Array.isArray(movie.monthlyRevenue)) {
+                        movie.monthlyRevenue.forEach((revenue, index) => {
+                            // Simple number conversion - your data looks clean
+                            const num = Number(revenue);
+                            if (!isNaN(num) && num >= 0) {
+                                totalMonthlyRevenue[index] += num;
+                            }
+                        });
+                    }
+                });
+            }
+
+            console.log('Total monthly revenue calculated:', totalMonthlyRevenue);
+
+            // Find max value for scale
+            const maxRevenue = Math.max(...totalMonthlyRevenue);
+            const hasData = totalMonthlyRevenue.some(val => val > 0);
+
+            console.log('Max revenue:', maxRevenue, 'Has data:', hasData);
+
+            let chart; // <-- move this to the top of your $(document).ready(function() { ... })
+
+            if (hasData) {
+                // Create the chart with simple configuration
+                const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Total Revenue ($)',
+                            data: getMonthlyRevenueData(), // initially all movies
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            fill: true,
+                            tension: 0.1,
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: '#28a745',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Total Monthly Revenue (Last 12 Months)',
+                                font: {
+                                    size: 16
+                                }
+                            },
+                            legend: {
+                                display: true
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        console.log('Y-axis tick value:', value, typeof value, isFinite(value));
+                                        if (typeof value === 'number' && isFinite(value)) {
+                                            return '$' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                                        }
+                                        return '$0';
+                                    },
+                                    stepSize: 10,
+                                    autoSkip: false
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    maxRotation: 45
+                                }
+                            }
+                        }
+                    }
+                });
+
+                console.log('Chart created successfully');
+
+                chart.resize();
+            } else {
+                // Show no data message
+                const chartContainer = document.getElementById('monthlyRevenueChart').closest('div');
+                if (chartContainer) {
+                    chartContainer.innerHTML =
+                        '<div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">' +
+                        '<i class="fa fa-chart-line" style="font-size: 48px; color: #6c757d; margin-bottom: 15px;"></i>' +
+                        '<h5 style="color: #6c757d; margin-bottom: 10px;">No Revenue Data Available</h5>' +
+                        '<p style="color: #6c757d; margin: 0;">No movie revenue data found for the chart display.</p>' +
+                        '</div>';
+                }
+            }
+
+            function updateChart(selectedMovieId) {
+                if (selectedMonthIndex !== null) {
+                    // Show all movies for the selected month
+                    const labels = [];
+                    const data = [];
+                    movieRevenueList.forEach(movie => {
+                        if (!selectedMovieId || movie.id == selectedMovieId) {
+                            labels.push(movie.name);
+                            const num = Number(movie.monthlyRevenue[selectedMonthIndex]);
+                            data.push((!isNaN(num) && num >= 0) ? num : 0);
+                        }
+                    });
+                    chart.config.type = 'bar'; // Switch to bar chart for movie comparison
+                    chart.data.labels = labels;
+                    chart.data.datasets[0].label = 'Revenue ($) in selected month';
+                    chart.data.datasets[0].data = data;
+                    chart.options.scales.x.title = { display: true, text: 'Movies' };
+                    chart.options.scales.y.title = { display: true, text: 'Revenue ($)' };
+                } else {
+                    // Default: show months on X-axis
+                    chart.config.type = 'line';
+                    chart.data.labels = months;
+                    chart.data.datasets[0].label = 'Total Revenue ($)';
+                    chart.data.datasets[0].data = getMonthlyRevenueData(selectedMovieId);
+                    chart.options.scales.x.title = { display: true, text: 'Month' };
+                    chart.options.scales.y.title = { display: true, text: 'Revenue ($)' };
+                }
+                chart.update();
+            }
+
+            function getMonthlyRevenueData(selectedMovieId) {
+                // Default: return all months
+                const monthlyRevenue = new Array(12).fill(0);
+                if (movieRevenueList && movieRevenueList.length > 0) {
+                    movieRevenueList.forEach(movie => {
+                        if (!selectedMovieId || movie.id == selectedMovieId) {
+                            if (movie.monthlyRevenue && Array.isArray(movie.monthlyRevenue)) {
+                                movie.monthlyRevenue.forEach((revenue, index) => {
+                                    const num = Number(revenue);
+                                    if (!isNaN(num) && num >= 0) {
+                                        monthlyRevenue[index] += num;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                return monthlyRevenue;
+            }
+
+            $('#movieSelect').on('change', function() {
+                const selectedMovieId = $(this).val();
+                updateChart(selectedMovieId);
+            });
+
+            $('#monthPicker').on('change', function() {
+                const value = $(this).val(); // format: "YYYY-MM"
+                if (value) {
+                    const [year, month] = value.split('-');
+                    // Build the label as in months array
+                    const label = new Date(year, parseInt(month, 10) - 1, 1).toLocaleString('en-US', { month: 'short', year: 'numeric' });
+                    selectedMonthIndex = months.indexOf(label);
+                } else {
+                    selectedMonthIndex = null;
+                }
+                updateChart($('#movieSelect').val());
+            });
+
+            $('#clearMonthBtn').on('click', function() {
+                $('#monthPicker').val('');
+                selectedMonthIndex = null;
+                updateChart($('#movieSelect').val());
+            });
+        });
+    </script>
+
+    <script th:src="@{/js/jquery.dlmenu.js}"></script>
+</body>
+</html> 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <header th:fragment="header" class="bg-dark text-white" style="padding: 15px 0; background-color: #ff4444 !important;">
+        <div class="container-fluid">
+            <div>
+                <h4 class="pull-left" style="margin: 0; color: #fff;">Admin Dashboard</h4>
+                <div class="pull-right" style="margin-top: 2px;">
+                    <div th:if="${session.userLogin != null}" style="display: inline-block;">
+                        <a class="btn btn-default" style="margin-right: 10px; background: #1b1b1b; color: #fff; border: none;" th:href="@{/dashboard}">
+                            <span th:text="${session.userLogin.fullname}">User</span>
+                        </a>
+                        <a class="btn btn-default" style="background: #1b1b1b; color: #fff; border: none;" th:href="@{/log-out}">
+                            Log out
+                        </a>
+                    </div>
+                    <div th:if="${session.userLogin == null}" style="display: inline-block;">
+                        <a class="btn btn-default" style="color: #333; background: #fff; border: none;" data-toggle="modal" data-target="#myModal">Sign up</a>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    </header>
+</body>
+</html> 

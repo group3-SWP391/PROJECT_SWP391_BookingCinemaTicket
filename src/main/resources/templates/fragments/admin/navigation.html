@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <nav th:fragment="navigation" class="h-100">
+        <div class="p-3">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/dashboard}">
+                        <i class="fa fa-tachometer" style="margin-right:8px;"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/movies}">
+                        <i class="fa fa-film" style="margin-right:8px;"></i> Manage Movies
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/tickets}">
+                        <i class="fa fa-ticket" style="margin-right:8px;"></i> Manage Tickets
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/schedules}">
+                        <i class="fa fa-calendar" style="margin-right:8px;"></i> Manage Schedules
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/cinemas}">
+                        <i class="fa fa-building" style="margin-right:8px;"></i> Manage Cinemas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/users}">
+                        <i class="fa fa-users" style="margin-right:8px;"></i> Manage Users
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html> 

@@ -1,0 +1,148 @@
+:root {
+    --admin-primary: #ff4444;
+    --admin-primary-hover: #ff6666;
+    --admin-sidebar-width: 250px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.admin-wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.admin-sidebar {
+    width: var(--admin-sidebar-width);
+    background-color: var(--admin-primary);
+    color: white;
+    height: calc(100vh - 56px);
+    position: fixed;
+    left: 0;
+    top: 56px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    padding-right: 5px;
+}
+
+.admin-main {
+    flex: 1;
+    margin-left: var(--admin-sidebar-width);
+    padding: 20px;
+    background-color: #f8f9fa;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+}
+
+.nav-link {
+    color: white;
+    background: transparent;
+    padding: 12px 20px;
+    border-radius: 0;
+    margin-bottom: 2px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: normal;
+}
+
+.nav > li > .nav-link:hover, .nav > li > .nav-link.active {
+    background-color: #d32f2f;
+    color: white;
+    font-weight: bold;
+    transform: translateX(5px);
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.08);
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.admin-main::-webkit-scrollbar {
+    width: 5px;
+}
+
+.admin-main::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.admin-main::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.admin-main::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.bg-dark {
+    background-color: var(--admin-primary) !important;
+}
+
+.card-metric {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.card-metric:hover {
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.card-title {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.card-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.month-picker-wrapper {
+    position: relative;
+}
+.month-picker-wrapper .calendar-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 18px;
+    pointer-events: none;
+}
+.flatpickr-input {
+    background: #fff !important;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding-left: 38px !important;
+    font-size: 16px;
+    color: #333;
+    height: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: border 0.2s;
+}
+.flatpickr-input:focus {
+    border: 1.5px solid #198754;
+    outline: none;
+} 
