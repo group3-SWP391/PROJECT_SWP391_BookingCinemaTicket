@@ -1,23 +1,127 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Staff Dashboard</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 0 20px;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0;
+      background-color: #34495e;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .stats {
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-item {
+      background: #e3e9f3;
+      border-radius: 6px;
+      padding: 15px;
+      text-align: center;
+      font-weight: 600;
+      color: #2c3e50;
+      box-shadow: inset 0 1px 3px rgba(255,255,255,0.6);
+    }
+
+    nav {
+      max-width: 800px;
+      margin: 0 auto 40px auto;
+      text-align: center;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: inline-flex;
+      gap: 30px;
+    }
+
+    nav ul li {
+      background-color: #2980b9;
+      border-radius: 6px;
+      padding: 15px 25px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+      transition: background-color 0.3s ease;
+    }
+
+    nav ul li:hover {
+      background-color: #1c5980;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav ul li a svg, nav ul li a span.emoji {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    @media(max-width: 480px) {
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      nav ul li {
+        padding: 12px 18px;
+      }
+    }
+  </style>
 </head>
 <body>
-<h1>Chào mừng đến với trang quản lý của nhân viên</h1>
+<header>
+  <h1>Chào mừng đến với trang quản lý của nhân viên</h1>
+</header>
 
-<div>
-  <p>Doanh thu: <span th:text="${revenue}">0</span> VNĐ</p>
-  <p>Số lượng vé đã bán: <span th:text="${tickets}">0</span></p>
-  <p>Tổng số phim: <span th:text="${movieCount}">0</span></p>
-  <p>Tổng số lịch chiếu: <span th:text="${scheduleCount}">0</span></p>
-</div>
+<section class="stats">
+  <div class="stat-item">
+    Doanh thu<br/>
+    <span th:text="${revenue}">0</span> VNĐ
+  </div>
+  <div class="stat-item">
+    Số lượng vé đã bán<br/>
+    <span th:text="${tickets}">0</span>
+  </div>
+  <div class="stat-item">
+    Tổng số phim<br/>
+    <span th:text="${movieCount}">0</span>
+  </div>
+  <div class="stat-item">
+    Tổng số lịch chiếu<br/>
+    <span th:text="${scheduleCount}">0</span>
+  </div>
+</section>
 
 <nav>
   <ul>
-    <li><a th:href="@{/dashboard/movies}">🎬 Quản lý phim</a></li>
-    <li><a th:href="@{/dashboard/schedules}">🗓 Xem lịch chiếu</a></li>
+    <li><a th:href="@{/dashboard/movies}"><span class="emoji">🎬</span> Quản lý phim</a></li>
+    <li><a th:href="@{/dashboard/schedules}"><span class="emoji">🗓</span> Xem lịch chiếu</a></li>
   </ul>
 </nav>
 </body>

@@ -3,19 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <title>Thêm phim mới</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 40px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    form {
+      max-width: 500px;
+      background-color: white;
+      padding: 25px 30px;
+      margin: 0 auto 30px auto;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 18px;
+      font-weight: 600;
+      color: #34495e;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 8px 12px;
+      margin-top: 6px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: #2980b9;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px 0;
+      background-color: #2980b9;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1c5980;
+    }
+
+    a.back-link {
+      display: block;
+      text-align: center;
+      color: #2980b9;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 20px;
+      transition: color 0.3s ease;
+    }
+
+    a.back-link:hover {
+      color: #1c5980;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 <h1>Thêm phim mới</h1>
 <form th:action="@{/dashboard/movies/add}" th:object="${movie}" method="post">
-  <label>Tên phim: <input type="text" th:field="*{name}" /></label><br/>
-  <label>Diễn viên: <input type="text" th:field="*{actors}" /></label><br/>
-  <label>Thể loại: <input type="text" th:field="*{categories}" /></label><br/>
-  <label>Đạo diễn: <input type="text" th:field="*{director}" /></label><br/>
-  <label>Thời lượng (phút): <input type="number" th:field="*{duration}" /></label><br/>
-  <label>Ngôn ngữ: <input type="text" th:field="*{language}" /></label><br/>
-  <!-- Thêm các trường khác tương ứng nếu muốn -->
+  <label>
+    Tên phim:
+    <input type="text" th:field="*{name}" required />
+  </label>
+  <label>
+    Diễn viên:
+    <input type="text" th:field="*{actors}" />
+  </label>
+  <label>
+    Thể loại:
+    <input type="text" th:field="*{categories}" />
+  </label>
+  <label>
+    Đạo diễn:
+    <input type="text" th:field="*{director}" />
+  </label>
+  <label>
+    Thời lượng (phút):
+    <input type="number" th:field="*{duration}" min="1" />
+  </label>
+  <label>
+    Ngôn ngữ:
+    <input type="text" th:field="*{language}" />
+  </label>
+  <!-- Thêm các trường khác nếu cần -->
   <button type="submit">Lưu</button>
 </form>
-<a th:href="@{/dashboard/movies}">Quay lại danh sách phim</a>
+<a class="back-link" th:href="@{/dashboard/movies}">← Quay lại danh sách phim</a>
 </body>
 </html>

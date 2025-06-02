@@ -1,24 +1,112 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Danh sách phim</title>
   <style>
-    ul { list-style: none; padding: 0; }
-    li { margin-bottom: 10px; }
-    a { margin-left: 10px; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+      margin: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 25px;
+    }
+    .add-movie {
+      display: block;
+      max-width: 150px;
+      margin: 0 auto 30px auto;
+      background-color: #27ae60;
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+    }
+    .add-movie:hover {
+      background-color: #1e8449;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    li {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .movie-name {
+      font-weight: 700;
+      font-size: 18px;
+      color: #34495e;
+      flex: 1 1 auto;
+    }
+    .actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-left: 20px;
+    }
+    .actions a {
+      text-decoration: none;
+      background-color: #2980b9;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+      transition: background-color 0.3s ease;
+      white-space: nowrap;
+    }
+    .actions a:hover {
+      background-color: #1c5980;
+    }
+    .actions a.delete {
+      background-color: #c0392b;
+    }
+    .actions a.delete:hover {
+      background-color: #822420;
+    }
+
+    @media (max-width: 480px) {
+      li {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .actions {
+        margin-left: 0;
+        margin-top: 10px;
+      }
+    }
   </style>
 </head>
 <body>
 <h1>Phim</h1>
-<a th:href="@{/dashboard/movies/add}">Thêm phim</a>
+<a class="add-movie" th:href="@{/dashboard/movies/add}">+ Thêm phim</a>
 <ul>
   <li th:each="m : ${movies}">
-    <span th:text="${m.name}">Tên phim</span>
-    <a th:href="@{'/dashboard/movies/edit/' + ${m.id}}">Sửa</a>
-    <a th:href="@{'/dashboard/movies/delete/' + ${m.id}}"
-       onclick="return confirm('Bạn có chắc muốn xoá phim này?');">Xoá</a>
-    <a th:href="@{'/dashboard/movies/' + ${m.id} + '/schedules'}">Xem lịch chiếu</a>
+    <span class="movie-name" th:text="${m.name}">Tên phim</span>
+    <div class="actions">
+      <a th:href="@{'/dashboard/movies/edit/' + ${m.id}}">Sửa</a>
+      <a class="delete" th:href="@{'/dashboard/movies/delete/' + ${m.id}}"
+         onclick="return confirm('Bạn có chắc muốn xoá phim này?');">Xoá</a>
+      <a th:href="@{'/dashboard/movies/' + ${m.id} + '/schedules'}">Xem lịch chiếu</a>
+    </div>
   </li>
 </ul>
 </body>

@@ -1,16 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Sửa thông tin phim</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 40px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    form {
+      max-width: 450px;
+      background-color: white;
+      padding: 25px 30px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    input[type="hidden"] {
+      display: none;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 18px;
+      font-weight: 600;
+      color: #34495e;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 8px 12px;
+      margin-top: 6px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: #2980b9;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px 0;
+      background-color: #2980b9;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1c5980;
+    }
+  </style>
 </head>
 <body>
 <h1>Sửa thông tin phim</h1>
 <form th:action="@{/dashboard/movies/edit}" th:object="${movie}" method="post">
   <input type="hidden" th:field="*{id}" />
-  <label>Tên phim: <input type="text" th:field="*{name}" /></label><br/>
-  <label>Thể loại: <input type="text" th:field="*{categories}" /></label><br/>
-  <label>Thời lượng: <input type="number" th:field="*{duration}" /></label><br/>
+  <label>
+    Tên phim:
+    <input type="text" th:field="*{name}" required />
+  </label>
+  <label>
+    Thể loại:
+    <input type="text" th:field="*{categories}" />
+  </label>
+  <label>
+    Thời lượng (phút):
+    <input type="number" th:field="*{duration}" min="1" />
+  </label>
   <button type="submit">Cập nhật</button>
 </form>
 </body>

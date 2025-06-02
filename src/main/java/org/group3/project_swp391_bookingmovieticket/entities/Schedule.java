@@ -2,6 +2,8 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -19,12 +21,6 @@ public class Schedule {
 
     private double price;
 
-    @Column(name = "start_date")
-    private LocalDate startDate;
-
-    @Column(name = "start_time")
-    private LocalTime startTime;
-
     @ManyToOne
     @JoinColumn(name = "branch_id")
     private Branch branch;
@@ -37,4 +33,9 @@ public class Schedule {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime startTime;
 }

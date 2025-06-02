@@ -1,24 +1,106 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Lịch chiếu</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+      margin: 30px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: 16px;
+    }
+
+    th {
+      background-color: #2980b9;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    tr:hover {
+      background-color: #f1f7ff;
+    }
+
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead tr {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        padding: 15px;
+      }
+
+      td {
+        border: none;
+        padding-left: 50%;
+        position: relative;
+        font-size: 14px;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        top: 14px;
+        font-weight: 600;
+        color: #555;
+        white-space: nowrap;
+      }
+    }
+  </style>
 </head>
 <body>
 <h1>Lịch chiếu phim</h1>
-<table border="1">
+<table>
+  <thead>
   <tr>
     <th>Tên phim</th>
     <th>Phòng chiếu</th>
     <th>Ngày bắt đầu</th>
     <th>Giờ bắt đầu</th>
   </tr>
+  </thead>
+  <tbody>
   <tr th:each="schedule : ${schedules}">
-    <td th:text="${schedule.movie.name}"></td>
-    <td th:text="${schedule.room.name}"></td>
-    <td th:text="${schedule.startDate}"></td>
-    <td th:text="${schedule.startTime}"></td>
+    <td th:text="${schedule.movie.name}" data-label="Tên phim"></td>
+    <td th:text="${schedule.room.name}" data-label="Phòng chiếu"></td>
+    <td th:text="${schedule.startDate}" data-label="Ngày bắt đầu"></td>
+    <td th:text="${schedule.startTime}" data-label="Giờ bắt đầu"></td>
   </tr>
+  </tbody>
 </table>
 </body>
 </html>
