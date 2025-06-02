@@ -1,22 +1,24 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.AdvertisingContactRequest;
 import org.group3.project_swp391_bookingmovieticket.entities.ContactRequest;
+import org.group3.project_swp391_bookingmovieticket.repositories.AdvertisingContactRequestRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.ContactRequestRepository;
+import org.group3.project_swp391_bookingmovieticket.services.impl.EmailService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.group3.project_swp391_bookingmovieticket.services.impl.EmailService;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 @Controller
 @RequestMapping("/")
@@ -31,6 +33,9 @@ public class HomeController {
     @Autowired
     private ContactRequestRepository contactRequestRepository;
 
+    @Autowired
+    private AdvertisingContactRequestRepository advertisingContactRequestRepository;
+
     @GetMapping
     public String displayHomePage(Model model, HttpServletRequest request) {
         request.getSession().setAttribute("movieAllLargeImageURL", movieService.findAll());
@@ -41,42 +46,36 @@ public class HomeController {
         return "home";
     }
 
-    // Trang About
     @GetMapping("/about")
     public String about(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "about";
     }
 
-    // Trang Blog Category
     @GetMapping("/blog-category")
     public String blogCategory(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "blog_category";
     }
 
-    // Trang Blog Single
     @GetMapping("/blog-single")
     public String blogSingle(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "blog_single";
     }
 
-    // Trang Booking Type
     @GetMapping("/booking-type")
     public String bookingType(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "booking_type";
     }
 
-    // Trang Confirmation Screen
     @GetMapping("/confirmation-screen")
     public String confirmationScreen(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "confirmation_screen";
     }
 
-    // Trang Contact
     @GetMapping("/contact")
     public String contact(Model model) {
         try {
@@ -88,28 +87,24 @@ public class HomeController {
         }
     }
 
-    // Trang Event Category
     @GetMapping("/event-category")
     public String eventCategory(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "event_category";
     }
 
-    // Trang Event Single
     @GetMapping("/event-single")
     public String eventSingle(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "event_single";
     }
 
-    // Trang Gallery
     @GetMapping("/gallery")
     public String gallery(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "gallery";
     }
 
-    // Trang Movie Booking
     @GetMapping("/movie-booking")
     public String movieBooking(Model model) {
         model.addAttribute("userDTO", new UserDTO());
@@ -123,38 +118,29 @@ public class HomeController {
         } else {
             model.addAttribute("movieByCategory", movieService.getMovieByCategory(categoryName));
         }
-
-        // Add other required attributes
         model.addAttribute("categoryAll", movieService.getMovieCategories());
         model.addAttribute("userDTO", new UserDTO());
-
-        // Return the Thymeleaf template name
         return "movie_category";
     }
 
-
-    // Trang Movie Single
     @GetMapping("/movie-single")
     public String movieSingle(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "movie_single";
     }
 
-    // Trang Movie Single Second
     @GetMapping("/movie-single-second")
     public String movieSingleSecond(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "movie_single_second";
     }
 
-    // Trang Seat Booking
     @GetMapping("/seat-booking")
     public String seatBooking(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "seat_booking";
     }
 
-    // Trang Movie Details
     @GetMapping("/movie-details")
     public String movieDetails(@RequestParam("id") int id, Model model) {
         Optional<MovieDTO> movieOptional = movieService.findById(id);
@@ -162,22 +148,7 @@ public class HomeController {
         model.addAttribute("userDTO", new UserDTO());
         return "movie_details";
     }
-    @GetMapping("/test-email")
-    public String testEmail(Model model) {
-        try {
-            emailService.sendEmail(
-                    "sonledz22cm@gmail.com",
-                    "Test Email from Spring Boot",
-                    "This is a test email sent from your Spring Boot application!"
-            );
-            model.addAttribute("successMessage", "Test email sent successfully!");
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "Failed to send test email: " + e.getMessage());
-        }
-        return "contact";
-    }
 
-    // Xử lý biểu mẫu Liên Hệ
     @PostMapping("/contact")
     public String handleContactForm(@RequestParam String fullName,
                                     @RequestParam String email,
@@ -186,18 +157,16 @@ public class HomeController {
                                     @RequestParam String message,
                                     Model model) {
         try {
-            // Lưu thông tin liên hệ vào cơ sở dữ liệu
             ContactRequest contactRequest = new ContactRequest();
             contactRequest.setFullName(fullName);
             contactRequest.setEmail(email);
             contactRequest.setPhone(phone);
             contactRequest.setRequestType(requestType);
             contactRequest.setMessage(message);
-            contactRequestRepository.save(contactRequest);
-            System.out.println("Before saving - createdAt: " + contactRequest.getCreatedAt());
             contactRequest.setCreatedAt(LocalDateTime.now());
+            contactRequestRepository.save(contactRequest);
+            System.out.println("Contact request saved successfully. CreatedAt: " + contactRequest.getCreatedAt());
 
-            // Gửi email phản hồi tự động
             String emailSubject;
             String emailBody;
             switch (requestType) {
@@ -235,16 +204,118 @@ public class HomeController {
             }
 
             emailService.sendEmail(email, emailSubject, emailBody);
+            System.out.println("Email sent to: " + email);
 
-            // Hiển thị thông báo thành công
             model.addAttribute("successMessage", "Yêu cầu của bạn đã được gửi thành công! Vui lòng kiểm tra email để xem phản hồi.");
             model.addAttribute("userDTO", new UserDTO());
             return "contact";
         } catch (Exception e) {
+            System.out.println("Error in handleContactForm: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("errorMessage", "Đã có lỗi xảy ra khi gửi yêu cầu: " + e.getMessage());
             model.addAttribute("userDTO", new UserDTO());
             return "contact";
         }
     }
 
+    @GetMapping("/advertising-contact")
+    public String advertisingContact(Model model, HttpSession session) {
+        try {
+            String securityCode = generateSecurityCode(6);
+            session.setAttribute("securityCode", securityCode);
+            model.addAttribute("securityCode", securityCode);
+            model.addAttribute("userDTO", new UserDTO());
+            System.out.println("Generated Security Code: " + securityCode);
+            return "advertising-contact";
+        } catch (Exception e) {
+            model.addAttribute("error", "An error occurred while loading the advertising contact page: " + e.getMessage());
+            return "error";
+        }
+    }
+
+    @PostMapping("/advertising-contact")
+    public String handleAdvertisingContactForm(@RequestParam String fullName,
+                                               @RequestParam String phone,
+                                               @RequestParam String email,
+                                               @RequestParam String companyName,
+                                               @RequestParam String companyAddress,
+                                               @RequestParam String rentalDate,
+                                               @RequestParam(required = false) String notes,
+                                               @RequestParam String securityCode,
+                                               Model model,
+                                               HttpServletRequest request,
+                                               HttpSession session) {
+        try {
+            System.out.println("Received Security Code: " + securityCode);
+            String expectedSecurityCode = (String) session.getAttribute("securityCode");
+            System.out.println("Expected Security Code: " + expectedSecurityCode);
+
+            if (expectedSecurityCode == null || !expectedSecurityCode.equals(securityCode)) {
+                System.out.println("Security code mismatch!");
+                model.addAttribute("errorMessage", "Mã bảo mật không chính xác. Vui lòng thử lại!");
+                String newSecurityCode = generateSecurityCode(6);
+                session.setAttribute("securityCode", newSecurityCode);
+                model.addAttribute("securityCode", newSecurityCode);
+                model.addAttribute("userDTO", new UserDTO());
+                return "advertising-contact";
+            }
+
+            System.out.println("Security code matched, proceeding with form processing...");
+
+            AdvertisingContactRequest advertisingContactRequest = new AdvertisingContactRequest();
+            advertisingContactRequest.setFullName(fullName);
+            advertisingContactRequest.setPhone(phone);
+            advertisingContactRequest.setEmail(email);
+            advertisingContactRequest.setCompanyName(companyName);
+            advertisingContactRequest.setCompanyAddress(companyAddress);
+            advertisingContactRequest.setRentalDate(LocalDate.parse(rentalDate));
+            advertisingContactRequest.setNotes(notes);
+            advertisingContactRequest.setCreatedAt(LocalDateTime.now());
+
+            System.out.println("Saving AdvertisingContactRequest to database...");
+            advertisingContactRequestRepository.save(advertisingContactRequest);
+            System.out.println("Successfully saved to database. ID: " + advertisingContactRequest.getId());
+
+            String emailSubject = "Xác Nhận Yêu Cầu Liên Hệ Quảng Cáo";
+            String emailBody = "Chào " + fullName + ",\n\n" +
+                    "Chúng tôi đã nhận được yêu cầu liên hệ quảng cáo từ " + companyName + ". Thông tin chi tiết:\n" +
+                    "Địa chỉ: " + companyAddress + "\n" +
+                    "Ngày muốn thuê: " + rentalDate + "\n" +
+                    "Ghi chú: " + (notes != null ? notes : "Không có") + "\n\n" +
+                    "Bộ phận quảng cáo sẽ liên hệ lại với bạn qua email " + email + " hoặc số điện thoại " + phone + " trong thời gian sớm nhất.\n" +
+                    "Trân trọng,\nHệ thống đặt vé xem phim";
+
+            System.out.println("Sending email to: " + email);
+            emailService.sendEmail(email, emailSubject, emailBody);
+            System.out.println("Email sent successfully.");
+
+            System.out.println("Adding success message to model...");
+            model.addAttribute("successMessage", "Yêu cầu của bạn đã được gửi thành công! Vui lòng kiểm tra email để xem phản hồi.");
+            String newSecurityCode = generateSecurityCode(6);
+            session.setAttribute("securityCode", newSecurityCode);
+            model.addAttribute("securityCode", newSecurityCode);
+            model.addAttribute("userDTO", new UserDTO());
+            System.out.println("Returning to advertising-contact page with success message.");
+            return "advertising-contact";
+        } catch (Exception e) {
+            System.out.println("Error in handleAdvertisingContactForm: " + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "Đã có lỗi xảy ra khi gửi yêu cầu: " + e.getMessage());
+            String newSecurityCode = generateSecurityCode(6);
+            session.setAttribute("securityCode", newSecurityCode);
+            model.addAttribute("securityCode", newSecurityCode);
+            model.addAttribute("userDTO", new UserDTO());
+            return "advertising-contact";
+        }
+    }
+
+    private String generateSecurityCode(int length) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuilder code = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            code.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        return code.toString();
+    }
 }

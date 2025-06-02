@@ -2,7 +2,7 @@
 <html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8" />
-	<title>Contact-Us</title>
+	<title>Liên hệ - Hỗ trợ</title>
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta name="description" content="Movie Pro" />
 	<meta name="keywords" content="Movie Pro" />
@@ -41,8 +41,6 @@
 			padding: 40px;
 			border-radius: 12px;
 			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-			max-width: 600px;
-			margin: 0 auto;
 		}
 		.form-label {
 			font-weight: 600;
@@ -64,9 +62,9 @@
 		.btn-primary {
 			background-color: #ff4a4a;
 			border: none;
-			padding: 12px;
+			padding: 9px;
 			font-size: 16px;
-			border-radius: 8px;
+			border-radius: 35px;
 			transition: background-color 0.3s ease;
 		}
 		.btn-primary:hover {
@@ -88,11 +86,11 @@
 		.prs_title_main_sec_wrapper {
 			text-align: center;
 			padding: 40px 0;
-			background: linear-gradient(90deg, #1a1a1a, #333); /* Replaced background image with gradient */
+			background: linear-gradient(90deg, #1a1a1a, #333);
 			color: white;
 		}
 		.prs_title_img_overlay {
-			background: rgba(0, 0, 0, 0.5); /* Adjusted overlay for better contrast */
+			background: rgba(0, 0, 0, 0.5);
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -125,7 +123,6 @@
 			margin-bottom: 15px;
 			margin-top: 15px;
 		}
-		/* Styles for request type */
 		.request-type-row {
 			display: flex;
 			align-items: center;
@@ -157,6 +154,23 @@
 			box-shadow: 0 0 5px rgba(255, 74, 74, 0.2);
 			outline: none;
 		}
+		.map-container {
+			height: 100%;
+			min-height: 500px;
+		}
+		.map-container iframe {
+			width: 100%;
+			height: 100%;
+			border: 0;
+			border-radius: 12px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+		}
+		@media (max-width: 767px) {
+			.map-container {
+				min-height: 300px;
+				margin-top: 20px;
+			}
+		}
 	</style>
 </head>
 <body>
@@ -180,7 +194,7 @@
 					<h2>Liên hệ với chúng tôi</h2>
 					<ul>
 						<li><a href="#">Home</a></li>
-						<li>   >   Contact</li>
+						<li> &nbsp; > &nbsp; Contact</li>
 					</ul>
 				</div>
 			</div>
@@ -189,12 +203,51 @@
 </div>
 <!-- Title Wrapper End -->
 
+<!-- st login wrapper Start -->
+<div class="modal fade st_pop_form_wrapper" id="myModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<form th:action="@{/login}" th:object="${userDTO}" method="post">
+				<div class="st_pop_form_heading_wrapper float_left">
+					<h3>Log in</h3>
+				</div>
+				<div class="st_profile_input float_left">
+					<label>Mobile Number</label>
+					<input type="number" placeholder="Phone" th:field="*{phone}">
+				</div>
+				<div class="st_profile__pass_input st_profile__pass_input_pop float_left">
+					<input type="password" placeholder="Password" th:field="*{password}">
+				</div>
+				<div class="st_form_pop_fp float_left">
+					<h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a></h3>
+				</div>
+				<div class="st_form_pop_login_btn float_left">
+					<button type="submit" class="btn btn-primary">Log in</button>
+					<p th:text="${errorLogin}"></p>
+				</div>
+				<div class="st_form_pop_or_btn float_left">
+					<h4>or</h4>
+				</div>
+				<div class="st_form_pop_facebook_btn float_left"><a th:href="@{none}"> Connect with Facebook</a></div>
+				<div class="st_form_pop_gmail_btn float_left"><a th:href="@{none}"> Connect with Google</a></div>
+				<div class="st_form_pop_signin_btn float_left">
+					<h4>Don’t have an account? <a th:href="@{none}" data-toggle="modal" data-target="#myModa3" target="_blank">Sign Up</a></h4>
+					<h5>I agree to the <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy Policy</a></h5>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- st login wrapper End -->
+
 <!-- Contact Section Start -->
 <div class="contact-section">
 	<div class="container">
-		<h2 class="text-center mb-4">-----------------	</h2>
-		<div class="row justify-content-center">
-			<div class="col-md-8">
+		<h2 class="text-center mb-4">---------FPT Cinema Xin Chào---------</h2>
+		<div class="row">
+			<!-- Form Column -->
+			<div class="col-md-6">
 				<div class="contact-form">
 					<!-- Success or Error Messages -->
 					<div th:if="${successMessage}" class="alert alert-success success-message">
@@ -241,6 +294,13 @@
 					</form>
 				</div>
 			</div>
+			<!-- Map Column -->
+			<div class="col-md-6">
+				<div class="map-container">
+					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29796.050740094113!2d105.5252892254472!3d21.01241665783514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135abc60e7d3f19%3A0x2be9d7d0b5abcbf4!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBGUFQgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1748799943846!5m2!1svi!2s"
+							allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -268,7 +328,7 @@
 				<div class="prs_contact_info_box_wrapper prs_contact_info_box_wrapper2">
 					<div class="prs_contact_info_smallbox"> <i class="flaticon-call-answer"></i></div>
 					<h3>Email</h3>
-					<p><a href="#">presenter@example.com</a><br><a href="#">movie@example.com</a></p>
+					<p><a href="#">sonlhhe186238@fpt.edu.vn</a><br><a href="#">movie@example.com</a></p>
 				</div>
 			</div>
 		</div>
@@ -276,25 +336,6 @@
 </div>
 <!-- Contact Info End -->
 
-<!-- Newsletter Wrapper Start -->
-<div class="prs_newsletter_wrapper">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-				<div class="prs_newsletter_text">
-					<h3>Get update sign up now!</h3>
-				</div>
-			</div>
-			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-				<div class="prs_newsletter_field">
-					<input type="text" placeholder="Enter Your Email">
-					<button type="submit">Submit</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Newsletter Wrapper End -->
 <!-- prs footer Wrapper Start -->
 <header lang="vi" th:include="fragments/footer"></header>
 <!-- prs footer Wrapper End -->

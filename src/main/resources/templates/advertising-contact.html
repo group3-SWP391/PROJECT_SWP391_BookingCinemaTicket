@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Liên Hệ Quảng Cáo - Movie Booking</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/animate.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="css/flaticon.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl.theme.default.css" />
+    <link rel="stylesheet" type="text/css" href="css/dl-menu.css" />
+    <link rel="stylesheet" type="text/css" href="css/nice-select.css" />
+    <link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
+    <link rel="stylesheet" type="text/css" href="css/venobox.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/layers.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/navigation.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/settings.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/responsive.css" />
+    <!-- Favicon links -->
+    <link rel="shortcut icon" type="image/png" href="images/header/favicon.ico" />
+    <style>
+        body { background-color: #f8f9fa; }
+        .contact-section { padding: 50px 0; }
+        .contact-form { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .form-label { font-weight: bold; }
+        .success-message { display: none; color: green; font-weight: bold; margin-top: 20px; }
+        .security-code { font-family: monospace; font-size: 1.2em; background-color: #f0f0f0; padding: 5px 10px; display: inline-block; }
+        .map-container {
+            height: 100%;
+            min-height: 500px;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 767px) {
+            .map-container {
+                min-height: 300px;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Preloader Start -->
+<div id="preloader">
+    <div id="status">
+        <img src="images/header/horoscope.gif" id="preloader_image" alt="loader">
+    </div>
+</div>
+
+<!-- Navigation Start -->
+<header lang="vi" th:replace="fragments/navigation :: navigation"></header>
+<!-- Navigation End -->
+
+<!-- Title Wrapper Start -->
+<div class="prs_title_main_sec_wrapper">
+    <div class="prs_title_img_overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="prs_title_heading_wrapper">
+                    <h2>Lập kế hoạch cùng FPT-Cinema ngay</h2>
+                    <ul>
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li>   >   Quảng cáo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Title Wrapper End -->
+
+<div class="contact-section">
+    <div class="container">
+        <h2 class="text-center mb-4">Liên Hệ Quảng Cáo</h2>
+        <div class="row">
+            <!-- Form Column -->
+            <div class="col-md-6">
+                <div class="contact-form">
+                    <div th:if="${successMessage}" class="alert alert-success success-message">
+                        <span th:text="${successMessage}"></span>
+                    </div>
+                    <div th:if="${errorMessage}" class="alert alert-danger">
+                        <span th:text="${errorMessage}"></span>
+                    </div>
+
+                    <form th:action="@{/advertising-contact}" method="post">
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Họ và Tên</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Nhập họ và tên" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số Điện Thoại</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email của bạn" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="companyName" class="form-label">Tên Công Ty</label>
+                            <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Nhập tên công ty" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="companyAddress" class="form-label">Địa Chỉ Công Ty</label>
+                            <input type="text" class="form-control" id="companyAddress" name="companyAddress" placeholder="Nhập địa chỉ công ty" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rentalDate" class="form-label">Ngày Muốn Thuê</label>
+                            <input type="date" class="form-control" id="rentalDate" name="rentalDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Ghi Chú</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="5" placeholder="Nhập ghi chú (nếu có)"></textarea>
+                        </div>
+                        <!-- Hiển thị mã bảo mật -->
+                        <div class="mb-3">
+                            <label for="securityCode" class="form-label">Mã Bảo Mật</label>
+                            <div>
+                                <span class="security-code" th:text="${securityCode}"></span>
+                            </div>
+                            <input type="text" class="form-control" id="securityCode" name="securityCode" placeholder="Nhập mã bảo mật hiển thị ở trên" required>
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">Gửi Yêu Cầu</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Map Column -->
+            <div class="col-md-6">
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29796.050740094113!2d105.5252892254472!3d21.01241665783514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135abc60e7d3f19%3A0x2be9d7d0b5abcbf4!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBGUFQgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1748799943846!5m2!1svi!2s"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- prs footer Wrapper Start -->
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- prs footer Wrapper End -->
+
+<!-- Main JS Files -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery_min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/modernizr.js"></script>
+<script src="js/owl.carousel.js"></script>
+<script src="js/jquery.dlmenu.js"></script>
+<script src="js/jquery.sticky.js"></script>
+<script src="js/jquery.nice-select.min.js"></script>
+<script src="js/jquery.magnific-popup.js"></script>
+<script src="js/jquery.bxslider.min.js"></script>
+<script src="js/venobox.min.js"></script>
+<script src="js/smothscroll_part1.js"></script>
+<script src="js/smothscroll_part2.js"></script>
+<script src="js/jquery.countTo.js"></script>
+<script src="js/jquery.inview.min.js"></script>
+<script src="js/jquery.shuffle.min.js"></script>
+<script src="js/plugin/rs_slider/jquery.themepunch.revolution.min.js"></script>
+<script src="js/plugin/rs_slider/jquery.themepunch.tools.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.addon.snow.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.actions.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.carousel.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.kenburn.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.layeranimation.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.migration.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.navigation.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.parallax.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.slideanims.min.js"></script>
+<script src="js/plugin/rs_slider/revolution.extension.video.min.js"></script>
+<script src="js/contact_form.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>

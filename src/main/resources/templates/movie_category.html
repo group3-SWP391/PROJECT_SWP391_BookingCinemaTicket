@@ -141,34 +141,6 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 visible-sm visible-xs">
-				<div class="prs_mcc_left_side_wrapper">
-					<div class="prs_mcc_left_searchbar_wrapper">
-						<input type="text" placeholder="Search Movie" />
-						<button><i class="flaticon-tool"></i></button>
-					</div>
-					<div class="prs_mcc_bro_title_wrapper">
-						<h2>Các thể loại phim</h2>
-						<ul>
-							<li><i class="fa fa-caret-right"></i> <a th:href="@{/movie/movie-category(categoryName='Tất cả')}">Tất cả <span>23,124</span></a></li>
-							<li><i class="fa fa-caret-right"></i> <a th:href="@{/movie/movie-category(categoryName='Hành động')}">Hành động <span>512</span></a></li>
-							<li><i class="fa fa-caret-right"></i> <a th:href="@{/movie/movie-category(categoryName='Lãng mạn')}">Lãng mạn <span>548</span></a></li>
-							<li><i class="fa fa-caret-right"></i> <a th:href="@{/movie/movie-category(categoryName='Phiêu lưu')}">Phiêu lưu <span>557</span></a></li>
-							<li><i class="fa fa-caret-right"></i> <a th:href="@{/movie/movie-category(categoryName='Tình cảm')}">Tình cảm <span>554</span></a></li>
-							<li><i class="fa fa-caret-right"></i> <a th:href="@{/movie/movie-category(categoryName='Phim tài liệu')}">Phim tài liệu <span>567</span></a></li>
-							<li><i class="fa fa-caret-right"></i> <a th:href="@{/movie/movie-category(categoryName='Hoạt hình')}">Hoạt hình <span>689</span></a></li>
-							<li><i class="fa fa-caret-right"></i> <a th:href="@{/movie/movie-category(categoryName='Khoa học viễn tưởng')}">Khoa học viễn tưởng <span>478</span></a></li>
-						</ul>
-					</div>
-					<div class="prs_mcc_event_title_wrapper">
-						<h2>Top Events</h2>
-						<img th:src="@{/images/content/movie_category/event_img.jpg}" alt="event_img" />
-						<h3><a href="#">Music Event in India</a></h3>
-						<p>Mumbai & Pune <span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i></span></p>
-						<h4>June 07 <span>08:00-12:00 pm</span></h4>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 </div>
@@ -197,98 +169,48 @@
 <!-- prs footer Wrapper Start -->
 <header lang="vi" th:include="fragments/footer"></header>
 <!-- prs footer Wrapper End -->
-
-<!-- Login Wrapper Start -->
+<!-- st login wrapper Start -->
 <div class="modal fade st_pop_form_wrapper" id="myModal" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<button type="button" class="close" data-dismiss="modal">×</button>
-			<div class="st_pop_form_heading_wrapper float_left">
-				<h3>Log in</h3>
-			</div>
-			<div class="st_profile_input float_left">
-				<label>Email / Mobile Number</label>
-				<input type="text" />
-			</div>
-			<div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-				<input type="password" placeholder="Password" />
-			</div>
-			<div class="st_form_pop_fp float_left">
-				<h3><a href="#" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a></h3>
-			</div>
-			<div class="st_form_pop_login_btn float_left">
-				<a href="https://webstrot.com/html/moviepro/html/page-1-7_profile_settings.html">LOGIN</a>
-			</div>
-			<div class="st_form_pop_or_btn float_left">
-				<h4>or</h4>
-			</div>
-			<div class="st_form_pop_facebook_btn float_left">
-				<a href="#">Connect with Facebook</a>
-			</div>
-			<div class="st_form_pop_gmail_btn float_left">
-				<a href="#">Connect with Google</a>
-			</div>
-			<div class="st_form_pop_signin_btn float_left">
-				<h4>Don’t have an account? <a href="#" data-toggle="modal" data-target="#myModa3" target="_blank">Sign Up</a></h4>
-				<h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></h5>
-			</div>
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<form th:action="@{/login}" th:object="${userDTO}" method="post">
+				<div class="st_pop_form_heading_wrapper float_left">
+					<h3>Log in</h3>
+				</div>
+				<div class="st_profile_input float_left">
+					<label>Mobile Number</label>
+					<input type="number" placeholder="Phone" th:field="*{phone}">
+				</div>
+				<div class="st_profile__pass_input st_profile__pass_input_pop float_left">
+					<input type="password" placeholder="Password" th:field="*{password}">
+				</div>
+				<div class="st_form_pop_fp float_left">
+					<h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot
+						Password?</a></h3>
+				</div>
+				<div class="st_form_pop_login_btn float_left">
+					<button type="submit" class="btn btn-primary">Log in</button>
+					<p th:text="${errorLogin}"></p>
+				</div>
+				<div class="st_form_pop_or_btn float_left">
+					<h4>or</h4>
+				</div>
+				<div class="st_form_pop_facebook_btn float_left"><a th:href="@{none}"> Connect with Facebook</a>
+				</div>
+				<div class="st_form_pop_gmail_btn float_left"><a th:href="@{none}"> Connect with Google</a>
+				</div>
+				<div class="st_form_pop_signin_btn float_left">
+					<h4>Don’t have an account? <a th:href="@{none}" data-toggle="modal" data-target="#myModa3"
+												  target="_blank">Sign Up</a></h4>
+					<h5>I agree to the <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy
+						Policy</a></h5>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
-<div class="modal fade st_pop_form_wrapper" id="myModa2" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<button type="button" class="close" data-dismiss="modal">×</button>
-			<div class="st_pop_form_heading_wrapper st_pop_form_heading_wrapper_fpass float_left">
-				<h3>Forgot Password</h3>
-				<p>We can help! All you need to do is enter your email ID and follow the instructions!</p>
-			</div>
-			<div class="st_profile_input float_left">
-				<label>Email Address</label>
-				<input type="text" />
-			</div>
-			<div class="st_form_pop_fpass_btn float_left">
-				<a href="#">Verify</a>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade st_pop_form_wrapper" id="myModa3" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<button type="button" class="close" data-dismiss="modal">×</button>
-			<div class="st_pop_form_heading_wrapper float_left">
-				<h3>Sign Up</h3>
-			</div>
-			<div class="st_profile_input float_left">
-				<label>Email / Mobile Number</label>
-				<input type="text" />
-			</div>
-			<div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-				<input type="password" placeholder="Password" />
-			</div>
-			<div class="st_form_pop_fp float_left">
-				<h3><a href="#" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a></h3>
-			</div>
-			<div class="st_form_pop_login_btn float_left">
-				<a href="https://webstrot.com/html/moviepro/html/page-1-7_profile_settings.html">LOGIN</a>
-			</div>
-			<div class="st_form_pop_or_btn float_left">
-				<h4>or</h4>
-			</div>
-			<div class="st_form_pop_facebook_btn float_left">
-				<a href="#"><i class="fab fa-facebook-f"></i> Connect with Facebook</a>
-			</div>
-			<div class="st_form_pop_gmail_btn float_left">
-				<a href="#"><i class="fab fa-google-plus-g"></i> Connect with Google</a>
-			</div>
-			<div class="st_form_pop_signin_btn st_form_pop_signin_btn_signup float_left">
-				<h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></h5>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Login Wrapper End -->
+
 
 <!-- Main JS Files -->
 <script th:src="@{/js/jquery_min.js}"></script>
