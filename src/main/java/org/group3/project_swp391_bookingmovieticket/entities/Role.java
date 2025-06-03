@@ -2,10 +2,12 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "roles")
+@NoArgsConstructor
 public class Role {
     @Id
     @Column(name = "id")

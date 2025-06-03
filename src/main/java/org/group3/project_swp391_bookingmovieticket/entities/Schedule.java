@@ -18,18 +18,25 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "startDate")
+    @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "startTime")
+    @Column(name = "start_time")
     private LocalDate startTime;
 
     @Column(name = "price")
     private double price;
+
+    @Column(name = "end_time")
+    private LocalDate endTime;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 }

@@ -1,7 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.EventDTO;
-import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.repositories.IEventRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IEventService;
 import org.modelmapper.ModelMapper;
@@ -22,31 +21,30 @@ public class EventService implements IEventService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<String> findAll() {
+    public List<EventDTO> findEventValid() {
+        return eventRepository.findEventValid()
+                .stream()
+                .map(event -> modelMapper.map(event, EventDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventDTO> findAll() {
         return List.of();
     }
 
     @Override
-    public Optional<String> findById(Integer id) {
+    public Optional<EventDTO> findById(Integer id) {
         return Optional.empty();
     }
 
     @Override
-    public void update(String s) {
+    public void update(EventDTO eventDTO) {
 
     }
 
     @Override
     public void remove(Integer id) {
 
-    }
-
-
-    @Override
-    public List<EventDTO> findEventValid() {
-        return eventRepository.findEventValid()
-                .stream()
-                .map(event -> modelMapper.map(event, EventDTO.class))
-                .collect(Collectors.toList());
     }
 }

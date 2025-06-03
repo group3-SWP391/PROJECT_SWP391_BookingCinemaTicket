@@ -17,7 +17,4 @@ public interface IMovieService extends IGeneralService<MovieDTO>{
     MovieDTO findMovieById(Integer id);
     List<MovieDTO> findMovieNowShowing();
     List<MovieDTO> findMovieByViewDesc();
-    List<MovieDTO> findMovieSameCategory(String categoryName);
-    List<MovieActor> findAllActorByMovieId(int movieId);
-    Director findDirectorByMovieId(int movieId);
-}
+    List<MovieDTO> findMovieSameCategory(String categoryName);}

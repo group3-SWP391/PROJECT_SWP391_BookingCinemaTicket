@@ -13,4 +13,6 @@ public class ScheduleDTO  {
     private LocalTime startTime;
     private MovieDTO movie;
     private Double price;
+    private LocalDate endTime;
+    private RoomDTO room;
 }

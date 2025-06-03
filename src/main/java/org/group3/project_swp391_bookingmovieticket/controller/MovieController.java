@@ -2,17 +2,16 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
+import org.group3.project_swp391_bookingmovieticket.services.impl.DirectorService;
+import org.group3.project_swp391_bookingmovieticket.services.impl.MovieActorService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
+import org.group3.project_swp391_bookingmovieticket.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/movie")
@@ -21,12 +20,17 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
+    @Autowired
+    private MovieActorService movieActorService;
+
+    @Autowired
+    private DirectorService directorService;
+
     @GetMapping
     public String displayMovieAll() {
         return "home";
     }
 
-    // chưa fix cần sang trang riêng
     @GetMapping("/search")
     public String displayAllMovies(@RequestParam(value = "movieNameSearch", required = false) String movieNameSearch,
                                    Model model) {
@@ -51,8 +55,8 @@ public class MovieController {
         }
         MovieDTO movieDetail = movieService.findMovieById(movieId);
         model.addAttribute("movieSameCategory", movieService.findMovieSameCategory(movieDetail.getCategories()));
-        model.addAttribute("actorByMovie", movieService.findAllActorByMovieId(movieId));
-        model.addAttribute("directorByMovie", movieService.findDirectorByMovieId(movieId));
+        model.addAttribute("actorByMovie", movieActorService.findAllActorByMovieId(movieId));
+        model.addAttribute("directorByMovie", directorService.findDirectorByMovieId(movieId));
         model.addAttribute("movieDetail", movieService.findMovieById(movieId));
         model.addAttribute("userDTO", new UserDTO());
         return "movie_detail";

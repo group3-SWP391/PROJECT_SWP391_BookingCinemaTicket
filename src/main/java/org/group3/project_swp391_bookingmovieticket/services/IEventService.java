@@ -4,6 +4,6 @@ import org.group3.project_swp391_bookingmovieticket.dtos.EventDTO;
 
 import java.util.List;
 
-public interface IEventService extends IGeneralService<String> {
+public interface IEventService extends IGeneralService<EventDTO> {
     List<EventDTO> findEventValid();
 }
