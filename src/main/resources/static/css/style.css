@@ -2468,7 +2468,7 @@ body.active #mobile-nav {
 /*-- prs upcomung Slider End --*/
 /*-- prs video section Start --*/
 .prs_video_section_main_wrapper {
-	background: url('../images/content/video_bg.jpg') 50% 0 repeat-y;
+	background: url('https://cdn.celluloidjunkie.com/wp-content/uploads/2019/08/21040434/CGV-entrance.jpg') 50% 0 repeat-y;
 	background-position: center 0;
 	background-size: cover;
 	background-repeat: no-repeat;

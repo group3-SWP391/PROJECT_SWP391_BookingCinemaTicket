@@ -8,10 +8,11 @@ import java.util.List;
 public class BranchDTO {
 
     private int id;
-    private String diaChi;
+    private String location;
     private String imgURL;
     private String name;
     private String phoneNo;
+    private String description;
     private List<ScheduleDTO> schedules;
     private List<MovieDTO> movies;
     private Long totalTicketSell;

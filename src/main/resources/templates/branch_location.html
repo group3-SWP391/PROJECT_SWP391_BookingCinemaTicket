@@ -66,7 +66,7 @@ Author: Webstrot
 						<ul>
 							<li><a th:href="@{/}">Home</a>
 							</li>
-							<li>&nbsp;&nbsp; >&nbsp;&nbsp; Event</li>
+							<li>&nbsp;&nbsp; >&nbsp;&nbsp; Theater > <span th:text="${locationFind}"></span></li>
 						</ul>
 					</div>
 				</div>
@@ -84,12 +84,12 @@ Author: Webstrot
 						<h2>Events</h2>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" th:each="event : ${session.event}" style="padding-top: 30px">
-						<img th:src="${event.imageUrl}" alt="event_img" style="width: 450px; height: 200px">
-						<div class="prs_feature_img_cont prs_ec_ue_right_img_cont" style="width: 450px; height: 200px">
-							<h3 th:text="${event.name}" style="padding-top: 15px"></h3>
+				<div class="col-lg-4 col-md-6 col-sm-12 col-xs-12" th:each="branch : ${branchByLocation}" style="padding-top: 30px; padding-bottom: 60px">
+						<img th:src="${branch.imgURL}" alt="event_img" style="width: 350px; height: 200px">
+						<div class="prs_feature_img_cont prs_ec_ue_right_img_cont" style="width: 350px; height: 200px">
+							<h3 th:text="${branch.name}" style="padding-top: 15px; font-weight: bold"></h3>
 							<div class="prs_ft_small_cont_left">
-								<p>Time limit</p>
+								<p>Hot</p>
 							</div>
 							<div class="prs_ft_small_cont_right"> <i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
@@ -98,10 +98,10 @@ Author: Webstrot
 								<i class="fa fa-star-o"></i>
 							</div>
 							<ul>
-								<li>Start: <span th:text="${event.startDate} ?: 'N/A'"></span></li>
-								<li>End: <span th:text="${event.endDate} ?: 'N/A'"></span></li>
+								<li><span style="font-weight: bold">Phone: </span><span th:text="${branch.phoneNo}"></span></li>
+								<li><span style="font-weight: bold">Location: </span><span th:text="${branch.location}"></span></li>
 							</ul>
-							<p class="prs_up_pera_sec" th:text="${event.description}">description</p>
+							<p class="prs_up_pera_sec" th:text="${branch.description}">description</p>
 					</div>
 				</div>
 			</div>

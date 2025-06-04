@@ -20,13 +20,16 @@ public class Branch {
     private String location;
 
     @Column(name = "img_url")
-    private String imgUrl;
+    private String imgURL;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "phone_no")
     private String phoneNo;
+
+    @Column(name = "description")
+    private String description;
 
     @OneToMany(mappedBy = "branch",fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;

@@ -10,4 +10,6 @@ public interface IBranchRepository extends JpaRepository<Branch, Integer> {
 
     @Query("SELECT DISTINCT b.location FROM Branch b")
     List<String> findAllLocationBranch();
+
+    List<Branch> findByLocation(String location);
 }

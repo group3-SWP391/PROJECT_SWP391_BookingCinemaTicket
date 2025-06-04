@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import org.group3.project_swp391_bookingmovieticket.constant.CommonConst;
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.DirectorService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.MOVIE_HIGH_VIEW;
+import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_DTO;
 @Controller
 @RequestMapping("/movie")
 public class MovieController {
@@ -34,12 +37,12 @@ public class MovieController {
     public String displayAllMovies(@RequestParam(value = "movieNameSearch", required = false) String movieNameSearch,
                                    Model model) {
         if (movieNameSearch == null || movieNameSearch.trim().isEmpty() || movieNameSearch.trim().equalsIgnoreCase(" ")) {
-            model.addAttribute("movieHighView", movieService.findMovieByViewDesc());
-            model.addAttribute("userDTO", new UserDTO());
+            model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
+            model.addAttribute(USER_DTO, new UserDTO());
             return "home";
         } else {
             model.addAttribute("movieSearch", movieService.findByMovieName(movieNameSearch));
-            model.addAttribute("userDTO", new UserDTO());
+            model.addAttribute(USER_DTO, new UserDTO());
         }
         return "movie_search";
     }
@@ -48,8 +51,8 @@ public class MovieController {
     public String displayMovieDetail(@RequestParam(value = "movieId", required = false) Integer movieId,
                                      Model model) {
         if (movieId == null) {
-            model.addAttribute("movieHighView", movieService.findMovieByViewDesc());
-            model.addAttribute("userDTO", new UserDTO());
+            model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
+            model.addAttribute(USER_DTO, new UserDTO());
             return "home";
         }
         MovieDTO movieDetail = movieService.findMovieById(movieId);
@@ -57,7 +60,7 @@ public class MovieController {
         model.addAttribute("actorByMovie", movieActorService.findAllActorByMovieId(movieId));
         model.addAttribute("directorByMovie", directorService.findDirectorByMovieId(movieId));
         model.addAttribute("movieDetail", movieService.findMovieById(movieId));
-        model.addAttribute("userDTO", new UserDTO());
+        model.addAttribute(USER_DTO, new UserDTO());
         return "movie_detail";
     }
 
@@ -65,7 +68,7 @@ public class MovieController {
     public String getMoviesByCategoryReturnView(@RequestParam(value = "categoryName", required = false)
                                               String categoryName, Model model) {
         model.addAttribute("movieByCategory", movieService.getMovieByCategory(categoryName.trim()));
-        model.addAttribute("userDTO",  new UserDTO());
+        model.addAttribute(USER_DTO,  new UserDTO());
         return "movie_category";
     }
 
@@ -73,8 +76,8 @@ public class MovieController {
     public String getMoviesShowing(@RequestParam(value = "status", required = false)
                                               String status, Model model) {
         if (status == null || status.trim().isEmpty()) {
-            model.addAttribute("movieHighView", movieService.findMovieByViewDesc());
-            model.addAttribute("userDTO", new UserDTO());
+            model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
+            model.addAttribute(USER_DTO, new UserDTO());
             return "home";
         } else {
             if (status.equalsIgnoreCase("now-showing")) {
@@ -85,7 +88,7 @@ public class MovieController {
                 model.addAttribute("status", "Coming-soon");
             }
         }
-        model.addAttribute("userDTO", new UserDTO());
+        model.addAttribute(USER_DTO, new UserDTO());
         return "movie_showing";
     }
 

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IBranchService  extends IGeneralService<BranchDTO> {
     List<String> findAllLocationBranch();
+    List<BranchDTO> findBranchByLocation(String location);
 }
