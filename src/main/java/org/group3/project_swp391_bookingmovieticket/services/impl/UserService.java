@@ -6,6 +6,9 @@ import org.group3.project_swp391_bookingmovieticket.repositories.IBillRepository
 import org.group3.project_swp391_bookingmovieticket.repositories.IUserRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -66,6 +69,8 @@ public class UserService implements IUserService {
 
 
     }
+
+
 
 
     @Autowired

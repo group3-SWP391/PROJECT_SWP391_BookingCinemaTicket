@@ -2,6 +2,8 @@ package org.group3.project_swp391_bookingmovieticket.services;
 
 
 import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,8 @@ public interface IUserService extends IGeneralService<User> {
     Optional<User> getUserByID(int id);
 
     Optional<List<User>> findByUserNameIgnoreCase(String keyword);
+
+
 
 
 

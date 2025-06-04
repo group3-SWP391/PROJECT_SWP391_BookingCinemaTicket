@@ -141,43 +141,32 @@
 <body>
 <div class="container table-container mt-5">
   <div class="header">
-    <h2><i class="fas fa-users mr-2"></i> Management</h2>
+    <h2><i class="fas fa-users mr-2"></i>User's ticket booking history</h2>
 
   </div>
-  <a href="/admin" class="btn btn-secondary mb-3 ms-3">
-    ← Back
-  </a>
-  <form action="/user/search" method="get" style="display: flex; align-items: center; margin: 10px 0;">
-    <input type="text" name="keyword" placeholder="Search..." th:value="${keyword}"
-           style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; width: 200px; outline: none;">
-    <button type="submit" style="margin-left: -30px; background: none; border: none; cursor: pointer; color: #666;">
-      🔍
-    </button>
-  </form>
+
+
 
 
   <div class="card">
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
       <tr>
-        <th>Username</th>
-        <th>Full Name</th>
-        <th>Phone</th>
-        <th style="width: 200px;">Actions</th>
+
+        <th>User</th>
+        <th>Create-Time</th>
+        <th>Price</th>
+        <th>Branch</th>
+        <th>Movie</th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="user : ${list}">
-        <td th:text="${user.username}">username</td>
-        <td th:text="${user.fullname}">fullname</td>
-        <td th:text="${user.phone}">phone</td>
-        <td width="210px" height="90px" >
-          <a th:href="@{'/user/booking-history/' + ${user.id}}" class="btn btn-warning btn-sm" title="Edit">
-            <i class="fas fa-edit icon"></i> Booking History
-          </a>
-
-
-        </td>
+      <tr th:each="ticket : ${listbooking}">
+        <td th:text="${ticket.bill.user.fullname}"></td>
+        <td th:text="${ticket.bill.createdTime}"></td>
+        <td th:text="${ticket.bill.price}"></td>
+        <td th:text="${ticket.schedule.branch.name}"></td>
+        <td th:text="${ticket.schedule.movie.name}"></td>
       </tr>
       </tbody>
 
