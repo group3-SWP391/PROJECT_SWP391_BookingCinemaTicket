@@ -36,16 +36,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<User> findByUsernameAndPassword(String username, String password) {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<User> findByPhoneAndPassword(String username, String password) {
         return userRepository.findByPhoneAndPassword(username, password);
     }

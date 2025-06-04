@@ -23,8 +23,9 @@
                                 </li>
                                 <li class="parent"><a th:href="@{/}" onclick="return false;">theater</a>
                                     <ul class="lg-submenu">
-                                        <li><a th:href="@{none}">none</a></li>
-                                        <li><a th:href="@{none}">none</a></li>
+                                        <li th:each="location : ${session.allLocationBranch}">
+                                            <a th:href="@{/}" th:text="${location}">location</a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="parent"><a th:href="@{/}" onclick="return false;">category</a>

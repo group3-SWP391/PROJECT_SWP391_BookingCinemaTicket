@@ -16,11 +16,11 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "dia_chi")
-    private String diaChi;
+    @Column(name = "location")
+    private String location;
 
-    @Column(name = "imgurl")
-    private String imgurl;
+    @Column(name = "img_url")
+    private String imgUrl;
 
     @Column(name = "name")
     private String name;

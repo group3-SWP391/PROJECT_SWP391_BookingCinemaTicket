@@ -22,7 +22,8 @@ public class DirectorService implements IDirectorService {
 
     @Override
     public DirectorDTO findDirectorByMovieId(int movieId) {
-        return directorRepository.findDirectorByMovieId(movieId);
+        Director director =  directorRepository.findDirectorByMovieId(movieId);
+        return modelMapper.map(director, DirectorDTO.class);
     }
 
     @Override

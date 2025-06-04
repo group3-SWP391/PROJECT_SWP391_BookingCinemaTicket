@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @Table(name = "event")
@@ -20,10 +22,10 @@ public class Event {
     private String description;
 
     @Column(name = "start_date", nullable = false)
-    private java.util.Date startDate;
+    private LocalDateTime  startDate;
 
     @Column(name = "end_date", nullable = false)
-    private java.util.Date endDate;
+    private LocalDateTime endDate;
 
     @Column(name = "image_url", length = 1000)
     private String imageUrl;
@@ -31,10 +33,9 @@ public class Event {
     @Column(name = "status")
     private Boolean status;
 
-    // Quan hệ ManyToOne với Branch
-//    @ManyToOne
-//    @JoinColumn(name = "branch_id")
-//    private Branch branch;
+    @ManyToOne
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 
     // Quan hệ ManyToOne với Movie
     @ManyToOne

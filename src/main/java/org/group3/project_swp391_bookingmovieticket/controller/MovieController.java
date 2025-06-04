@@ -5,7 +5,6 @@ import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.DirectorService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieActorService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
