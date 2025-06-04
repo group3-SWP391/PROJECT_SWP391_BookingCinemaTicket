@@ -13,6 +13,10 @@
                         <a class="btn btn-default" style="margin-right: 10px; background: #1b1b1b; color: #fff; border: none;" th:href="@{/dashboard}">
                             <span th:text="${session.userLogin.fullname}">User</span>
                         </a>
+                        <!-- Nút Profile -->
+                        <a href="/admin/profile" class="btn btn-info mb-3" style="margin-right: 10px;">
+                            Profile
+                        </a>
                         <a class="btn btn-default" style="background: #1b1b1b; color: #fff; border: none;" th:href="@{/log-out}">
                             Log out
                         </a>
