@@ -14,7 +14,7 @@
     <div class="admin-wrapper">
         <!-- Header -->
         <div th:replace="fragments/admin/header :: header"></div>
-        
+        <a href="/admin/profile" class="btn btn-info mb-3">Thông tin cá nhân</a>
         <!-- Main Content -->
         <div class="admin-content">
             <!-- Sidebar -->
@@ -26,6 +26,7 @@
             <main class="admin-main">
                 <div th:insert="${content}">
                     <!-- Content will be inserted here -->
+                    <div th:if="${content != null}" th:replace="${content} :: content"></div>
                 </div>
             </main>
         </div>

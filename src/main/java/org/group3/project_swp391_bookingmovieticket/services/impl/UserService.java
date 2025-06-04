@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
+import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.repositories.IUserRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IUserService;
@@ -27,26 +28,67 @@ public class UserService implements IUserService {
 
     @Override
     public void update(User user) {
-
+        userRepository.save(user);
     }
 
     @Override
     public void remove(Integer id) {
-
+        userRepository.deleteById(id);
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return Optional.empty();
+        return Optional.empty(); // không dùng username
     }
 
     @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) {
-        return Optional.empty();
+        return Optional.empty(); // không dùng
     }
 
     @Override
-    public Optional<User> findByPhoneAndPassword(String username, String password) {
-        return userRepository.findByPhoneAndPassword(username, password);
+    public Optional<User> findByPhoneAndPassword(String phone, String password) {
+        return userRepository.findByPhoneAndPassword(phone, password);
+    }
+
+    // === Các phương thức bổ sung cho profile ===
+
+    public User findByPhone(String phone) {
+        return userRepository.findByPhone(phone).orElse(null);
+    }
+
+    public UserDTO convertToDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setPhone(user.getPhone());
+        dto.setFullname(user.getFullname());
+        dto.setUsername(user.getUsername());
+        dto.setRole(user.getRole());
+        return dto;
+    }
+
+    public void updateProfile(UserDTO dto) {
+        Optional<User> optional = userRepository.findById(dto.getId());
+        if (optional.isPresent()) {
+            User user = optional.get();
+            user.setFullname(dto.getFullname());
+            user.setUsername(dto.getUsername());
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found!");
+        }
+    }
+
+    public boolean changePassword(String phone, String oldPassword, String newPassword) {
+        Optional<User> optional = userRepository.findByPhone(phone);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            if (user.getPassword().equals(oldPassword)) {
+                user.setPassword(newPassword);
+                userRepository.save(user);
+                return true;
+            }
+        }
+        return false;
     }
 }
