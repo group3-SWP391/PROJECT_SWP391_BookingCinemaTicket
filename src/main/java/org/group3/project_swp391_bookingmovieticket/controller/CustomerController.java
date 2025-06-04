@@ -53,7 +53,13 @@ public class CustomerController {
     public String getAllBookingHistory(@PathVariable int id, Model model){
         try {
             List<Ticket> tickets = iTicketService.getListBillByID(id);
-            model.addAttribute("listbooking", tickets);
+            if(tickets.isEmpty()){
+                model.addAttribute("message", "No bookings found.");
+            }else{
+                model.addAttribute("listbooking", tickets);
+
+            }
+
             return "admin/listbooking";
 
 

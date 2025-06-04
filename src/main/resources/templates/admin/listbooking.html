@@ -16,7 +16,7 @@
     .header {
      position: sticky;
       top: 0;
-      background: linear-gradient(90deg, #007bff, #00c4ff);
+      background: linear-gradient(90deg, #dc3545, #951957);
       color: white;
       padding: 30px;
       border-radius: 12px;
@@ -144,6 +144,9 @@
     <h2><i class="fas fa-users mr-2"></i>User's ticket booking history</h2>
 
   </div>
+  <div th:if="${listbooking == null}">
+    <div class="alert alert-info" th:text="${message}"></div>
+  </div>
 
 
 
@@ -158,6 +161,7 @@
         <th>Price</th>
         <th>Branch</th>
         <th>Movie</th>
+        <th>Seat Name</th>
       </tr>
       </thead>
       <tbody>
@@ -167,10 +171,12 @@
         <td th:text="${ticket.bill.price}"></td>
         <td th:text="${ticket.schedule.branch.name}"></td>
         <td th:text="${ticket.schedule.movie.name}"></td>
+        <td th:text="${ticket.seat.name}"></td>
       </tr>
       </tbody>
 
     </table>
+
   </div>
 
 

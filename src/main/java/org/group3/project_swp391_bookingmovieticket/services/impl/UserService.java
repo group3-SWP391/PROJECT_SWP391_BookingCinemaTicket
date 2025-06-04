@@ -1,6 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import jakarta.transaction.Transactional;
+import org.apache.coyote.Request;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.repositories.IBillRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.IUserRepository;
@@ -70,7 +71,14 @@ public class UserService implements IUserService {
 
     }
 
+    @Override
+    public Page<User> getListUserPaging(int index) {
+        int size = 6;
+        Pageable pageable = PageRequest.of(index - 1, size);
+        return userRepository.findAll(pageable);
 
+
+    }
 
 
     @Autowired

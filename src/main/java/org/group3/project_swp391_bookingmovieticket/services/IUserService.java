@@ -23,6 +23,8 @@ public interface IUserService extends IGeneralService<User> {
 
     Optional<List<User>> findByUserNameIgnoreCase(String keyword);
 
+    Page<User> getListUserPaging(int index);
+
 
 
 
