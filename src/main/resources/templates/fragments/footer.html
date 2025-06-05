@@ -6,19 +6,17 @@
                     <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_1">
                         <h2>LANGUAGE MOVIES</h2>
                         <ul>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">English movie</a>
+                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Phim Việt Nam</a>
                             </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Tamil movie</a>
+                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Phim Thái Lan</a>
                             </li>
                             <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Punjabi Movie</a>
                             </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Hindi movie</a>
+                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Phim Ấn Độ</a>
                             </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Malyalam movie</a>
+                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Phim Malyalam</a>
                             </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">English Action movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Hindi Action movie</a>
+                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Phim Hành Động Tiếng Anh</a>
                             </li>
                         </ul>
                     </div>
@@ -27,20 +25,14 @@
                     <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_2">
                         <h2>MOVIES by presenter</h2>
                         <ul>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Action movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Romantic movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Adult movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Comedy movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Drama movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Musical movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Classical movie</a>
-                            </li>
+                            <li><i class="fa fa-circle"></i> <a th:href="@{/movie/movie-category(categoryName='Tất cả')}">Tất cả</a></li>
+                            <li><i class="fa fa-circle"></i> <a th:href="@{/movie/movie-category(categoryName='Hành động')}">Hành động</a></li>
+                            <li><i class="fa fa-circle"></i> <a th:href="@{/movie/movie-category(categoryName='Khoa học viễn tưởng')}">Khoa học viễn tưởng</a></li>
+                            <li><i class="fa fa-circle"></i> <a th:href="@{/movie/movie-category(categoryName='Tình cảm')}">Tình cảm</a></li>
+                            <li><i class="fa fa-circle"></i> <a th:href="@{/movie/movie-category(categoryName='Phiêu lưu')}">Phiêu lưu</a></li>
+                            <li><i class="fa fa-circle"></i> <a th:href="@{/movie/movie-category(categoryName='Hài')}">Hài</a></li>
+                            <li><i class="fa fa-circle"></i> <a th:href="@{/movie/movie-category(categoryName='Hoạt hình')}">Hoạt hình</a></li>
+                            <li><i class="fa fa-circle"></i> <a th:href="@{/movie/movie-category(categoryName='Phim tài liệu')}">Phim tài liệu</a></li>
                         </ul>
                     </div>
                 </div>
@@ -48,7 +40,7 @@
                     <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_3">
                         <h2>BOOKING ONLINE</h2>
                         <ul>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.example.com</a>
+                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">http://localhost:8080/about</a>
                             </li>
                             <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.hello.com</a>
                             </li>
@@ -66,49 +58,15 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_4">
-                        <h2>App available on</h2>
-                        <p>Download App and Get Free Movie Ticket!</p>
-                        <ul>
-                            <li>
-                                <a th:href="@{none}">
-                                    <img th:src="@{/images/content/f1.jpg}" alt="footer_img">
-                                </a>
-                            </li>
-                            <li>
-                                <a th:href="@{none}">
-                                    <img th:src="@{/images/content/f2.jpg}" alt="footer_img">
-                                </a>
-                            </li>
-                        </ul>
-                        <h5><span>$50</span> Payback on App Download</h5>
-                    </div>
+                <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_4">
+                    <h2>Chăm sóc khách hàng</h2>
+                    <p><strong>Hotline:</strong> 0355075204</p>
+                    <p><strong>Giờ làm việc:</strong> 8:00 - 22:00 (Tất cả các ngày, bao gồm cả Lễ Tết)</p>
+                    <p><strong>Email hỗ trợ:</strong> <a href="mailto:hoidap@fpt.vn">hoidap@fpt.vn</a></p>
+
+                    <h5><span>$50</span> hoàn tiền khi tải ứng dụng</h5>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="prs_bottom_footer_wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
-                    <div class="prs_footer_social_wrapper">
-                        <ul>
-                            <li><a th:href="@{none}"><i class="fa fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a th:href="@{none}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path
-                                                d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
-                                    </svg>
-                                </a>
-                            </li>
-                            <li><a th:href="@{none}"><i class="fa fa-linkedin"></i></a>
-                            </li>
-                            <li><a th:href="@{none}"><i class="fa fa-youtube-play"></i></a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>

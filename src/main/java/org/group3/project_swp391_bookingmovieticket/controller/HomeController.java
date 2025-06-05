@@ -176,7 +176,7 @@ public class HomeController {
                             "Chúng tôi đã nhận được yêu cầu đặt vé xem phim của bạn. Nội dung yêu cầu:\n" +
                             message + "\n\n" +
                             "Chúng tôi sẽ liên hệ lại với bạn sớm nhất qua số điện thoại " + phone + ".\n" +
-                            "Trân trọng,\nHệ thống đặt vé xem phim";
+                            "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
                     break;
                 case "COMPLAINT":
                     emailSubject = "Xác Nhận Khiếu Nại";
@@ -184,7 +184,7 @@ public class HomeController {
                             "Chúng tôi đã nhận được khiếu nại của bạn. Nội dung khiếu nại:\n" +
                             message + "\n\n" +
                             "Chúng tôi sẽ xem xét và phản hồi bạn trong thời gian sớm nhất.\n" +
-                            "Trân trọng,\nHệ thống đặt vé xem phim";
+                            "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
                     break;
                 case "FEEDBACK":
                     emailSubject = "Cảm Ơn Góp Ý Của Bạn";
@@ -192,7 +192,7 @@ public class HomeController {
                             "Cảm ơn bạn đã gửi góp ý cho chúng tôi. Nội dung góp ý:\n" +
                             message + "\n\n" +
                             "Chúng tôi rất trân trọng ý kiến của bạn và sẽ cải thiện dịch vụ tốt hơn.\n" +
-                            "Trân trọng,\nHệ thống đặt vé xem phim";
+                            "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
                     break;
                 default:
                     emailSubject = "Xác Nhận Yêu Cầu";
@@ -200,13 +200,13 @@ public class HomeController {
                             "Chúng tôi đã nhận được yêu cầu của bạn. Nội dung:\n" +
                             message + "\n\n" +
                             "Chúng tôi sẽ phản hồi bạn sớm nhất có thể.\n" +
-                            "Trân trọng,\nHệ thống đặt vé xem phim";
+                            "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
             }
 
             emailService.sendEmail(email, emailSubject, emailBody);
             System.out.println("Email sent to: " + email);
 
-            model.addAttribute("successMessage", "Yêu cầu của bạn đã được gửi thành công! Vui lòng kiểm tra email để xem phản hồi.");
+            model.addAttribute("successMessage", "Yêu cầu của bạn đã được gửi thành công!!!!!!! Vui lòng kiểm tra email để xem phản hồi.");
             model.addAttribute("userDTO", new UserDTO());
             return "contact";
         } catch (Exception e) {
@@ -282,8 +282,8 @@ public class HomeController {
                     "Địa chỉ: " + companyAddress + "\n" +
                     "Ngày muốn thuê: " + rentalDate + "\n" +
                     "Ghi chú: " + (notes != null ? notes : "Không có") + "\n\n" +
-                    "Bộ phận quảng cáo sẽ liên hệ lại với bạn qua email " + email + " hoặc số điện thoại " + phone + " trong thời gian sớm nhất.\n" +
-                    "Trân trọng,\nHệ thống đặt vé xem phim";
+                    "Bộ phận quảng cáo FPT Cinemas của chúng tôi đã ghi nhận yêu cầu của bạn và sẽ liên hệ lại với bạn qua email " + email + " hoặc số điện thoại " + phone + " để báo giá trong thời gian sớm nhất.\n" +
+                    "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
 
             System.out.println("Sending email to: " + email);
             emailService.sendEmail(email, emailSubject, emailBody);
@@ -308,7 +308,7 @@ public class HomeController {
             return "advertising-contact";
         }
     }
-
+// phuong thuc tạo mã code ngau nhien
     private String generateSecurityCode(int length) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();

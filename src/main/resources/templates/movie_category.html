@@ -146,29 +146,11 @@
 </div>
 <!-- MC Category Sidebar End -->
 
-
-<!-- Newsletter Wrapper Start -->
-<div class="prs_newsletter_wrapper">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-				<div class="prs_newsletter_text">
-					<h3>Get update sign up now !</h3>
-				</div>
-			</div>
-			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-				<div class="prs_newsletter_field">
-					<input type="text" placeholder="Enter Your Email" />
-					<button type="submit">Submit</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Newsletter Wrapper End -->
 <!-- prs footer Wrapper Start -->
 <header lang="vi" th:include="fragments/footer"></header>
 <!-- prs footer Wrapper End -->
+
+
 <!-- st login wrapper Start -->
 <div class="modal fade st_pop_form_wrapper" id="myModal" role="dialog">
 	<div class="modal-dialog">
@@ -210,7 +192,13 @@
 		</div>
 	</div>
 </div>
-
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+		intent="WELCOME"
+		chat-title="Website_BookingMovie"
+		agent-id="11276361-847e-42c4-ab48-dc2621284adf"
+		language-code="vi"
+></df-messenger>
 
 <!-- Main JS Files -->
 <script th:src="@{/js/jquery_min.js}"></script>
