@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface IMovieActorRepository extends JpaRepository<MovieActor, Integer> {
 
-    @Query("SELECT ma FROM MovieActor ma WHERE ma.movie.id = :movieId")
+    @Query("SELECT ma FROM MovieActor ma WHERE ma.movie.id = :movieId ")
     List<MovieActor> findAllActorByMovieId(@Param("movieId") Integer movieId);
 }

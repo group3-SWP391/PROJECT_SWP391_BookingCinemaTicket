@@ -24,7 +24,7 @@
                                 <li class="parent"><a th:href="@{/}" onclick="return false;">theater</a>
                                     <ul class="lg-submenu">
                                         <li th:each="location : ${session.allLocationBranch}">
-                                            <a th:href="@{/event/branch-by-location(locationName=${location})}" th:text="${location}">location</a>
+                                            <a th:href="@{/branch/branch-by-location(locationName=${location})}" th:text="${location}">location</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -35,7 +35,6 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{/event}">event</a></li>
                                 <li class="parent"><a th:href="@{/contact}">contact</a></li>
                             </ul>
                         </div>

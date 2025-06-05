@@ -10,4 +10,6 @@ public interface IEventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e WHERE e.status = true AND e.startDate <= CURRENT_TIMESTAMP ")
     List<Event> findEventValid();
+
+    Event findEventById(int id);
 }

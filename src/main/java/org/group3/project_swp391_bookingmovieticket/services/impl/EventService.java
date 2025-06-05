@@ -1,6 +1,8 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.EventDTO;
+import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.Event;
 import org.group3.project_swp391_bookingmovieticket.repositories.IEventRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IEventService;
 import org.modelmapper.ModelMapper;
@@ -26,6 +28,12 @@ public class EventService implements IEventService {
                 .stream()
                 .map(event -> modelMapper.map(event, EventDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public EventDTO findEventById(int id) {
+        Event event = eventRepository.findEventById(id);
+        return modelMapper.map(event, EventDTO.class);
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.BranchService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.EventService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,32 +14,27 @@ import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.
 import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_DTO;
 
 @Controller
-@RequestMapping("/event")
-public class EventController {
+@RequestMapping("/branch")
+public class BranchController {
 
     @Autowired
     private MovieService movieService;
 
     @Autowired
-    private EventService eventService;
+    private BranchService branchService;
 
-    @GetMapping
-    public String event(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "event";
-    }
-
-    @GetMapping("/event-detail")
-    public String eventDetail(Model model,
-                                   @RequestParam(value = "eventId", required = false, defaultValue = "0") Integer eventId) {
-        if (eventId == null || eventId < 0) {
+    @GetMapping("/branch-by-location")
+    public String branchByLocation(Model model,
+                                   @RequestParam(value = "locationName", required = false) String locationName) {
+        if (locationName == null || locationName.isEmpty()) {
             model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
             model.addAttribute(USER_DTO, new UserDTO());
             return "home";
         } else {
-            model.addAttribute("eventDetail", eventService.findEventById(eventId));
+            model.addAttribute("locationFind", locationName);
+            model.addAttribute("branchByLocation", branchService.findBranchByLocation(locationName));
             model.addAttribute(USER_DTO, new UserDTO());
         }
-        return "event_detail";
+        return "branch_location";
     }
 }

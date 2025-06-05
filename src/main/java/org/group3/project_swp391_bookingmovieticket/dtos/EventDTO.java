@@ -13,6 +13,7 @@ public class EventDTO {
     private LocalDateTime endDate;
     private Integer branchId;
     private Integer movieId;
-    private String imageUrl;
+    private String imageLargeURL;
+    private String imageSmallURL;
     private Boolean status;
 }

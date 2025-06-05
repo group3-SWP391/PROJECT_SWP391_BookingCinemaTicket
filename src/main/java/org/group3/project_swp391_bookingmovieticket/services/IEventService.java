@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IEventService extends IGeneralService<EventDTO> {
     List<EventDTO> findEventValid();
+    EventDTO findEventById(int id);
 }

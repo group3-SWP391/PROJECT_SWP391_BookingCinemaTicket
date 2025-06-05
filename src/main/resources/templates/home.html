@@ -21,8 +21,8 @@ Author: Webstrot
     <meta charset="utf-8"/>
     <title>Home page</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta name="description" content="Movie Pro"/>
-    <meta name="keywords" content="Movie Pro"/>
+    <meta name="description" content="Home page"/>
+    <meta name="keywords" content="Home page"/>
     <meta name="author" content=""/>
     <meta name="MobileOptimized" content="320"/>
     <!--Template style -->
@@ -72,19 +72,26 @@ Author: Webstrot
                 <div role="tabpanel" class="tab-pane active">
                     <div class="row">
                         <div class="prs_feature_slider_main_wrapper container-fluid"
-                             style="padding-left: 0 !important; padding-right: 0 !important;
-                             position: relative; left: 50%; right: 50%;
-                             margin-left: -50vw; margin-right: -50vw; width: 100vw;">
+                             style="padding-left: 0 !important;
+                             padding-right: 0 !important;
+                             position: relative;
+                             left: 50%;
+                             right: 50%;
+                             margin-left: -50vw;
+                             margin-right: -50vw;
+                             width: 100vw;
+                             height: 700px;">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-6 col-sm-12 col-12">
                                         <div class="prs_heading_section_wrapper"
-                                             style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0;">
+                                             style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: -60px 0;">
                                             <hr style="flex-grow: 1; border: none; border-top: 3px solid black; margin: 0;">
                                             <h2 style="margin: 0; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; font-size: 40px">
                                                 hot movie</h2>
                                             <hr style="flex-grow: 1; border: none; border-top: 3px solid black; margin: 0;">
                                         </div>
+
                                     </div>
                                     <div class="col-lg-12 col-md-6 col-sm-12 col-12">
                                         <div class="prs_feature_slider_wrapper">
@@ -145,7 +152,6 @@ Author: Webstrot
         </div> <!-- hết row chính -->
     </div> <!-- hết container -->
 </div>
-
 <!-- prs upcomung Slider End -->
 
 <!-- prs video section Start -->
@@ -166,94 +172,71 @@ Author: Webstrot
         </div>
     </div>
 </div>
-<!-- prs video section End -->
+<!--prs video section End-->
+
 
 <!-- prs web series Slider Start -->
-<!--<div class="prs_upcom_slider_main_wrapper">-->
-<!--    <div class="container">-->
-<!--        <div class="row">-->
-<!--            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
-<!--                <div class="prs_heading_section_wrapper">-->
-<!--                    <h2>Categories</h2>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
-<!--                <div class="prs_upcome_tabs_wrapper" style="display: flex; justify-content: center;">-->
-<!--                    <select class="form-select" id="categorySelection">-->
-<!--                        <option value="" disabled selected>&#45;&#45; Choose category &#45;&#45;</option>-->
-<!--                        <option th:each="category : ${categoryAll}"-->
-<!--                                th:value="${category}"-->
-<!--                                th:text="${category}">-->
-<!--                        </option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 tab-content" id="movieListContainerCategory">-->
-<!--                <div role="tabpanel" class="tab-pane active">-->
-<!--                    &lt;!&ndash; Bỏ owl-carousel, dùng row + col tạo lưới &ndash;&gt;-->
-<!--                    <div class="row">-->
-<!--                        <div th:each="movie : ${movieAll}" class="col-lg-3 col-md-4 col-sm-6 mb-4">-->
-<!--                            <div class="prs_upcom_movie_box_wrapper"-->
-<!--                                 style="height: 100%; display: flex; flex-direction: column;">-->
-<!--                                <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">-->
-<!--                                    <img th:src="${movie.smallImageURL}" alt="movie_img"-->
-<!--                                         style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>-->
-<!--                                    <div class="prs_upcom_movie_img_overlay"></div>-->
-<!--                                    <div class="prs_upcom_movie_img_btn_wrapper">-->
-<!--                                        <ul>-->
-<!--                                            <li><a th:href="@{none}">View Trailer</a></li>-->
-<!--                                            <li><a th:href="@{none}">View Details</a></li>-->
-<!--                                        </ul>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">-->
-<!--                                    <div class="prs_upcom_movie_content_box_inner">-->
-<!--                                        <h2 th:text="${movie.name}"-->
-<!--                                            style="font-size: 1.1rem; font-weight: bold; height: 40px">-->
-<!--                                            Movie name-->
-<!--                                        </h2>-->
-<!--                                        <div style="font-size: 0.9rem; color: #333;">-->
-<!--                                            <p>-->
-<!--                                                <strong>Thể loại:</strong> <span th:text="${movie.categories}">Movie category</span>-->
-<!--                                            </p>-->
-<!--                                            <p>-->
-<!--                                                <strong>Thời lượng:</strong>-->
-<!--                                                <span th:text="${movie.duration + ' minutes'}">Movie duration</span>-->
-<!--                                            </p>-->
-<!--                                            <p>-->
-<!--                                                <strong>Khởi chiếu:</strong>-->
-<!--                                                <span th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>-->
-<!--                                            </p>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div> &lt;!&ndash; hết mỗi phim &ndash;&gt;-->
-<!--                    </div> &lt;!&ndash; hết row &ndash;&gt;-->
-<!--                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"-->
-<!--                         style="display: flex; justify-content: center;">-->
-<!--                        <div class="pager_wrapper gc_blog_pagination">-->
-<!--                            <ul class="pagination">-->
-<!--                                <li><a href="#"><i class="flaticon-left-arrow"></i></a>-->
-<!--                                </li>-->
-<!--                                <li><a href="#">1</a>-->
-<!--                                </li>-->
-<!--                                <li><a href="#">2</a>-->
-<!--                                </li>-->
-<!--                                <li><a href="#">3</a>-->
-<!--                                </li>-->
-<!--                                <li><a href="#">4</a>-->
-<!--                                </li>-->
-<!--                                <li><a href="#"><i class="flaticon-right-arrow"></i></a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div> &lt;!&ndash; hết tab-panel &ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="prs_upcom_slider_main_wrapper" >
+    <div class="container">
+        <div class="row">
+            <div class="col-12 tab-content">
+                <div role="tabpanel" class="tab-pane active">
+                    <div class="row">
+                        <div class="prs_feature_slider_main_wrapper container-fluid"
+                             style="padding-left: 0 !important;
+                             padding-right: 0 !important;
+                             position: relative;
+                             left: 50%;
+                             right: 50%;
+                             margin-left: -50vw;
+                             margin-right: -50vw;
+                             width: 100vw;
+                             height: 500px;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-6 col-sm-12 col-12">
+                                        <div class="prs_heading_section_wrapper"
+                                             style="display: flex;
+                                             align-items: center;
+                                             justify-content: center;
+                                             gap: 10px;
+                                             margin: -60px 0;
+                                             padding-left: 70px">
+                                            <hr style="flex-grow: 1; border: none; border-top: 3px solid black; margin: 0;">
+                                            <h2 style="margin: 0; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; font-size: 40px">
+                                                events</h2>
+                                            <hr style="flex-grow: 1; border: none; border-top: 3px solid black; margin: 0;">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-6 col-sm-12 col-12"
+                                         style="width: 1500px; padding-right: 300px; padding-left: -300px">
+                                        <div class="prs_feature_slider_wrapper">
+                                            <div class="owl-carousel owl-theme">
+                                                <div th:each="event : ${session.event}"
+                                                     class="item prs_feature_slider_item_wrapper"
+                                                     style="height: 350px;width: 450px;">
+                                                    <div class="prs_feature_img_box_wrapper">
+                                                        <div class="prs_feature_img">
+                                                            <a th:href="@{/event/event-detail(eventId=${event.id})}">
+                                                                <img th:src="${event.imageSmallURL}" alt="feature_img"
+                                                                     style="height: 250px; width: 350px; padding-left: 30px; padding-right: 30px">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- hết row -->
+                </div> <!-- hết tab-panel -->
+            </div> <!-- hết tab-content -->
+        </div> <!-- hết row chính -->
+    </div> <!-- hết container -->
+</div>
 <!-- prs web series Slider End -->
 
 

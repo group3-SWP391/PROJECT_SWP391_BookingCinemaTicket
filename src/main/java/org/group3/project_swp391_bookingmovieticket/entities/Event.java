@@ -27,8 +27,11 @@ public class Event {
     @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
 
-    @Column(name = "image_url", length = 1000)
-    private String imageUrl;
+    @Column(name = "image_large_url", length = 1000)
+    private String imageLargeURL;
+
+    @Column(name = "image_small_url", length = 1000)
+    private String imageSmallURL;
 
     @Column(name = "status")
     private Boolean status;
