@@ -1,7 +1,7 @@
 :root {
-    --admin-primary: #ff4444;
-    --admin-primary-hover: #ff6666;
-    --admin-sidebar-width: 250px;
+    --manager-primary: #ff4444;
+    --manager-primary-hover: #ff6666;
+    --manager-sidebar-width: 250px;
 }
 
 body {
@@ -10,21 +10,21 @@ body {
     overflow: hidden;
 }
 
-.admin-wrapper {
+.manager-wrapper {
     height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.admin-content {
+.manager-content {
     flex: 1;
     display: flex;
     overflow: hidden;
 }
 
-.admin-sidebar {
-    width: var(--admin-sidebar-width);
-    background-color: var(--admin-primary);
+.manager-sidebar {
+    width: var(--manager-sidebar-width);
+    background-color: var(--manager-primary);
     color: white;
     height: calc(100vh - 56px);
     position: fixed;
@@ -35,9 +35,9 @@ body {
     padding-right: 5px;
 }
 
-.admin-main {
+.manager-main {
     flex: 1;
-    margin-left: var(--admin-sidebar-width);
+    margin-left: var(--manager-sidebar-width);
     padding: 20px;
     background-color: #f8f9fa;
     height: calc(100vh - 56px);
@@ -70,25 +70,25 @@ body {
     text-align: center;
 }
 
-.admin-main::-webkit-scrollbar {
+.manager-main::-webkit-scrollbar {
     width: 5px;
 }
 
-.admin-main::-webkit-scrollbar-track {
+.manager-main::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
 
-.admin-main::-webkit-scrollbar-thumb {
+.manager-main::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 4px;
 }
 
-.admin-main::-webkit-scrollbar-thumb:hover {
+.manager-main::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
 .bg-dark {
-    background-color: var(--admin-primary) !important;
+    background-color: var(--manager-primary) !important;
 }
 
 .card-metric {

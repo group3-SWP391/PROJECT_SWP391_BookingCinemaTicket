@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/admin")
-public class AdminProfileController {
+@RequestMapping("/manager")
+public class ManagerProfileController {
 
     @Autowired
     private UserService userService;
@@ -26,17 +26,21 @@ public class AdminProfileController {
         if (user == null) return "redirect:/login";
 
         UserDTO userDTO = userService.convertToDTO(user);
-        model.addAttribute("admin", userDTO);
-        model.addAttribute("content", "admin/profile");
+        model.addAttribute("manager", userDTO);
+        model.addAttribute("content", "manager/profile");
 
-        return "admin/layout";
+        return "manager/layout";
     }
 
     @PostMapping("/profile/update")
-    public String updateProfile(@ModelAttribute("admin") UserDTO userDTO,
+    public String updateProfile(@ModelAttribute("manager") UserDTO userDTO,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
         try {
+            User userLogin = (User) session.getAttribute("userLogin");
+            if (userLogin != null && userDTO.getId() == null) {
+                userDTO.setId(userLogin.getId());
+            }
             userService.updateProfile(userDTO);
             User updatedUser = userService.findByPhone(userDTO.getPhone());
             session.setAttribute("userLogin", updatedUser);
@@ -44,7 +48,7 @@ public class AdminProfileController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Cập nhật thất bại: " + e.getMessage());
         }
-        return "redirect:/admin/profile";
+        return "redirect:/manager/profile";
     }
 
     @PostMapping("/profile/change-password")
@@ -62,6 +66,6 @@ public class AdminProfileController {
         } else {
             redirectAttributes.addFlashAttribute("error", "Mật khẩu cũ không đúng!");
         }
-        return "redirect:/admin/profile";
+        return "redirect:/manager/profile";
     }
 }

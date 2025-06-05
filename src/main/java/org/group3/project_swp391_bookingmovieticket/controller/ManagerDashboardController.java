@@ -18,8 +18,8 @@ import java.time.Year;
 import java.time.YearMonth;
 
 @Controller
-@RequestMapping("/admin")
-public class AdminDashboardController {
+@RequestMapping("/manager")
+public class ManagerDashboardController {
 
     @Autowired
     private IUserRepository userRepository;
@@ -39,7 +39,7 @@ public class AdminDashboardController {
         if (user == null) {
             return "redirect:/login";
         }
-        
+
         // Calculate monthly revenue for overall dashboard
         List<Double> monthlyRevenue = new ArrayList<>();
         int year = Year.now().getValue();
@@ -47,7 +47,7 @@ public class AdminDashboardController {
             Double revenue = billRepository.getRevenueForMonth(month, year);
             monthlyRevenue.add(revenue != null ? revenue : 0.0);
         }
-        
+
         // Calculate total revenue by summing individual movie revenues
         double totalRevenue = 0.0;
         List<org.group3.project_swp391_bookingmovieticket.entities.Movie> allMovies = movieRepository.findAll();
@@ -63,78 +63,78 @@ public class AdminDashboardController {
         for (org.group3.project_swp391_bookingmovieticket.entities.Movie movie : allMovies) {
             System.out.println("Movie: " + movie.getName() + " (ID: " + movie.getId() + ")");
         }
-        
+
         // Create MovieRevenueDTO list with error handling
         List<MovieRevenueDTO> movieRevenueList = new ArrayList<>();
         try {
             movieRevenueList = allMovies.stream()
-                .map(m -> {
-                    try {
-                        System.out.println("Processing movie: " + m.getName());
-                        
-                        // Get total revenue with error handling
-                        Double revenue = null;
+                    .map(m -> {
                         try {
-                            revenue = billRepository.getRevenueByMovie(m.getId());
-                            System.out.println("Revenue for " + m.getName() + ": " + revenue);
-                        } catch (Exception e) {
-                            System.err.println("Error getting revenue for movie " + m.getName() + ": " + e.getMessage());
-                            revenue = 0.0;
-                        }
-                        
-                        // Get tickets sold with error handling
-                        Long tickets = null;
-                        try {
-                            tickets = billRepository.getTicketsSoldByMovie(m.getId());
-                            System.out.println("Tickets for " + m.getName() + ": " + tickets);
-                        } catch (Exception e) {
-                            System.err.println("Error getting tickets for movie " + m.getName() + ": " + e.getMessage());
-                            tickets = 0L;
-                        }
-                        
-                        // Get last show date with error handling
-                        java.sql.Date lastShow = null;
-                        try {
-                            lastShow = scheduleRepository.getLastShowDateByMovie(m.getId());
-                            System.out.println("Last show for " + m.getName() + ": " + lastShow);
-                        } catch (Exception e) {
-                            System.err.println("Error getting last show for movie " + m.getName() + ": " + e.getMessage());
-                        }
-                        
-                        // Calculate monthly revenue for last 12 months
-                        List<Double> movieMonthlyRevenue = new ArrayList<>();
-                        for (int i = 0; i < 12; i++) {
-                            try {
-                                YearMonth yearMonth = YearMonth.now().minusMonths(i);
-                                Double monthRevenue = billRepository.getMonthlyRevenueByMovie(
-                                    m.getId(), 
-                                    yearMonth.getMonthValue(), 
-                                    yearMonth.getYear()
-                                );
-                                movieMonthlyRevenue.add(0, monthRevenue != null ? monthRevenue : 0.0);
-                            } catch (Exception e) {
-                                System.err.println("Error getting monthly revenue for movie " + m.getName() + ": " + e.getMessage());
-                                movieMonthlyRevenue.add(0, 0.0);
-                            }
-                        }
-                        System.out.println("Monthly revenue for " + m.getName() + ": " + movieMonthlyRevenue);
+                            System.out.println("Processing movie: " + m.getName());
 
-                        return new MovieRevenueDTO(
-                            m.getName(),
-                            revenue != null ? revenue : 0.0,
-                            tickets != null ? tickets.intValue() : 0,
-                            lastShow != null ? lastShow.toString() : "No shows",
-                            m.getId(),
-                            movieMonthlyRevenue
-                        );
-                    } catch (Exception e) {
-                        System.err.println("Error processing movie " + m.getName() + ": " + e.getMessage());
-                        e.printStackTrace();
-                        return null;
-                    }
-                })
-                .filter(dto -> dto != null) // Remove null entries
-                .toList();
+                            // Get total revenue with error handling
+                            Double revenue = null;
+                            try {
+                                revenue = billRepository.getRevenueByMovie(m.getId());
+                                System.out.println("Revenue for " + m.getName() + ": " + revenue);
+                            } catch (Exception e) {
+                                System.err.println("Error getting revenue for movie " + m.getName() + ": " + e.getMessage());
+                                revenue = 0.0;
+                            }
+
+                            // Get tickets sold with error handling
+                            Long tickets = null;
+                            try {
+                                tickets = billRepository.getTicketsSoldByMovie(m.getId());
+                                System.out.println("Tickets for " + m.getName() + ": " + tickets);
+                            } catch (Exception e) {
+                                System.err.println("Error getting tickets for movie " + m.getName() + ": " + e.getMessage());
+                                tickets = 0L;
+                            }
+
+                            // Get last show date with error handling
+                            java.sql.Date lastShow = null;
+                            try {
+                                lastShow = scheduleRepository.getLastShowDateByMovie(m.getId());
+                                System.out.println("Last show for " + m.getName() + ": " + lastShow);
+                            } catch (Exception e) {
+                                System.err.println("Error getting last show for movie " + m.getName() + ": " + e.getMessage());
+                            }
+
+                            // Calculate monthly revenue for last 12 months
+                            List<Double> movieMonthlyRevenue = new ArrayList<>();
+                            for (int i = 0; i < 12; i++) {
+                                try {
+                                    YearMonth yearMonth = YearMonth.now().minusMonths(i);
+                                    Double monthRevenue = billRepository.getMonthlyRevenueByMovie(
+                                            m.getId(),
+                                            yearMonth.getMonthValue(),
+                                            yearMonth.getYear()
+                                    );
+                                    movieMonthlyRevenue.add(0, monthRevenue != null ? monthRevenue : 0.0);
+                                } catch (Exception e) {
+                                    System.err.println("Error getting monthly revenue for movie " + m.getName() + ": " + e.getMessage());
+                                    movieMonthlyRevenue.add(0, 0.0);
+                                }
+                            }
+                            System.out.println("Monthly revenue for " + m.getName() + ": " + movieMonthlyRevenue);
+
+                            return new MovieRevenueDTO(
+                                    m.getName(),
+                                    revenue != null ? revenue : 0.0,
+                                    tickets != null ? tickets.intValue() : 0,
+                                    lastShow != null ? lastShow.toString() : "No shows",
+                                    m.getId(),
+                                    movieMonthlyRevenue
+                            );
+                        } catch (Exception e) {
+                            System.err.println("Error processing movie " + m.getName() + ": " + e.getMessage());
+                            e.printStackTrace();
+                            return null;
+                        }
+                    })
+                    .filter(dto -> dto != null) // Remove null entries
+                    .toList();
         } catch (Exception e) {
             System.err.println("Error creating movie revenue list: " + e.getMessage());
             e.printStackTrace();
@@ -161,8 +161,8 @@ public class AdminDashboardController {
         model.addAttribute("movieRevenueList", movieRevenueList);
         model.addAttribute("movieRevenueListJson", movieRevenueListJson);
         model.addAttribute("movieRevenueListRaw", movieRevenueListJson.replace("\"", "\\\""));
-        model.addAttribute("content", "admin/dashboard");
+        model.addAttribute("content", "manager/dashboard");
 
-        return "admin/layout";
+        return "manager/layout";
     }
 }
