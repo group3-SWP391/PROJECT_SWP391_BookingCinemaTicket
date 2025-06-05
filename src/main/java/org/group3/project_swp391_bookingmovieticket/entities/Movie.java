@@ -48,4 +48,5 @@ public class Movie {
 
     @Column(name = "trailerurl")
     private String trailerUrl;
+
 }

@@ -9,7 +9,8 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "schedule")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,25 +18,21 @@ public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
+    @Column(name = "price", nullable = false)
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "branch_id")
-    private Branch branch;
-
-    @ManyToOne
-    @JoinColumn(name = "movie_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
     @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 }

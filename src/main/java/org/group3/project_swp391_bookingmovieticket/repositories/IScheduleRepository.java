@@ -9,6 +9,9 @@ import java.util.List;
 
 @Repository
 public interface IScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findByStartTimeAfter(LocalDateTime dateTime);
-    List<Schedule> findByMovieId(Long movieId);  // <-- Thêm method này
+    // Nếu muốn lấy tất cả schedule có ngày startDate >= ngày cho trước:
+    List<Schedule> findByStartDateAfter(java.time.LocalDate date);
+
+    // Hoặc lấy schedule theo movieId:
+    List<Schedule> findByMovieId(Long movieId);
 }

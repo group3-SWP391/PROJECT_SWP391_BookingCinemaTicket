@@ -82,16 +82,82 @@ public class StaffDashboardController {
         return "redirect:/dashboard/movies";
     }
 
+    // Danh sách tất cả lịch chiếu
     @GetMapping("/schedules")
     public String viewSchedules(Model model) {
         model.addAttribute("schedules", scheduleRepository.findAll());
         return "staff/schedule";
     }
 
+    // Danh sách lịch chiếu theo phim
     @GetMapping("/movies/{movieId}/schedules")
     public String viewSchedulesByMovie(@PathVariable Long movieId, Model model) {
         List<Schedule> schedules = scheduleRepository.findByMovieId(movieId);
         model.addAttribute("schedules", schedules);
-        return "staff/schedule";  // Tên file html hiển thị lịch chiếu
+        model.addAttribute("movie", movieRepository.findById(movieId).orElse(null));
+        return "staff/schedule";
+    }
+
+    // Form thêm lịch chiếu mới (liên kết với movieId nếu có)
+    @GetMapping({"/schedules/add", "/movies/{movieId}/schedules/add"})
+    public String addScheduleForm(@PathVariable(required = false) Long movieId, Model model) {
+        Schedule schedule = new Schedule();
+
+        if (movieId != null) {
+            Movie movie = movieRepository.findById(movieId).orElse(null);
+            schedule.setMovie(movie);
+            model.addAttribute("movie", movie);
+        }
+
+        model.addAttribute("schedule", schedule);
+        model.addAttribute("movies", movieRepository.findAll());
+        return "staff/add_schedule";
+    }
+
+    // Xử lý thêm lịch chiếu
+    @PostMapping("/schedules/add")
+    public String addSchedule(@ModelAttribute("schedule") Schedule schedule) {
+        // Lấy Movie từ DB để tránh transient object exception
+        if (schedule.getMovie() != null && schedule.getMovie().getId() != null) {
+            Movie movie = movieRepository.findById(schedule.getMovie().getId()).orElse(null);
+            schedule.setMovie(movie);
+        } else {
+            schedule.setMovie(null);
+        }
+        schedule.setId(null);
+        scheduleRepository.save(schedule);
+        return "redirect:/dashboard/schedules";
+    }
+
+    // Form sửa lịch chiếu
+    @GetMapping("/schedules/edit/{id}")
+    public String editScheduleForm(@PathVariable Long id, Model model) {
+        Schedule schedule = scheduleRepository.findById(id).orElse(null);
+        if (schedule == null) return "redirect:/dashboard/schedules";
+
+        model.addAttribute("schedule", schedule);
+        model.addAttribute("movies", movieRepository.findAll());
+        return "staff/edit_schedule";
+    }
+
+    // Xử lý sửa lịch chiếu
+    @PostMapping("/schedules/edit")
+    public String editSchedule(@ModelAttribute("schedule") Schedule schedule) {
+        // Lấy Movie từ DB để tránh transient object exception
+        if (schedule.getMovie() != null && schedule.getMovie().getId() != null) {
+            Movie movie = movieRepository.findById(schedule.getMovie().getId()).orElse(null);
+            schedule.setMovie(movie);
+        } else {
+            schedule.setMovie(null);
+        }
+        scheduleRepository.save(schedule);
+        return "redirect:/dashboard/schedules";
+    }
+
+    // Xóa lịch chiếu
+    @GetMapping("/schedules/delete/{id}")
+    public String deleteSchedule(@PathVariable Long id) {
+        scheduleRepository.deleteById(id);
+        return "redirect:/dashboard/schedules";
     }
 }
