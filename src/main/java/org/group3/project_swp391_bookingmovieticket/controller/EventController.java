@@ -1,7 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
-import org.group3.project_swp391_bookingmovieticket.services.impl.BranchService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.EventService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -68,6 +68,7 @@ public class MovieController {
     public String getMoviesByCategoryReturnView(@RequestParam(value = "categoryName", required = false)
                                               String categoryName, Model model) {
         model.addAttribute("movieByCategory", movieService.getMovieByCategory(categoryName.trim()));
+        model.addAttribute("categoryName", categoryName);
         model.addAttribute(USER_DTO,  new UserDTO());
         return "movie_category";
     }

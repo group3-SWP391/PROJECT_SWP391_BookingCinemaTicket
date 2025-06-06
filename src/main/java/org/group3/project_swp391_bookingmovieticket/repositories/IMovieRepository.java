@@ -14,7 +14,7 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     @Query("SELECT DISTINCT m.categories FROM Movie m")
     List<String>getMovieCategories();
 
-    @Query("SELECT m FROM Movie m WHERE m.statusShowing = 0")
+    @Query("SELECT m FROM Movie m WHERE m.releaseDate >= CURRENT_DATE  AND m.endDate >= CURRENT_DATE ")
     List<Movie> findMovieComingSoon();
 
     @Query("SELECT m FROM Movie m WHERE m.categories LIKE %:categoryName%")
@@ -22,11 +22,15 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
 
     Movie findMovieById(Integer id);
 
-    @Query("SELECT m FROM Movie m WHERE m.statusShowing = 1")
+    @Query("SELECT m FROM Movie m WHERE m.releaseDate <= CURRENT_DATE  AND m.endDate >= CURRENT_DATE ")
     List<Movie> findMovieNowShowing();
 
-    @Query(value = "SELECT TOP 8 * FROM movie m WHERE m.is_showing = 1 ORDER BY m.views DESC", nativeQuery = true)
+    @Query(value = "SELECT TOP 8 * FROM movie m " +
+            "WHERE YEAR(m.release_Date) = YEAR(GETDATE()) " +
+            "AND MONTH(m.release_Date) = MONTH(GETDATE()) " +
+            "ORDER BY m.views DESC", nativeQuery = true)
     List<Movie> findMovieByViewDesc();
+
 
     @Query(value = "SELECT m FROM Movie m WHERE m.categories LIKE %:categoryName%")
     List<Movie> findMovieSameCategory(@Param("categoryName") String categoryName);

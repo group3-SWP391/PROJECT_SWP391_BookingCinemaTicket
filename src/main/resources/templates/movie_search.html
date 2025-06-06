@@ -42,10 +42,6 @@
 <header lang="vi" th:replace="fragments/navigation :: navigation"></header>
 <!-- Navigation End -->
 
-<!-- prs Slider Start -->
-<header lang="vi" th:include="fragments/slider :: slider"></header>
-<!-- prs Slider End -->
-
 <!-- Title Wrapper Start -->
 <div class="prs_title_main_sec_wrapper">
     <div class="prs_title_img_overlay"></div>
@@ -64,9 +60,6 @@
 </div>
 <!-- Title Wrapper End -->
 
-<!-- prs Slider Start -->
-<header lang="vi" th:include="fragments/slider :: slider"></header>
-<!-- prs Slider End -->
 
 <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
 ,
@@ -82,7 +75,20 @@
                         </button>
                     </div>
                     <div class="prs_mcc_bro_title_wrapper">
-                        <h2>browse title</h2>
+                        <h2>Showing</h2>
+                        <ul>
+                            <li>
+                                <i class="fa fa-play"></i>
+                                <a href="#" onclick="loadNowShowingMovies(); return false;">Now-showing</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-play"></i>
+                                <a href="#" onclick="loadNoComingShowingMovies(); return false;">Coming-soon</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="prs_mcc_bro_title_wrapper">
+                        <h2>Category</h2>
                         <ul>
                             <li th:each="category : ${session.categoryAll}">
                                 <i class="fa fa-play"></i>
@@ -380,6 +386,25 @@
 
             container.appendChild(div);
         });
+    }
+</script>
+
+<!-- js for choose now or comming movie-->
+<script>
+    function loadNowShowingMovies() {
+        let filteredMovies = movieShowingData.filter(movie => {
+            let currentDate = new Date();
+            return new Date(movie.releaseDate) <= currentDate && new Date(movie.endDate) >= currentDate;
+        });
+        renderMovies(filteredMovies);
+    }
+
+    function loadNoComingShowingMovies() {
+        let filteredMovies = movieShowingData.filter(movie => {
+            let currentDate = new Date();
+            return new Date(movie.releaseDate) > currentDate;
+        });
+        renderMovies(filteredMovies);
     }
 </script>
 

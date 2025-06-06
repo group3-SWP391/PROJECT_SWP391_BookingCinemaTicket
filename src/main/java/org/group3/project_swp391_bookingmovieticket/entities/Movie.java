@@ -60,6 +60,9 @@ public class Movie {
     @Column(name = "views")
     private int views;
 
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;
 

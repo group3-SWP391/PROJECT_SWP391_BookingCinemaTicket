@@ -32,6 +32,7 @@ public class HomeController {
         request.getSession().setAttribute("categoryAll", movieService.getMovieCategories());
         request.getSession().setAttribute("allLocationBranch", branchService.findAllLocationBranch());
         request.getSession().setAttribute("event", eventService.findEventValid());
+        System.out.println(movieService.findMovieByViewDesc());
         model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
         model.addAttribute(USER_DTO, new UserDTO());
         return "home";

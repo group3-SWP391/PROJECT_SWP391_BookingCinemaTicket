@@ -18,6 +18,7 @@ public class MovieDTO  {
     private String actors;
     private String categories;
     private LocalDate releaseDate;
+    private LocalDate endDate;
     private int duration;
     private String trailerURLWatchLink;
     private String language;
