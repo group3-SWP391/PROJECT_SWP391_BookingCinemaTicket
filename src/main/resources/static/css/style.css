@@ -1845,14 +1845,7 @@ body.active #mobile-nav {
 }
 
 /*-- prs Slider End --*/
-/*-- prs upcomung Slider Start --*/
-.prs_upcom_slider_main_wrapper {
-	float: left;
-	width: 100%;
-	padding-top: 95px;
-	padding-bottom: 94px;
-	background: #f6f6f6;
-}
+
 
 .prs_upcom_movie_video_box_wrapper {
 	background: url('../images/content/ws1.jpg') 50% 0 repeat-y;
@@ -3745,7 +3738,7 @@ body.active #mobile-nav {
 
 .prs_footer_cont1_wrapper p {
 	font-size: 15px;
-	padding-top: 55px;
+	padding-top: 20px;
 	color: rgba(255, 255, 255, 0.57);
 }
 

@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-
 @Entity
 @Data
 @Table(name = "[user]")
@@ -20,7 +19,7 @@ public class User {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
@@ -34,9 +33,10 @@ public class User {
     @Column(name = "phone", nullable = true)
     private String phone;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
-
-
 }

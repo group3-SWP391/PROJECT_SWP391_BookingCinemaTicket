@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f9;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .account-info, .form-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none; /* Ẩn mặc định */
+        }
+        .account-info p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .form-section label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #444;
+        }
+        .form-section input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-section button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-section button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+        }
+        .success {
+            color: green;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .links a {
+            text-decoration: none;
+            color: #2196F3;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        .toggle-button {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        .toggle-button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+    <script>
+
+        function hideAllForms() {
+            document.getElementById('updateProfileForm').style.display = 'none';
+            document.getElementById('changePasswordForm').style.display = 'none';
+        }
+
+        function showUpdateProfile() {
+            hideAllForms();
+            document.getElementById('updateProfileForm').style.display = 'block';
+        }
+
+        function showChangePassword() {
+            hideAllForms();
+            document.getElementById('changePasswordForm').style.display = 'block';
+        }
+
+        window.onload = function() {
+            document.getElementById('accountInfo').style.display = 'block';
+        };
+    </script>
+</head>
+<body>
+<h1>My Account</h1>
+<div th:if="${session.userLogin}">
+    <div id="accountInfo" class="account-info">
+        <p><strong>Full Name:</strong> <span th:text="${user.fullname}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${user.phone} ?: 'Not provided'"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+    </div>
+
+
+    <button class="toggle-button" onclick="showUpdateProfile()">Update Profile</button>
+    <button class="toggle-button" onclick="showChangePassword()">Change Password</button>
+
+    <div id="updateProfileForm" class="form-section">
+        <h3>Update Profile</h3>
+        <form th:action="@{/update-profile}" method="post">
+            <label for="fullname">Full Name:</label>
+            <input type="text" id="fullname" name="fullname" th:value="${user.fullname}" required><br>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" th:value="${user.phone}" required><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:value="${user.email}" required><br>
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+
+    <div id="changePasswordForm" class="form-section">
+        <h3>Change Password</h3>
+        <form th:action="@{/change-password}" method="post">
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" id="currentPassword" name="currentPassword" required><br>
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required><br>
+            <button type="submit">Change Password</button>
+        </form>
+    </div>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <div th:if="${success}" class="success" th:text="${success}"></div>
+</div>
+<div th:unless="${session.userLogin}" th:text="'Please log in to view your account.'"></div>
+<div class="links">
+    <a th:href="@{/}">Back to Home</a>
+    <a th:href="@{/log-out}" th:unless="${session.userLogin == null}">Log Out</a>
+</div>
+</body>
+</html>

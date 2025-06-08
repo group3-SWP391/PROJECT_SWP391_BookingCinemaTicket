@@ -141,6 +141,8 @@ public class HomeController {
         return "seat_booking";
     }
 
+
+
     @GetMapping("/movie-details")
     public String movieDetails(@RequestParam("id") int id, Model model) {
         Optional<MovieDTO> movieOptional = movieService.findById(id);
@@ -308,7 +310,7 @@ public class HomeController {
             return "advertising-contact";
         }
     }
-// phuong thuc tạo mã code ngau nhien
+    // phuong thuc tạo mã code ngau nhien
     private String generateSecurityCode(int length) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();

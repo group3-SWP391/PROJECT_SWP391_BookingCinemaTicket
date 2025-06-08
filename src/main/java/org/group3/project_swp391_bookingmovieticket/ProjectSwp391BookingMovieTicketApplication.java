@@ -13,6 +13,7 @@ public class ProjectSwp391BookingMovieTicketApplication {
         return new ModelMapper();
     }
 
+
     public static void main(String[] args) {
         SpringApplication.run(ProjectSwp391BookingMovieTicketApplication.class, args);
     }
