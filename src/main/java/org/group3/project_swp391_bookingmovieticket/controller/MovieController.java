@@ -1,6 +1,4 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
-
-import org.group3.project_swp391_bookingmovieticket.constant.CommonConst;
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.DirectorService;
@@ -92,6 +90,4 @@ public class MovieController {
         model.addAttribute(USER_DTO, new UserDTO());
         return "movie_showing";
     }
-
-
 }

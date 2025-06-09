@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @Table(name = "schedule")
@@ -22,13 +23,13 @@ public class Schedule {
     private LocalDate startDate;
 
     @Column(name = "start_time")
-    private LocalDate startTime;
+    private LocalTime  startTime;
 
     @Column(name = "price")
     private double price;
 
     @Column(name = "end_time")
-    private LocalDate endTime;
+    private LocalTime endTime;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -39,4 +40,15 @@ public class Schedule {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
+
+    @Override
+    public String toString() {
+        return "Schedule{id=" + id + ", startDate=" + startDate + ", startTime=" + startTime + "}";
+        // Không in movie để tránh vòng lặp!
+    }
 }

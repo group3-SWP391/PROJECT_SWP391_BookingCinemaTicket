@@ -1,7 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.Director;
 import org.group3.project_swp391_bookingmovieticket.entities.Movie;
 import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IMovieService;

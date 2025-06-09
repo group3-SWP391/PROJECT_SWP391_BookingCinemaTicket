@@ -3,6 +3,7 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -31,6 +32,14 @@ public class Branch {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "location_detail")
+    private String locationDetail;
+
+    @ToString.Exclude
     @OneToMany(mappedBy = "branch",fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
+    private List<Room> roomList;
 }

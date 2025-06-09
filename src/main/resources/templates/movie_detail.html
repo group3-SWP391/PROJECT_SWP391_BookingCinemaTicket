@@ -62,7 +62,7 @@ Author: Webstrot
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="st_video_slider_inner_wrapper float_left"  th:style="'background-image: url(' + ${movieDetail.largeImageURL} + '); background-position: center 0; background-size: cover; background-repeat: no-repeat;'">>
+                <div class="st_video_slider_inner_wrapper float_left"  th:style="'background-image: url(' + ${movieDetail.largeImageURL} + '); background-position: center 0; background-size: cover; background-repeat: no-repeat;'">
                     <div class="st_video_slider_overlay"></div>
                     <div class="st_video_slide_sec float_left">
                         <a rel='external' th:href="${movieDetail.trailerURLWatchLink}" title='title'
@@ -195,7 +195,7 @@ Author: Webstrot
         <div class="st_slider_rating_right">
             <div class="st_slider_rating_btn prs_animate_btn1">
                 <ul>
-                    <li data-animation="animated fadeInUp"><a th:href="@{none}"
+                    <li data-animation="animated fadeInUp"><a th:href="@{/schedule/movieId(movieId=${movieDetail.id})}"
                                                               class="button button--tamaya prs_upcom_main_btn"
                                                               data-text="book now"><span>book
 									now</span></a>

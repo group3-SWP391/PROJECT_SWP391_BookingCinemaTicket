@@ -3,6 +3,7 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -28,6 +29,7 @@ public class Room {
     @Column(name = "imgurl", length = 1000)
     private String imgURL;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(nullable = false,name = "branch_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
