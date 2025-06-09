@@ -14,13 +14,16 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private double price;
+    private Float price;
 
     @Column(name = "start_date")
     private Date startDate;
 
     @Column(name = "start_time")
     private Time startTime;
+
+    @Column(name = "end_time")
+    private Time endTime;
 
     @ManyToOne
     @JoinColumn(name = "branch_id")

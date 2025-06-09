@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- Actor data for JavaScript -->
+    <script type="application/json" id="actorOptionsData" th:text="${#jackson.writeValueAsString(actors)}"></script>
+</head>
+<body>
+    <div th:fragment="content" class="cinema-stage">
+        <!-- Cinema-themed Movie Reel -->
+        <div class="movie-reel">
+            🎬
+        </div>
+        
+        <!-- Dashboard Content Wrapper -->
+        <div class="dashboard-content">
+            <!-- Add Movie Button -->
+            <button type="button" class="btn-add-movie" data-toggle="modal" data-target="#movieModal" id="addMovieBtn">
+                <i class="fa fa-plus-circle"></i> Add New Movie
+            </button>
+
+            <!-- Movie Management Header -->
+            <div class="movie-management-header">
+                <h1>
+                    <i class="fa fa-film"></i>
+                    Movie Management System
+                </h1>
+            </div>
+
+            <!-- Movie Table Container -->
+            <div class="movie-table-container">
+                <table class="table movie-table">
+                    <thead>
+                        <tr>
+                            <th>Poster</th>
+                            <th>Movie Name</th>
+                            <th>Director</th>
+                            <th>Duration</th>
+                            <th>Category</th>
+                            <th>Language</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="movie : ${movies}">
+                            <td>
+                                <img th:src="${movie.smallImageUrl != null ? movie.smallImageUrl : '/images/default-movie.jpg'}" 
+                                     alt="Movie Poster" class="movie-poster" />
+                            </td>
+                            <td>
+                                <strong th:text="${movie.name}">Movie Name</strong>
+                                <br>
+                                <small class="text-muted" th:text="${movie.rated}">PG-13</small>
+                            </td>
+                            <td>
+                                <span class="director-badge" th:if="${movie.director != null}" th:text="${movie.director.name}">Director</span>
+                                <span class="text-muted" th:if="${movie.director == null}">No Director</span>
+                            </td>
+                            <td th:text="${movie.duration + ' min'}">120 min</td>
+                            <td th:text="${movie.categories}">Action, Drama</td>
+                            <td th:text="${movie.language}">English</td>
+                            <td>
+                                <span class="status-badge" 
+                                      th:classappend="${movie.isShowing == 1 ? 'status-showing' : 'status-not-showing'}"
+                                      th:text="${movie.isShowing == 1 ? 'Showing' : 'Not Showing'}">
+                                    Showing
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button type="button" class="btn-action btn-edit" 
+                                            th:onclick="'editMovie(' + ${movie.id} + ')'">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </button>
+                                    <button type="button" class="btn-action btn-delete" 
+                                            th:onclick="'deleteMovie(' + ${movie.id} + ', \'' + ${movie.name} + '\')'">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Movie Modal -->
+    <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="movieModalLabel">
+                        <i class="fa fa-film"></i> Add New Movie
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="movieForm">
+                        <input type="hidden" id="movieId" name="movieId">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="movieName">Movie Name *</label>
+                                    <input type="text" class="form-control" id="movieName" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="movieDuration">Duration (minutes) *</label>
+                                    <input type="number" class="form-control" id="movieDuration" name="duration" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="movieCategories">Categories *</label>
+                                    <input type="text" class="form-control" id="movieCategories" name="categories" 
+                                           placeholder="e.g. Action, Drama, Comedy" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="movieLanguage">Language *</label>
+                                    <input type="text" class="form-control" id="movieLanguage" name="language" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="movieRated">Rating</label>
+                                    <select class="form-control" id="movieRated" name="rated">
+                                        <option value="G">G</option>
+                                        <option value="PG">PG</option>
+                                        <option value="PG-13">PG-13</option>
+                                        <option value="R">R</option>
+                                        <option value="NC-17">NC-17</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="movieFormat">Format</label>
+                                    <select class="form-control" id="movieFormat" name="format">
+                                        <option value="2D">2D</option>
+                                        <option value="3D">3D</option>
+                                        <option value="IMAX">IMAX</option>
+                                        <option value="4DX">4DX</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="movieStatus">Status</label>
+                                    <select class="form-control" id="movieStatus" name="isShowing">
+                                        <option value="1">Currently Showing</option>
+                                        <option value="0">Not Showing</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="movieDirector">Director</label>
+                            <select class="form-control" id="movieDirector" name="directorId">
+                                <option value="">Select Director</option>
+                                <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.name}">Director Name</option>
+                            </select>
+                            <button type="button" class="btn btn-sm btn-success" style="margin-top: 5px;" onclick="openAddDirectorModal()">
+                                <i class="fa fa-plus"></i> Add New Director
+                            </button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="movieSmallImage">Small Image URL</label>
+                                    <input type="url" class="form-control" id="movieSmallImage" name="smallImageUrl">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="movieLargeImage">Large Image URL</label>
+                                    <input type="url" class="form-control" id="movieLargeImage" name="largeImageUrl">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="movieTrailer">Trailer URL</label>
+                            <input type="url" class="form-control" id="movieTrailer" name="trailerUrl">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="movieShortDescription">Short Description</label>
+                            <textarea class="form-control" id="movieShortDescription" name="shortDescription" rows="2"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="movieLongDescription">Long Description</label>
+                            <textarea class="form-control" id="movieLongDescription" name="longDescription" rows="4"></textarea>
+                        </div>
+
+                        <!-- Actors Section -->
+                        <div class="form-group">
+                            <label>Actors & Characters</label>
+                            <div id="actorsContainer">
+                                <!-- Actor rows will be added here dynamically -->
+                            </div>
+                            <button type="button" class="btn-add-actor" onclick="addActorRow()">
+                                <i class="fa fa-plus"></i> Add Actor
+                            </button>
+                            <button type="button" class="btn btn-sm btn-info" style="margin-left: 10px;" data-toggle="modal" data-target="#actorModal">
+                                <i class="fa fa-user-plus"></i> Create New Actor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-save-movie" onclick="saveMovie()">Save Movie</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Director Modal -->
+    <div class="modal fade" id="directorModal" tabindex="-1" role="dialog" aria-labelledby="directorModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="directorModalLabel">
+                        <i class="fa fa-user-plus"></i> Add New Director
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="directorForm">
+                        <div class="form-group">
+                            <label for="directorName">Director Name *</label>
+                            <input type="text" class="form-control" id="directorName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="directorBio">Description</label>
+                            <textarea class="form-control" id="directorBio" name="biography" rows="3" placeholder="Brief description of the director"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveDirector()">Save Director</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actor Modal -->
+    <div class="modal fade" id="actorModal" tabindex="-1" role="dialog" aria-labelledby="actorModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="actorModalLabel">
+                        <i class="fa fa-user-plus"></i> Add New Actor
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="actorForm">
+                        <div class="form-group">
+                            <label for="actorName">Actor Name *</label>
+                            <input type="text" class="form-control" id="actorName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="actorBio">Notes</label>
+                            <textarea class="form-control" id="actorBio" name="biography" rows="3" placeholder="Optional notes about the actor (not stored in database)"></textarea>
+                            <small class="text-muted">Note: Only the actor name will be saved to the database.</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveActor()">Save Actor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html> 

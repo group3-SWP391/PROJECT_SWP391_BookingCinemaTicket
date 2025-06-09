@@ -94,106 +94,120 @@
     </style>
 </head>
 <body>
-    <div th:fragment="content">
-        <div class="dashboard-header" style="margin-bottom: 25px;">
-            <h2>
-                Hello <span th:text="${session.userLogin != null ? session.userLogin.fullname : 'Manager'}">Manager</span> <span style="font-size: 1.2em;">👋</span>
-            </h2>
-            <p class="text-muted">Overview information about your system</p>
+    <div th:fragment="content" class="cinema-stage">
+        <!-- Cinema-themed Movie Reel -->
+        <div class="movie-reel">
+            🎬
         </div>
+        
+        <!-- Dashboard Content Wrapper -->
+        <div class="dashboard-content">
+            <!-- Welcome Header -->
+            <div class="cinema-header">
+                <h1>RETURN TO WORK</h1>
+                <p>WATCH MOVIE</p>
+            </div>
 
-        <!-- Metrics Cards -->
-        <div class="row" style="margin-bottom: 30px;">
-            <div class="col-xs-12 col-sm-6 col-lg-3">
-                <div class="card-metric text-center panel panel-success">
-                    <div class="card-icon" style="color: #28a745;"><i class="fa fa-money"></i></div>
-                    <div class="card-title">Total Revenue</div>
-                    <div class="card-value" style="color: #28a745;" th:text="${revenue != null ? #numbers.formatDecimal(revenue, 2, 'COMMA', 0, 'POINT') + ' $' : '0 $'}">0 $</div>
-                </div>
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h2>
+                    Hello <span th:text="${session.userLogin != null ? session.userLogin.fullname : 'Manager'}">James</span> <span style="font-size: 1.2em;">👋</span>
+                </h2>
+                <p class="text-muted">Overview information about your cinema system</p>
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-3">
-                <div class="card-metric text-center panel panel-primary">
-                    <div class="card-icon" style="color: #337ab7;"><i class="fa fa-ticket"></i></div>
-                    <div class="card-title">Tickets Sold</div>
-                    <div class="card-value" style="color: #337ab7;" th:text="${tickets}">0</div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-6 col-lg-3">
-                <div class="card-metric text-center panel panel-warning">
-                    <div class="card-icon" style="color: #f0ad4e;"><i class="fa fa-film"></i></div>
-                    <div class="card-title">Total Movies</div>
-                    <div class="card-value" style="color: #f0ad4e;" th:text="${movieCount}">0</div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-6 col-lg-3">
-                <div class="card-metric text-center panel panel-danger">
-                    <div class="card-icon" style="color: #d9534f;"><i class="fa fa-calendar"></i></div>
-                    <div class="card-title">Total Schedules</div>
-                    <div class="card-value" style="color: #d9534f;" th:text="${scheduleCount}">0</div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Filters -->
-        <div class="row filter-row" style="margin-bottom: 30px;">
-            <div class="col-xs-12 col-sm-4">
-                <label for="monthPicker" class="filter-label">Select Month</label>
-                <div class="month-picker-wrapper" style="display: flex; align-items: center;">
-                    <span class="calendar-icon"><i class="fa fa-calendar"></i></span>
-                    <input id="monthPicker" class="form-control flatpickr-input" placeholder="Select Month" readonly>
-                    <button type="button" id="clearMonthBtn" class="btn btn-default" style="margin-left: 8px; height: 40px;">
-                        <i class="fa fa-times"></i>
-                    </button>
+            <!-- Metrics Cards -->
+            <div class="row" style="margin-bottom: 30px;">
+                <div class="col-xs-12 col-sm-6 col-lg-3">
+                    <div class="card-metric text-center">
+                        <div class="card-icon" style="color: #27ae60;"><i class="fa fa-money"></i></div>
+                        <div class="card-title">Total Revenue</div>
+                        <div class="card-value" style="color: #27ae60;" th:text="${revenue != null ? #numbers.formatDecimal(revenue, 2, 'COMMA', 0, 'POINT') + ' $' : '00 $'}">00 $</div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-3">
+                    <div class="card-metric text-center">
+                        <div class="card-icon" style="color: #3498db;"><i class="fa fa-ticket"></i></div>
+                        <div class="card-title">Tickets Sold</div>
+                        <div class="card-value" style="color: #3498db;" th:text="${tickets}">0</div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-3">
+                    <div class="card-metric text-center">
+                        <div class="card-icon" style="color: #f39c12;"><i class="fa fa-film"></i></div>
+                        <div class="card-title">Total Movies</div>
+                        <div class="card-value" style="color: #f39c12;" th:text="${movieCount}">0</div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-3">
+                    <div class="card-metric text-center">
+                        <div class="card-icon" style="color: #e74c3c;"><i class="fa fa-calendar"></i></div>
+                        <div class="card-title">Total Schedules</div>
+                        <div class="card-value" style="color: #e74c3c;" th:text="${scheduleCount}">0</div>
+                    </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-4">
-                <label for="movieSelect" class="filter-label">Select Movie</label>
-                <select id="movieSelect" name="movie" class="form-control">
-                    <option value="">All</option>
-                    <option th:each="m : ${movies}" th:value="${m.id}" th:text="${m.name}">Movie</option>
-                </select>
-            </div>
-            <!--
-            <div class="col-xs-12 col-sm-4" style="margin-bottom: 10px;">
-                <label>Select Cinema</label>
-                <select name="cinema" class="form-control">
-                    <option value="">All</option>
-                    <option th:each="c : ${cinemas}" th:value="${c.id}" th:text="${c.name}">Cinema</option>
-                </select>
-            </div>
-            -->
-        </div>
 
-        <!-- Add this after your filters section -->
-        <div style="margin-bottom: 40px; width: 100%; height: 600px;">
-            <h5 style="margin-bottom: 15px;">Monthly Revenue Overview (Last 12 Months)</h5>
-            <canvas id="monthlyRevenueChart" height="600" style="width: 100%;"></canvas>
-        </div>
+            <!-- Filters -->
+            <div class="row filter-row">
+                <div class="col-xs-12 col-sm-4">
+                    <label for="monthPicker" class="filter-label">Select Month</label>
+                    <div class="month-picker-wrapper" style="display: flex; align-items: center;">
+                        <span class="calendar-icon"><i class="fa fa-calendar"></i></span>
+                        <input id="monthPicker" class="form-control flatpickr-input" placeholder="Select Month" readonly>
+                        <button type="button" id="clearMonthBtn" class="btn btn-secondary" style="margin-left: 8px; height: 42px; background: rgba(44, 62, 80, 0.8); border: none; color: white;">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label for="movieSelect" class="filter-label">Select Movie</label>
+                    <select id="movieSelect" name="movie" class="form-control" style="height: 42px; border: 2px solid rgba(44, 62, 80, 0.2); border-radius: 8px;">
+                        <option value="">All</option>
+                        <option th:each="m : ${movies}" th:value="${m.id}" th:text="${m.name}">Movie</option>
+                    </select>
+                </div>
+            </div>
 
-        <!-- Revenue by Movie -->
-        <div style="margin-bottom: 40px;">
-            <h5 style="margin-bottom: 15px;">Revenue by Movie</h5>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th>Movie Name</th>
-                        <th>Revenue ($)</th>
-                        <th>Tickets Sold</th>
-                        <th>Last Show Date</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="m : ${movieRevenueList}">
-                        <td th:text="${m.name}"></td>
-                        <td th:text="${#numbers.formatDecimal(m.totalRevenue, 0, 'COMMA', 0, 'POINT') + ' $'}"></td>
-                        <td th:text="${m.ticketSold}"></td>
-                        <td th:text="${m.lastShowDate}"></td>
-                        <td><a th:href="@{/manager/movie/{id}(id=${m.id})}" class="btn btn-xs btn-primary">Details</a></td>
-                    </tr>
-                    </tbody>
-                </table>
+            <!-- Chart Section -->
+            <div style="margin-bottom: 40px; background: rgba(255,255,255,0.98); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                <h5 style="margin-bottom: 20px; color: #2c3e50; font-weight: bold;">
+                    <i class="fa fa-bar-chart" style="margin-right: 10px;"></i>Monthly Revenue Overview (Last 12 Months)
+                </h5>
+                <canvas id="monthlyRevenueChart" height="400" style="width: 100%;"></canvas>
+            </div>
+
+            <!-- Revenue by Movie Table -->
+            <div style="margin-bottom: 40px; background: rgba(255,255,255,0.98); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                <h5 style="margin-bottom: 20px; color: #2c3e50; font-weight: bold;">
+                    <i class="fa fa-film" style="margin-right: 10px;"></i>Revenue by Movie
+                </h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th><i class="fa fa-film" style="margin-right: 5px;"></i>Movie Name</th>
+                            <th><i class="fa fa-money" style="margin-right: 5px;"></i>Revenue ($)</th>
+                            <th><i class="fa fa-ticket" style="margin-right: 5px;"></i>Tickets Sold</th>
+                            <th><i class="fa fa-calendar" style="margin-right: 5px;"></i>Last Show Date</th>
+                            <th><i class="fa fa-cog" style="margin-right: 5px;"></i>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="m : ${movieRevenueList}">
+                            <td th:text="${m.name}"></td>
+                            <td th:text="${#numbers.formatDecimal(m.totalRevenue, 0, 'COMMA', 0, 'POINT') + ' $'}"></td>
+                            <td th:text="${m.ticketSold}"></td>
+                            <td th:text="${m.lastShowDate}"></td>
+                            <td>
+                                <a th:href="@{/manager/movie/{id}(id=${m.id})}" class="btn btn-sm" style="background: linear-gradient(45deg, #27ae60, #2ecc71); color: white; border: none; border-radius: 5px; padding: 5px 12px;">
+                                    <i class="fa fa-eye" style="margin-right: 3px;"></i>Details
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -275,13 +289,13 @@
                         datasets: [{
                             label: 'Total Revenue ($)',
                             data: getMonthlyRevenueData(), // initially all movies
-                            borderColor: '#28a745',
-                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            borderColor: '#27ae60',
+                            backgroundColor: 'rgba(39, 174, 96, 0.1)',
                             fill: true,
                             tension: 0.1,
                             pointRadius: 5,
                             pointHoverRadius: 8,
-                            pointBackgroundColor: '#28a745',
+                            pointBackgroundColor: '#27ae60',
                             pointBorderColor: '#fff',
                             pointBorderWidth: 2
                         }]
@@ -412,7 +426,10 @@
             });
 
             $('#clearMonthBtn').on('click', function() {
-                $('#monthPicker').val('');
+                const monthPicker = document.getElementById('monthPicker');
+                if (monthPicker._flatpickr) {
+                    monthPicker._flatpickr.clear();
+                }
                 selectedMonthIndex = null;
                 updateChart($('#movieSelect').val());
             });

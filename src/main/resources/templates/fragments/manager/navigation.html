@@ -5,36 +5,51 @@
 </head>
 <body>
     <nav th:fragment="navigation" class="h-100">
-        <div class="p-3">
+        <!-- Admin Profile Section -->
+        <div class="admin-profile">
+            <div class="admin-avatar">
+                <i class="fa fa-user-circle"></i>
+            </div>
+            <div class="admin-title">Admin</div>
+            <div class="admin-role">Cinema Manager</div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div style="padding: 20px 0;">
             <ul class="nav nav-pills nav-stacked">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/manager/dashboard}">
-                        <i class="fa fa-tachometer" style="margin-right:8px;"></i> Dashboard
+                        <i class="fa fa-tachometer"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/manager/movies}">
-                        <i class="fa fa-film" style="margin-right:8px;"></i> Manage Movies
+                        <i class="fa fa-film"></i> Manager Movies
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/manager/tickets}">
-                        <i class="fa fa-ticket" style="margin-right:8px;"></i> Manage Tickets
+                        <i class="fa fa-ticket"></i> Manage Tickets
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/manager/schedules}">
-                        <i class="fa fa-calendar" style="margin-right:8px;"></i> Manage Schedules
+                        <i class="fa fa-calendar"></i> Manage Schedules
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/manager/cinemas}">
-                        <i class="fa fa-building" style="margin-right:8px;"></i> Manage Cinemas
+                        <i class="fa fa-building"></i> Manage Cinemas
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/manager/users}">
-                        <i class="fa fa-users" style="margin-right:8px;"></i> Manage Users
+                        <i class="fa fa-users"></i> Manage Users
+                    </a>
+                </li>
+                <li class="nav-item" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                    <a class="nav-link" th:href="@{/}">
+                        <i class="fa fa-home"></i> HomePage
                     </a>
                 </li>
             </ul>

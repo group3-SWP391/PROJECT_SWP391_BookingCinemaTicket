@@ -13,20 +13,18 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String actors;
     private String categories;
-    private String director;
-    private int duration;
+    private Integer duration;
 
     @Column(name = "is_showing")
-    private int isShowing;
+    private Integer isShowing;
 
     private String language;
 
     @Column(name = "large_imageurl")
     private String largeImageUrl;
 
-    @Column(name = "long_description")
+    @Column(name = "long_description", length = 1000)
     private String longDescription;
 
     private String name;
@@ -35,12 +33,24 @@ public class Movie {
     @Column(name = "release_date")
     private Date releaseDate;
 
-    @Column(name = "short_description")
+    @Column(name = "short_description", length = 500)
     private String shortDescription;
 
     @Column(name = "small_imageurl")
     private String smallImageUrl;
 
-    @Column(name = "trailerurl")
-    private String trailerUrl;
+    @Column(name = "trailerurl_watch_link")
+    private String trailerUrlWatchLink;
+
+    @Column(name = "format", length = 10)
+    private String format;
+
+    @ManyToOne
+    @JoinColumn(name = "director_id")
+    private Director director;
+
+    private Integer views;
+
+    @Column(name = "end_date")
+    private Date endDate;
 }

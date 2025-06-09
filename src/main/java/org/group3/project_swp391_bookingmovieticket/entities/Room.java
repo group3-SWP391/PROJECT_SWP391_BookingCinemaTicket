@@ -11,14 +11,14 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private int capacity;
+    private Integer capacity;
 
     private String imgurl;
 
     private String name;
 
     @Column(name = "total_area")
-    private double totalArea;
+    private Float totalArea;
 
     @ManyToOne
     @JoinColumn(name = "branch_id")

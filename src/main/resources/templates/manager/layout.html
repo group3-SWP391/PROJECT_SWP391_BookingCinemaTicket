@@ -6,29 +6,30 @@
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
     <link th:href="@{/css/font-awesome.css}" rel="stylesheet">
     <link th:href="@{/css/manager.css}" rel="stylesheet">
+    <link th:href="@{/css/movie-management.css}" rel="stylesheet">
     <script th:src="@{/js/jquery_min.js}"></script>
     <script th:src="@{/js/bootstrap.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/movie-management.js}"></script>
 </head>
 <body>
-    <div class="manager-wrapper">
-        <!-- Header -->
-        <div th:replace="fragments/manager/header :: header"></div>
-        <!-- Main Content -->
-        <div class="manager-content">
-            <!-- Sidebar -->
-            <div class="manager-sidebar">
-                <div th:replace="fragments/manager/navigation :: navigation"></div>
-            </div>
-            
-            <!-- Main Content Area -->
-            <main class="manager-main">
-                <div th:insert="${content}">
-                    <!-- Content will be inserted here -->
-                    <div th:if="${content != null}" th:replace="${content} :: content"></div>
-                </div>
-            </main>
+<div class="manager-wrapper">
+    <!-- Header -->
+    <div th:replace="fragments/manager/header :: header"></div>
+
+    <!-- Main Content -->
+    <div class="manager-content">
+        <!-- Sidebar -->
+        <div class="manager-sidebar">
+            <div th:replace="fragments/manager/navigation :: navigation"></div>
         </div>
+
+        <!-- Main Content Area -->
+        <main class="manager-main">
+            <!-- ✅ Chỉ dùng đúng 1 th:replace để giữ context model -->
+            <div th:replace="${content} :: content"></div>
+        </main>
     </div>
+</div>
 </body>
-</html> 
+</html>

@@ -11,14 +11,18 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "dia_chi")
-    private String diaChi;
+    @Column(name = "location")
+    private String location;
 
-    private String imgurl;
+    @Column(name = "img_url")
+    private String imgUrl;
 
     private String name;
 
     @Column(name = "phone_no")
     private String phoneNo;
+
+    @Column(name = "description", length = 1000)
+    private String description;
 }
 

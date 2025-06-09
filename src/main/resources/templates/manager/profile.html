@@ -1,48 +1,51 @@
-<!--/* @thymesVar id="manager" type="org.group3.project_swp391_bookingmovieticket.dtos.UserDTO" */-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Thông tin cá nhân</title>
-  <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
 </head>
 <body>
-<div class="container mt-5" style="max-width: 600px;">
-  <h3>Thông tin cá nhân</h3>
 
-  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+<div th:fragment="content">
+  <div class="container mt-5" style="max-width: 700px;">
+    <h3 class="mb-4">Thông tin cá nhân</h3>
 
-  <form th:action="@{/manager/profile/update}" th:object="${manager}" method="post">
-    <div class="mb-3">
-      <label for="fullname" class="form-label">Họ tên</label>
-      <input type="text" class="form-control" id="fullname" th:field="*{fullname}" required>
-    </div>
-    <div class="mb-3">
-      <label for="phone" class="form-label">Số điện thoại</label>
-      <input type="text" class="form-control" id="phone" th:field="*{phone}" readonly>
-    </div>
-    <div class="mb-3">
-      <label for="username" class="form-label">Tên đăng nhập</label>
-      <input type="text" class="form-control" id="username" th:field="*{username}" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Cập nhật thông tin</button>
-  </form>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-  <hr>
+    <!-- ✅ Gắn th:object trực tiếp vào FORM -->
+    <form th:action="@{/manager/profile/update}" th:object="${manager}" method="post">
+      <div class="mb-3">
+        <label for="fullname" class="form-label">Họ tên</label>
+        <input type="text" class="form-control" id="fullname" th:field="*{fullname}" required>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Số điện thoại</label>
+        <input type="text" class="form-control" id="phone" th:field="*{phone}" readonly>
+      </div>
+      <div class="mb-3">
+        <label for="username" class="form-label">Tên đăng nhập</label>
+        <input type="text" class="form-control" id="username" th:field="*{username}" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Cập nhật thông tin</button>
+    </form>
 
-  <h4>Đổi mật khẩu</h4>
-  <form th:action="@{/manager/profile/change-password}" method="post">
-    <div class="mb-3">
-      <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
-      <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
-    </div>
-    <div class="mb-3">
-      <label for="newPassword" class="form-label">Mật khẩu mới</label>
-      <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-    </div>
-    <button type="submit" class="btn btn-warning">Đổi mật khẩu</button>
-  </form>
+    <hr class="my-4">
+
+    <h4>Đổi mật khẩu</h4>
+    <form th:action="@{/manager/profile/change-password}" method="post">
+      <div class="mb-3">
+        <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
+        <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
+      </div>
+      <div class="mb-3">
+        <label for="newPassword" class="form-label">Mật khẩu mới</label>
+        <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+      </div>
+      <button type="submit" class="btn btn-warning">Đổi mật khẩu</button>
+    </form>
+  </div>
 </div>
+
 </body>
 </html>

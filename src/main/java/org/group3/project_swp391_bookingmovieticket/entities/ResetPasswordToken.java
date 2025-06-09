@@ -7,18 +7,19 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "bill")
-public class Bill {
+@Table(name = "reset_password_token")
+public class ResetPasswordToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "created_time")
-    private Date createdTime;
+    @Column(name = "expiry_date")
+    private Date expiryDate;
 
-    private Float price;
+    @Column(name = "token")
+    private String token;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-}
+} 
