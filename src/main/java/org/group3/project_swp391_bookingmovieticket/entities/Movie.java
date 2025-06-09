@@ -12,35 +12,43 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    private String actors;
-    private String categories;
-    private String director;
     private int duration;
+    private String language;
+    @Column(name = "large_imageurl")
+    private String largeImageUrl;
+    @Column(name = "long_description")
+    private String longDescription;
+    private String name;
+    private String rated;
+    @Column(name = "release_date")
+    private Date releaseDate;
+    @Column(name = "short_description")
+    private String shorDescription;
+    @Column(name = "small_imageurl")
+    private String smallImageurl;
+    @Column(name = "trailerurl_watch_link")
+    private String trailerurlWatchLink;
+    @Column(name = "format")
+    private String format;
 
+    @ManyToOne
+    @JoinColumn(name = "director_id")
+    private Director director;
+    private String categories;
+    private int views;
+    private Date end_date;
     @Column(name = "is_showing")
     private int isShowing;
 
-    private String language;
 
-    @Column(name = "large_imageurl")
-    private String largeImageUrl;
 
-    @Column(name = "long_description")
-    private String longDescription;
 
-    private String name;
-    private String rated;
 
-    @Column(name = "release_date")
-    private Date releaseDate;
 
-    @Column(name = "short_description")
-    private String shortDescription;
 
-    @Column(name = "small_imageurl")
-    private String smallImageUrl;
 
-    @Column(name = "trailerurl")
-    private String trailerUrl;
+
+
+
+
 }
