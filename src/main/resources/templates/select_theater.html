@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn Rạp</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        select, a {
+            padding: 8px;
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .branch-image {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+
+        .schedule {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .schedule img {
+            max-width: 100px;
+            height: auto;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Chọn Rạp</h1>
+    <div>
+        <h2>Danh Sách Rạp</h2>
+        <div th:each="name : ${branchNames}">
+            <a th:href="@{/select-theater(name=${name})}"
+               th:text="${name}"
+               th:class="${name == param.name} ? 'selected' : ''"></a>
+        </div>
+    </div>
+
+    <div th:if="${addresses != null and not #lists.isEmpty(addresses)}">
+        <h2>Tất cả các địa chỉ</h2>
+        <div th:each="address : ${addresses}">
+            <a th:href="@{/select-theater(name=${param.name},branchId=${address.id})}"
+               th:text="${address.name + ' - ' + address.diaChi}"></a>
+        </div>
+    </div>
+    <div th:if="${selectedBranch != null}">
+        <h2 th:text="${selectedBranch.name}"></h2>
+        <img th:src="${selectedBranch.imgurl}" alt="Branch Image" class="branch-image"
+             th:if="${!#strings.isEmpty(selectedBranch.imgurl)}"/>
+        <h3>Lịch Chiếu</h3>
+        <div th:each="schedule : ${schedules}" class="schedule">
+            <span th:text="${schedule.movieName}"></span> -
+            <span th:text="${schedule.startDate} + ' ' + schedule.startTime"></span> -
+            <span th:text="${#numbers.formatDecimal(schedule.price, 0, 2)} + ' VNĐ'"></span>
+            <img th:src="${selectedBranch.imgurl}" alt="Branch Image" th:if="${!#strings.isEmpty(selectedBranch.imgurl)}"/>
+        </div>
+        <div th:if="${#lists.isEmpty(schedules)}">
+            <p>Không có lịch chiếu tại rạp này.</p>
+        </div>
+    </div>
+</div>
+<script>
+    function loadAddresses() {
+        var selectedName = $('#branchName').val();
+        if (selectedName) {
+            $.ajax({
+                url: '/api/addresses',
+                type: 'GET',
+                data: { name: selectedName },
+                success: function(addresses) {
+                    var addressSelect = $('#branchAddress');
+                    addressSelect.empty();
+                    addressSelect.append('<option value="">Chọn địa chỉ</option>');
+                    addresses.forEach(function(address) {
+                        addressSelect.append(
+                            '<option value="/select-theater?name=' + encodeURIComponent(selectedName) + '&branchId=' + address.id + '">' +
+                            address.diaChi +
+                            '</option>'
+                        );
+                    });
+
+                    // Cập nhật danh sách địa chỉ hiển thị
+                    $.ajax({
+                        url: '/select-theater',
+                        type: 'GET',
+                        data: { name: selectedName },
+                        success: function(data) {
+                            // Cập nhật nội dung trang bằng cách tải lại hoặc thay thế phần tử
+                            window.location.href = '/select-theater?name=' + encodeURIComponent(selectedName);
+                        },
+                        error: function() {
+                            alert('Không thể tải danh sách địa chỉ.');
+                        }
+                    });
+                },
+                error: function() {
+                    alert('Không thể tải danh sách địa chỉ.');
+                }
+            });
+        } else {
+            $('#branchAddress').empty().append('<option value="">Chọn địa chỉ</option>');
+            // Xóa danh sách địa chỉ hiển thị nếu không chọn rạp
+            window.location.href = '/select-theater';
+        }
+    }
+
+    // Tải địa chỉ khi trang được tải nếu đã có name được chọn
+    $(document).ready(function() {
+        if ($('#branchName').val()) {
+            loadAddresses();
+        }
+    });
+</script>
+</body>
+</html>

@@ -31,27 +31,18 @@ public class MovieService implements IMovieService {
 
     @Override
     public Optional<MovieDTO> findById(Integer id) {
-// tim phim tromg cơ sở dữ liệu bằng id
         Optional<Movie> movieOptional = movieRepository.findById(id);
-
-        // lay phim tu optional
-        Movie movie = movieOptional.get();
-
-        // Chuyển doi từ Movie (entity) sang MovieDTO
-        MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
-
-        // Tra ve MovieDTO duoc bọc trong optional
-        return Optional.of(movieDTO);
+        return movieOptional.map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 
     @Override
     public void update(MovieDTO movieDTO) {
-
+        // TODO: Implement update logic
     }
 
     @Override
     public void remove(Integer id) {
-
+        // TODO: Implement remove logic
     }
 
     @Override
@@ -62,7 +53,6 @@ public class MovieService implements IMovieService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public List<String> getMovieCategories() {
         return movieRepository.getMovieCategories();
@@ -70,7 +60,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTO> getNowShowingMovies() {
-        return movieRepository.findMovieIsShowing()
+        return movieRepository.findByIsShowing(1)
                 .stream()
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());
@@ -78,7 +68,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTO> getCommingSoonMovies() {
-        return movieRepository.findMovieCommingSoon()
+        return movieRepository.findByIsShowing(2)
                 .stream()
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());
@@ -91,5 +81,4 @@ public class MovieService implements IMovieService {
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());
     }
-
 }
