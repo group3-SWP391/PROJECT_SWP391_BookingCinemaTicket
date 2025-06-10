@@ -3,30 +3,31 @@ let editingMovieId = null;
 let actorRowCount = 0;
 let actorOptions = [];
 
-// Initialize when DOM is ready
 function initializeMovieManagement() {
-    // Get actor options from the page (passed from Thymeleaf)
     const actorOptionsElement = document.getElementById('actorOptionsData');
     if (actorOptionsElement) {
         try {
-            actorOptions = JSON.parse(actorOptionsElement.textContent);
-            console.log('Actor options loaded:', actorOptions);
+            const rawText = actorOptionsElement.textContent || actorOptionsElement.innerHTML;
+            actorOptions = JSON.parse(rawText);
         } catch (e) {
             console.error('Error parsing actor options:', e);
+            console.error('Raw content was:', actorOptionsElement.textContent);
             actorOptions = [];
         }
+    } else {
+        console.warn('Actor options element not found');
+        actorOptions = [];
     }
-    
-    // Bind Add Movie Button
+    if (!actorOptions || actorOptions.length === 0) {
+        fetchActorsFromAPI();
+    }
     const addMovieBtn = document.getElementById('addMovieBtn');
     if (addMovieBtn) {
         addMovieBtn.addEventListener('click', openAddMovieModal);
-        console.log('Add Movie button bound successfully');
     } else {
         console.warn('Add Movie button not found');
     }
 
-    // Make functions globally available
     window.editMovie = editMovie;
     window.deleteMovie = deleteMovie;
     window.openAddMovieModal = openAddMovieModal;
@@ -36,22 +37,16 @@ function initializeMovieManagement() {
     window.openAddDirectorModal = openAddDirectorModal;
     window.saveDirector = saveDirector;
     window.saveActor = saveActor;
-    
-    console.log('Movie management initialized');
+    window.removeFilePreview = removeFilePreview;
+    setupFileUpload();
 }
-
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeMovieManagement);
-
-// Also initialize when window loads (for dynamic content)
 window.addEventListener('load', function() {
     if (document.getElementById('addMovieBtn') && !document.getElementById('addMovieBtn').hasEventListener) {
         initializeMovieManagement();
         document.getElementById('addMovieBtn').hasEventListener = true;
     }
 });
-
-// Retry mechanism for dynamic content loading
 let retryCount = 0;
 const maxRetries = 10;
 
@@ -69,17 +64,23 @@ function waitForElementsAndInitialize() {
     
     retryCount++;
     if (retryCount < maxRetries) {
-        console.log(`Waiting for movie management elements... attempt ${retryCount}`);
         setTimeout(waitForElementsAndInitialize, 500);
     } else {
         console.warn('Movie management elements not found after maximum retries');
     }
 }
 
-// Start the retry mechanism
 setTimeout(waitForElementsAndInitialize, 100);
-
-// Open Add Movie Modal
+function fetchActorsFromAPI() {
+    fetch('/manager/actors')
+        .then(response => response.json())
+        .then(actors => {
+            actorOptions = actors;
+        })
+        .catch(error => {
+            console.error('Error fetching actors from API:', error);
+        });
+}
 function openAddMovieModal() {
     editingMovieId = null;
     
@@ -89,7 +90,6 @@ function openAddMovieModal() {
     const actorsContainer = document.getElementById('actorsContainer');
     
     if (!modalLabel || !movieForm || !movieId || !actorsContainer) {
-        console.error('Modal elements not found. Modal HTML may not be loaded.');
         alert('Error: Modal components are not ready. Please refresh the page.');
         return;
     }
@@ -99,22 +99,28 @@ function openAddMovieModal() {
     movieId.value = '';
     actorsContainer.innerHTML = '';
     actorRowCount = 0;
-    addActorRow(); // Add one default actor row
+    
+    // Reset file upload areas
+    resetFileUploadAreas();
+    
+    addActorRow();
 }
 
-// Add Actor Row
 function addActorRow(selectedActorId = '', characterName = '') {
     actorRowCount++;
     const container = document.getElementById('actorsContainer');
     const rowDiv = document.createElement('div');
     rowDiv.className = 'actor-row';
     rowDiv.id = `actorRow${actorRowCount}`;
-    
     let actorOptionsHtml = '<option value="">Select Actor</option>';
-    actorOptions.forEach(actor => {
-        const selected = actor.id == selectedActorId ? 'selected' : '';
-        actorOptionsHtml += `<option value="${actor.id}" ${selected}>${actor.name}</option>`;
-    });
+    if (actorOptions && actorOptions.length > 0) {
+        actorOptions.forEach(actor => {
+            const selected = actor.id == selectedActorId ? 'selected' : '';
+            actorOptionsHtml += `<option value="${actor.id}" ${selected}>${actor.name}</option>`;
+        });
+    } else {
+        actorOptionsHtml += '<option value="" disabled>No actors available - please create some first</option>';
+    }
     
     rowDiv.innerHTML = `
         <div class="actor-controls">
@@ -138,7 +144,6 @@ function addActorRow(selectedActorId = '', characterName = '') {
     container.appendChild(rowDiv);
 }
 
-// Remove Actor Row
 function removeActorRow(rowId) {
     const row = document.getElementById(rowId);
     if (row) {
@@ -146,34 +151,35 @@ function removeActorRow(rowId) {
     }
 }
 
-// Save Movie
 function saveMovie() {
     const form = document.getElementById('movieForm');
     const formData = new FormData(form);
+    const actorIds = formData.getAll('actorIds');
+    const characterNames = formData.getAll('characterNames');
     
-    // Convert FormData to JSON for easier handling
-    const movieData = {};
-    for (let [key, value] of formData.entries()) {
-        if (movieData[key]) {
-            if (Array.isArray(movieData[key])) {
-                movieData[key].push(value);
-            } else {
-                movieData[key] = [movieData[key], value];
-            }
-        } else {
-            movieData[key] = value;
+    const actors = [];
+    for (let i = 0; i < actorIds.length; i++) {
+        if (actorIds[i] && characterNames[i]) {
+            actors.push({
+                actorId: parseInt(actorIds[i]),
+                characterName: characterNames[i]
+            });
         }
     }
     
-    const url = editingMovieId ? `/manager/movies/${editingMovieId}` : '/manager/movies';
-    const method = editingMovieId ? 'PUT' : 'POST';
+    formData.delete('actorIds');
+    formData.delete('characterNames');
+    formData.append('actors', JSON.stringify(actors));
+    if (editingMovieId) {
+        formData.append('_method', 'PUT');
+        formData.append('movieId', editingMovieId);
+    }
+    
+    const url = '/manager/movies';
     
     fetch(url, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(movieData)
+        method: 'POST',
+        body: formData
     })
     .then(response => response.json())
     .then(data => {
@@ -189,13 +195,9 @@ function saveMovie() {
         alert('Error saving movie');
     });
 }
-
-// Edit Movie
 function editMovie(movieId) {
     editingMovieId = movieId;
     document.getElementById('movieModalLabel').innerHTML = '<i class="fa fa-edit"></i> Edit Movie';
-    
-    // Fetch movie data
     fetch(`/manager/movies/${movieId}`)
         .then(response => response.json())
         .then(data => {
@@ -207,16 +209,23 @@ function editMovie(movieId) {
                 document.getElementById('movieCategories').value = movie.categories || '';
                 document.getElementById('movieLanguage').value = movie.language || '';
                 document.getElementById('movieRated').value = movie.rated || '';
-                document.getElementById('movieFormat').value = movie.format || '';
+                const formatDropdown = document.getElementById('movieFormat');
+                formatDropdown.value = (movie.format || '').trim();
                 document.getElementById('movieStatus').value = movie.isShowing || 0;
                 document.getElementById('movieDirector').value = movie.director ? movie.director.id : '';
-                document.getElementById('movieSmallImage').value = movie.smallImageUrl || '';
-                document.getElementById('movieLargeImage').value = movie.largeImageUrl || '';
-                document.getElementById('movieTrailer').value = movie.trailerUrlWatchLink || '';
+                resetFileUploadAreas();
+                if (movie.smallImageUrl) {
+                    showCurrentFileInfo(movie.smallImageUrl, 'smallImage');
+                }
+                if (movie.largeImageUrl) {
+                    showCurrentFileInfo(movie.largeImageUrl, 'largeImage');
+                }
+                if (movie.trailerUrlWatchLink) {
+                    showCurrentFileInfo(movie.trailerUrlWatchLink, 'trailer');
+                }
+                
                 document.getElementById('movieShortDescription').value = movie.shortDescription || '';
                 document.getElementById('movieLongDescription').value = movie.longDescription || '';
-                
-                // Clear and populate actors
                 document.getElementById('actorsContainer').innerHTML = '';
                 actorRowCount = 0;
                 
@@ -225,7 +234,7 @@ function editMovie(movieId) {
                         addActorRow(movieActor.actor.id, movieActor.nameInMovie);
                     });
                 } else {
-                    addActorRow(); // Add empty row if no actors
+                    addActorRow();
                 }
                 
                 $('#movieModal').modal('show');
@@ -238,8 +247,6 @@ function editMovie(movieId) {
             alert('Error loading movie data');
         });
 }
-
-// Delete Movie
 function deleteMovie(movieId, movieName) {
     if (confirm(`Are you sure you want to delete "${movieName}"?`)) {
         fetch(`/manager/movies/${movieId}`, {
@@ -260,14 +267,11 @@ function deleteMovie(movieId, movieName) {
     }
 }
 
-// Open Add Director Modal
 function openAddDirectorModal() {
     document.getElementById('directorModalLabel').innerHTML = '<i class="fa fa-user-plus"></i> Add New Director';
     document.getElementById('directorForm').reset();
     $('#directorModal').modal('show');
 }
-
-// Save Director
 function saveDirector() {
     const form = document.getElementById('directorForm');
     const formData = new FormData(form);
@@ -306,7 +310,6 @@ function saveDirector() {
     });
 }
 
-// Save Actor
 function saveActor() {
     const form = document.getElementById('actorForm');
     const formData = new FormData(form);
@@ -326,10 +329,7 @@ function saveActor() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Add new actor to the global array and refresh current actor rows
             actorOptions.push(data.actor);
-            
-            // Refresh all actor select elements
             const actorSelects = document.querySelectorAll('select[name="actorIds"]');
             actorSelects.forEach(select => {
                 const currentValue = select.value;
@@ -346,8 +346,189 @@ function saveActor() {
             alert('Error saving actor: ' + data.message);
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving actor');
+            .catch(error => {
+            console.error('Error:', error);
+            alert('Error saving actor');
+        });
+}
+
+function setupFileUpload() {
+    const fileInputs = [
+        { id: 'movieSmallImage', type: 'image', preview: 'smallImagePreview', area: 'smallImageUploadArea' },
+        { id: 'movieLargeImage', type: 'image', preview: 'largeImagePreview', area: 'largeImageUploadArea' },
+        { id: 'movieTrailer', type: 'video', preview: 'trailerPreview', area: 'trailerUploadArea' }
+    ];
+
+    fileInputs.forEach(config => {
+        const input = document.getElementById(config.id);
+        const uploadArea = document.getElementById(config.area);
+        const preview = document.getElementById(config.preview);
+
+        if (!input || !uploadArea || !preview) return;
+        input.addEventListener('change', function(e) {
+            handleFileSelect(e.target.files[0], config);
+        });
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0], config);
+                const dt = new DataTransfer();
+                dt.items.add(files[0]);
+                input.files = dt.files;
+            }
+        });
+    });
+}
+
+function handleFileSelect(file, config) {
+    if (!file) return;
+    const isValidType = config.type === 'image' ?
+        file.type.startsWith('image/') : 
+        file.type.startsWith('video/');
+
+    if (!isValidType) {
+        alert(`Please select a valid ${config.type} file.`);
+        return;
+    }
+    const maxSize = config.type === 'image' ? 10 * 1024 * 1024 : 50 * 1024 * 1024;
+    if (file.size > maxSize) {
+        alert(`File size must be less than ${config.type === 'image' ? '10MB' : '50MB'}.`);
+        return;
+    }
+    showFilePreview(file, config);
+}
+
+function showFilePreview(file, config) {
+    const uploadArea = document.getElementById(config.area);
+    const preview = document.getElementById(config.preview);
+    
+    if (!uploadArea || !preview) return;
+
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        if (config.type === 'image') {
+            const img = preview.querySelector('.preview-image');
+            img.src = e.target.result;
+        } else if (config.type === 'video') {
+            const video = preview.querySelector('.preview-video');
+            const source = video.querySelector('source');
+            source.src = e.target.result;
+            video.load();
+        }
+
+        const fileName = preview.querySelector('.file-name');
+        const fileSize = preview.querySelector('.file-size');
+        
+        if (fileName) fileName.textContent = file.name;
+        if (fileSize) fileSize.textContent = formatFileSize(file.size);
+        uploadArea.style.display = 'none';
+        preview.style.display = 'block';
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function removeFilePreview(type) {
+    const configs = {
+        'smallImage': { id: 'movieSmallImage', preview: 'smallImagePreview', area: 'smallImageUploadArea' },
+        'largeImage': { id: 'movieLargeImage', preview: 'largeImagePreview', area: 'largeImageUploadArea' },
+        'trailer': { id: 'movieTrailer', preview: 'trailerPreview', area: 'trailerUploadArea' }
+    };
+
+    const config = configs[type];
+    if (!config) return;
+
+    const input = document.getElementById(config.id);
+    const uploadArea = document.getElementById(config.area);
+    const preview = document.getElementById(config.preview);
+
+    if (input) input.value = '';
+    if (uploadArea) uploadArea.style.display = 'block';
+    if (preview) {
+        preview.style.display = 'none';
+        
+        // Clear preview content
+        const img = preview.querySelector('.preview-image');
+        const video = preview.querySelector('.preview-video');
+        const source = preview.querySelector('source');
+        
+        if (img) img.src = '';
+        if (video && source) {
+            source.src = '';
+            video.load();
+        }
+    }
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+function showCurrentFileInfo(fileUrl, type) {
+    if (!fileUrl) return;
+
+    const configs = {
+        'smallImage': { preview: 'smallImagePreview', area: 'smallImageUploadArea' },
+        'largeImage': { preview: 'largeImagePreview', area: 'largeImageUploadArea' },
+        'trailer': { preview: 'trailerPreview', area: 'trailerUploadArea' }
+    };
+
+    const config = configs[type];
+    if (!config) return;
+
+    const uploadArea = document.getElementById(config.area);
+    const preview = document.getElementById(config.preview);
+
+    if (!uploadArea || !preview) return;
+
+    if (type === 'trailer') {
+        const video = preview.querySelector('.preview-video');
+        const source = video.querySelector('source');
+        if (video && source) {
+            source.src = fileUrl;
+            video.load();
+        }
+    } else {
+        const img = preview.querySelector('.preview-image');
+        if (img) {
+            img.src = fileUrl;
+        }
+    }
+    const fileName = preview.querySelector('.file-name');
+    if (fileName) {
+        fileName.textContent = fileUrl.split('/').pop() || 'Current file';
+    }
+
+    uploadArea.style.display = 'none';
+    preview.style.display = 'block';
+}
+
+function resetFileUploadAreas() {
+    const types = ['smallImage', 'largeImage', 'trailer'];
+    
+    types.forEach(type => {
+        removeFilePreview(type);
     });
 } 

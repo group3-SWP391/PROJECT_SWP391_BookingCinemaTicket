@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- Actor data for JavaScript -->
-    <script type="application/json" id="actorOptionsData" th:text="${#jackson.writeValueAsString(actors)}"></script>
+    <script type="application/json" id="actorOptionsData">/*[[${#jackson.writeValueAsString(actors)}]]*/</script>
 </head>
 <body>
     <div th:fragment="content" class="cinema-stage">
@@ -70,11 +70,14 @@
                             <td>
                                 <div class="action-buttons">
                                     <button type="button" class="btn-action btn-edit" 
-                                            th:onclick="'editMovie(' + ${movie.id} + ')'">
+                                            th:data-movie-id="${movie.id}"
+                                            onclick="editMovie(this.dataset.movieId)">
                                         <i class="fa fa-edit"></i> Edit
                                     </button>
                                     <button type="button" class="btn-action btn-delete" 
-                                            th:onclick="'deleteMovie(' + ${movie.id} + ', \'' + ${movie.name} + '\')'">
+                                            th:data-movie-id="${movie.id}"
+                                            th:data-movie-name="${movie.name}"
+                                            onclick="deleteMovie(this.dataset.movieId, this.dataset.movieName)">
                                         <i class="fa fa-trash"></i> Delete
                                     </button>
                                 </div>
@@ -149,6 +152,7 @@
                                 <div class="form-group">
                                     <label for="movieFormat">Format</label>
                                     <select class="form-control" id="movieFormat" name="format">
+                                        <option value="">Select Format</option>
                                         <option value="2D">2D</option>
                                         <option value="3D">3D</option>
                                         <option value="IMAX">IMAX</option>
@@ -178,24 +182,110 @@
                             </button>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="movieSmallImage">Small Image URL</label>
-                                    <input type="url" class="form-control" id="movieSmallImage" name="smallImageUrl">
+                        <!-- Media Upload Section -->
+                        <div class="media-upload-section">
+                            <h5 class="section-title">
+                                <i class="fa fa-image"></i> Movie Media
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="movieSmallImage">Poster Image (Small)</label>
+                                        <div class="file-upload-container">
+                                            <div class="file-upload-area" id="smallImageUploadArea">
+                                                <div class="upload-icon">
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                                <div class="upload-text">
+                                                    <span class="upload-title">Drop image here or click to browse</span>
+                                                    <span class="upload-subtitle">PNG, JPG, GIF up to 10MB</span>
+                                                </div>
+                                                <input type="file" class="file-input" id="movieSmallImage" 
+                                                       name="smallImageFile" accept="image/*">
+                                            </div>
+                                            <div class="file-preview" id="smallImagePreview" style="display: none;">
+                                                <img class="preview-image" alt="Small Image Preview">
+                                                <div class="preview-overlay">
+                                                    <button type="button" class="btn-remove-file" 
+                                                            onclick="removeFilePreview('smallImage')">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="file-info">
+                                                    <span class="file-name"></span>
+                                                    <span class="file-size"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="movieLargeImage">Banner Image (Large)</label>
+                                        <div class="file-upload-container">
+                                            <div class="file-upload-area" id="largeImageUploadArea">
+                                                <div class="upload-icon">
+                                                    <i class="fa fa-image"></i>
+                                                </div>
+                                                <div class="upload-text">
+                                                    <span class="upload-title">Drop image here or click to browse</span>
+                                                    <span class="upload-subtitle">PNG, JPG, GIF up to 10MB</span>
+                                                </div>
+                                                <input type="file" class="file-input" id="movieLargeImage" 
+                                                       name="largeImageFile" accept="image/*">
+                                            </div>
+                                            <div class="file-preview" id="largeImagePreview" style="display: none;">
+                                                <img class="preview-image" alt="Large Image Preview">
+                                                <div class="preview-overlay">
+                                                    <button type="button" class="btn-remove-file" 
+                                                            onclick="removeFilePreview('largeImage')">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="file-info">
+                                                    <span class="file-name"></span>
+                                                    <span class="file-size"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="movieLargeImage">Large Image URL</label>
-                                    <input type="url" class="form-control" id="movieLargeImage" name="largeImageUrl">
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="movieTrailer">Trailer URL</label>
-                            <input type="url" class="form-control" id="movieTrailer" name="trailerUrl">
+                            <div class="form-group">
+                                <label for="movieTrailer">Trailer Video</label>
+                                <div class="file-upload-container">
+                                    <div class="file-upload-area" id="trailerUploadArea">
+                                        <div class="upload-icon">
+                                            <i class="fa fa-video-camera"></i>
+                                        </div>
+                                        <div class="upload-text">
+                                            <span class="upload-title">Drop video here or click to browse</span>
+                                            <span class="upload-subtitle">MP4, AVI, MOV up to 50MB</span>
+                                        </div>
+                                        <input type="file" class="file-input" id="movieTrailer" 
+                                               name="trailerFile" accept="video/*">
+                                    </div>
+                                    <div class="file-preview video-preview" id="trailerPreview" style="display: none;">
+                                        <video class="preview-video" controls>
+                                            <source type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <div class="preview-overlay">
+                                            <button type="button" class="btn-remove-file" 
+                                                    onclick="removeFilePreview('trailer')">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div class="file-info">
+                                            <span class="file-name"></span>
+                                            <span class="file-size"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -280,12 +370,7 @@
                         <div class="form-group">
                             <label for="actorName">Actor Name *</label>
                             <input type="text" class="form-control" id="actorName" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="actorBio">Notes</label>
-                            <textarea class="form-control" id="actorBio" name="biography" rows="3" placeholder="Optional notes about the actor (not stored in database)"></textarea>
-                            <small class="text-muted">Note: Only the actor name will be saved to the database.</small>
-                        </div>
+                        </div> 
                     </form>
                 </div>
                 <div class="modal-footer">

@@ -1,38 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
 </head>
+
 <body>
     <header th:fragment="header" class="manager-header" style="padding: 15px 0;">
-        <div class="container-fluid">
-            <div>
-                <h4 class="pull-left" style="margin: 0; color: #fff; font-weight: bold;">
-                    <i class="fa fa-film" style="margin-right: 10px;"></i>Manager Page
-                </h4>
-                <div class="pull-right" style="margin-top: 2px;">
-                    <div th:if="${session.userLogin != null}" style="display: inline-block;">
-                        <a class="btn" style="margin-right: 10px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; padding: 8px 15px;" th:href="@{/manager/dashboard}">
-                            <i class="fa fa-user" style="margin-right: 5px;"></i>
-                            <span th:text="${session.userLogin.fullname}">James</span>
-                        </a>
-                        <!-- Profile Button -->
-                        <a href="/manager/profile" class="btn btn-light" style="margin-right: 10px; background: rgba(255,255,255,0.9); color: #27ae60; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;">
-                            <i class="fa fa-cog" style="margin-right: 5px;"></i>Profile
-                        </a>
-                        <a class="btn" style="background: rgba(231, 76, 60, 0.9); color: #fff; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;" th:href="@{/log-out}">
-                            <i class="fa fa-sign-out" style="margin-right: 5px;"></i>Log out
-                        </a>
-                    </div>
-                    <div th:if="${session.userLogin == null}" style="display: inline-block;">
-                        <a class="btn btn-light" style="color: #27ae60; background: #fff; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;" data-toggle="modal" data-target="#myModal">
-                            <i class="fa fa-user-plus" style="margin-right: 5px;"></i>Sign up
-                        </a>
-                    </div>
+        <div class="container-fluid" style="display: flex;justify-content: space-between; align-items: center;">
+            <h4 class="pull-left" style="margin: 0; color: #fff; font-weight: bold; flex: 1;">
+                <i class="fa fa-film" style="margin-right: 10px;"></i>Manager Page
+            </h4>
+            <div class="pull-right" style="margin-top: 2px;">
+                <div th:if="${session.userLogin != null}" style="display: inline-block;">
+                    <a class="btn"
+                        style="margin-right: 10px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; padding: 8px 15px;"
+                        th:href="@{/manager/dashboard}">
+                        <i class="fa fa-user" style="margin-right: 5px;"></i>
+                        <span th:text="${session.userLogin.fullname}">James</span>
+                    </a>
+                    <!-- Profile Button -->
+                    <a href="/manager/profile" class="btn btn-light"
+                        style="margin-right: 10px; background: rgba(255,255,255,0.9); color: #27ae60; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;">
+                        <i class="fa fa-cog" style="margin-right: 5px;"></i>Profile
+                    </a>
+                    <a class="btn"
+                        style="background: rgba(231, 76, 60, 0.9); color: #fff; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;"
+                        th:href="@{/log-out}">
+                        <i class="fa fa-sign-out" style="margin-right: 5px;"></i>Log out
+                    </a>
                 </div>
-                <div style="clear: both;"></div>
+                <div th:if="${session.userLogin == null}" style="display: inline-block;">
+                    <a class="btn btn-light"
+                        style="color: #27ae60; background: #fff; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;"
+                        data-toggle="modal" data-target="#myModal">
+                        <i class="fa fa-user-plus" style="margin-right: 5px;"></i>Sign up
+                    </a>
+                </div>
             </div>
+            <div style="clear: both;"></div>
         </div>
     </header>
 </body>
-</html> 
+
+</html>
