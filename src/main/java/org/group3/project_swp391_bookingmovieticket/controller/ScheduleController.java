@@ -54,10 +54,8 @@ public class ScheduleController {
     public String findBranchByStartDate(@RequestParam("movieId") int movieId,
                                         @RequestParam("startDate") String startDate,
                                         Model model) {
-        System.out.println(startDate+"controller");
         model.addAttribute("movieDetail", movieService.findMovieById(movieId));
         model.addAttribute("branchByMovie", branchService.getBranchByStartDate(movieId, startDate));
-        System.out.println(branchService.getBranchByStartDate(movieId, startDate));
         model.addAttribute("allStartDateByMovie", scheduleService.getAllStartDateScheduleByMovieId(movieId));
         model.addAttribute("selectedDate", startDate);
         model.addAttribute(USER_DTO, new UserDTO());

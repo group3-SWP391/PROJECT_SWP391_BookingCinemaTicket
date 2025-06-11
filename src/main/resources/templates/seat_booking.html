@@ -1,593 +1,530 @@
 <!DOCTYPE html>
-<!-- 
-Template Name: Movie Pro
-Version: 1.0.0
-Author: Webstrot
-
--->
-<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="zxx">
-<!--[endif]-->
-
-
-<!-- Mirrored from www.webstrot.com/html/moviepro/html/seat_booking.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:11 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8" />
-	<title>Movie Pro Responsive HTML Template</title>
-	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-	<meta name="description" content="Movie Pro" />
-	<meta name="keywords" content="Movie Pro" />
-	<meta name="author" content="" />
-	<meta name="MobileOptimized" content="320" />
-	<!--Template style -->
-	<link rel="stylesheet" type="text/css" href="css/animate.css" />
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-	<link rel="stylesheet" type="text/css" href="css/font-awesome.css" />
-	<link rel="stylesheet" type="text/css" href="css/fonts.css" />
-	<link rel="stylesheet" type="text/css" href="css/flaticon.css" />
-	<link rel="stylesheet" type="text/css" href="css/owl.carousel.css" />
-	<link rel="stylesheet" type="text/css" href="css/owl.theme.default.css" />
-	<link rel="stylesheet" type="text/css" href="css/dl-menu.css" />
-	<link rel="stylesheet" type="text/css" href="css/nice-select.css" />
-	<link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
-	<link rel="stylesheet" type="text/css" href="css/venobox.css" />
-	<link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/layers.css" />
-	<link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/navigation.css" />
-	<link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/settings.css" />
-	<link rel="stylesheet" type="text/css" href="css/seat.css" />
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<link rel="stylesheet" type="text/css" href="css/responsive.css" />
-	<link rel="stylesheet" id="theme-color" type="text/css" href="#" />
-	<!-- favicon links -->
-	<link rel="shortcut icon" type="image/png" href="images/header/favicon.ico" />
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Web site created using create-react-app">
+    <link rel="apple-touch-icon" href="logo192.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <title>Seat booking</title>
+    <link th:href="@{/css/2.fd207d57.chunk.css}" rel="stylesheet"/>
+    <link th:href="@{/css/main.ffa69c8e.chunk.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+    <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{/css/slick-theme.css}"/>
+    <!-- favicon links -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+    <style>
+        .checkOut__left .bookSlot .bookSlot__content .chooseSlot .picking .slot__picking .slot__row .slot__item {
+            font-size: 31px !important;
+            font-weight: 600 !important;
+        }
+
+        .item--checked {
+            cursor: no-drop !important;
+            color: gold !important;
+        }
+
+        .item--hidden {
+            cursor: no-drop !important;
+            color: #FFFF !important;
+        }
+    </style>
 </head>
 
-<body>
-	<!-- preloader Start -->
-	<div id="preloader">
-		<div id="status">
-			<img src="images/header/horoscope.gif" id="preloader_image" alt="loader">
-		</div>
-	</div>
-	<!-- color picker start -->
-	<!-- st top header Start -->
-	<div class="st_bt_top_header_wrapper float_left">
-		<div class="container container_seat">
-			<div class="row">
-				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-					<div class="st_bt_top_back_btn st_bt_top_back_btn_seatl float_left"> <a href="movie_booking.html"><i
-								class="fas fa-long-arrow-alt-left"></i> &nbsp;Back</a>
-					</div>
-					<div class="cc_ps_quantily_info cc_ps_quantily_info_tecket">
-						<p>Select Ticket</p>
-						<div class="select_number">
-							<button onclick="changeQty(1); return false;" class="increase"><i class="fa fa-plus"></i>
-							</button>
-							<input type="text" name="quantity" value="1" size="2" id="input-quantity"
-								class="form-control" />
-							<button onclick="changeQty(0); return false;" class="decrease"><i class="fa fa-minus"></i>
-							</button>
-						</div>
-						<input type="hidden" name="product_id" />
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-					<div class="st_bt_top_center_heading st_bt_top_center_heading_seat_book_page float_left">
-						<h3>Aquaman - English - (2:47)</h3>
-						<h4>Today, 19 Dec, 10:00 PM</h4>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-					<div class="st_bt_top_close_btn st_bt_top_close_btn2 float_left"> <a href="#"><i
-								class="fa fa-times"></i></a>
-					</div>
-					<div class="st_seatlay_btn float_left"> <a href="booking_type.html">Proceed to Pay</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- st top header Start -->
-	<!-- st seat Layout Start -->
-	<div class="st_seatlayout_main_wrapper float_left">
-		<div class="container container_seat">
-			<div class="st_seat_lay_heading float_left">
-				<h3>Ariesplex SL Cinemas</h3>
-			</div>
-			<div class="st_seat_full_container">
-				<div class="st_seat_lay_economy_wrapper float_left">
-					<div class="screen">
-						<img src="images/content/screen.png">
-					</div>
-					<div class="st_seat_lay_economy_heading float_left">
-						<h3>Economy</h3>
-					</div>
-					<div class="st_seat_lay_row float_left">
-						<ul>
-							<li class="st_seat_heading_row">D</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c1" name="cb">
-								<label for="c1"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c2" name="cb" placeholder="1">
-								<label for="c2"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c3" name="cb">
-								<label for="c3"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</sp2an>
-									<input type="checkbox" id="c4" name="cb">
-									<label for="c4"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c5" name="cb">
-								<label for="c5"></label>
-							</li>
-						</ul>
-						<ul class="st_eco_second_row">
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c6" name="cb">
-								<label for="c6"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c7" name="cb" placeholder="1">
-								<label for="c7"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c8" name="cb">
-								<label for="c8"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c9" name="cb">
-								<label for="c9"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c10" name="cb">
-								<label for="c10"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c11" name="cb">
-								<label for="c11"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c12" name="cb">
-								<label for="c12"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c13" name="cb">
-								<label for="c13"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c14" name="cb">
-								<label for="c14"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c15" name="cb">
-								<label for="c15"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c16" name="cb">
-								<label for="c16"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c17" name="cb">
-								<label for="c17"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c18" name="cb">
-								<label for="c18"></label>
-							</li>
-						</ul>
-						<ul class="st_eco_second_row">
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c19" name="cb">
-								<label for="c19"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c20" name="cb" placeholder="1">
-								<label for="c20"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c21" name="cb">
-								<label for="c21"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c22" name="cb">
-								<label for="c22"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c23" name="cb">
-								<label for="c23"></label>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="st_seat_lay_economy_wrapper st_seat_lay_economy_wrapperexicutive float_left">
-					<div class="st_seat_lay_economy_heading float_left">
-						<h3>Executive + 3d glasss - rs 190.00</h3>
-					</div>
-					<div class="st_seat_lay_row float_left">
-						<ul>
-							<li class="st_seat_heading_row">C</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c24" name="cb">
-								<label for="c24"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c25" name="cb" placeholder="1">
-								<label for="c25"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c26" name="cb">
-								<label for="c26"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c27" name="cb">
-								<label for="c27"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c28" name="cb">
-								<label for="c28"></label>
-							</li>
-						</ul>
-						<ul class="st_eco_second_row">
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c29" name="cb">
-								<label for="c29"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c30" name="cb" placeholder="1">
-								<label for="c30"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c31" name="cb">
-								<label for="c31"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c32" name="cb">
-								<label for="c32"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c33" name="cb">
-								<label for="c33"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c34" name="cb">
-								<label for="c34"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c35" name="cb">
-								<label for="c35"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c36" name="cb">
-								<label for="c36"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c37" name="cb">
-								<label for="c37"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c38" name="cb">
-								<label for="c38"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c39" name="cb">
-								<label for="c39"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c40" name="cb">
-								<label for="c40"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c41" name="cb">
-								<label for="c41"></label>
-							</li>
-						</ul>
-						<ul class="st_eco_second_row">
-							<li class="seat_disable">
-								<input type="checkbox" id="c42" name="cb">
-								<label for="c42"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c43" name="cb" placeholder="1">
-								<label for="c43"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c44" name="cb">
-								<label for="c44"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c45" name="cb">
-								<label for="c45"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c46" name="cb">
-								<label for="c46"></label>
-							</li>
-						</ul>
-					</div>
-					<div class="st_seat_lay_row float_left">
-						<ul>
-							<li class="st_seat_heading_row">B</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c47" name="cb">
-								<label for="c47"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c48" name="cb" placeholder="1">
-								<label for="c48"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c49" name="cb">
-								<label for="c49"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c50" name="cb">
-								<label for="c50"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c51" name="cb">
-								<label for="c51"></label>
-							</li>
-						</ul>
-						<ul class="st_eco_second_row">
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c52" name="cb">
-								<label for="c52"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c53" name="cb" placeholder="1">
-								<label for="c53"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c54" name="cb">
-								<label for="c54"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c55" name="cb">
-								<label for="c55"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c56" name="cb">
-								<label for="c56"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c57" name="cb">
-								<label for="c57"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c58" name="cb">
-								<label for="c58"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c59" name="cb">
-								<label for="c59"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c60" name="cb">
-								<label for="c60"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c61" name="cb">
-								<label for="c61"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c62" name="cb">
-								<label for="c62"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c63" name="cb">
-								<label for="c63"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c64" name="cb">
-								<label for="c64"></label>
-							</li>
-						</ul>
-						<ul class="st_eco_second_row">
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c65" name="cb">
-								<label for="c65"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c66" name="cb" placeholder="1">
-								<label for="c66"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c67" name="cb">
-								<label for="c67"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c68" name="cb">
-								<label for="c68"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c69" name="cb">
-								<label for="c69"></label>
-							</li>
-						</ul>
-					</div>
-					<div class="st_seat_lay_row float_left">
-						<ul>
-							<li class="st_seat_heading_row">A</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c70" name="cb">
-								<label for="c70"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c71" name="cb" placeholder="1">
-								<label for="c71"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c72" name="cb">
-								<label for="c72"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c73" name="cb">
-								<label for="c73"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c74" name="cb">
-								<label for="c74"></label>
-							</li>
-						</ul>
-						<ul class="st_eco_second_row">
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c75" name="cb">
-								<label for="c75"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c76" name="cb" placeholder="1">
-								<label for="c76"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c77" name="cb">
-								<label for="c77"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c78" name="cb">
-								<label for="c78"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c79" name="cb">
-								<label for="c79"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c80" name="cb">
-								<label for="c80"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c81" name="cb">
-								<label for="c81"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c82" name="cb">
-								<label for="c82"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c83" name="cb">
-								<label for="c83"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c84" name="cb">
-								<label for="c84"></label>
-							</li>
-							<li class="seat_disable">
-								<input type="checkbox" id="c85" name="cb">
-								<label for="c85"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c86" name="cb">
-								<label for="c86"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c87" name="cb">
-								<label for="c87"></label>
-							</li>
-						</ul>
-						<ul class="st_eco_second_row">
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c88" name="cb">
-								<label for="c88"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c89" name="cb" placeholder="1">
-								<label for="c89"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c90" name="cb">
-								<label for="c90"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c91" name="cb">
-								<label for="c91"></label>
-							</li>
-							<li> <span>Pay Rs.790.00</span>
-								<input type="checkbox" id="c92" name="cb">
-								<label for="c92"></label>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- st seat Layout End -->
-	<!--main js file start-->
-	<script src="js/jquery_min.js"></script>
-	<script src="js/modernizr.js"></script>
-	<script src="js/bootstrap.js"></script>
-	<script src="js/owl.carousel.js"></script>
-	<script src="js/jquery.dlmenu.js"></script>
-	<script src="js/jquery.sticky.js"></script>
-	<script src="js/jquery.nice-select.min.js"></script>
-	<script src="js/jquery.magnific-popup.js"></script>
-	<script src="js/jquery.bxslider.min.js"></script>
-	<script src="js/venobox.min.js"></script>
-	<script src="js/smothscroll_part1.js"></script>
-	<script src="js/smothscroll_part2.js"></script>
-	<script src="js/plugin/rs_slider/jquery.themepunch.revolution.min.js"></script>
-	<script src="js/plugin/rs_slider/jquery.themepunch.tools.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.addon.snow.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.actions.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.carousel.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.kenburn.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.layeranimation.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.migration.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.navigation.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.parallax.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.slideanims.min.js"></script>
-	<script src="js/plugin/rs_slider/revolution.extension.video.min.js"></script>
-	<script src="js/custom.js"></script>
-	<!--main js file end-->
-	<script>
-		//* Isotope js
-		function protfolioIsotope() {
-			if ($('.st_fb_filter_left_box_wrapper').length) {
-				// Activate isotope in container
-				$(".protfoli_inner, .portfoli_inner").imagesLoaded(function () {
-					$(".protfoli_inner, .portfoli_inner").isotope({
-						layoutMode: 'masonry',
-					});
-				});
+<body data-new-gr-c-s-check-loaded="14.1073.0" data-gr-ext-installed="" style="padding-top: 50px">
+<noscript>You need to enable JavaScript to run
+    this app.
+</noscript>
+<header lang="vi" th:include="fragments/navigation :: navigation"></header>
 
-				// Add isotope click function 
-				$(".protfoli_filter li").on('click', function () {
-					$(".protfoli_filter li").removeClass("active");
-					$(this).addClass("active");
-					var selector = $(this).attr("data-filter");
-					$(".protfoli_inner, .portfoli_inner").isotope({
-						filter: selector,
-						animationOptions: {
-							duration: 450,
-							easing: "linear",
-							queue: false,
-						}
-					});
-					return false;
-				});
-			};
-		};
-		protfolioIsotope();
+<div id="root">
+    <div class="container-fluid bg-light" style="padding-top: 20px;">
+        <div class="bookTicket__content row mt-5">
+            <div class="checkOut__left col-md-9 col-sm-12 p-0">
+                <div class="bookSlot">
+                    <div class="bookSlot__content" style="overflow-x: scroll;">
+                        <div class="theater__info d-flex justify-content-between">
+                            <div class="theater__img d-flex bg-light">
+                                <img th:src="${schedule.branch.imgURL}" style="width: 150px; height: 100px">
+                                <div class="theater__name">
+                                        	<span class="name">
+                                        		<span class="subname" th:text="${schedule.room.name}"></span>
+                                        	</span>
+                                    <p class="showtime" th:text="'Start date: '+${schedule.startDate}"
+                                       style="font-size: 15px"></p>
+                                    <p class="showtime" th:text="'Start time: '+${schedule.startTime}"
+                                       style="font-size: 15px"></p>
+                                </div>
+                            </div>
+                            <div class="timeKeepSlot">
+                                <p class="title__text" style="font-size: 20px;">Count down end movie</p><span
+                                    class="time" style="font-size: 22px;"></span>
+                            </div>
+                        </div>
+                        <div class="chooseSlot" style="width: 1000px">
+                            <div class="screen__img"><img src="https://i.ibb.co/zWgWjtg/screen.png" alt="screen">
+                            </div>
+                            <div class="picking row" style="padding: 0 50px;">
+                                <div class="slot__picking col-12">
+                                    <div class="slot__row">
+                                        <th:block th:each="seat, iterStat : ${seats}">
+                                            <i class="fa fa-couch slot__item"
+                                               th:classappend="${seat.isActive} ?
+                                               (${seat.isChecked} ? 'item--checked':
+                                               (${seat.isOccupied} == 1 ? 'item--picked':
+                                               (${seat.isVip} ? 'item--vip':''))):'item--hidden'"
+                                               th:data-seat="${seat.name}"
+                                               th:data-price="${seat.isVip} ? (${schedule.price + 20000}) : (${schedule.price})"
+                                               th:data-seat-id="${seat.id}"></i>
+                                            <br th:if="${iterStat.index % 10 == 9}"/>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slot__detail row">
+                                <div class="col-md-3 col-sm-6 col-xs-6"><i
+                                        class="fa fa-couch item--picking"></i><span class="slot__text">The chair is currently being selected.</span>
+                                </div>
+                                <div class="col-md-2 col-sm-6 col-xs-6"><i
+                                        class="fa fa-couch item--picked"></i><span class="slot__text">The seat has already been taken.</span>
+                                </div>
+                                <div class="col-md-2 col-sm-6 col-xs-6"><i
+                                        class="fa fa-couch item--regular"></i><span
+                                        class="slot__text">Regular chair</span>
+                                </div>
+                                <div class="col-md-2 col-sm-6 col-xs-6"><i class="fa fa-couch item--vip"></i><span
+                                        class="slot__text">Vip chair</span></div>
+                                <div class="col-md-3 col-sm-6 col-xs-6"><i class="fa fa-couch item--checked"></i><span
+                                        class="slot__text">Your chair</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="checkOut__right col-md-3 col-sm-12">
+                <div class="checkout__form">
+                    <div class="total__price"><span class="price" data-price="0">0₫</span></div>
+                    <div class="film__info">
+                        <span class="film__age--C" th:text="${schedule.room.name}"></span>
+                        <span class="film__name" th:text="${schedule.movie.name}"></span>
+                        <p class="film__detail" th:text="${schedule.startDate}+' - '+${schedule.startTime}"></p>
+                        <p class="theater__name" th:text="${schedule.branch.name}"></p>
+                        <p class="film__address" th:text="${schedule.branch.locationDetail}"></p>
+                    </div>
+                    <div class="count__slot">
+                        <div>The chair is being selected:</div>
+                        <div class="slot"></div>
+                    </div>
+                    <div class="discountForm d-flex justify-content-between">
+                        <div class="discountForm__content"><label class="label__name">Discount code</label><input
+                                type="text" name="code" id="txtDiscountCode" class="form-control d-inline"
+                                placeholder="Enter here..."></div>
+                        <button id="btnCheckCode" class="btn mb-2">Apply</button>
+                    </div>
+                    <div class="payForm">
+                        <a class="pay__link" href="/#">
+                        <p class="text__notification">Please select a seat to display the appropriate payment method.</p></a>
+                    </div>
+                </div>
+                <div class="textNotification text-center"><i class="fa fa-info-circle text-danger mr-1"></i><span
+                        class="noti__text">The purchased ticket cannot be exchanged or refunded. The ticket code will be sent via message
+                                <span class="noti__link">SMS</span> (Zalo message) and <span
+                            class="noti__link">Email</span>
+                                đã nhập. </span></div>
+                <div id="btnBook" class="btnBook" data-toggle="modal" data-target="#CreditModal">Payment</div>
+                <div>
+                    <div class="CreditModal modal fade bd-example-modal-lg" id="CreditModal" tabindex="-1"
+                         role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Thanh toán</h5>
+                                    <button type="button" class="close"
+                                            data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="PaymentForm">
+                                        <div class="row">
+                                            <div class="credit-card col-md-6 col-sm-12 mb-2">
+                                                <div class="rccs">
+                                                    <div class="rccs__card rccs__card--unknown">
+                                                        <div class="rccs__card--front">
+                                                            <div class="rccs__card__background"></div>
+                                                            <div class="rccs__issuer"></div>
+                                                            <div class="rccs__cvc__front"></div>
+                                                            <div class="rccs__number">•••• •••• •••• ••••</div>
+                                                            <div class="rccs__name">YOUR NAME HERE</div>
+                                                            <div class="rccs__expiry">
+                                                                <div class="rccs__expiry__valid">valid thru</div>
+                                                                <div class="rccs__expiry__value">••/••</div>
+                                                            </div>
+                                                            <div class="rccs__chip"></div>
+                                                        </div>
+                                                        <div class="rccs__card--back">
+                                                            <div class="rccs__card__background"></div>
+                                                            <div class="rccs__stripe"></div>
+                                                            <div class="rccs__signature"></div>
+                                                            <div class="rccs__cvc"></div>
+                                                            <div class="rccs__issuer"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="info-card col-md-6 col-sm-12">
+                                                <form class="info-form" th:action="@{/booking}" method="post">
+                                                    <div class="textb"><input type="tel" name="number"
+                                                                              class="w-100">
+                                                        <div class="placeholder">Card Number</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6" style="padding-right: 0px;">
+                                                            <div class="textb"><input type="tel" name="expiry">
+                                                                <div class="placeholder">Valid</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="textb"><input type="tel" name="cvc">
+                                                                <div class="placeholder">CVC</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="textb"><input type="text" name="name">
+                                                        <div class="placeholder">Name</div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="btn-booking" type="button" class="btn-style draw-border">Đặt
+                                        vé
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="success" class="swal-overlay notify " tabindex="-1">
+    <div class="swal-modal" role="dialog" aria-modal="true">
+        <div class="swal-icon swal-icon--success">
+            <span class="swal-icon--success__line swal-icon--success__line--long"></span>
+            <span class="swal-icon--success__line swal-icon--success__line--tip"></span>
 
-		function changeQty(increase) {
-			var qty = parseInt($('.select_number').find("input").val());
-			if (!isNaN(qty)) {
-				qty = increase ? qty + 1 : (qty > 1 ? qty - 1 : 1);
-				$('.select_number').find("input").val(qty);
-			} else {
-				$('.select_number').find("input").val(1);
-			}
-		}
-	</script>
+            <div class="swal-icon--success__ring"></div>
+            <div class="swal-icon--success__hide-corners"></div>
+        </div>
+        <div class="swal-title">Thanh toán thành công</div>
+        <div class="swal-text" style=""></div>
+        <div class="swal-footer">
+            <div class="swal-button-container">
+
+                <button class="swal-button swal-button--confirm">OK</button>
+
+                <div class="swal-button__loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="error" class="swal-overlay notify" tabindex="-1">
+    <div class="swal-modal" role="dialog" aria-modal="true">
+        <div class="swal-icon swal-icon--error">
+            <div class="swal-icon--error__x-mark">
+                <span class="swal-icon--error__line swal-icon--error__line--left"></span>
+                <span class="swal-icon--error__line swal-icon--error__line--right"></span>
+            </div>
+        </div>
+        <div id="text-error" class="swal-title">Có người nhanh tay đặt chỗ của bạn</div>
+        <div class="swal-footer">
+            <div class="swal-button-container">
+
+                <button class="swal-button swal-button--confirm">OK</button>
+
+                <div class="swal-button__loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="error-time" class="swal-overlay" tabindex="-1">
+    <div class="swal-modal" role="dialog" aria-modal="true">
+        <div class="swal-icon swal-icon--error">
+            <div class="swal-icon--error__x-mark">
+                <span class="swal-icon--error__line swal-icon--error__line--left"></span>
+                <span class="swal-icon--error__line swal-icon--error__line--right"></span>
+            </div>
+        </div>
+        <div class="swal-title">Lịch chiếu đã đóng, vui lòng chọn lịch chiếu khác!</div>
+        <div class="swal-footer">
+            <div class="swal-button-container">
+
+                <button id="notify-error" class="swal-button swal-button--confirm">OK</button>
+
+                <div class="swal-button__loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<footer lang="vi" th:include="fragments/footer"></footer>
+
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+<script th:inline="javascript">
+
+    $(document).ready(function () {
+        dataParameter = []
+        const price = $(".price");
+        $(".slot__item").click(function () {
+            const priceSeat = Number($(this).data("price"))
+            const codeSeat = $(this).data("seat")
+            const seatId = $(this).data("seatId")
+            console.log(`Bạn vừa click vào ghế: ${codeSeat}, Giá: ${priceSeat}, Id: ${seatId}`);
+            if (!$(this).hasClass("item--picked") && !$(this).hasClass("item--checked"))
+                if ($(this).hasClass("item--picking")) {
+                    $(this).removeClass("item--picking");
+                    current = Number(price.data("price") - priceSeat)
+                    price.text(current.toLocaleString('en-US', {style: 'currency', currency: 'VND'}));
+                    price.data("price", current)
+                    $.each($(".mr-2"), function (index, seat) {
+
+                        if (seat.textContent == "Ghế: " + codeSeat + ",") {
+                            seat.remove()
+                        }
+                    })
+
+                    dataParameter.splice(dataParameter.indexOf(seatId), 1);
+
+                } else {
+                    $(this).addClass("item--picking");
+                    current = Number(price.data("price") + priceSeat)
+
+                    price.text(current.toLocaleString('vi-VN') + "₫");
+                    price.data("price", current)
+                    $(".slot").append('<span class="mr-2">Ghế: ' + codeSeat + ',</span>')
+                    dataParameter.push(seatId)
+
+                }
+        });
+        //clock time
+        var clock = setInterval(function () {
+            $('.time').text(remainingTime());
+            if (remainingTime() == null) {
+                clearInterval(clock);
+                $("#error-time").addClass("swal-overlay--show-modal")
+            }
+        }, 1000);
+        //submit form booking
+        $("#btn-booking").click(function () {
+            if (dataParameter.length != 0) {
+                var json = JSON.stringify(
+                    {
+                        "scheduleId": [[${schedule.id}]],
+                        "userId": [[${session.userLogin.id}]],
+                        "listSeatIds": dataParameter
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/api/bills/create-new-bill",
+                    data: json,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //change status of seat
+                        $(".item--picking").addClass("item--checked");
+                        $(".item--picking").removeClass("item--picking");
+
+                        //reset bill
+                        $(".slot").empty()
+                        price.data("price", "0")
+                        current = 0
+                        price.text(current.toLocaleString('en-US', {style: 'currency', currency: 'VND'}));
+
+                        //close all modal check-out
+                        $('#CreditModal').trigger('click');
+
+                        //show notify
+                        $("#success").addClass("swal-overlay--show-modal")
+
+                        dataParameter = []
+
+                    },
+                    error: function (e) {
+                        $("#text-error").html(e.responseText)
+                        $("#error").addClass("swal-overlay--show-modal")
+                        $("button").click(function (e) {
+                            location.reload(true);
+                        });
+                    }
+                });
+            } else {
+                $("#text-error").html("Bạn chưa chọn chỗ ngồi!")
+                $("#error").addClass("swal-overlay--show-modal")
+            }
+        });
+        //close notify
+        $(".notify").click(function (e) {
+            if (remainingTime() != null)
+                $(this).removeClass("swal-overlay--show-modal");
+        });
+        $("#notify-error").click(function () {
+            window.location.href = '/';
+        })
+    });
+
+    function remainingTime() {
+        const today = new Date();
+        const dateSchedule = new Date([[${schedule.startDate} + ' ' + ${schedule.startTime}]])
+        seconds = Math.floor((dateSchedule - today) / 1000);
+        if (seconds > 0) {
+            var h = Math.floor(seconds / 3600);
+            var m = Math.floor((seconds % 3600) / 60);
+            var s = seconds - h * 3600 - m * 60;
+        } else {
+            return null
+        }
+        return h + " giờ " + m + " phút " + s + " giây ";
+    }
+
+
+</script>
+<script>
+    !function (e) {
+        function r(r) {
+            for (var n, a, p = r[0], i = r[1], l = r[2], c = 0, s = []; c < p.length; c++) a = p[c], Object.prototype.hasOwnProperty.call(o, a) && o[a] && s.push(o[a][0]), o[a] = 0;
+            for (n in i) Object.prototype.hasOwnProperty.call(i, n) && (e[n] = i[n]);
+            for (f && f(r); s.length;) s.shift()();
+            return u.push.apply(u, l || []), t()
+        }
+
+        function t() {
+            for (var e, r = 0; r < u.length; r++) {
+                for (var t = u[r], n = !0, p = 1; p < t.length; p++) {
+                    var i = t[p];
+                    0 !== o[i] && (n = !1)
+                }
+                n && (u.splice(r--, 1), e = a(a.s = t[0]))
+            }
+            return e
+        }
+
+        var n = {}, o = {1: 0}, u = [];
+
+        function a(r) {
+            if (n[r]) return n[r].exports;
+            var t = n[r] = {i: r, l: !1, exports: {}};
+            return e[r].call(t.exports, t, t.exports, a), t.l = !0, t.exports
+        }
+
+        a.m = e, a.c = n, a.d = function (e, r, t) {
+            a.o(e, r) || Object.defineProperty(e, r, {enumerable: !0, get: t})
+        }, a.r = function (e) {
+            "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, {value: "Module"}), Object.defineProperty(e, "__esModule", {value: !0})
+        }, a.t = function (e, r) {
+            if (1 & r && (e = a(e)), 8 & r) return e;
+            if (4 & r && "object" == typeof e && e && e.__esModule) return e;
+            var t = Object.create(null);
+            if (a.r(t), Object.defineProperty(t, "default", {
+                enumerable: !0,
+                value: e
+            }), 2 & r && "string" != typeof e) for (var n in e) a.d(t, n, function (r) {
+                return e[r]
+            }.bind(null, n));
+            return t
+        }, a.n = function (e) {
+            var r = e && e.__esModule ? function () {
+                return e.default
+            } : function () {
+                return e
+            };
+            return a.d(r, "a", r), r
+        }, a.o = function (e, r) {
+            return Object.prototype.hasOwnProperty.call(e, r)
+        }, a.p = "/";
+        var p = this.webpackJsonpmoviereactapp = this.webpackJsonpmoviereactapp || [], i = p.push.bind(p);
+        p.push = r, p = p.slice();
+        for (var l = 0; l < p.length; l++) r(p[l]);
+        var f = i;
+        t()
+    }([])</script>
 </body>
-
-
-<!-- Mirrored from www.webstrot.com/html/moviepro/html/seat_booking.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:12 GMT -->
 </html>

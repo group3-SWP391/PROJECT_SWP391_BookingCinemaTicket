@@ -36,12 +36,10 @@ public class LoginController {
         user.setPassword(userDTO.getPassword());
         Optional<User> userExist = userService.findByPhoneAndPassword(user.getPhone(), user.getPassword());
         if (userExist.isPresent()) {
-            System.out.println(userExist.get());
             // lưu user lên session để phân quyền và lấy thông tin
             request.getSession().setAttribute("userLogin", userExist.get());
             return "redirect:/";
         } else {
-            System.out.println("Invalid username or password");
             model.addAttribute("errorLogin", "Invalid username or password");
             // truyền tiếp new UserDTO vào form để form blind được new UserDTO tiếp
             model.addAttribute("userDTO", new UserDTO());

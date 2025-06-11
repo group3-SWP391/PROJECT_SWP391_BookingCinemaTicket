@@ -12,4 +12,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT DISTINCT s.startDate FROM Schedule s WHERE s.movie.id = :movieId")
     List<LocalDate> getAllStartDateScheduleByMovieId(@Param("movieId") Integer movieId);
 
+    @Query("SELECT s FROM Schedule s WHERE s.id= :scheduleId")
+    Schedule findByScheduleId(@Param("scheduleId") Integer scheduleId);
+
 }

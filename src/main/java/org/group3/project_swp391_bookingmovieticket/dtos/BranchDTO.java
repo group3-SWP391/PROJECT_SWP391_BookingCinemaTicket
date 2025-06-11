@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,8 +17,10 @@ public class BranchDTO {
     private String phoneNo;
     private String description;
     private String locationDetail;
+    @JsonIgnore
     @ToString.Exclude
     private List<ScheduleDTO> scheduleList;
+    @JsonIgnore
     @ToString.Exclude
     private List<RoomDTO> roomList;
     private Long totalTicketSell;

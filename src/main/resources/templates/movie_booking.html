@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- 
+<!--
 Template Name: Movie Pro
 Version: 1.0.0
 Author: Webstrot
@@ -147,9 +147,30 @@ Author: Webstrot
     <div class="st_slider_index_sidebar_main_wrapper st_slider_index_sidebar_main_wrapper_booking float_left">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                    <div class="prs_mcc_left_side_wrapper" style="padding-top: 2px">
+                        <div class="prs_mcc_bro_title_wrapper">
+                            <h2 style="padding-top: -20px; margin-top: -20px">Location</h2>
+                            <ul id="locationList">
+                                <li>
+                                    <i class="fa fa-play" style="padding-right: 5px"></i>
+                                    <a href="#" data-location="all" onclick="showAllBranches(); return false;">All</a>
+                                </li>
+                                <li th:each="location : ${session.allLocationBranch}">
+                                    <i class="fa fa-play" style="padding-right: 5px"></i>
+                                    <a href="#" th:text="${location}" th:attr="data-location=${location}" onclick="filterBranchesByLocation(this); return false;"></a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-play" style="padding-right: 5px"></i>
+                                    <a href="#" data-location="all" onclick="location.reload(); return false;">Back</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
                     <div class="st_indx_slider_main_container float_left">
-                        <div class="row">
+                        <div class="row" id="branchListContainer">
                             <div class="col-md-12">
                                 <div class="tab-content">
                                     <div id="home" class="tab-pane active">
@@ -171,19 +192,15 @@ Author: Webstrot
                                                             </option>
                                                         </select>
                                                     </form>
-
                                                 </div>
                                                 <div class="col-md-12"
                                                      th:each="branch : ${branchByMovie}"
                                                      style="padding-top: 30px; padding-bottom: 30px">
                                                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                                         <div class="st_calender_asc ">
-                                                            <div class="st_calen_asc_heart"><a href="#"> <i
-                                                                    class="fa fa-heart"></i></a>
-                                                            </div>
                                                             <div class="st_calen_asc_heart_cont">
-                                                                <h2 th:text="${branch.name}"
-                                                                    style="font-weight: bold; color: #ff4444"></h2>
+                                                                <h3 th:text="${branch.name}"
+                                                                    style="font-weight: bold; font-size: 25px;color: #ff4444"></h3>
                                                                 <p th:text="${branch.locationDetail}"
                                                                    style="width: 190%; padding-top: 5px; padding-bottom: 5px"></p>
                                                                 <img th:src="${branch.imgURL}"
@@ -193,7 +210,7 @@ Author: Webstrot
                                                     </div>
                                                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12"
                                                          th:each="entry : ${branch.groupedScheduleByRoomName.entrySet()}"
-                                                         style="padding-top: 20px; margin-bottom: 20px;">
+                                                         style="padding-top: 15px; margin-bottom: 20px; padding-left: 50px">
                                                         <!-- Tên loại phòng (in 1 lần duy nhất) -->
                                                         <p th:text="${entry.key}"
                                                            style="font-weight: bold; margin-bottom: 10px;"></p>
@@ -202,7 +219,7 @@ Author: Webstrot
                                                         <div style="display: flex; flex-wrap: wrap;">
                                                             <div th:each="schedule : ${entry.value}"
                                                                  style="margin-right: 10px; margin-bottom: 10px; padding-right: 20px">
-                                                                <a href="seat_booking.html"
+                                                                <a th:href="@{'/booking/' + ${schedule.id}}"
                                                                    th:text="${schedule.startTime}"
                                                                    style="display: inline-block; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;"></a>
                                                             </div>
@@ -350,6 +367,75 @@ Author: Webstrot
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
+
+<script th:inline="javascript">
+    let allBranches = /*[[${branchByMovie}]]*/ [];
+    const allStartDates = /*[[${allStartDateByMovie}]]*/ [];
+</script>
+<script>
+    function showAllBranches() {
+        // Render lại toàn bộ danh sách đã có
+        renderBranches(allBranches);
+    }
+    function filterBranchesByLocation(clickedElement) {
+        const selectedLocation = clickedElement.getAttribute('data-location');
+        console.log("Selected location:", selectedLocation);
+
+        // Lọc các branch có location đúng
+        const filteredBranches = allBranches.filter(branch => branch.location === selectedLocation);
+
+        // Hiển thị các branch lọc được
+        renderBranches(filteredBranches);
+    }
+</script>
+<script>
+    function renderBranches(branches) {
+        const container = document.getElementById('branchListContainer');
+        container.innerHTML = ''; // Xóa nội dung cũ
+
+        if (branches.length === 0) {
+            container.innerHTML = '<p>No branches found.</p>';
+            return;
+        }
+
+        branches.forEach(branch => {
+            // Tạo HTML cho từng branch
+            const branchHTML = `
+        <div class="col-md-12" style="padding-top: 30px; padding-bottom: 30px">
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                <div class="st_calender_asc ">
+                    <div class="st_calen_asc_heart_cont">
+                        <h3 style="font-weight: bold; font-size: 25px; color: #ff4444">${branch.name}</h3>
+                        <p style="width: 190%; padding-top: 5px; padding-bottom: 5px">${branch.locationDetail}</p>
+                        <img src="${branch.imgURL}" style="width: 300px; height: 150px">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px; margin-bottom: 20px; padding-left: 50px">
+                ${renderGroupedSchedules(branch.groupedScheduleByRoomName)}
+            </div>
+        </div>`;
+            container.innerHTML += branchHTML;
+        });
+    }
+
+    function renderGroupedSchedules(grouped) {
+        let html = '';
+        for (const roomName in grouped) {
+            html += `<p style="font-weight: bold; margin-bottom: 10px;">${roomName}</p>`;
+            html += `<div style="display: flex; flex-wrap: wrap;">`;
+            grouped[roomName].forEach(schedule => {
+                html += `
+                <div style="margin-right: 10px; margin-bottom: 10px; padding-right: 20px">
+                    <a href="seat_booking.html" style="display: inline-block; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">${schedule.startTime.substring(0, 5)}</a>
+                </div>`;
+            });
+            html += `</div>`;
+        }
+        return html;
+    }
+
+</script>
 <!--main js file end-->
 </body>
 <!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_booking.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:11 GMT -->

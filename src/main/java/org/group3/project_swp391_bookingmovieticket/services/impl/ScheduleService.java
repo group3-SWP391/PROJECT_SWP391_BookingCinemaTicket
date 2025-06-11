@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
+import org.group3.project_swp391_bookingmovieticket.dtos.ScheduleDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
 import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.IScheduleRepository;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +30,12 @@ public class ScheduleService implements IScheduleService {
                 .stream()
                 .filter(startDate -> startDate.compareTo(date) >= 0)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ScheduleDTO getScheduleByScheduleId(int scheduleId) {
+        Schedule schedule = scheduleRepository.findByScheduleId(scheduleId);
+        return modelMapper.map(schedule, ScheduleDTO.class);
     }
 
     @Override
