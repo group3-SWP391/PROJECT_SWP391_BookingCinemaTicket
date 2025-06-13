@@ -86,33 +86,44 @@
   <form th:action="@{/employee/add}" method="post" th:object="${employee}">
     <div class="form-group">
       <label for="employeename">Username:</label>
-      <input type="text" th:field="*{username}" id="employeename" required>
+      <input type="text" th:field="*{username}" id="employeename" >
+
+
     </div>
+    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color:red"></div>
 
     <div class="form-group">
       <label for="fullName">Full Name:</label>
       <input type="text" th:field="*{fullname}" id="fullName" required>
+
     </div>
+    <div th:if="${#fields.hasErrors('fullname')}" th:errors = *{fullname} style="color:red"></div>
 
     <div class="form-group">
       <label for="password">Password:</label>
       <input type="password" th:field="*{password}" id="password" required>
+
     </div>
+    <div th:if="${#fields.hasErrors('password')}" th:errors = *{password} style="color:red"></div>
 
     <div class="form-group">
       <label for="phone">Phone:</label>
-      <input type="text" th:field="*{phone}" id="phone" required placeholder="0901234563"
-             pattern="[0-9]{10}" title="Enter a 10-digit phone number">
+      <input type="text" th:field="*{phone}" id="phone">
+
+
     </div>
+    <div th:if="${#fields.hasErrors('phone')}" th:errors = *{phone} style="color:red"></div>
     <div class="form-group">
-      <label for="email-employee">Phone:</label>
+      <label for="email-employee">Email:</label>
       <input type="email" th:field="*{email}" id="email-employee" required placeholder="nguyenvana@gmail.com" >
 
+
     </div>
+    <div th:if="${#fields.hasErrors('email')}" th:errors = *{email} style="color:red"></div>
 
     <div class="form-group">
 
-      <input type="hidden" th:field="*{role}" value = "${employee.role}"  >
+      <input type="hidden" th:field="*{role}" th:value="*{role}"  >
 
 
     </div>

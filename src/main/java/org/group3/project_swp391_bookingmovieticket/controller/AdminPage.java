@@ -27,9 +27,10 @@ public class AdminPage {
     @GetMapping("/user")
     public String getAllUser(Model model){
         List<User> listUser = new ArrayList<>();
+        List<User> list =  iUserService.findAll();
 
-        for (User user: iUserService.findAll()){
-            if(user.getRole().getName().equalsIgnoreCase("Customer")){
+        for (User user: list){
+            if("Customer".equalsIgnoreCase(user.getRole().getName())){
                 listUser.add(user);
             }
         }

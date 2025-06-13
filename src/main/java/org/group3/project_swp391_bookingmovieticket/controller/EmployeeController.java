@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.Role;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.services.IRoleService;
@@ -7,8 +8,10 @@ import org.group3.project_swp391_bookingmovieticket.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,15 +26,32 @@ public class EmployeeController {
     @GetMapping("/add/employee")
     public String addEmployeePage(Model model){
         Optional<Role> role =  iRoleService.findByName("employee");
-        Role role1 = role.get();
-        User user = new User();
-        user.setRole(role1);
-        model.addAttribute("employee", user);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setRole(role.get());
+
+        model.addAttribute("employee", userDTO);
         return "admin/add-employee";
 
     }
     @PostMapping("employee/add")
-    public String saveEmployee(@ModelAttribute("employee") User user){
+    public String saveEmployee(@ModelAttribute("employee") @Valid UserDTO userDTO, BindingResult result){
+        if(result.hasErrors()){
+
+            return "admin/add-employee";
+
+        }
+        //chuyển từ DTO - > entity.
+
+        User user = new User();
+        user.setUsername(userDTO.getUsername());
+        user.setFullname(userDTO.getFullname());
+        user.setPhone(userDTO.getPhone());
+        user.setPassword(userDTO.getPassword());
+        user.setRole(userDTO.getRole());
+        user.setEmail(userDTO.getEmail());
+
+
+
         iUserService.save(user);
         return "redirect:/admin/employee";
     }
@@ -52,7 +72,16 @@ public class EmployeeController {
     public String showFormForUpdate(@PathVariable int id, Model model){
         try {
             Optional<User> user = iUserService.getUserByID(id);
-            model.addAttribute("employee", user.get());
+            UserDTO userDTO = new UserDTO();
+            userDTO.setId(user.get().getId());
+            userDTO.setFullname(user.get().getFullname());
+            userDTO.setUsername(user.get().getUsername());
+            userDTO.setPassword(user.get().getPassword());
+            userDTO.setEmail(user.get().getEmail());
+            userDTO.setPhone(user.get().getPhone());
+            userDTO.setRole(user.get().getRole());
+
+            model.addAttribute("employee", userDTO);
             return "admin/update-employee";
 
         }catch (IllegalArgumentException iae){
@@ -63,7 +92,20 @@ public class EmployeeController {
         return "admin/error";
     }
     @PostMapping("/employee/update")
-    public String updateCustomer(@ModelAttribute("employee") User user){
+    public String updateCustomer(@ModelAttribute("employee")@Valid UserDTO userDTO, BindingResult result){
+        if(result.hasErrors()){
+            return "admin/update-employee";
+        }
+        //chuyển từ DTO - > entity.
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setFullname(userDTO.getFullname());
+        user.setPhone(userDTO.getPhone());
+        user.setPassword(userDTO.getPassword());
+        user.setRole(userDTO.getRole());
+        user.setEmail(userDTO.getEmail());
+
         iUserService.save(user);
         return "redirect:/admin/employee";
 

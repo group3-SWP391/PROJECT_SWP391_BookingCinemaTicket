@@ -65,22 +65,27 @@
 
     <label>Username:</label>
     <input type="text" th:field="*{username}"  />
+    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color:red"></div>
 
 
     <input type="hidden" th:field="*{password}" />
 
+
     <label>Full Name:</label>
     <input type="text" th:field="*{fullname}" />
+    <div th:if="${#fields.hasErrors('fullname')}" th:errors = *{fullname} style="color:red"></div>
 
     <label>Phone:</label>
     <input type="text" th:field="*{phone}" />
+    <div th:if="${#fields.hasErrors('phone')}" th:errors = *{phone} style="color:red"></div>
 
     <label>Email:</label>
     <input type="email" th:field="*{email}" />
+    <div th:if="${#fields.hasErrors('email')}" th:errors = *{email} style="color:red"></div>
 
 
 
-    <input type="hidden" th:field="*{role.id}" />
+    <input type="hidden" th:field="*{role}" th:value="*{role}"  >
 
     <button type="submit">Update</button>
   </form>

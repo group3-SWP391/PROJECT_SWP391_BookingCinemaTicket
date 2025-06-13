@@ -36,7 +36,7 @@ public class RoleService implements IRoleService {
 
     @Override
     public Optional<Role> findByName(String name) {
-        return iRoleRepository.findByName(name);
+        return iRoleRepository.findByNameIgnoreCase(name);
 
 
     }

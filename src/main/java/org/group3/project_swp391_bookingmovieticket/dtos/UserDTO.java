@@ -1,10 +1,12 @@
 package org.group3.project_swp391_bookingmovieticket.dtos;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.group3.project_swp391_bookingmovieticket.entities.Role;
-import org.hibernate.validator.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 
-import javax.validation.constraints.Size;
 
 @Data
 public class UserDTO {
@@ -24,6 +26,13 @@ public class UserDTO {
     @NotBlank(message = "Phone cannot be blank")
     @Size(min = 9, max = 11, message = "Phone not valid!")
     private String phone;
+
+    @Email(message = "Email phải đúng định dạng")
+    @Pattern(
+            regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            message = "Email không hợp lệ"
+    )
+    private String email;
 
     private Role role;
     

@@ -33,7 +33,7 @@ public class UserService implements IUserService {
     public void delete(int id) {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()){
-             if(iBillRepository.existsById(id)){
+             if(iBillRepository.existsByUserId(id)){
                  throw new IllegalArgumentException("Cannot delete because they have existing bills.");
 
              }else{

@@ -52,7 +52,7 @@ public class TicketService implements ITicketService {
         }
 
         List<Bill> bills = iBillRepository.findByUserId(user.get().getId());
-        System.out.println(bills);
+
 
         for (Bill b : bills) {
             Optional<Ticket> ticket = iTicketRepository.findById(b.getId());

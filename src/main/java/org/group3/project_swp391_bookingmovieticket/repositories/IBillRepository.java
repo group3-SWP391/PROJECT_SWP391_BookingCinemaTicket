@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface IBillRepository extends JpaRepository<Bill, Integer> {
     List<Bill> findByUserId(int id);
+    boolean existsByUserId(int id);
 }
