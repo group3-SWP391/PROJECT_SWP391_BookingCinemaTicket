@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Entity
 @Data
-@Table(name = "schedule")
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,13 +20,19 @@ public class Schedule {
     private Float price;
 
     @Column(name = "start_date")
-    private String startDate;
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @Column(name = "start_time")
-    private String startTime;
+    private LocalTime startTime;
+
+    @Column(name = "format")
+    private String format;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", referencedColumnName = "id") // Thay thế branchId bằng quan hệ
+    @JoinColumn(name = "branch_id", referencedColumnName = "id")
     private Branch branch;
 
     @Column(name = "room_id")
@@ -34,10 +42,13 @@ public class Schedule {
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private Movie movie;
 
+    @Column(name = "map")
+    private String map;
+
     public Schedule() {
     }
 
-    public Schedule(Integer id, Movie movie, Integer roomId, Branch branch, String startTime, String startDate, Float price) {
+    public Schedule(Integer id, Movie movie, Integer roomId, Branch branch, LocalTime startTime, LocalDate startDate, Float price, String format, String map) {
         this.id = id;
         this.movie = movie;
         this.roomId = roomId;
@@ -45,6 +56,7 @@ public class Schedule {
         this.startTime = startTime;
         this.startDate = startDate;
         this.price = price;
+        this.format = format;
+        this.map = map;
     }
-
 }

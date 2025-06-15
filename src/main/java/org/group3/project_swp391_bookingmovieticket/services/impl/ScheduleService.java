@@ -69,11 +69,12 @@ public class ScheduleService implements IScheduleService {
         return schedules.stream().map(schedule -> {
             ScheduleDTO dto = new ScheduleDTO();
             dto.setId(schedule.getId() != null ? schedule.getId() : null);
-            dto.setBranchId(schedule.getBranch() != null ? schedule.getBranch().getId() : null); // Lấy branchId từ Branch
+            dto.setBranchId(schedule.getBranch() != null ? schedule.getBranch().getId() : null);
             dto.setStartDate(schedule.getStartDate());
+            dto.setEndDate(schedule.getEndDate());
             dto.setStartTime(schedule.getStartTime());
             dto.setPrice(schedule.getPrice());
-            // Lấy imgurl từ Branch
+
             dto.setImgurl(schedule.getBranch() != null ? schedule.getBranch().getImgurl() : null);
             dto.setRoomId(schedule.getRoomId() != null ? schedule.getRoomId() : null);
             dto.setMovieId(schedule.getMovie() != null ? schedule.getMovie().getId() : null);

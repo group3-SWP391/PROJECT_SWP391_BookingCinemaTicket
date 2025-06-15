@@ -8,9 +8,6 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByPhoneAndPassword(String phone, String password);
-
-
-
         Optional<User> findByPhone(String phone);
 
 }

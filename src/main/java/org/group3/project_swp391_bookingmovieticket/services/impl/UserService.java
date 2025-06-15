@@ -5,6 +5,8 @@ import org.group3.project_swp391_bookingmovieticket.repositories.IUserRepository
 import org.group3.project_swp391_bookingmovieticket.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +16,16 @@ import java.util.Optional;
 @Service
 public class UserService implements IUserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private OtpService otpService;
 
     @Override
     public List<User> findAll() {
@@ -35,11 +42,14 @@ public class UserService implements IUserService {
         if (user == null || user.getId() == null) {
             throw new IllegalArgumentException("User or user ID cannot be null.");
         }
-        // Lấy password hiện tại từ database
-        String currentPassword = jdbcTemplate.queryForObject(
-                "SELECT password FROM [user] WHERE id = ?", String.class, user.getId());
-        String sql = "UPDATE [user] SET full_name = ?, phone = ?, email = ?, password = ? WHERE id = ?";
-        jdbcTemplate.update(sql, user.getFullname(), user.getPhone(), user.getEmail(), currentPassword, user.getId());
+        try {
+            String currentPassword = jdbcTemplate.queryForObject(
+                    "SELECT password FROM [user] WHERE id = ?", String.class, user.getId());
+            String sql = "UPDATE [user] SET full_name = ?, phone = ?, email = ?, password = ? WHERE id = ?";
+            jdbcTemplate.update(sql, user.getFullname(), user.getPhone(), user.getEmail(), currentPassword, user.getId());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update user: " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -53,7 +63,7 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        String sql = "SELECT * FROM [user] WHERE email = ?"; // Giả sử username là email
+        String sql = "SELECT * FROM [user] WHERE email = ?";
         try {
             Map<String, Object> userMap = jdbcTemplate.queryForMap(sql, username);
             User user = new User();
@@ -70,14 +80,20 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) {
-        Optional<User> userOptional = findByUsername(username);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if (password.equals(user.getPassword())) { // So sánh trực tiếp
-                return Optional.of(user);
+        try {
+            logger.debug("Checking username: {} and password: {}", username, password);
+            Optional<User> userOptional = findByUsername(username);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                if (password != null && password.equals(user.getPassword())) {
+                    return Optional.of(user);
+                }
             }
+            return Optional.empty();
+        } catch (Exception e) {
+            logger.error("Error finding user by username and password: {}", username, e);
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     @Override
@@ -107,11 +123,48 @@ public class UserService implements IUserService {
 
     @Override
     public void changePassword(Integer userId, String newPassword) {
-        String sql = "UPDATE [user] SET password = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, newPassword, userId);
-        System.out.println("Rows affected by password update: " + rowsAffected + " for userId: " + userId);
-        if (rowsAffected == 0) {
-            System.out.println("No rows updated - check userId or database constraints.");
+        try {
+            String sql = "UPDATE [user] SET password = ? WHERE id = ?";
+            int rowsAffected = jdbcTemplate.update(sql, newPassword, userId);
+            if (rowsAffected == 0) {
+                throw new RuntimeException("No user found with ID: " + userId);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to change password: " + e.getMessage(), e);
+        }
+    }
+
+    public void initiateUpdateProfile(User user) {
+        otpService.generateOtp(user.getId(), user.getEmail(), "UPDATE_PROFILE");
+    }
+
+    public boolean verifyUpdateProfile(Integer userId, String otpCode, User user) {
+        try {
+            if (otpService.verifyOtp(userId, otpCode, "UPDATE_PROFILE")) {
+                update(user);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            logger.error("Error verifying update profile for userId: {}", userId, e);
+            return false;
+        }
+    }
+
+    public void initiateChangePassword(Integer userId, String email) {
+        otpService.generateOtp(userId, email, "CHANGE_PASSWORD");
+    }
+
+    public boolean verifyChangePassword(Integer userId, String otpCode, String newPassword) {
+        try {
+            if (otpService.verifyOtp(userId, otpCode, "CHANGE_PASSWORD")) {
+                changePassword(userId, newPassword);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            logger.error("Error verifying change password for userId: {}", userId, e);
+            return false;
         }
     }
 }

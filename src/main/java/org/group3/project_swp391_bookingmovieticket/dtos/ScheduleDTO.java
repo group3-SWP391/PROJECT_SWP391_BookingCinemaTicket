@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -13,8 +17,9 @@ public class ScheduleDTO implements Serializable {
     private Integer id;
     private Integer branchId;
     private String movieName;
-    private String startDate;
-    private String startTime;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalTime startTime;
     private Float price;
     private String imgurl;
     private Integer roomId;
