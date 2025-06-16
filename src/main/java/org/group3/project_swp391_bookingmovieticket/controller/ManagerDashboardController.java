@@ -58,50 +58,34 @@ public class ManagerDashboardController {
             }
         }
 
-        // Debug: Check if movies exist
-        System.out.println("Total movies found: " + allMovies.size());
-        for (org.group3.project_swp391_bookingmovieticket.entities.Movie movie : allMovies) {
-            System.out.println("Movie: " + movie.getName() + " (ID: " + movie.getId() + ")");
-        }
-
-        // Create MovieRevenueDTO list with error handling
         List<MovieRevenueDTO> movieRevenueList = new ArrayList<>();
         try {
             movieRevenueList = allMovies.stream()
                     .map(m -> {
                         try {
-                            System.out.println("Processing movie: " + m.getName());
-
-                            // Get total revenue with error handling
                             Double revenue = null;
                             try {
                                 revenue = billRepository.getRevenueByMovie(m.getId());
-                                System.out.println("Revenue for " + m.getName() + ": " + revenue);
                             } catch (Exception e) {
                                 System.err.println("Error getting revenue for movie " + m.getName() + ": " + e.getMessage());
                                 revenue = 0.0;
                             }
 
-                            // Get tickets sold with error handling
                             Long tickets = null;
                             try {
                                 tickets = billRepository.getTicketsSoldByMovie(m.getId());
-                                System.out.println("Tickets for " + m.getName() + ": " + tickets);
                             } catch (Exception e) {
                                 System.err.println("Error getting tickets for movie " + m.getName() + ": " + e.getMessage());
                                 tickets = 0L;
                             }
 
-                            // Get last show date with error handling
                             java.sql.Date lastShow = null;
                             try {
                                 lastShow = scheduleRepository.getLastShowDateByMovie(m.getId());
-                                System.out.println("Last show for " + m.getName() + ": " + lastShow);
                             } catch (Exception e) {
                                 System.err.println("Error getting last show for movie " + m.getName() + ": " + e.getMessage());
                             }
 
-                            // Calculate monthly revenue for last 12 months
                             List<Double> movieMonthlyRevenue = new ArrayList<>();
                             for (int i = 0; i < 12; i++) {
                                 try {
@@ -117,7 +101,6 @@ public class ManagerDashboardController {
                                     movieMonthlyRevenue.add(0, 0.0);
                                 }
                             }
-                            System.out.println("Monthly revenue for " + m.getName() + ": " + movieMonthlyRevenue);
 
                             return new MovieRevenueDTO(
                                     m.getName(),
@@ -140,14 +123,12 @@ public class ManagerDashboardController {
             e.printStackTrace();
         }
 
-        System.out.println("Final Movie Revenue List size: " + movieRevenueList.size());
 
         // Convert movieRevenueList to JSON string for JavaScript
         String movieRevenueListJson = "[]";
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             movieRevenueListJson = objectMapper.writeValueAsString(movieRevenueList);
-            System.out.println("MovieRevenueList JSON: " + movieRevenueListJson);
         } catch (JsonProcessingException e) {
             System.err.println("Error converting movieRevenueList to JSON: " + e.getMessage());
         }

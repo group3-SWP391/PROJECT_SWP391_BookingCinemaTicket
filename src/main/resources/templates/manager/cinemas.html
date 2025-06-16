@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div th:fragment="content" class="cinema-stage">
+        <!-- Cinema-themed Building Icon -->
+        <div class="movie-reel">
+            🏢
+        </div>
+        
+        <!-- Dashboard Content Wrapper -->
+        <div class="dashboard-content">
+            <!-- Add Cinema Button -->
+            <button type="button" class="btn-add-movie" data-toggle="modal" data-target="#cinemaModal" id="addCinemaBtn">
+                <i class="fa fa-plus-circle"></i> Add New Cinema
+            </button>
+
+            <!-- Cinema Management Header -->
+            <div class="movie-management-header">
+                <h1>
+                    <i class="fa fa-building"></i>
+                    Cinema Management System
+                </h1>
+            </div>
+
+            <!-- Cinema Table Container -->
+            <div class="movie-table-container">
+                <table class="table movie-table">
+                    <thead>
+                        <tr>
+                            <th>Cinema Name</th>
+                            <th>Address</th>
+                            <th>Contact</th>
+                            <th>Rooms</th>
+                            <th>Total Capacity</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cinema : ${cinemas}">
+                            <td>
+                                <strong th:text="${cinema.name}">Cinema Name</strong>
+                                <br>
+                                <small class="text-muted" th:text="${cinema.description}" th:if="${cinema.description != null}">Cinema Description</small>
+                            </td>
+                            <td>
+                                <span th:text="${cinema.address}" th:if="${cinema.address != null}">Cinema Address</span>
+                                <span class="text-muted" th:if="${cinema.address == null}">No Address</span>
+                            </td>
+                            <td>
+                                <div th:if="${cinema.phone != null}">
+                                    <i class="fa fa-phone"></i> <span th:text="${cinema.phone}">Phone</span>
+                                </div>
+                                <div th:if="${cinema.email != null}">
+                                    <i class="fa fa-envelope"></i> <span th:text="${cinema.email}">Email</span>
+                                </div>
+                                <span class="text-muted" th:if="${cinema.phone == null and cinema.email == null}">No Contact</span>
+                            </td>
+                            <td>
+                                <span class="room-count-badge" th:text="${cinema.activeRoomCount} + ' rooms'">5 rooms</span>
+                                <br>
+                                <button type="button" class="btn btn-sm btn-info" 
+                                        th:data-cinema-id="${cinema.id}"
+                                        onclick="viewRooms(this.dataset.cinemaId)">
+                                    <i class="fa fa-eye"></i> View Rooms
+                                </button>
+                            </td>
+                            <td>
+                                <span class="capacity-badge" th:text="${cinema.totalCapacity} + ' seats'">500 seats</span>
+                            </td>
+                            <td>
+                                <span class="status-badge" 
+                                      th:classappend="${cinema.isActive == 1 ? 'status-showing' : 'status-not-showing'}"
+                                      th:text="${cinema.isActive == 1 ? 'Active' : 'Inactive'}">
+                                    Active
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button type="button" class="btn-action btn-edit" 
+                                            th:data-cinema-id="${cinema.id}"
+                                            onclick="editCinema(this.dataset.cinemaId)">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </button>
+                                    <button type="button" class="btn-action btn-info" 
+                                            th:data-cinema-id="${cinema.id}"
+                                            onclick="manageRooms(this.dataset.cinemaId)">
+                                        <i class="fa fa-cogs"></i> Rooms
+                                    </button>
+                                    <button type="button" class="btn-action btn-delete" 
+                                            th:data-cinema-id="${cinema.id}"
+                                            th:data-cinema-name="${cinema.name}"
+                                            onclick="deleteCinema(this.dataset.cinemaId, this.dataset.cinemaName)">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cinema Modal -->
+        <div class="modal fade" id="cinemaModal" tabindex="-1" role="dialog" aria-labelledby="cinemaModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="cinemaModalLabel">
+                            <i class="fa fa-building"></i> Add New Cinema
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="cinemaForm">
+                            <input type="hidden" id="cinemaId" name="cinemaId">
+                            
+                            <div class="form-group">
+                                <label for="cinemaName">Cinema Name * <small class="text-muted">(max 255 chars)</small></label>
+                                <input type="text" class="form-control" id="cinemaName" name="name" maxlength="255" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cinemaAddress">Address <small class="text-muted">(max 500 chars)</small></label>
+                                <textarea class="form-control" id="cinemaAddress" name="address" rows="3" maxlength="500" 
+                                          placeholder="Enter full cinema address"></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="cinemaPhone">Phone <small class="text-muted">(max 20 chars)</small></label>
+                                        <input type="text" class="form-control" id="cinemaPhone" name="phone" maxlength="20" 
+                                               placeholder="e.g. 028-3822-3456">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="cinemaEmail">Email <small class="text-muted">(max 100 chars)</small></label>
+                                        <input type="email" class="form-control" id="cinemaEmail" name="email" maxlength="100" 
+                                               placeholder="e.g. info@cinema.com">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cinemaDescription">Description <small class="text-muted">(max 1000 chars)</small></label>
+                                <textarea class="form-control" id="cinemaDescription" name="description" rows="4" maxlength="1000" 
+                                          placeholder="Brief description of the cinema"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cinemaStatus">Status</label>
+                                <select class="form-control" id="cinemaStatus" name="isActive">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn-save-movie" onclick="saveCinema()">Save Cinema</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Management Modal -->
+        <div class="modal fade" id="roomModal" tabindex="-1" role="dialog" aria-labelledby="roomModalLabel">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="roomModalLabel">
+                            <i class="fa fa-cogs"></i> Manage Rooms - <span id="roomModalCinemaName">Cinema Name</span>
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Add Room Button -->
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-success" onclick="showAddRoomForm()">
+                                <i class="fa fa-plus"></i> Add New Room
+                            </button>
+                        </div>
+
+                        <!-- Add/Edit Room Form -->
+                        <div id="roomFormContainer" style="display: none;" class="mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 id="roomFormTitle"><i class="fa fa-plus"></i> Add New Room</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="roomForm">
+                                        <input type="hidden" id="roomId" name="roomId">
+                                        <input type="hidden" id="roomCinemaId" name="cinemaId">
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="roomName">Room Name * <small class="text-muted">(max 100 chars)</small></label>
+                                                    <input type="text" class="form-control" id="roomName" name="name" maxlength="100" required 
+                                                           placeholder="e.g. Screen 1, Hall A">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="roomType">Room Type <small class="text-muted">(max 50 chars)</small></label>
+                                                    <select class="form-control" id="roomType" name="roomType">
+                                                        <option value="">Select Type</option>
+                                                        <option value="STANDARD">Standard</option>
+                                                        <option value="VIP">VIP</option>
+                                                        <option value="IMAX">IMAX</option>
+                                                        <option value="4DX">4DX</option>
+                                                        <option value="PREMIUM">Premium</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="roomCapacity">Capacity *</label>
+                                                    <input type="number" class="form-control" id="roomCapacity" name="capacity" required min="1" 
+                                                           placeholder="e.g. 150">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="roomRowCount">Row Count</label>
+                                                    <input type="number" class="form-control" id="roomRowCount" name="rowCount" min="1" 
+                                                           placeholder="e.g. 15" onchange="calculateCapacity()">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="roomSeatsPerRow">Seats per Row</label>
+                                                    <input type="number" class="form-control" id="roomSeatsPerRow" name="seatsPerRow" min="1" 
+                                                           placeholder="e.g. 10" onchange="calculateCapacity()">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="roomDescription">Description <small class="text-muted">(max 500 chars)</small></label>
+                                            <textarea class="form-control" id="roomDescription" name="description" rows="3" maxlength="500" 
+                                                      placeholder="Brief description of the room"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="roomStatus">Status</label>
+                                            <select class="form-control" id="roomStatus" name="isActive">
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" onclick="saveRoom()">
+                                                <i class="fa fa-save"></i> Save Room
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" onclick="cancelRoomForm()">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rooms List -->
+                        <div id="roomsList">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Room Name</th>
+                                            <th>Type</th>
+                                            <th>Capacity</th>
+                                            <th>Layout</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="roomsTableBody">
+                                        <!-- Rooms will be loaded here dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

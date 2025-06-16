@@ -28,6 +28,9 @@ function initializeMovieManagement() {
         console.warn('Add Movie button not found');
     }
 
+    // Initialize trailer type functionality
+    initializeTrailerTypeToggle();
+
     window.editMovie = editMovie;
     window.deleteMovie = deleteMovie;
     window.openAddMovieModal = openAddMovieModal;
@@ -38,6 +41,9 @@ function initializeMovieManagement() {
     window.saveDirector = saveDirector;
     window.saveActor = saveActor;
     window.removeFilePreview = removeFilePreview;
+    window.toggleTrailerInput = toggleTrailerInput;
+    window.clearYoutubePreview = clearYoutubePreview;
+    window.getTrailerData = getTrailerData;
     setupFileUpload();
 }
 document.addEventListener('DOMContentLoaded', initializeMovieManagement);
@@ -131,9 +137,9 @@ function addActorRow(selectedActorId = '', characterName = '') {
                 </select>
             </div>
             <div class="form-group">
-                <label>Character Name</label>
+                <label>Character Name <small class="text-muted">(max 255 chars)</small></label>
                 <input type="text" class="form-control" name="characterNames" 
-                       value="${characterName}" placeholder="Character name in movie" required>
+                       value="${characterName}" placeholder="Character name in movie" maxlength="255" required>
             </div>
             <button type="button" class="remove-actor" onclick="removeActorRow('actorRow${actorRowCount}')">
                 <i class="fa fa-times"></i>
@@ -152,6 +158,11 @@ function removeActorRow(rowId) {
 }
 
 function saveMovie() {
+    // Validate form before submission
+    if (!validateMovieForm()) {
+        return;
+    }
+    
     const form = document.getElementById('movieForm');
     const formData = new FormData(form);
     const actorIds = formData.getAll('actorIds');
@@ -170,6 +181,13 @@ function saveMovie() {
     formData.delete('actorIds');
     formData.delete('characterNames');
     formData.append('actors', JSON.stringify(actors));
+    
+    // Ensure trailer type is included
+    const uploadRadio = document.getElementById('trailerTypeUpload');
+    if (uploadRadio) {
+        const selectedTrailerType = uploadRadio.checked ? 'upload' : 'youtube';
+        formData.set('trailerType', selectedTrailerType);
+    }
     if (editingMovieId) {
         formData.append('_method', 'PUT');
         formData.append('movieId', editingMovieId);
@@ -220,9 +238,9 @@ function editMovie(movieId) {
                 if (movie.largeImageUrl) {
                     showCurrentFileInfo(movie.largeImageUrl, 'largeImage');
                 }
-                if (movie.trailerUrlWatchLink) {
-                    showCurrentFileInfo(movie.trailerUrlWatchLink, 'trailer');
-                }
+                
+                // Handle trailer based on type
+                setupTrailerForEdit(data.displayTrailerUrl || movie.trailerUrlWatchLink, data.trailerType);
                 
                 document.getElementById('movieShortDescription').value = movie.shortDescription || '';
                 document.getElementById('movieLongDescription').value = movie.longDescription || '';
@@ -273,6 +291,10 @@ function openAddDirectorModal() {
     $('#directorModal').modal('show');
 }
 function saveDirector() {
+    if (!validateDirectorForm()) {
+        return;
+    }
+    
     const form = document.getElementById('directorForm');
     const formData = new FormData(form);
     
@@ -311,6 +333,10 @@ function saveDirector() {
 }
 
 function saveActor() {
+    if (!validateActorForm()) {
+        return;
+    }
+    
     const form = document.getElementById('actorForm');
     const formData = new FormData(form);
     
@@ -531,4 +557,265 @@ function resetFileUploadAreas() {
     types.forEach(type => {
         removeFilePreview(type);
     });
+}
+
+// Trailer Type Toggle Functions
+function initializeTrailerTypeToggle() {
+    const youtubeInput = document.getElementById('movieTrailerYoutube');
+    if (youtubeInput) {
+        youtubeInput.addEventListener('input', function() {
+            // Debounce the preview function
+            clearTimeout(this.previewTimeout);
+            this.previewTimeout = setTimeout(previewYouTubeVideo, 500);
+        });
+
+        youtubeInput.addEventListener('blur', previewYouTubeVideo);
+    }
+}
+
+// Toggle between upload and YouTube input
+function toggleTrailerInput() {
+    const uploadRadio = document.getElementById('trailerTypeUpload');
+    const youtubeRadio = document.getElementById('trailerTypeYoutube');
+    const uploadContainer = document.getElementById('trailerUploadContainer');
+    const youtubeContainer = document.getElementById('trailerYoutubeContainer');
+    
+    if (uploadRadio && youtubeRadio && uploadContainer && youtubeContainer) {
+        if (uploadRadio.checked) {
+            uploadContainer.style.display = 'block';
+            youtubeContainer.style.display = 'none';
+            // Clear YouTube input when switching to upload
+            const youtubeInput = document.getElementById('movieTrailerYoutube');
+            if (youtubeInput) youtubeInput.value = '';
+            clearYoutubePreview();
+        } else if (youtubeRadio.checked) {
+            uploadContainer.style.display = 'none';
+            youtubeContainer.style.display = 'block';
+            // Clear file input when switching to YouTube
+            const trailerInput = document.getElementById('movieTrailer');
+            if (trailerInput) trailerInput.value = '';
+            removeFilePreview('trailer');
+        }
+    }
+}
+
+// Extract YouTube video ID from URL
+function extractYouTubeID(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+
+// Preview YouTube video
+function previewYouTubeVideo() {
+    const youtubeInput = document.getElementById('movieTrailerYoutube');
+    const youtubePreview = document.getElementById('youtubePreview');
+    const youtubeIframe = document.getElementById('youtubeIframe');
+    
+    if (!youtubeInput || !youtubePreview || !youtubeIframe) return;
+    
+    const url = youtubeInput.value.trim();
+    if (!url) {
+        clearYoutubePreview();
+        return;
+    }
+
+    const videoId = extractYouTubeID(url);
+    if (videoId) {
+        youtubeIframe.src = `https://www.youtube.com/embed/${videoId}`;
+        youtubePreview.style.display = 'block';
+        youtubeInput.classList.remove('is-invalid');
+        youtubeInput.classList.add('is-valid');
+    } else {
+        clearYoutubePreview();
+        youtubeInput.classList.remove('is-valid');
+        youtubeInput.classList.add('is-invalid');
+    }
+}
+
+// Clear YouTube preview
+function clearYoutubePreview() {
+    const youtubePreview = document.getElementById('youtubePreview');
+    const youtubeIframe = document.getElementById('youtubeIframe');
+    const youtubeInput = document.getElementById('movieTrailerYoutube');
+    
+    if (youtubePreview) youtubePreview.style.display = 'none';
+    if (youtubeIframe) youtubeIframe.src = '';
+    if (youtubeInput) youtubeInput.classList.remove('is-valid', 'is-invalid');
+}
+
+// Get trailer data based on selected type
+function getTrailerData() {
+    const uploadRadio = document.getElementById('trailerTypeUpload');
+    const trailerFile = document.getElementById('movieTrailer');
+    const youtubeUrl = document.getElementById('movieTrailerYoutube');
+    
+    if (!uploadRadio || !trailerFile || !youtubeUrl) return null;
+    
+    if (uploadRadio.checked && trailerFile.files[0]) {
+        return {
+            type: 'upload',
+            file: trailerFile.files[0]
+        };
+    } else if (!uploadRadio.checked && youtubeUrl.value.trim()) {
+        const videoId = extractYouTubeID(youtubeUrl.value.trim());
+        if (videoId) {
+            return {
+                type: 'youtube',
+                url: youtubeUrl.value.trim(),
+                videoId: videoId
+            };
+        }
+    }
+    return null;
+}
+
+// Form validation functions
+function validateMovieForm() {
+    const validationRules = [
+        { id: 'movieName', maxLength: 255, name: 'Movie Name' },
+        { id: 'movieCategories', maxLength: 100, name: 'Categories' },
+        { id: 'movieLanguage', maxLength: 255, name: 'Language' },
+        { id: 'movieShortDescription', maxLength: 500, name: 'Short Description' },
+        { id: 'movieLongDescription', maxLength: 1000, name: 'Long Description' },
+        { id: 'movieTrailerYoutube', maxLength: 1000, name: 'YouTube URL' }
+    ];
+
+    let isValid = true;
+    const errors = [];
+
+    // Validate text fields
+    validationRules.forEach(rule => {
+        const element = document.getElementById(rule.id);
+        if (element && element.value.trim().length > rule.maxLength) {
+            isValid = false;
+            errors.push(`${rule.name} cannot exceed ${rule.maxLength} characters`);
+            element.classList.add('is-invalid');
+        } else if (element) {
+            element.classList.remove('is-invalid');
+        }
+    });
+
+    // Validate character names
+    const characterInputs = document.querySelectorAll('input[name="characterNames"]');
+    characterInputs.forEach((input, index) => {
+        if (input.value.trim().length > 255) {
+            isValid = false;
+            errors.push(`Character name ${index + 1} cannot exceed 255 characters`);
+            input.classList.add('is-invalid');
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    });
+
+    // Validate required fields
+    const requiredFields = ['movieName', 'movieDuration', 'movieCategories', 'movieLanguage'];
+    requiredFields.forEach(fieldId => {
+        const element = document.getElementById(fieldId);
+        if (element && !element.value.trim()) {
+            isValid = false;
+            errors.push(`${element.labels[0]?.textContent || fieldId} is required`);
+            element.classList.add('is-invalid');
+        }
+    });
+
+    // Show validation errors
+    if (!isValid) {
+        alert('Please fix the following errors:\n\n' + errors.join('\n'));
+    }
+
+    return isValid;
+}
+
+function validateDirectorForm() {
+    const name = document.getElementById('directorName').value.trim();
+    const description = document.getElementById('directorBio').value.trim();
+    
+    if (name.length > 255) {
+        alert('Director name cannot exceed 255 characters');
+        return false;
+    }
+    
+    if (description.length > 255) {
+        alert('Director description cannot exceed 255 characters');
+        return false;
+    }
+    
+    if (!name) {
+        alert('Director name is required');
+        return false;
+    }
+    
+    return true;
+}
+
+function validateActorForm() {
+    const name = document.getElementById('actorName').value.trim();
+    
+    if (name.length > 255) {
+        alert('Actor name cannot exceed 255 characters');
+        return false;
+    }
+    
+    if (!name) {
+        alert('Actor name is required');
+        return false;
+    }
+    
+    return true;
+}
+
+// Trailer edit setup functions
+function setupTrailerForEdit(trailerUrl, trailerType) {
+    if (!trailerUrl || !trailerType) {
+        // No trailer data, keep default upload option
+        return;
+    }
+    
+    const uploadRadio = document.getElementById('trailerTypeUpload');
+    const youtubeRadio = document.getElementById('trailerTypeYoutube');
+    const uploadContainer = document.getElementById('trailerUploadContainer');
+    const youtubeContainer = document.getElementById('trailerYoutubeContainer');
+    const youtubeInput = document.getElementById('movieTrailerYoutube');
+    
+    if (trailerType === 'youtube') {
+        // Set YouTube option
+        if (youtubeRadio) youtubeRadio.checked = true;
+        if (uploadRadio) uploadRadio.checked = false;
+        
+        // Show YouTube container, hide upload container
+        if (youtubeContainer) youtubeContainer.style.display = 'block';
+        if (uploadContainer) uploadContainer.style.display = 'none';
+        
+        // Set the YouTube URL (should already be in watch format from backend)
+        if (youtubeInput) {
+            youtubeInput.value = trailerUrl;
+            // Trigger preview
+            setTimeout(() => previewYouTubeVideo(), 100);
+        }
+    } else {
+        // Set upload option (default)
+        if (uploadRadio) uploadRadio.checked = true;
+        if (youtubeRadio) youtubeRadio.checked = false;
+        
+        // Show upload container, hide YouTube container
+        if (uploadContainer) uploadContainer.style.display = 'block';
+        if (youtubeContainer) youtubeContainer.style.display = 'none';
+        
+        // Show current uploaded file info
+        showCurrentFileInfo(trailerUrl, 'trailer');
+    }
+}
+
+function convertEmbedToWatchUrl(embedUrl) {
+    if (embedUrl && embedUrl.includes('youtube.com/embed/')) {
+        const videoId = embedUrl.split('/embed/')[1].split('?')[0];
+        return `https://www.youtube.com/watch?v=${videoId}`;
+    }
+    return embedUrl;
+}
+
+function isYouTubeUrl(url) {
+    if (!url) return false;
+    return url.toLowerCase().includes('youtube.com') || url.toLowerCase().includes('youtu.be');
 } 
