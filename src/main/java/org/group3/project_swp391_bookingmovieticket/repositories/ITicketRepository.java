@@ -1,8 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.repositories;
 
-import org.group3.project_swp391_bookingmovieticket.dtos.TicketDTO;
+
 import org.group3.project_swp391_bookingmovieticket.entities.Ticket;
-import org.group3.project_swp391_bookingmovieticket.services.IGeneralService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

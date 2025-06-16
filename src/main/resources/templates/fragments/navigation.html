@@ -49,7 +49,7 @@
                             <li>
                                 <div th:if="${session.userLogin == null}">
                                     <a class="button button--tamaya" data-text="sign up" data-toggle="modal"
-                                       data-target="#myModal"><span>sign up</span></a>
+                                       data-target="#myModal" href="#"><span>sign up</span></a>
                                 </div>
                                 <div th:if="${session.userLogin != null}">
                                     <a style="background: #1b1b1b" class="btn" th:href="@{none}">

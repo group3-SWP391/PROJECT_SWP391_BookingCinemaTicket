@@ -2,7 +2,7 @@ package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.ScheduleDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
-import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepository;
+
 import org.group3.project_swp391_bookingmovieticket.repositories.IScheduleRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IScheduleService;
 import org.modelmapper.ModelMapper;
@@ -45,7 +45,7 @@ public class ScheduleService implements IScheduleService {
 
     @Override
     public Optional<Schedule> findById(Integer id) {
-        return Optional.empty();
+        return scheduleRepository.findById(id);
     }
 
     @Override

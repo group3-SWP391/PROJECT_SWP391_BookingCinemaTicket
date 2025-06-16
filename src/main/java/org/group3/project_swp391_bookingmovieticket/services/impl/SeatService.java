@@ -10,6 +10,7 @@ import org.group3.project_swp391_bookingmovieticket.services.ISeatService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.payos.PayOS;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,14 +41,12 @@ public class SeatService implements ISeatService {
                 .stream()
                 .map(ticket -> ticket.getSeat())
                 .collect(Collectors.toList());
-        System.out.println(occupiedSeats + "occupiedSeats");
 
         //Lấy về các ghế mà user đang đăng nhập đã đặt
         List<Seat> checkedSeats = ticketRepository.findTicketsByUserIdAndScheduleId(userId, scheduleId)
                 .stream()
                 .map(ticket -> ticket.getSeat())
                 .collect(Collectors.toList());
-        System.out.println(checkedSeats + "checkedSeats");
 
         // Chuyển về seatDTO, trả về các seatDTO
         List<SeatDTO> filterSeats = listSeat
@@ -75,8 +74,12 @@ public class SeatService implements ISeatService {
                     }
                     return seatDTO;
                 }).collect(Collectors.toList());
-        System.out.println(filterSeats + "filterSeats");
         return filterSeats;
+    }
+
+    @Override
+    public List<String> findSeatNamesByIdList(List<Integer> ids) {
+        return seatRepository.findSeatNamesByIdList(ids);
     }
 
     @Override

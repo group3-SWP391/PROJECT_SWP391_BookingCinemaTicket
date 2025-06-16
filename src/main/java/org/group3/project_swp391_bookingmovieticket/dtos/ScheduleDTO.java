@@ -1,10 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.ToString;
-
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

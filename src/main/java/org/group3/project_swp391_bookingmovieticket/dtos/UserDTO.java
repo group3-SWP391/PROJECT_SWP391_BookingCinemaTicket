@@ -4,6 +4,7 @@ import lombok.Data;
 import org.group3.project_swp391_bookingmovieticket.entities.Role;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 @Data
@@ -24,6 +25,10 @@ public class UserDTO {
     @NotBlank(message = "Phone cannot be blank")
     @Size(min = 9, max = 11, message = "Phone not valid!")
     private String phone;
+
+    @Email(message = "Eamil not valid!")
+    @NotBlank(message = "Email cannot be blank")
+    private String email;
 
     private Role role;
     

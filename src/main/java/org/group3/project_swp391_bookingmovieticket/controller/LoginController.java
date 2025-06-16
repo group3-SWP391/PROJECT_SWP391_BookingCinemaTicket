@@ -3,16 +3,19 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
+import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -24,25 +27,32 @@ public class LoginController {
 
     @GetMapping("/login")
     public String userLoginGet(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
+        model.addAttribute("userLoginDTO", new UserLoginDTO());
         return "home";
     }
 
     @PostMapping("/login")
-    public String userLoginPost(@ModelAttribute UserDTO userDTO,
-                                  Model model, HttpServletRequest request) {
+    public String userLoginPost(@ModelAttribute("userLoginDTO") @Valid UserLoginDTO userLoginDTO,
+                                BindingResult bindingResult,
+                                Model model,
+                                HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("showLoginModal", true);
+            model.addAttribute("errorLogin", "Please check your input.");
+            return "home";
+        }
         User user = new User();
-        user.setPhone(userDTO.getPhone());
-        user.setPassword(userDTO.getPassword());
-        Optional<User> userExist = userService.findByPhoneAndPassword(user.getPhone(), user.getPassword());
+        user.setEmail(userLoginDTO.getEmail());
+        user.setPassword(userLoginDTO.getPassword());
+        Optional<User> userExist = userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
         if (userExist.isPresent()) {
             // lưu user lên session để phân quyền và lấy thông tin
             request.getSession().setAttribute("userLogin", userExist.get());
-            return "redirect:/";
+            return "home";
         } else {
             model.addAttribute("errorLogin", "Invalid username or password");
-            // truyền tiếp new UserDTO vào form để form blind được new UserDTO tiếp
-            model.addAttribute("userDTO", new UserDTO());
+            model.addAttribute("showLoginModal", true);
+            model.addAttribute("userLoginDTO", new UserLoginDTO());
             return "home";
         }
     }

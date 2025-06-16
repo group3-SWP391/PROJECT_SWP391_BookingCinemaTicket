@@ -93,17 +93,24 @@
                             <div class="picking row" style="padding: 0 50px;">
                                 <div class="slot__picking col-12">
                                     <div class="slot__row">
-                                        <th:block th:each="seat, iterStat : ${seats}">
-                                            <i class="fa fa-couch slot__item"
-                                               th:classappend="${seat.isActive} ?
-                                               (${seat.isChecked} ? 'item--checked':
-                                               (${seat.isOccupied} == 1 ? 'item--picked':
-                                               (${seat.isVip} ? 'item--vip':''))):'item--hidden'"
-                                               th:data-seat="${seat.name}"
-                                               th:data-price="${seat.isVip} ? (${schedule.price + 20000}) : (${schedule.price})"
-                                               th:data-seat-id="${seat.id}"></i>
-                                            <br th:if="${iterStat.index % 10 == 9}"/>
-                                        </th:block>
+                                        <div th:each="rowIdx : ${#numbers.sequence(0, rowLabels.size() - 1)}">
+                                            <span class="me-2 fw-bold" th:text="${rowLabels[rowIdx]}"
+                                                  style="font-weight: bold; padding-right: 10px"></span>
+                                            <!-- tên hàng -->
+                                            <th:block th:each="colIdx : ${#numbers.sequence(0, seatsPerRow - 1)}">
+                                                <th:block th:with="seat=${seats[rowIdx * seatsPerRow + colIdx]}">
+                                                    <i class="fa fa-couch slot__item"
+                                                       th:classappend="${seat.isActive} ?
+                                                (${seat.isChecked} ? 'item--checked':
+                                                (${seat.isOccupied}==1 ? 'item--picked':
+                                                (${seat.isVip} ? 'item--vip':''))):
+                                                 'item--hiden'"
+                                                       th:data-seat="${seat.name}"
+                                                       th:data-price="${seat.isVip} ? ${schedule.price + 20000} : ${schedule.price}"
+                                                       th:data-seat-id="${seat.id}"></i>
+                                                </th:block>
+                                            </th:block>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +156,8 @@
                     </div>
                     <div class="payForm">
                         <a class="pay__link" href="/#">
-                        <p class="text__notification">Please select a seat to display the appropriate payment method.</p></a>
+                            <p class="text__notification">Please select a seat to display the appropriate payment
+                                method.</p></a>
                     </div>
                 </div>
                 <div class="textNotification text-center"><i class="fa fa-info-circle text-danger mr-1"></i><span
@@ -157,81 +165,7 @@
                                 <span class="noti__link">SMS</span> (Zalo message) and <span
                             class="noti__link">Email</span>
                                 đã nhập. </span></div>
-                <div id="btnBook" class="btnBook" data-toggle="modal" data-target="#CreditModal">Payment</div>
-                <div>
-                    <div class="CreditModal modal fade bd-example-modal-lg" id="CreditModal" tabindex="-1"
-                         role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Thanh toán</h5>
-                                    <button type="button" class="close"
-                                            data-dismiss="modal" aria-label="Close"><span
-                                            aria-hidden="true">×</span></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="PaymentForm">
-                                        <div class="row">
-                                            <div class="credit-card col-md-6 col-sm-12 mb-2">
-                                                <div class="rccs">
-                                                    <div class="rccs__card rccs__card--unknown">
-                                                        <div class="rccs__card--front">
-                                                            <div class="rccs__card__background"></div>
-                                                            <div class="rccs__issuer"></div>
-                                                            <div class="rccs__cvc__front"></div>
-                                                            <div class="rccs__number">•••• •••• •••• ••••</div>
-                                                            <div class="rccs__name">YOUR NAME HERE</div>
-                                                            <div class="rccs__expiry">
-                                                                <div class="rccs__expiry__valid">valid thru</div>
-                                                                <div class="rccs__expiry__value">••/••</div>
-                                                            </div>
-                                                            <div class="rccs__chip"></div>
-                                                        </div>
-                                                        <div class="rccs__card--back">
-                                                            <div class="rccs__card__background"></div>
-                                                            <div class="rccs__stripe"></div>
-                                                            <div class="rccs__signature"></div>
-                                                            <div class="rccs__cvc"></div>
-                                                            <div class="rccs__issuer"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="info-card col-md-6 col-sm-12">
-                                                <form class="info-form" th:action="@{/booking}" method="post">
-                                                    <div class="textb"><input type="tel" name="number"
-                                                                              class="w-100">
-                                                        <div class="placeholder">Card Number</div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-6" style="padding-right: 0px;">
-                                                            <div class="textb"><input type="tel" name="expiry">
-                                                                <div class="placeholder">Valid</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="textb"><input type="tel" name="cvc">
-                                                                <div class="placeholder">CVC</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="textb"><input type="text" name="name">
-                                                        <div class="placeholder">Name</div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="btn-booking" type="button" class="btn-style draw-border">Đặt
-                                        vé
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="btn-booking" class="btnBook" type="button">Payment</div>
             </div>
         </div>
     </div>
@@ -312,6 +246,8 @@
 </div>
 <footer lang="vi" th:include="fragments/footer"></footer>
 
+<div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
+
 <script th:src="@{/js/jquery_min.js}"></script>
 <script th:src="@{/js/modernizr.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
@@ -354,6 +290,7 @@
     $(document).ready(function () {
         dataParameter = []
         const price = $(".price");
+        // hiện ghế đang chọn
         $(".slot__item").click(function () {
             const priceSeat = Number($(this).data("price"))
             const codeSeat = $(this).data("seat")
@@ -393,54 +330,48 @@
                 $("#error-time").addClass("swal-overlay--show-modal")
             }
         }, 1000);
+
         //submit form booking
         $("#btn-booking").click(function () {
             if (dataParameter.length != 0) {
-                var json = JSON.stringify(
-                    {
-                        "scheduleId": [[${schedule.id}]],
-                        "userId": [[${session.userLogin.id}]],
-                        "listSeatIds": dataParameter
-                    });
+                const scheduleId = [[${schedule.id}]];
+                const userId = [[${session.userLogin.id}]];
+                const totalPrice = Number($(".price").data("price"));;
+
+                const payload = {
+                    scheduleId: scheduleId,
+                    userId: userId,
+                    listSeatId: dataParameter,
+                    totalPrice: totalPrice
+                };
+
+                console.log("Sending data:", payload);
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:8080/api/bills/create-new-bill",
-                    data: json,
+                    url: "http://localhost:8080/create-payment-link",
+                    data: JSON.stringify(payload),
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
-                        //change status of seat
-                        $(".item--picking").addClass("item--checked");
-                        $(".item--picking").removeClass("item--picking");
-
-                        //reset bill
-                        $(".slot").empty()
-                        price.data("price", "0")
-                        current = 0
-                        price.text(current.toLocaleString('en-US', {style: 'currency', currency: 'VND'}));
-
-                        //close all modal check-out
-                        $('#CreditModal').trigger('click');
-
-                        //show notify
-                        $("#success").addClass("swal-overlay--show-modal")
-
-                        dataParameter = []
-
+                        // Chuyển người dùng đến trang thanh toán
+                        if (data.checkoutUrl) {
+                            window.location.href = data.checkoutUrl;
+                        } else {
+                            alert("Không lấy được link thanh toán.");
+                        }
                     },
                     error: function (e) {
-                        $("#text-error").html(e.responseText)
-                        $("#error").addClass("swal-overlay--show-modal")
-                        $("button").click(function (e) {
-                            location.reload(true);
-                        });
+                        console.error(e);
+                        $("#text-error").html("Lỗi khi tạo link thanh toán.");
+                        $("#error").addClass("swal-overlay--show-modal");
                     }
                 });
             } else {
-                $("#text-error").html("Bạn chưa chọn chỗ ngồi!")
-                $("#error").addClass("swal-overlay--show-modal")
+                $("#text-error").html("Bạn chưa chọn chỗ ngồi!");
+                $("#error").addClass("swal-overlay--show-modal");
             }
         });
+
         //close notify
         $(".notify").click(function (e) {
             if (remainingTime() != null)
