@@ -1,8 +1,10 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.SeatDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.PaymentLink;
 import org.group3.project_swp391_bookingmovieticket.entities.Room;
 import org.group3.project_swp391_bookingmovieticket.entities.Seat;
+import org.group3.project_swp391_bookingmovieticket.repositories.IPaymentLinkRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.IScheduleRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.ISeatRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.ITicketRepository;
@@ -10,10 +12,10 @@ import org.group3.project_swp391_bookingmovieticket.services.ISeatService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.payos.PayOS;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,62 +27,75 @@ public class SeatService implements ISeatService {
     @Autowired
     private ITicketRepository ticketRepository;
     @Autowired
+    private IPaymentLinkRepository paymentLinkRepository;
+    @Autowired
     private ModelMapper modelMapper;
 
 
     @Override
     public List<SeatDTO> getSeatsByScheduleIdAndUserId(Integer scheduleId, Integer userId) {
-
-        // Lấy ra các chỗ ngồi của phòng trong lịch đó
         Room room = scheduleRepository.getById(scheduleId).getRoom();
-        // Lấy về các seat của room chứa cái schedule đó
         List<Seat> listSeat = seatRepository.getSeatByRoom_Id(room.getId());
 
-        // Lấy về các ghế đã được đặt, lấy bởi scheduleId đã tồn tại trong bảng ticket
-        List<Seat> occupiedSeats = ticketRepository.findTicketsBySchedule_Id(scheduleId)
-                .stream()
-                .map(ticket -> ticket.getSeat())
+        // các ghế của người khác đặt thành công và đã có trong bảng bill
+        List<Seat> occupiedSeats = ticketRepository.findTicketsOfOtherUser(scheduleId, userId)
+                .stream().map(ticket -> ticket.getSeat()).collect(Collectors.toList());
+
+        // các ghế đã thanh toán và đã có trong bảng bill
+        List<Seat> checkedSeats = ticketRepository.findTicketsOfCurrentUserAndScheduleId(userId, scheduleId)
+                .stream().map(ticket -> ticket.getSeat()).collect(Collectors.toList());
+
+        // lấy về các payment link còn khả dụng
+        List<PaymentLink> allPendingLinks = paymentLinkRepository.findAllByStatus("PENDING");
+
+        //  Tách xử lý seatDTOs
+        List<SeatDTO> seatDTOs = listSeat.stream().map(seat -> {
+            SeatDTO seatDTO = modelMapper.map(seat, SeatDTO.class);
+
+            // đánh dấu các ghế đã được mua bởi user khác
+            if (occupiedSeats.stream().anyMatch(s -> Objects.equals(s.getId(), seatDTO.getId()))) {
+                seatDTO.setOccupied(true);
+            } else {
+                // đánh dấu các ghế của user khác chưa được thanh toán
+                boolean isSeatHeld = allPendingLinks.stream().anyMatch(link ->
+                                Objects.equals(link.getSchedule().getId(), scheduleId) &&
+                                        link.getSeatList().contains(seatDTO.getName()) &&
+                                        !Objects.equals(link.getUser().getId(), userId) // chỉ lấy những ghế không phải của user
+                        // hiện tại mà ở trong allPendingLinks để khóa những ghế dó lại
+                );
+                seatDTO.setOccupied(isSeatHeld);
+            }
+
+            // checkedSeats là những ghế trong bảng bill đã thanh toán
+            if (checkedSeats.stream().anyMatch(s -> Objects.equals(s.getId(), seatDTO.getId()))) {
+                seatDTO.setChecked(true);
+            } else { // else khi những ghế đó đã được ở trong paymentLink nhưng ch đc thanh toán nhưng vẫn phải khóa tạm thời
+                // đánh dấu các ghế của user đã được thanh toán
+                boolean isSeatHeld = allPendingLinks.stream().anyMatch(link ->
+                        Objects.equals(link.getSchedule().getId(), scheduleId) &&
+                                link.getSeatList().contains(seatDTO.getName()) &&
+                                Objects.equals(link.getUser().getId(), userId)
+                );
+                seatDTO.setChecked(isSeatHeld);
+            }
+            return seatDTO;
+        }).collect(Collectors.toList());
+
+        // thay đổi trạng thái các link đã quá time
+        List<PaymentLink> expiredLinks = allPendingLinks.stream()
+                .filter(link -> Duration.between(link.getCreatedAt(), LocalDateTime.now()).toMinutes() > 15)
                 .collect(Collectors.toList());
-
-        //Lấy về các ghế mà user đang đăng nhập đã đặt
-        List<Seat> checkedSeats = ticketRepository.findTicketsByUserIdAndScheduleId(userId, scheduleId)
-                .stream()
-                .map(ticket -> ticket.getSeat())
-                .collect(Collectors.toList());
-
-        // Chuyển về seatDTO, trả về các seatDTO
-        List<SeatDTO> filterSeats = listSeat
-                .stream()
-                .map(seat -> {
-                    SeatDTO seatDTO = modelMapper.map(seat, SeatDTO.class);
-                    if (occupiedSeats
-                            .stream()
-                            .map(occupiedSeat -> occupiedSeat.getId())
-                            .collect(Collectors.toList()).contains(seat.getId())) {
-                        seatDTO.setIsOccupied(1); // Nếu ghế đã được đặt bởi người khác thì set = true
-                    }
-                    return seatDTO;
-                }).collect(Collectors.toList());
-
-        // kiếm tra những ghế được đặt bởi người dùng rồi
-        filterSeats = filterSeats
-                .stream()
-                .map(seatDTO -> {
-                    if (checkedSeats
-                            .stream()
-                            .map(checkedSeat -> checkedSeat.getId()).
-                            collect(Collectors.toList()).contains(seatDTO.getId())) {
-                        seatDTO.setChecked(true);
-                    }
-                    return seatDTO;
-                }).collect(Collectors.toList());
-        return filterSeats;
+        expiredLinks.forEach(link -> link.setStatus("CANCEL"));
+        paymentLinkRepository.saveAll(expiredLinks);
+        return seatDTOs;
     }
+
 
     @Override
     public List<String> findSeatNamesByIdList(List<Integer> ids) {
         return seatRepository.findSeatNamesByIdList(ids);
     }
+
 
     @Override
     public List<Seat> findAll() {
@@ -99,6 +114,5 @@ public class SeatService implements ISeatService {
 
     @Override
     public void remove(Integer id) {
-
     }
 }

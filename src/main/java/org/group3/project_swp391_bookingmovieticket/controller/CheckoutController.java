@@ -4,7 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.group3.project_swp391_bookingmovieticket.dtos.BookingRequestDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.ScheduleDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.PaymentLink;
 import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
+import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.services.impl.PaymentLinkService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.ScheduleService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import vn.payos.type.CheckoutResponseData;
 import vn.payos.type.ItemData;
 import vn.payos.type.PaymentData;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +32,9 @@ import java.util.Map;
 @Controller
 public class CheckoutController {
     private final PayOS payOS;
+
+    @Autowired
+    private PaymentLinkService paymentLinkService;
 
     @Autowired
     private ScheduleService scheduleService;
@@ -66,11 +74,9 @@ public class CheckoutController {
         try {
             final String baseUrl = getBaseUrl(request);
             final String productName = schedule.getMovie().getName();
-            final String description =
-                    schedule.getStartTime().toString().replace(":","h") + " " +
-                    schedule.getStartDate().toString() + " Seat " + listSeatName;
+            final String description = "Seat " + listSeatName;
             final String returnUrl = baseUrl + "/confirmation_screen";
-            final String cancelUrl = baseUrl + "/cancel";
+            final String cancelUrl = baseUrl + "/booking/" + bookingRequestDTO.getScheduleId();
             final int price = 5000;
 
             String currentTimeString = String.valueOf(System.currentTimeMillis());
@@ -93,6 +99,18 @@ public class CheckoutController {
 
             CheckoutResponseData data = payOS.createPaymentLink(paymentData);
             String checkoutUrl = data.getCheckoutUrl();
+
+            // insert vào bảng để lưu
+            PaymentLink paymentLink = new PaymentLink();
+            paymentLink.setOrderCode(orderCode);
+            paymentLink.setCheckoutUrl(checkoutUrl);
+            paymentLink.setStatus("PENDING");
+            paymentLink.setSchedule(schedule);
+            paymentLink.setUser((User) request.getSession().getAttribute("userLogin"));
+            paymentLink.setSeatList(String.join(",", listSeatName));
+            paymentLink.setTotalPrice(price);
+            paymentLink.setCreatedAt(LocalDateTime.now());
+            paymentLinkService.insert(paymentLink);
 
             Map<String, String> response = new HashMap<>();
             response.put("checkoutUrl", checkoutUrl);

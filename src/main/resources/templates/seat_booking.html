@@ -102,7 +102,7 @@
                                                     <i class="fa fa-couch slot__item"
                                                        th:classappend="${seat.isActive} ?
                                                 (${seat.isChecked} ? 'item--checked':
-                                                (${seat.isOccupied}==1 ? 'item--picked':
+                                                (${seat.isOccupied} ? 'item--picked':
                                                 (${seat.isVip} ? 'item--vip':''))):
                                                  'item--hiden'"
                                                        th:data-seat="${seat.name}"
@@ -336,7 +336,8 @@
             if (dataParameter.length != 0) {
                 const scheduleId = [[${schedule.id}]];
                 const userId = [[${session.userLogin.id}]];
-                const totalPrice = Number($(".price").data("price"));;
+                const totalPrice = Number($(".price").data("price"));
+                ;
 
                 const payload = {
                     scheduleId: scheduleId,
