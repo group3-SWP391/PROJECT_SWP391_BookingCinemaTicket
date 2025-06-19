@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="prs_navi_left_main_wrapper">
                 <div class="prs_logo_main_wrapper">
-                    <a th:href="@{/}">
+                    <a th:href="@{/home}">
                         <img th:src="@{/images/header/logo.png}" alt="logo"/>
                     </a>
                 </div>
@@ -14,7 +14,7 @@
                             </div>
                             <div class="clearfix"></div>
                             <ul class="dl-menu">
-                                <li class="parent"><a th:href="@{/}">Home</a></li>
+                                <li class="parent"><a th:href="@{/home}">Home</a></li>
                                 <li class="parent"><a th:href="@{/}" onclick="return false">Movie</a>
                                     <ul class="lg-submenu">
                                         <li><a th:href="@{/movie/showing(status='now-showing')}">Now-showing</a></li>

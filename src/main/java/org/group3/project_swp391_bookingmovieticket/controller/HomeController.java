@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.BranchService;
@@ -15,7 +16,6 @@ import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.
 import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_LOGIN_DTO;
 
 @Controller
-@RequestMapping("/")
 public class HomeController {
 
     @Autowired
@@ -27,8 +27,9 @@ public class HomeController {
     @Autowired
     private BranchService branchService;
 
-    @GetMapping
+    @GetMapping("/home")
     public String displayHomePage(Model model, HttpServletRequest request) {
+        System.out.println(">>> HomeController HIT <<<");
         request.getSession().setAttribute("categoryAll", movieService.getMovieCategories());
         request.getSession().setAttribute("allLocationBranch", branchService.findAllLocationBranch());
         request.getSession().setAttribute("event", eventService.findEventValid());
@@ -36,11 +37,4 @@ public class HomeController {
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
         return "home";
     }
-
-    @GetMapping("/contact")
-    public String displayContactPage(Model model) {
-        model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
-        return "contact";
-    }
-
 }

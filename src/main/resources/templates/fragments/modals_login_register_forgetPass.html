@@ -6,6 +6,7 @@
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <form th:action="@{/login}" th:object="${userLoginDTO}" method="post">
+                    <input type="hidden" name="redirect" th:value="${param.redirect}" />
                     <div class="st_pop_form_heading_wrapper float_left">
                         <h3>Log in</h3>
                     </div>

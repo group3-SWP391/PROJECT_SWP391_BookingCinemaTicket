@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -34,6 +31,7 @@ public class LoginController {
     @PostMapping("/login")
     public String userLoginPost(@ModelAttribute("userLoginDTO") @Valid UserLoginDTO userLoginDTO,
                                 BindingResult bindingResult,
+                                @RequestParam(value = "redirect", required = false) String redirect,
                                 Model model,
                                 HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
@@ -48,7 +46,11 @@ public class LoginController {
         if (userExist.isPresent()) {
             // lưu user lên session để phân quyền và lấy thông tin
             request.getSession().setAttribute("userLogin", userExist.get());
-            return "home";
+            //  Nếu có redirect → chuyển hướng về lại trang cũ
+            if (redirect != null && !redirect.isBlank()) {
+                return "redirect:" + redirect;
+            }
+            return "redirect:/home";
         } else {
             model.addAttribute("errorLogin", "Invalid username or password");
             model.addAttribute("showLoginModal", true);
@@ -60,7 +62,7 @@ public class LoginController {
     @GetMapping("/log-out")
     public String signOut(HttpSession session) {
         session.removeAttribute("userLogin");
-        return "redirect:/";
+        return "redirect:/home";
     }
 
 }

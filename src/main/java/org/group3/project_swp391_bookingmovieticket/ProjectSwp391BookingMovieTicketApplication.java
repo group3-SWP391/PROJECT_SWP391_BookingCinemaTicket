@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.group3.project_swp391_bookingmovieticket")
 public class ProjectSwp391BookingMovieTicketApplication {
 
     @Bean
@@ -14,6 +14,7 @@ public class ProjectSwp391BookingMovieTicketApplication {
     }
 
     public static void main(String[] args) {
+        System.out.println("=== APPLICATION STARTED ===");
         SpringApplication.run(ProjectSwp391BookingMovieTicketApplication.class, args);
     }
 
