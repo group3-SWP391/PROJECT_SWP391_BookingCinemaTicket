@@ -9,4 +9,5 @@ public class TicketDTO {
     private ScheduleDTO schedule;
     private SeatDTO seat;
     private BillDTO bill;
+
 }

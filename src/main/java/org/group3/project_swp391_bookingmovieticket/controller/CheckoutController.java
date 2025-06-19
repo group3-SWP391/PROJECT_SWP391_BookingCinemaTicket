@@ -65,7 +65,7 @@ public class CheckoutController {
     @PostMapping(value = "/create-payment-link", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> checkout(@RequestBody BookingRequestDTO bookingRequestDTO,
                                       HttpServletRequest request) {
-
+        request.getSession().setAttribute("bookingRequestDTO", bookingRequestDTO);
         Schedule schedule = scheduleService.findById(bookingRequestDTO.getScheduleId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
 
@@ -75,8 +75,8 @@ public class CheckoutController {
             final String baseUrl = getBaseUrl(request);
             final String productName = schedule.getMovie().getName();
             final String description = "Seat " + listSeatName;
-            final String returnUrl = baseUrl + "/confirmation_screen";
-            final String cancelUrl = baseUrl + "/booking/" + bookingRequestDTO.getScheduleId();
+            final String returnUrl = baseUrl + "/bill/confirmation_screen";
+            final String cancelUrl = baseUrl + "/bill/cancel_screen";
             final int price = 5000;
 
             String currentTimeString = String.valueOf(System.currentTimeMillis());
@@ -119,7 +119,7 @@ public class CheckoutController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi tạo link thanh toán.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error when creating payment link.");
         }
     }
 

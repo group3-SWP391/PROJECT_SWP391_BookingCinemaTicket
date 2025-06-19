@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
 
+    List<Ticket> findTicketsBySchedule_IdAndSeat_Id(Integer scheduleId, Integer seatId);
+
     @Query("SELECT t FROM Ticket t " +
             "JOIN t.bill b " +
             "WHERE t.schedule.id = :scheduleId AND b.user.id <> :userId " +

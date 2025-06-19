@@ -63,7 +63,7 @@ Author: Webstrot
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="prs_title_heading_wrapper" style="margin-bottom: 50px;">
-					<h2>Confirmation Screen</h2>
+					<h2>Cancel Screen</h2>
 				</div>
 			</div>
 		</div>
@@ -78,51 +78,16 @@ Author: Webstrot
 			<div class="row">
 				<div class="col-md-12">
 					<div class="st_bcc_heading_wrapper float_left"> <i class="fa fa-check-circle"></i>
-						<h3>Payment successful thank you for using our service!</h3>
+						<h3>The payment has been canceled, thank you for using our service!</h3>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="st_bcc_ticket_boxes_wrapper float_left">
 						<div class="st_bcc_tecket_top_hesder float_left">
-							<p>Your Booking is Confirmed!</p> <span style="font-weight: bold">Please check the ticket information again on your profile!</span>
+							<p>Your Booking is Canceled!</p> <span style="font-weight: bold">If there are any system-related errors, please contact the hotline!</span>
 						</div>
 						<div class="st_bcc_tecket_bottom_hesder float_left">
-							<div class="st_bcc_tecket_bottom_left_wrapper">
-								<div class="st_bcc_tecket_bottom_inner_left">
-									<div class="st_bcc_teckt_bot_inner_img">
-										<img th:src="${scheduleOrder.getMovie().getSmallImageURL()}" alt="img"
-											 style="height: 230px; width: 150px; border: 5px solid #ff4444; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
-									</div>
-									<div class="st_bcc_teckt_bot_inner_img_cont">
-										<h4 th:text="${scheduleOrder.getMovie().getName()}"></h4>
-										<h5 th:text="${scheduleOrder.getStartDate()}"></h5>
-										<h3 th:text="${scheduleOrder.getMovie().getDuration()} + 'minutes'"></h3>
-										<h6 th:text="${scheduleOrder.getBranch().locationDetail}"></h6>
-									</div>
-									<div class="st_purchase_img">
-										<img src="images/content/pur2.png" alt="img">
-									</div>
-								</div>
-								<div class="st_bcc_tecket_bottom_inner_right"> <i class="fas fa-chair"></i>
-									<h3>SEAT <br>
-										<span th:text="${paymentLink.getSeatList().toString()}"></span>
-									</h3>
-								</div>
-							</div>
-							<div class="st_bcc_tecket_bottom_right_wrapper">
-								<img src="images/content/qr.png" alt="img">
-								<h4>QR ticket here</h4>
-							</div>
-							<div class="st_bcc_tecket_bottom_left_price_wrapper" style="padding-top: 20px">
-								<h4>Total Amount</h4>
-								<h5 th:text="${session.bookingRequestDTO.totalPrice}"></h5>
-							</div>
 						</div>
-					</div>
-					<div class="st_bcc_ticket_boxes_bottom_wrapper float_left" style="font-weight: bold;">
-						<p>You can access your ticket from your Profile. We will send you
-							<br>an e-Mail Confirmation with in 15 Minutes.
-						</p>
 					</div>
 				</div>
 			</div>

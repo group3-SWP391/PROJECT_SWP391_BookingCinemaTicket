@@ -39,4 +39,20 @@ public class PaymentLinkService implements IPaymentLinkService {
     public PaymentLink insert(PaymentLink paymentLink) {
         return paymentLinkRepository.save(paymentLink);
     }
+
+    @Override
+    public void updateStatusByOrderCode(long orderCode, String newStatus) {
+        PaymentLink paymentLink = paymentLinkRepository.findByOrderCode(orderCode);
+        if (paymentLink != null) {
+            paymentLink.setStatus(newStatus);
+            paymentLinkRepository.save(paymentLink);
+        }
+    }
+
+    @Override
+    public PaymentLink findByOrderCode(long orderCode) {
+        return paymentLinkRepository.findByOrderCode(orderCode);
+    }
+
+
 }
