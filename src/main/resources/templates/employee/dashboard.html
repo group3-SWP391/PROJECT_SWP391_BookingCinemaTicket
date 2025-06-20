@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Sales Interface</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body { background-color: #f4f6f9; font-family: 'Arial', sans-serif; }
+        .container { max-width: 1200px; }
+        .nav-tabs { border-bottom: 2px solid #007bff; }
+        .nav-link { font-weight: 500; color: #343a40; }
+        .nav-link.active { background-color: #007bff; color: white; }
+        .tab-content { padding: 25px; border: 1px solid #dee2e6; border-radius: 0 0 8px 8px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-label { font-weight: 500; }
+        .btn-primary, .btn-success { transition: all 0.2s; }
+        .btn-primary:hover, .btn-success:hover { transform: translateY(-1px); }
+        .table { font-size: 15px; }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Cinema Ticket Sales System</h2>
+    <ul class="nav nav-tabs" id="ticketTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="schedule-tab" data-bs-toggle="tab" data-bs-target="#schedule" type="button" role="tab"><a th:href="@{/employee/page}" style="color:black; text-decoration:none;" >Showtimes</a></button>
+        </li>
+    </ul>
+    <div class="tab-content" id="ticketTabContent">
+        <!-- Showtimes Tab -->
+        <div class="tab-pane fade show active" id="schedule" role="tabpanel">
+            <h4 class="mb-4">
+                View Showtime
+            </h4>
+            <form th:action="@{/employee/searchshowtime}" method="get">
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <label for="filter-date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="filter-date" name="date">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="from-time" class="form-label">From</label>
+                        <select class="form-select" id="from-time" name="fromHour">
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 AM</option>
+                            <option value="13:00">13:00 PM</option>
+                            <option value="14:00">14:00 PM</option>
+                            <option value="15:00">15:00 PM</option>
+                            <option value="16:00">16:00 PM</option>
+                            <option value="17:00">17:00 PM</option>
+                            <option value="18:00">18:00 PM</option>
+                            <option value="19:00">19:00 PM</option>
+                            <option value="20:00">20:00 PM</option>
+                            <option value="21:00">21:00 PM</option>
+                            <option value="22:00">22:00 PM</option>
+                            <option value="23:00">23:00 PM</option>
+                            <option value="24:00">24:00 PM</option>
+                            <option value="1:00">1:00 PM</option>
+                            <option value="2:00">2:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filter-theater" class="form-label">Branch</label>
+                        <select class="form-select" id="filter-theater" name="branch">
+                            <option th:each="branch: ${listbranch}" th:text="${branch.name}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Movie</th>
+                    <th>Branch</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ticketmovie: ${movieTicketCount}">
+                    <td>
+                        <a th:href="@{/employee/movie/detail/{id}(id=${ticketmovie.key.schedule.movie.id})}" th:text="${ticketmovie.key.schedule.movie.name}"></a>
+                    </td>
+                    <td th:text="${ticketmovie.key.schedule.branch.name}"></td>
+                    <td th:text="${ticketmovie.key.schedule.startTime}"></td>
+                    <td th:if="${ticketmovie.value < ticketmovie.key.seat.room.capacity}" th:text="'Available'"></td>
+                    <td th:if="${ticketmovie.value == ticketmovie.key.seat.room.capacity}" th:text="'Sold out'"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div th:if="${message != null}" th:text="${message}"></div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap JS and Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
