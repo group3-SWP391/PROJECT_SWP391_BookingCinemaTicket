@@ -51,7 +51,7 @@
                             <td>
                                 <strong th:text="${movie.name}">Movie Name</strong>
                                 <br>
-                                <small class="text-muted" th:text="${movie.rated}">PG-13</small>
+                                <small class="text-muted" th:text="${movie.rating != null ? movie.rating.name : movie.rated}">PG-13</small>
                             </td>
                             <td>
                                 <span class="director-badge" th:if="${movie.director != null}" th:text="${movie.director.name}">Director</span>
@@ -129,8 +129,13 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="movieLanguage">Language * <small class="text-muted">(max 255 chars)</small></label>
-                                    <input type="text" class="form-control" id="movieLanguage" name="language" maxlength="255" required>
+                                    <label for="movieLanguage">Language *</label>
+                                    <select class="form-control" id="movieLanguage" name="language" required>
+                                        <option value="">Select Language</option>
+                                        <option value="Vietnamese Subtitles">Vietnamese Subtitles</option>
+                                        <option value="Vietnamese Dubbed">Vietnamese Dubbed</option>
+                                        <option value="English Subtitles">English Subtitles</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -139,13 +144,13 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="movieRated">Rating</label>
-                                    <select class="form-control" id="movieRated" name="rated">
-                                        <option value="G">G</option>
-                                        <option value="PG">PG</option>
-                                        <option value="PG-13">PG-13</option>
-                                        <option value="R">R</option>
-                                        <option value="NC-17">NC-17</option>
+                                    <select class="form-control" id="movieRated" name="ratingId">
+                                        <option value="">Select Rating</option>
+                                        <option th:each="rating : ${ratings}" th:value="${rating.id}" th:text="${rating.name + ' - ' + rating.description}">Rating</option>
                                     </select>
+                                    <button type="button" class="btn btn-sm btn-success" style="margin-top: 5px;" onclick="openAddRatingModal()">
+                                        <i class="fa fa-plus"></i> Add New Rating
+                                    </button>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -260,14 +265,14 @@
                                 <!-- Trailer Type Selection -->
                                 <div class="trailer-type-selection" style="margin-bottom: 15px;">
                                     <div class="radio-group">
-                                        <label class="radio-option">
-                                            <input type="radio" name="trailerType" value="upload" id="trailerTypeUpload" checked onchange="toggleTrailerInput()">
+                                        <label class="radio-option hidden">
+                                            <input type="radio" name="trailerType" value="upload" id="trailerTypeUpload"  onchange="toggleTrailerInput()">
                                             <span class="radio-label">
                                                 <i class="fa fa-upload"></i> Upload Video File
                                             </span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="trailerType" value="youtube" id="trailerTypeYoutube" onchange="toggleTrailerInput()">
+                                            <input type="radio" name="trailerType" value="youtube" id="trailerTypeYoutube" checked onchange="toggleTrailerInput()">
                                             <span class="radio-label">
                                                 <i class="fa fa-youtube-play"></i> YouTube Link
                                             </span>
@@ -424,6 +429,42 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" onclick="saveActor()">Save Actor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="ratingModalLabel">
+                        <i class="fa fa-star-o"></i> Add New Rating
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="ratingForm">
+                        <div class="form-group">
+                            <label for="ratingName">Rating Name * <small class="text-muted">(max 50 chars)</small></label>
+                            <input type="text" class="form-control" id="ratingName" name="name" maxlength="50" required placeholder="e.g., PG-13, R, G">
+                        </div>
+                        <div class="form-group">
+                            <label for="ratingDescription">Description <small class="text-muted">(max 255 chars)</small></label>
+                            <textarea class="form-control" id="ratingDescription" name="description" rows="3" maxlength="255" placeholder="Brief description of the rating"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="ratingAgeLimit">Age Limit <small class="text-muted">(optional)</small></label>
+                            <input type="number" class="form-control" id="ratingAgeLimit" name="ageLimit" min="0" max="25" placeholder="Minimum age required (optional)">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveRating()">Save Rating</button>
                 </div>
             </div>
         </div>

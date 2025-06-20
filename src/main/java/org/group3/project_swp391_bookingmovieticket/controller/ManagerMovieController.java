@@ -40,6 +40,9 @@ public class  ManagerMovieController {
 
     @Autowired
     private IMovieActorRepository movieActorRepository;
+
+    @Autowired
+    private IRatingRepository ratingRepository;
     
     private static final String UPLOAD_DIR = "uploads/movies/";
     
@@ -166,6 +169,20 @@ public class  ManagerMovieController {
         
         return null; // No validation errors
     }
+    
+    private String validateRatingData(String name, String description) {
+        if (name == null || name.trim().isEmpty()) {
+            return "Rating name is required";
+        }
+        if (name.length() > 50) {
+            return "Rating name cannot exceed 50 characters";
+        }
+        if (description != null && description.length() > 255) {
+            return "Rating description cannot exceed 255 characters";
+        }
+        
+        return null; // No validation errors
+    }
 
     @GetMapping("/movies")
     public String showMoviesManagement(Model model, HttpSession session) {
@@ -177,10 +194,12 @@ public class  ManagerMovieController {
         List<Movie> movies = movieRepository.findAll();
         List<Director> directors = directorRepository.findAll();
         List<Actor> actors = actorRepository.findAll();
+        List<Rating> ratings = ratingRepository.findByIsActive(1);
 
         model.addAttribute("movies", movies);
         model.addAttribute("directors", directors);
         model.addAttribute("actors", actors);
+        model.addAttribute("ratings", ratings);
         model.addAttribute("content", "manager/movies");
 
         return "manager/layout";
@@ -194,6 +213,7 @@ public class  ManagerMovieController {
             @RequestParam("categories") String categories,
             @RequestParam("language") String language,
             @RequestParam(value = "rated", required = false) String rated,
+            @RequestParam(value = "ratingId", required = false) Integer ratingId,
             @RequestParam(value = "format", required = false) String format,
             @RequestParam("isShowing") Integer isShowing,
             @RequestParam(value = "directorId", required = false) Integer directorId,
@@ -266,7 +286,7 @@ public class  ManagerMovieController {
                     } else {
                         response.put("success", false);
                         response.put("message", "Invalid YouTube URL format");
-                        return ResponseEntity.ok(response);
+                                return ResponseEntity.ok(response);
                     }
                 } else if ("upload".equals(trailerType) && trailerFile != null && !trailerFile.isEmpty()) {
                     String trailerPath = saveFile(trailerFile, "videos");
@@ -284,6 +304,11 @@ public class  ManagerMovieController {
             if (directorId != null) {
                 Optional<Director> director = directorRepository.findById(directorId);
                 director.ifPresent(movie::setDirector);
+            }
+
+            if (ratingId != null) {
+                Optional<Rating> rating = ratingRepository.findById(ratingId);
+                rating.ifPresent(movie::setRating);
             }
 
             if (!isUpdate) {
@@ -411,6 +436,12 @@ public class  ManagerMovieController {
                     Integer directorId = Integer.parseInt(movieData.get("directorId").toString());
                     Optional<Director> director = directorRepository.findById(directorId);
                     director.ifPresent(movie::setDirector);
+                }
+
+                if (movieData.get("ratingId") != null) {
+                    Integer ratingId = Integer.parseInt(movieData.get("ratingId").toString());
+                    Optional<Rating> rating = ratingRepository.findById(ratingId);
+                    rating.ifPresent(movie::setRating);
                 }
 
                 Movie savedMovie = movieRepository.save(movie);
@@ -575,6 +606,69 @@ public class  ManagerMovieController {
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", "Error adding actor: " + e.getMessage());
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/ratings")
+    @ResponseBody
+    public ResponseEntity<List<Rating>> getAllRatings(HttpSession session) {
+        User user = (User) session.getAttribute("userLogin");
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+        
+        List<Rating> ratings = ratingRepository.findByIsActive(1);
+        return ResponseEntity.ok(ratings);
+    }
+
+    @PostMapping("/ratings")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> addRating(@RequestBody Map<String, String> ratingData) {
+        Map<String, Object> response = new HashMap<>();
+        
+        String validationError = validateRatingData(ratingData.get("name"), ratingData.get("description"));
+        if (validationError != null) {
+            response.put("success", false);
+            response.put("message", validationError);
+            return ResponseEntity.badRequest().body(response);
+        }
+        
+        try {
+            // Check if rating name already exists
+            Rating existingRating = ratingRepository.findByName(ratingData.get("name"));
+            if (existingRating != null) {
+                response.put("success", false);
+                response.put("message", "Rating with this name already exists");
+                return ResponseEntity.badRequest().body(response);
+            }
+            
+            Rating rating = new Rating();
+            rating.setName(ratingData.get("name"));
+            rating.setDescription(ratingData.get("description"));
+            
+            // Parse age limit if provided
+            if (ratingData.get("ageLimit") != null && !ratingData.get("ageLimit").trim().isEmpty()) {
+                try {
+                    rating.setAgeLimit(Integer.parseInt(ratingData.get("ageLimit")));
+                } catch (NumberFormatException e) {
+                    response.put("success", false);
+                    response.put("message", "Invalid age limit format");
+                    return ResponseEntity.badRequest().body(response);
+                }
+            }
+            
+            rating.setIsActive(1); // Default to active
+            
+            Rating savedRating = ratingRepository.save(rating);
+            
+            response.put("success", true);
+            response.put("message", "Rating added successfully!");
+            response.put("rating", savedRating);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error adding rating: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);

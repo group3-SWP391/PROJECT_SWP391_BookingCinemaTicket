@@ -30,6 +30,10 @@ public class Movie {
     private String name;
     private String rated;
 
+    @ManyToOne
+    @JoinColumn(name = "rating_id")
+    private Rating rating;
+
     @Column(name = "release_date")
     private Date releaseDate;
 

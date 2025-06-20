@@ -226,7 +226,7 @@ function editMovie(movieId) {
                 document.getElementById('movieDuration').value = movie.duration || '';
                 document.getElementById('movieCategories').value = movie.categories || '';
                 document.getElementById('movieLanguage').value = movie.language || '';
-                document.getElementById('movieRated').value = movie.rated || '';
+                document.getElementById('movieRated').value = movie.rating ? movie.rating.id : '';
                 const formatDropdown = document.getElementById('movieFormat');
                 formatDropdown.value = (movie.format || '').trim();
                 document.getElementById('movieStatus').value = movie.isShowing || 0;
@@ -376,6 +376,54 @@ function saveActor() {
             console.error('Error:', error);
             alert('Error saving actor');
         });
+}
+
+function openAddRatingModal() {
+    // Reset and show the rating modal
+    document.getElementById('ratingForm').reset();
+    $('#ratingModal').modal('show');
+}
+
+function saveRating() {
+    if (!validateRatingForm()) {
+        return;
+    }
+    
+    const form = document.getElementById('ratingForm');
+    const formData = new FormData(form);
+    
+    const ratingData = {};
+    for (let [key, value] of formData.entries()) {
+        ratingData[key] = value;
+    }
+    
+    fetch('/manager/ratings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(ratingData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Add new rating to select
+            const select = document.getElementById('movieRated');
+            const option = document.createElement('option');
+            option.value = data.rating.id;
+            option.text = data.rating.name + ' - ' + data.rating.description;
+            option.selected = true;
+            select.appendChild(option);
+            
+            $('#ratingModal').modal('hide');
+        } else {
+            alert('Error saving rating: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving rating');
+    });
 }
 
 function setupFileUpload() {
@@ -759,6 +807,34 @@ function validateActorForm() {
     
     if (!name) {
         alert('Actor name is required');
+        return false;
+    }
+    
+    return true;
+}
+
+function validateRatingForm() {
+    const name = document.getElementById('ratingName').value.trim();
+    const description = document.getElementById('ratingDescription').value.trim();
+    const ageLimit = document.getElementById('ratingAgeLimit').value.trim();
+    
+    if (!name) {
+        alert('Rating name is required');
+        return false;
+    }
+    
+    if (name.length > 50) {
+        alert('Rating name cannot exceed 50 characters');
+        return false;
+    }
+    
+    if (description.length > 255) {
+        alert('Rating description cannot exceed 255 characters');
+        return false;
+    }
+    
+    if (ageLimit && (isNaN(ageLimit) || ageLimit < 0 || ageLimit > 25)) {
+        alert('Age limit must be a number between 0 and 25');
         return false;
     }
     
