@@ -75,7 +75,7 @@ public class CheckoutController {
             final String baseUrl = getBaseUrl(request);
             final String productName = schedule.getMovie().getName();
             final String description = "Seat " + listSeatName;
-            final String returnUrl = baseUrl + "/bill/confirmation_screen";
+            final String returnUrl = baseUrl + "/bill/create_bill";
             final String cancelUrl = baseUrl + "/bill/cancel_screen";
             final int price = 5000;
 

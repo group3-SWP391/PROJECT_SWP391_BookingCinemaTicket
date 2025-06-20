@@ -100,7 +100,7 @@ Author: Webstrot
 										<h6 th:text="${scheduleOrder.getBranch().locationDetail}"></h6>
 									</div>
 									<div class="st_purchase_img">
-										<img src="images/content/pur2.png" alt="img">
+										<img th:src="@{/images/content/pur2.png}" alt="pur2 image" />
 									</div>
 								</div>
 								<div class="st_bcc_tecket_bottom_inner_right"> <i class="fas fa-chair"></i>
@@ -110,7 +110,7 @@ Author: Webstrot
 								</div>
 							</div>
 							<div class="st_bcc_tecket_bottom_right_wrapper">
-								<img src="images/content/qr.png" alt="img">
+								<img th:src="@{/images/content/qr.png}" alt="qr image" />
 								<h4>QR ticket here</h4>
 							</div>
 							<div class="st_bcc_tecket_bottom_left_price_wrapper" style="padding-top: 20px">
