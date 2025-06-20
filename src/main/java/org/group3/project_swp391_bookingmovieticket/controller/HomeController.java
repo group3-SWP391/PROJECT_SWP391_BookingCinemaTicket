@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.MOVIE_HIGH_VIEW;
 import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_LOGIN_DTO;
@@ -27,7 +28,16 @@ public class HomeController {
     private BranchService branchService;
 
     @GetMapping("/home")
-    public String displayHomePage(Model model, HttpServletRequest request) {
+    public String displayHomePage(@RequestParam(value = "redirectUrl", required = false) String redirectUrl,
+                                  @RequestParam(value = "showLoginModal", required = false) String showLoginModal,
+                                  Model model,
+                                  HttpServletRequest request) {
+        if ("true".equals(showLoginModal)) {
+            model.addAttribute("showLoginModal", true);
+        }
+        if (redirectUrl != null) {
+            model.addAttribute("redirectUrl", redirectUrl);
+        }
         request.getSession().setAttribute("categoryAll", movieService.getMovieCategories());
         request.getSession().setAttribute("allLocationBranch", branchService.findAllLocationBranch());
         request.getSession().setAttribute("event", eventService.findEventValid());

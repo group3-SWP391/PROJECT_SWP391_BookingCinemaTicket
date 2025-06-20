@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Controller
@@ -36,31 +38,42 @@ public class LoginController {
                                 BindingResult bindingResult,
                                 Model model,
                                 HttpServletRequest request) {
+        String redirectUrl = request.getParameter("redirectUrl");
         if (bindingResult.hasErrors()) {
             model.addAttribute("showLoginModal", true);
             model.addAttribute("errorLogin", "Please check your input.");
-            return "home";
+            model.addAttribute("redirectUrl", redirectUrl); // Để Thymeleaf giữ lại
+            return "redirect:/home"
+                    + (redirectUrl != null ? "?redirectUrl=" + URLEncoder.encode(redirectUrl, StandardCharsets.UTF_8) : "?")
+                    + "&showLoginModal=true";
         }
         User user = new User();
         user.setEmail(userLoginDTO.getEmail());
         user.setPassword(userLoginDTO.getPassword());
         Optional<User> userExist = userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
+
         if (userExist.isPresent()) {
             // lưu user lên session để phân quyền và lấy thông tin
             request.getSession().setAttribute("userLogin", userExist.get());
-            return "home";
+            if (redirectUrl != null && !redirectUrl.isEmpty()) {
+                return "redirect:" + redirectUrl;
+            }
+            return "redirect:/home";
         } else {
             model.addAttribute("errorLogin", "Invalid username or password");
             model.addAttribute("showLoginModal", true);
             model.addAttribute("userLoginDTO", new UserLoginDTO());
-            return "home";
+            model.addAttribute("redirectUrl", redirectUrl);
+            return "redirect:/home"
+                    + (redirectUrl != null ? "?redirectUrl=" + URLEncoder.encode(redirectUrl, StandardCharsets.UTF_8) : "?")
+                    + "&showLoginModal=true";
         }
     }
 
     @GetMapping("/log-out")
     public String signOut(HttpSession session) {
         session.removeAttribute("userLogin");
-        return "redirect:/";
+        return "redirect:/home";
     }
 
 }

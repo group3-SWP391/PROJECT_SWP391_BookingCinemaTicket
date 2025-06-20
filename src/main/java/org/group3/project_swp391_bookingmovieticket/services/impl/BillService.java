@@ -86,7 +86,6 @@ public class BillService implements IBillService {
                 ticket.setSchedule(schedule);
                 ticket.setSeat(seatRepository.getById(seatId));
                 ticket.setBill(createdBill);
-                System.out.println(ticket);
                 ticketRepository.save(ticket);
             });
         } else {

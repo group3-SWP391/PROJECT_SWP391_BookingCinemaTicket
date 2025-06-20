@@ -52,7 +52,6 @@ public class BookingController {
         model.addAttribute("rowLabels", rowLabels);
         model.addAttribute("seatsPerRow", seatsPerRow);
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
-
         return "seat_booking";
     }
 

@@ -44,6 +44,7 @@ public class SeatService implements ISeatService {
         // các ghế đã thanh toán và đã có trong bảng bill
         List<Seat> checkedSeats = ticketRepository.findTicketsOfCurrentUserAndScheduleId(userId, scheduleId)
                 .stream().map(ticket -> ticket.getSeat()).collect(Collectors.toList());
+        System.out.println("checkedSeats" + checkedSeats);
 
         // lấy về các payment link còn khả dụng
         List<PaymentLink> allPendingLinks = paymentLinkRepository.findAllByStatus("PENDING");
@@ -59,7 +60,9 @@ public class SeatService implements ISeatService {
                 // đánh dấu các ghế của user khác chưa được thanh toán
                 boolean isSeatHeld = allPendingLinks.stream().anyMatch(link ->
                                 Objects.equals(link.getSchedule().getId(), scheduleId) &&
-                                        link.getSeatList().contains(seatDTO.getName()) &&
+                                        Arrays.asList(link.getSeatList().split(","))
+                                                .stream()
+                                                .anyMatch(seatCheck -> seatCheck.equals(seatDTO.getName())) &&
                                         !Objects.equals(link.getUser().getId(), userId) // chỉ lấy những ghế không phải của user
                         // hiện tại mà ở trong allPendingLinks để khóa những ghế dó lại
                 );
@@ -73,7 +76,9 @@ public class SeatService implements ISeatService {
                 // đánh dấu các ghế của user đã được thanh toán
                 boolean isSeatHeld = allPendingLinks.stream().anyMatch(link ->
                         Objects.equals(link.getSchedule().getId(), scheduleId) &&
-                                link.getSeatList().contains(seatDTO.getName()) &&
+                                Arrays.asList(link.getSeatList().split(","))
+                                        .stream()
+                                        .anyMatch(seatCheck -> seatCheck.equals(seatDTO.getName())) &&
                                 Objects.equals(link.getUser().getId(), userId)
                 );
                 seatDTO.setChecked(isSeatHeld);

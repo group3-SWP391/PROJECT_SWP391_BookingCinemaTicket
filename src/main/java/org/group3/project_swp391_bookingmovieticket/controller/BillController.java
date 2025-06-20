@@ -42,7 +42,6 @@ public class BillController {
         if ("PAID".equals(status) && request.getSession().getAttribute("billCreated") == null) {
             billService.createNewBill(dto);
             paymentLinkService.updateStatusByOrderCode(orderCode, status);
-            System.out.println(orderCode + " " + status);
             request.getSession().setAttribute("billCreated", true);
         }
         redirectAttributes.addAttribute("orderCode", orderCode);
