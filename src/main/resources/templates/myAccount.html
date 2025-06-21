@@ -121,11 +121,24 @@
         .toggle-button:hover {
             background-color: #1976D2;
         }
+        #orderHistory table, #voucherHistory table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #orderHistory th, #orderHistory td, #voucherHistory th, #voucherHistory td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        #orderHistory th, #voucherHistory th {
+            background-color: #f2f2f2;
+        }
     </style>
     <script>
         function hideAllForms() {
             document.getElementById('updateProfileForm').style.display = 'none';
             document.getElementById('changePasswordForm').style.display = 'none';
+            document.getElementById('orderHistory').style.display = 'none';
+            document.getElementById('voucherHistory').style.display = 'none';
         }
 
         function showUpdateProfile() {
@@ -138,6 +151,16 @@
             document.getElementById('changePasswordForm').style.display = 'block';
         }
 
+        function showOrder() {
+            hideAllForms();
+            document.getElementById('orderHistory').style.display = 'block';
+        }
+
+        function showVoucher() {
+            hideAllForms();
+            document.getElementById('voucherHistory').style.display = 'block';
+        }
+
         window.onload = function() {
             document.getElementById('accountInfo').style.display = 'block';
         };
@@ -145,7 +168,7 @@
 </head>
 <body>
 <!-- Navigation Start -->
-<header lang="vi" th:replace="fragments/navigation :: navigation"></header>
+<header lang="vi" th:replace="~{fragments/navigation :: navigation}"></header>
 <!-- Navigation End -->
 
 <!-- Title Wrapper Start -->
@@ -177,6 +200,9 @@
 
     <button class="toggle-button" onclick="showUpdateProfile()">Update Profile</button>
     <button class="toggle-button" onclick="showChangePassword()">Change Password</button>
+    <button class="toggle-button" onclick="showOrder()">History Order</button>
+    <button class="toggle-button" onclick="showVoucher()">My Voucher</button>
+    <button class="toggle-button" onclick="showVoucher()">Wait to payment</button>
 
     <div id="updateProfileForm" class="form-section">
         <h3>Update Profile</h3>
@@ -189,6 +215,7 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" th:value="${user.email} ?: ${session.userLogin?.email}" required>
             <button type="submit">Save Changes</button>
+            <label>Lưu ý: Kiểm tra kỹ lại thông tin trước khi đổi thông tin</label>
         </form>
     </div>
 
@@ -200,7 +227,51 @@
             <label for="newPassword">New Password:</label>
             <input type="password" id="newPassword" name="newPassword" required>
             <button type="submit">Submit</button>
+            <label>Lưu ý: Kiểm tra kỹ lại mật khẩu trước khi đổi</label>
         </form>
+    </div>
+
+    <div id="orderHistory" class="form-section">
+        <h3>Transaction History</h3>
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Movie</th>
+                <th>Seat</th>
+                <th>Price(VND)</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.movieName}"></td>
+                <td th:text="${order.seatId}"></td>
+                <td th:text="${order.price}"></td>
+                <td th:text="${#temporals.format(order.transactionDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${order.status}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="voucherHistory" class="form-section">
+        <h3>My Voucher</h3>
+        <div th:if="${vouchers.isEmpty()}">
+            <p>No vouchers available.</p>
+        </div>
+        <table th:unless="${vouchers.isEmpty()}">
+            <tr>
+                <th>Voucher Code</th>
+                <th>Discount (%)</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+            <tr th:each="voucher : ${vouchers}">
+                <td th:text="${voucher.code}"></td>
+                <td th:text="${voucher.discountPercentage}"></td>
+                <td th:text="${#temporals.format(voucher.startDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(voucher.endDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+        </table>
     </div>
 
     <div th:if="${error}" class="error" th:text="${error}"></div>

@@ -27,22 +27,26 @@ public class OtpService {
     public String generateOtp(Integer userId, String email, String actionType) {
         String otpCode = generateRandomOtp();
 
+        long otpCount = otpRepository.count();
+        if (otpCount >= 20) {
+            Optional<Otp> oldestOtp = otpRepository.findTopByOrderByCreatedAtAsc();
+            oldestOtp.ifPresent(otpRepository::delete);
+        }
+
         Otp otp = new Otp();
         otp.setUserId(userId);
         otp.setOtpCode(otpCode);
         otp.setCreatedAt(LocalDateTime.now());
-        otp.setExpiresAt(LocalDateTime.now().plusMinutes(OTP_VALIDITY_MINUTES));
+        otp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
         otp.setIsUsed(false);
         otp.setActionType(actionType);
 
         otpRepository.save(otp);
 
-        String subject = "Your OTP Code for " + actionType;
-        String body = "Your OTP code is: " + otpCode + "\nThis code is valid for " + OTP_VALIDITY_MINUTES + " minutes.";
-        emailService.sendEmail(email, subject, body);
-
+        emailService.sendEmail(email, "Your OTP Code", "Your OTP: " + otpCode);
         return otpCode;
     }
+
 
     public boolean verifyOtp(Integer userId, String otpCode, String actionType) {
         logger.debug("Verifying OTP: {} for userId: {}, action: {}", otpCode, userId, actionType);

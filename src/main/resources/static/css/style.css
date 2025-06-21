@@ -1845,7 +1845,14 @@ body.active #mobile-nav {
 }
 
 /*-- prs Slider End --*/
-
+/*-- prs upcomung Slider Start --*/
+.prs_upcom_slider_main_wrapper {
+	float: left;
+	width: 100%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background: #f6f6f6;
+}
 
 .prs_upcom_movie_video_box_wrapper {
 	background: url('../images/content/ws1.jpg') 50% 0 repeat-y;
@@ -2461,7 +2468,7 @@ body.active #mobile-nav {
 /*-- prs upcomung Slider End --*/
 /*-- prs video section Start --*/
 .prs_video_section_main_wrapper {
-	background: url('../images/content/video_bg.jpg') 50% 0 repeat-y;
+	background: url('https://cdn.celluloidjunkie.com/wp-content/uploads/2019/08/21040434/CGV-entrance.jpg') 50% 0 repeat-y;
 	background-position: center 0;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -3171,6 +3178,7 @@ body.active #mobile-nav {
 }
 
 .prs_feature_img_cont {
+	height: 190px;
 	float: left;
 	width: 100%;
 	padding: 30px;
@@ -3738,7 +3746,7 @@ body.active #mobile-nav {
 
 .prs_footer_cont1_wrapper p {
 	font-size: 15px;
-	padding-top: 20px;
+	padding-top: 55px;
 	color: rgba(255, 255, 255, 0.57);
 }
 

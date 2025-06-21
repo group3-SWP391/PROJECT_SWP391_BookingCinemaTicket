@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface IOtpRepository extends JpaRepository<Otp, Long> {
     Optional<Otp> findByUserIdAndOtpCodeAndActionTypeAndIsUsedFalse(Integer userId, String otpCode, String actionType);
+    Optional<Otp> findTopByOrderByCreatedAtAsc();
 }

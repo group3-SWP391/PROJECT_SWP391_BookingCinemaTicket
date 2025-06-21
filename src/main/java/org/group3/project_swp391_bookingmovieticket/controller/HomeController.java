@@ -4,12 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.AdvertisingContactRequest;
-import org.group3.project_swp391_bookingmovieticket.entities.ContactRequest;
+import org.group3.project_swp391_bookingmovieticket.entities.*;
 import org.group3.project_swp391_bookingmovieticket.repositories.AdvertisingContactRequestRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.ContactRequestRepository;
+import org.group3.project_swp391_bookingmovieticket.repositories.VoucherRepository;
 import org.group3.project_swp391_bookingmovieticket.services.impl.EmailService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
+import org.group3.project_swp391_bookingmovieticket.services.impl.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -35,6 +38,11 @@ public class HomeController {
 
     @Autowired
     private AdvertisingContactRequestRepository advertisingContactRequestRepository;
+
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     @GetMapping
     public String displayHomePage(Model model, HttpServletRequest request) {
@@ -135,20 +143,50 @@ public class HomeController {
         return "movie_single_second";
     }
 
-    @GetMapping("/seat-booking")
-    public String seatBooking(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "seat_booking";
-    }
-
-
-
     @GetMapping("/movie-details")
     public String movieDetails(@RequestParam("id") int id, Model model) {
         Optional<MovieDTO> movieOptional = movieService.findById(id);
         model.addAttribute("movie", movieOptional.get());
         model.addAttribute("userDTO", new UserDTO());
         return "movie_details";
+    }
+
+    @GetMapping("/my-account")
+    public String myAccount(Model model, HttpSession session) {
+        try {
+            User user = (User) session.getAttribute("userLogin");
+            if (user == null) {
+                model.addAttribute("error", "Please log in to view your account.");
+                return "redirect:/login";
+            }
+            System.out.println("User loaded in myAccount: " + user.getFullname() + ", " + user.getPhone() + ", " + user.getEmail());
+            List<Order> orders;
+            try {
+                orders = orderService.getOrdersByUserId(user.getId());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                for (Order order : orders) {
+                    order.setTransactionDateFormatted(order.getTransactionDate().format(formatter));
+                }
+            } catch (Exception e) {
+                model.addAttribute("error", "Failed to load order history: " + e.getMessage());
+                orders = List.of();
+            }
+            List<Voucher> vouchers;
+            try {
+                vouchers = voucherRepository.findValidVouchersByUserId(user.getId(), LocalDateTime.now());
+            } catch (Exception e) {
+                model.addAttribute("error", "Failed to load your voucher: " + e.getMessage());
+                vouchers = List.of();
+            }
+            model.addAttribute("user", user);
+            model.addAttribute("orders", orders);
+            model.addAttribute("vouchers", vouchers);
+            model.addAttribute("userDTO", new UserDTO());
+            return "myAccount";
+        } catch (Exception e) {
+            model.addAttribute("error", "An error occurred while loading the account page: " + e.getMessage());
+            return "error";
+        }
     }
 
     @PostMapping("/contact")
@@ -310,7 +348,7 @@ public class HomeController {
             return "advertising-contact";
         }
     }
-    // phuong thuc tạo mã code ngau nhien
+
     private String generateSecurityCode(int length) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();

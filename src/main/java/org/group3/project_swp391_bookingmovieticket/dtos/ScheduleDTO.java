@@ -3,6 +3,8 @@ package org.group3.project_swp391_bookingmovieticket.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.group3.project_swp391_bookingmovieticket.entities.Movie;
+import org.group3.project_swp391_bookingmovieticket.entities.Room;
 
 import java.io.Serializable;
 import java.sql.Time;
@@ -22,7 +24,8 @@ public class ScheduleDTO implements Serializable {
     private LocalTime startTime;
     private Float price;
     private String imgurl;
-    private Integer roomId;
-    private Integer movieId;
+    private Room room;
+    private Movie movie;
+    private BranchDTO branch;
 
 }

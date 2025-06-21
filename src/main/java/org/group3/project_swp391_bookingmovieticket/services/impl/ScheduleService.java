@@ -1,16 +1,18 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.ScheduleDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.Branch;
 import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
 import org.group3.project_swp391_bookingmovieticket.entities.Movie;
 import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.IScheduleRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.IBranchRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IScheduleService;
+import org.hibernate.Hibernate;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,14 @@ public class ScheduleService implements IScheduleService {
 
     @Autowired
     private IMovieRepository movieRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public ScheduleDTO getScheduleByScheduleId(int scheduleId) {
+        Schedule schedule = scheduleRepository.findByScheduleId(scheduleId);
+        return modelMapper.map(schedule, ScheduleDTO.class);
+    }
 
     @Override
     public List<Schedule> findAll() {
@@ -57,6 +67,7 @@ public class ScheduleService implements IScheduleService {
         scheduleRepository.deleteById(id);
     }
 
+
     @Override
     public List<ScheduleDTO> findByBranchId(Integer branchId) {
         if (branchId == null) {
@@ -76,8 +87,8 @@ public class ScheduleService implements IScheduleService {
             dto.setPrice(schedule.getPrice());
 
             dto.setImgurl(schedule.getBranch() != null ? schedule.getBranch().getImgurl() : null);
-            dto.setRoomId(schedule.getRoomId() != null ? schedule.getRoomId() : null);
-            dto.setMovieId(schedule.getMovie() != null ? schedule.getMovie().getId() : null);
+            dto.setRoom(schedule.getRoom().getId() != null ? schedule.getRoom() : null);
+            dto.setMovie(schedule.getMovie() != null ? schedule.getMovie() : null);
 
             if (schedule.getMovie() != null) {
                 Movie movie = schedule.getMovie();
@@ -86,4 +97,26 @@ public class ScheduleService implements IScheduleService {
             return dto;
         }).collect(Collectors.toList());
     }
+
+    public Schedule getScheduleById(Integer scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+        if (schedule != null) {
+            // Force load the movie (if lazy-loaded)
+            Hibernate.initialize(schedule.getMovie());
+
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime startDateTime = LocalDateTime.of(schedule.getStartDate(), schedule.getStartTime());
+
+            if (now.isAfter(startDateTime)) {
+                throw new RuntimeException("Lịch chiếu đã đóng, vui lòng chọn lịch chiếu khác!");
+            }
+
+            if (now.toLocalDate().isAfter(schedule.getEndDate())) {
+                throw new RuntimeException("Rạp đã ngừng chiếu suất này sau ngày " + schedule.getEndDate());
+            }
+        }
+        return schedule;
+    }
+
+
 }

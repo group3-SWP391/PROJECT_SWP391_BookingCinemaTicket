@@ -21,10 +21,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}" />
-
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}" />
     <style>
+        /* CSS giữ nguyên như bạn đã cung cấp */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -194,7 +193,7 @@
         }
 
         .hidden {
-            display: none !important; /* Đảm bảo hidden không chiếm không gian */
+            display: none !important;
         }
 
         .buttons {
@@ -232,6 +231,33 @@
             background: #009874;
             transform: translateY(-2px);
         }
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .button-map,
+        .button-contact {
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        .button-map.disabled {
+            background-color: #ccc;
+            color: #666;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .phone-info {
+            font-size: 14px;
+        }
+
 
         @media (max-width: 600px) {
             .container {
@@ -276,7 +302,6 @@
     </style>
 </head>
 <body>
-
 <!-- Navigation Start -->
 <header lang="vi" th:replace="fragments/navigation :: navigation"></header>
 <!-- Navigation End -->
@@ -286,7 +311,6 @@
     <h2 th:text="${branch.name} + ' - ' + ${branch.diaChi}"></h2>
     <div class="theater-info">
         <img th:src="${branch.imgurl}" alt="Theater Image" th:if="${!#strings.isEmpty(branch.imgurl)}"/>
-        <p><strong>Điện thoại:</strong> <span th:text="${branch.phoneNo}"></span></p>
     </div>
     <div class="date-picker">
         <label for="date-select">Chọn ngày:</label>
@@ -298,7 +322,7 @@
              th:attr="data-date=${#temporals.format(schedule.startTime, 'yyyy-MM-dd')},data-movie-id=${schedule.movie.id}
              ,data-schedule-id=${schedule.id},data-start-time=${#temporals.format(schedule.startTime, 'HH:mm')}
              ,data-end-date=${#temporals.format(schedule.endDate, 'yyyy-MM-dd')},data-format=${schedule.format}
-             ,data-release-date=room_+0+${schedule.roomId},data-movie-name=${schedule.movie.name}
+             ,data-release-date=room_+0+${schedule.room.id},data-movie-name=${schedule.movie.name}
              ,data-poster=${schedule.movie.smallImageUrl}">
             <!-- Data stored in attributes, displayed dynamically -->
         </div>
@@ -307,10 +331,26 @@
         </div>
     </div>
     <div class="buttons">
-        <a th:href="${schedules.isEmpty() ? '#' : schedules[0].map}" th:text="'XEM BẢN ĐỒ'" target="_blank"></a>
-        <a th:href="@{/contact}">LIÊN HỆ CINEMA</a>
+        <!-- Link đến bản đồ, chỉ hiển thị nếu có schedule -->
+        <a th:if="${!schedules.isEmpty()}"
+           th:href="${schedules[0].map}"
+           target="_blank"
+           class="button-map">
+            XEM BẢN ĐỒ
+        </a>
+        <span th:if="${schedules.isEmpty()}" class="button-map disabled">XEM BẢN ĐỒ</span>
+
+        <!-- Link đến trang liên hệ -->
+        <a th:href="@{/contact}" class="button-contact">LIÊN HỆ CINEMA</a>
+
+        <!-- Hiển thị số điện thoại -->
+        <div class="phone-info">
+            <strong>Điện thoại:</strong> <span th:text="${branch.phoneNo}">0123 456 789</span>
+        </div>
     </div>
+
 </div>
+
 <script>
     function populateDatePicker() {
         const select = document.getElementById('date-select');
@@ -334,26 +374,21 @@
         }
     }
 
-    // Filter schedules by selected date and group by unique movies
     function filterSchedulesByDate() {
         const selectedDate = new Date(document.getElementById('date-select').value);
         const schedules = document.getElementsByClassName('schedule-item');
         const container = document.getElementById('schedule-container');
         const uniqueMovies = new Map();
 
-        // Debug: Log selected date
         console.log('Selected Date:', selectedDate.toISOString().split('T')[0]);
 
-        // Hide all schedules initially
         Array.from(schedules).forEach(schedule => schedule.classList.add('hidden'));
 
-        // Group schedules by movie ID and filter by end_date
         Array.from(schedules).forEach(schedule => {
             const scheduleDate = new Date(schedule.getAttribute('data-date'));
             const endDate = new Date(schedule.getAttribute('data-end-date'));
             const movieId = schedule.getAttribute('data-movie-id');
 
-            // Debug: Log schedule details
             console.log('Schedule:', {
                 date: scheduleDate.toISOString().split('T')[0],
                 endDate: endDate.toISOString().split('T')[0],
@@ -361,7 +396,7 @@
             });
 
             if (!isNaN(scheduleDate) && !isNaN(endDate) && scheduleDate <= selectedDate && selectedDate <= endDate) {
-                schedule.classList.remove('hidden'); // Hiển thị schedule nếu khớp
+                schedule.classList.remove('hidden');
                 if (!uniqueMovies.has(movieId)) {
                     uniqueMovies.set(movieId, []);
                 }
@@ -376,7 +411,6 @@
             }
         });
 
-        // Clear existing displayed schedules and regenerate
         const existingSchedules = container.querySelectorAll('.schedule.displayed');
         existingSchedules.forEach(schedule => {
             if (!schedule.classList.contains('schedule-item')) {
@@ -384,7 +418,6 @@
             }
         });
 
-        // Display schedules for each unique movie
         let hasSchedules = false;
         uniqueMovies.forEach((showtimes, movieId) => {
             const movie = showtimes[0];
@@ -401,7 +434,7 @@
                     <span>${movie.releaseDate || 'N/A'}</span>
                     <div class="showtimes">
                         ${showtimes.map(showtime => `
-                            <a href="/book-ticket?scheduleId=${showtime.scheduleId}">${showtime.startTime}</a>
+                            <a href="/booking/${showtime.scheduleId}">${showtime.startTime}</a>
                         `).join('')}
                     </div>
                 </div>
@@ -410,28 +443,53 @@
             hasSchedules = true;
         });
 
-        // Show/hide no-schedule message
         const noScheduleDiv = container.querySelector('.no-schedule');
         if (noScheduleDiv) {
             noScheduleDiv.style.display = hasSchedules ? 'none' : 'block';
         }
 
-        // Save selected date to localStorage
         localStorage.setItem('selectedDate', selectedDate.toISOString().split('T')[0]);
 
-        // Remove any leftover hidden schedules to avoid whitespace
         Array.from(schedules).forEach(schedule => {
             if (schedule.classList.contains('hidden') && schedule.classList.contains('schedule-item')) {
-                schedule.style.display = 'none'; // Đảm bảo không chiếm không gian
+                schedule.style.display = 'none';
             }
         });
     }
 
-    // Initialize date picker and filter on page load
     document.addEventListener('DOMContentLoaded', () => {
         populateDatePicker();
         filterSchedulesByDate();
     });
+
 </script>
+<!-- Main JS Files -->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/jquery.countTo.js}"></script>
+<script th:src="@{/js/jquery.inview.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
 </body>
 </html>

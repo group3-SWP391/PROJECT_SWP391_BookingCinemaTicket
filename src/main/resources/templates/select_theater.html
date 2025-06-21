@@ -1,102 +1,98 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chọn Rạp</title>
+    <meta name="description" content="Movie Pro" />
+    <meta name="keywords" content="Movie Pro" />
+    <meta name="author" content="" />
+    <meta name="MobileOptimized" content="320" />
+    <!-- Template style -->
+    <link rel="stylesheet" type="text/css" href="css/animate.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="css/flaticon.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl.theme.default.css" />
+    <link rel="stylesheet" type="text/css" href="css/dl-menu.css" />
+    <link rel="stylesheet" type="text/css" href="css/nice-select.css" />
+    <link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
+    <link rel="stylesheet" type="text/css" href="css/venobox.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/layers.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/navigation.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/settings.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/responsive.css" />
+    <link rel="shortcut icon" type="image/png" href="images/header/favicon.ico" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2 {
-            color: #333;
-        }
-
-        select, a {
-            padding: 8px;
-            margin: 10px 0;
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .branch-image {
-            max-width: 100%;
-            height: auto;
-            margin: 10px 0;
-        }
-
-        .schedule {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .schedule img {
-            max-width: 100px;
-            height: auto;
-            vertical-align: middle;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; color: #333; }
+        .container { max-width: 1200px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; gap: 30px; flex-wrap: wrap; }
+        .left-panel { flex: 1 1 250px; }
+        .right-panel { flex: 2 1 600px; }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 20px; font-size: 2em; }
+        h2 { color: #34495e; margin-top: 20px; border-bottom: 2px solid #ecf0f1; padding-bottom: 5px; }
+        .branch-list a, .address-list a { display: block; padding: 10px 15px; background: #ecf0f1; border-radius: 5px; text-decoration: none; color: #2980b9; margin-bottom: 10px; transition: 0.3s; text-align: center; }
+        .branch-list a:hover, .address-list a:hover { background: #3498db; color: #fff; }
+        .branch-list a.selected { background: #2ecc71; color: #fff; }
+        .branch-image { max-width: 100%; border-radius: 5px; margin: 10px 0; }
+        .schedule { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #f5f6fa; border-radius: 5px; margin: 10px 0; }
+        .schedule span { flex-grow: 1; color: #7f8c8d; }
+        .schedule img { max-width: 80px; height: auto; margin-left: 10px; }
+        .no-schedule { color: #e74c3c; text-align: center; padding: 10px; }
     </style>
 </head>
 <body>
+<header lang="vi" th:replace="fragments/navigation :: navigation"></header>
+<div class="prs_title_main_sec_wrapper">
+    <div class="prs_title_img_overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="prs_title_heading_wrapper">
+                    <h2>Chọn chi nhánh</h2>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li> &nbsp; > &nbsp; Theater</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
-    <h1>Chọn Rạp</h1>
-    <div>
+    <div class="left-panel">
         <h2>Danh Sách Rạp</h2>
-        <div th:each="name : ${branchNames}">
+        <div class="branch-list" th:each="name : ${branchNames}">
             <a th:href="@{/select-theater(name=${name})}"
                th:text="${name}"
                th:class="${name == param.name} ? 'selected' : ''"></a>
         </div>
     </div>
-    <div th:if="${addresses != null and not #lists.isEmpty(addresses)}">
-        <h2>Tất cả các địa chỉ</h2>
-        <div th:each="address : ${addresses}">
-            <a th:href="@{/theater-detail(branchId=${address.id})}"
-               th:text="${address.name + ' - ' + address.diaChi}"></a>
+    <div class="right-panel">
+        <div th:if="${addresses != null and not #lists.isEmpty(addresses)}">
+            <h2>Danh sách địa chỉ</h2>
+            <div class="address-list" th:each="address : ${addresses}">
+                <a th:href="@{/theater-detail(branchId=${address.id})}"
+                   th:text="${address.name + ' - ' + address.diaChi}"></a>
+            </div>
         </div>
-    </div>
-    <div th:if="${selectedBranch != null}">
-        <h2 th:text="${selectedBranch.name}"></h2>
-        <img th:src="${selectedBranch.imgurl}" alt="Branch Image" class="branch-image"
-             th:if="${!#strings.isEmpty(selectedBranch.imgurl)}"/>
-        <h3>Lịch Chiếu</h3>
-        <div th:each="schedule : ${schedules}" class="schedule">
-            <span th:text="${schedule.movieName} + ' - ' + #temporals.format(schedule.startDate, 'dd/MM/yyyy') + ' ' + #temporals.format(schedule.startTime, 'HH:mm') + ' - ' + #numbers.formatDecimal(schedule.price, 0, 2) + ' VNĐ'"></span>
-            <img th:src="${selectedBranch.imgurl}" alt="Branch Image" th:if="${!#strings.isEmpty(selectedBranch.imgurl)}"/>
-        </div>
-        <div th:if="${#lists.isEmpty(schedules)}">
-            <p>Không có lịch chiếu tại rạp này.</p>
+        <div th:if="${selectedBranch != null}" class="branch-detail">
+            <h2 th:text="${selectedBranch.name}"></h2>
+            <img th:src="${selectedBranch.imgurl}" alt="Branch Image" class="branch-image"
+                 th:if="${!#strings.isEmpty(selectedBranch.imgurl)}"/>
+            <h3>Lịch Chiếu</h3>
+            <div th:each="schedule : ${schedules}" class="schedule">
+                <span th:text="|${schedule.movieName} - ${#temporals.format(schedule.startDate, 'dd/MM/yyyy')} ${#temporals.format(schedule.startTime, 'HH:mm')} - ${#numbers.formatDecimal(schedule.price, 0, 2)} VNĐ|"></span>
+                <img th:src="${selectedBranch.imgurl}" alt="Branch Image" th:if="${!#strings.isEmpty(selectedBranch.imgurl)}"/>
+            </div>
+            <div th:if="${#lists.isEmpty(schedules)}" class="no-schedule">
+                <p>Không có lịch chiếu tại rạp này.</p>
+            </div>
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-    });
-</script>
 </body>
 </html>

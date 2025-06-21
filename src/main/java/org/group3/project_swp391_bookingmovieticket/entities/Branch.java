@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class Branch {
     @Column(name = "phone_no")
     private String phoneNo;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private List<Schedule> schedules;
 }

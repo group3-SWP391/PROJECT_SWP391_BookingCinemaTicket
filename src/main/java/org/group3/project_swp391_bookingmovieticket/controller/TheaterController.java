@@ -55,6 +55,7 @@ public class TheaterController {
         logger.info("Fetching theater detail for branchId: {}", branchId);
 
         Branch branch = branchRepository.findById(branchId).orElse(null);
+        System.out.println("branch: " + branch);
         if (branch == null) {
             logger.error("Branch with id {} not found", branchId);
             return "redirect:/select-theater";
@@ -62,6 +63,7 @@ public class TheaterController {
         model.addAttribute("branch", branch);
 
         List<Schedule> schedules = scheduleRepository.findByBranchId(branchId);
+        System.out.println("schedules: " + schedules);
         if (schedules == null || schedules.isEmpty()) {
             logger.warn("No schedules found for branchId: {}", branchId);
         }

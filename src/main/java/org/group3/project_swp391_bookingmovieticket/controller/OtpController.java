@@ -30,7 +30,6 @@ public class OtpController {
         } catch (Exception e) {
             logger.error("Error initiating update profile for userId: {}", user.getId(), e);
             model.addAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại.");
-            // Đảm bảo user không null khi render
             User currentUser = (User) session.getAttribute("userLogin");
             model.addAttribute("user", currentUser != null ? currentUser : new User());
             return "myAccount";
@@ -47,7 +46,6 @@ public class OtpController {
             if (user == null) {
                 logger.warn("userLogin is null in session");
                 model.addAttribute("error", "Phiên đã hết hạn. Vui lòng đăng nhập lại.");
-                // Đảm bảo user không null khi render
                 model.addAttribute("user", new User());
                 return "myAccount";
             }
@@ -61,7 +59,7 @@ public class OtpController {
                 logger.info("Current password is incorrect for userId: {}", user.getId());
                 model.addAttribute("error", "Mật khẩu hiện tại không đúng.");
                 // Đảm bảo user không null khi render
-                model.addAttribute("user", user); // Sử dụng user từ session
+                model.addAttribute("user", user);
                 return "myAccount";
             }
         } catch (Exception e) {
@@ -69,7 +67,6 @@ public class OtpController {
             String userId = (sessionUser != null) ? String.valueOf(sessionUser.getId()) : "unknown";
             logger.error("Error initiating change password for userId: {}", userId, e);
             model.addAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại.");
-            // Đảm bảo user không null khi render
             model.addAttribute("user", sessionUser != null ? sessionUser : new User());
             return "myAccount";
         }

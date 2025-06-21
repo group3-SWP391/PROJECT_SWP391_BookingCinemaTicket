@@ -4,12 +4,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Data
+@Table(name = "schedule")
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,13 +35,12 @@ public class Schedule {
     @Column(name = "format")
     private String format;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id", referencedColumnName = "id")
     private Branch branch;
 
-    @Column(name = "room_id")
-    private Integer roomId;
-
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private Movie movie;
@@ -45,18 +48,10 @@ public class Schedule {
     @Column(name = "map")
     private String map;
 
-    public Schedule() {
-    }
+    @ToString.Exclude
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
-    public Schedule(Integer id, Movie movie, Integer roomId, Branch branch, LocalTime startTime, LocalDate startDate, Float price, String format, String map) {
-        this.id = id;
-        this.movie = movie;
-        this.roomId = roomId;
-        this.branch = branch;
-        this.startTime = startTime;
-        this.startDate = startDate;
-        this.price = price;
-        this.format = format;
-        this.map = map;
-    }
 }

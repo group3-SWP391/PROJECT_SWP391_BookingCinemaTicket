@@ -3,9 +3,10 @@ package org.group3.project_swp391_bookingmovieticket.services.impl;
 import org.group3.project_swp391_bookingmovieticket.entities.Branch;
 import org.group3.project_swp391_bookingmovieticket.repositories.IBranchRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
+import org.group3.project_swp391_bookingmovieticket.dtos.BranchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.group3.project_swp391_bookingmovieticket.dtos.BranchDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,8 @@ public class BranchService implements IBranchService {
 
     @Autowired
     private IBranchRepository branchRepository;
+
+
 
     @Override
     public List<Branch> findAll() {
@@ -39,7 +42,7 @@ public class BranchService implements IBranchService {
 
     @Override
     public void remove(Integer id) {
-
+        // Implement removal logic if needed
     }
 
     @Override
@@ -51,10 +54,12 @@ public class BranchService implements IBranchService {
     public List<Branch> findByDiaChi(String diaChi) {
         return branchRepository.findByDiaChi(diaChi);
     }
+
     @Override
     public List<BranchDTO> findAllBranchesDTO() {
         return branchRepository.findAll().stream()
                 .map(branch -> new BranchDTO(branch.getId(), branch.getName(), branch.getDiaChi()))
                 .collect(Collectors.toList());
     }
+
 }
