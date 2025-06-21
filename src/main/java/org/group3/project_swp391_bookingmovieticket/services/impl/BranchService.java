@@ -61,7 +61,7 @@ public class BranchService implements IBranchService {
                         branchDTO.getScheduleList()
                                 .stream()
                                 .sorted(Comparator.comparing(ScheduleDTO::getStartTime)) // sắp xếp trước
-                                .collect(Collectors.groupingBy(schedule -> schedule.getRoom().getName()))
+                                .collect(Collectors.groupingBy(schedule -> schedule.getRoom().getRoomType()))
                 );
                 branchDTOList.add(branchDTO);
             }

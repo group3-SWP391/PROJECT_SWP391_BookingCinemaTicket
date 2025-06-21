@@ -14,7 +14,6 @@ public class PaymentLinkDTO {
     private String seatList;
     private Integer totalPrice;
     private LocalDateTime createdAt;
-
     private User user;
     private Schedule schedule;
 }

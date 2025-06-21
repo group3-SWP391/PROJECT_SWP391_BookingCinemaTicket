@@ -29,6 +29,18 @@ public class Room {
     @Column(name = "imgurl", length = 1000)
     private String imgURL;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "room_type")
+    private String roomType;
+
+    @Column(name = "is_active")
+    private boolean isActive;
+
+    @Column(name = "row_count")
+    private int rowCount;
+
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(nullable = false,name = "branch_id")

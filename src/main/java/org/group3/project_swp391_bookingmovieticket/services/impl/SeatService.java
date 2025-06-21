@@ -44,7 +44,6 @@ public class SeatService implements ISeatService {
         // các ghế đã thanh toán và đã có trong bảng bill
         List<Seat> checkedSeats = ticketRepository.findTicketsOfCurrentUserAndScheduleId(userId, scheduleId)
                 .stream().map(ticket -> ticket.getSeat()).collect(Collectors.toList());
-        System.out.println("checkedSeats" + checkedSeats);
 
         // lấy về các payment link còn khả dụng
         List<PaymentLink> allPendingLinks = paymentLinkRepository.findAllByStatus("PENDING");

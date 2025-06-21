@@ -77,7 +77,7 @@ public class CheckoutController {
             final String description = "Seat " + listSeatName;
             final String returnUrl = baseUrl + "/bill/create_bill";
             final String cancelUrl = baseUrl + "/bill/cancel_screen";
-            final int price = 5000;
+            final int price = bookingRequestDTO.getTotalPrice();
 
             String currentTimeString = String.valueOf(System.currentTimeMillis());
             long orderCode = Long.parseLong(currentTimeString.substring(currentTimeString.length() - 6));

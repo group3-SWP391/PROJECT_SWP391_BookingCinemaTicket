@@ -2,11 +2,14 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.group3.project_swp391_bookingmovieticket.dtos.RoomDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.SeatDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.services.impl.RoomService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.ScheduleService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.SeatService;
+import org.group3.project_swp391_bookingmovieticket.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +33,9 @@ public class BookingController {
     @Autowired
     private SeatService seatService;
 
+    @Autowired
+    private RoomService roomService;
+
     @GetMapping("/{scheduleId}")
     public String displayRoomAndSeat(@PathVariable("scheduleId") Integer scheduleId,
                                      Model model, HttpServletRequest request) {
@@ -38,9 +44,10 @@ public class BookingController {
 
         List<SeatDTO> seats = seatService.getSeatsByScheduleIdAndUserId(scheduleId, user.getId());
 
-        // Giả sử mỗi hàng có 10 ghế
-        int seatsPerRow = 10;
-        int totalRows = (int) Math.ceil((double) seats.size() / seatsPerRow);
+        // lấy tổng số ghế / cho số row
+        int seatsPerRow = roomService.findRoomByScheduleId(scheduleId).getRowCount();
+        int capacity = roomService.findRoomByScheduleId(scheduleId).getCapacity();
+        int totalRows = (int) Math.ceil((double) capacity / seatsPerRow);
 
         // Tạo danh sách ký hiệu hàng: A, B, C, D, ...
         List<String> rowLabels = IntStream.range(0, totalRows)

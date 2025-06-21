@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@ToString(exclude = "room")
 public class SeatDTO {
     private int id;
     private String name;
@@ -12,5 +11,5 @@ public class SeatDTO {
     private boolean isVip;
     private boolean isOccupied;
     private boolean isChecked;
-    private RoomDTO room;
+
 }

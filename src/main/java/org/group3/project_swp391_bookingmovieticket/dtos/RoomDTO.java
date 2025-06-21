@@ -13,6 +13,10 @@ public class RoomDTO {
     private double totalArea;
     private String imgURL;
     private BranchDTO branch;
+    private int rowCount;
+    private boolean isActive;
+    private String roomType;
+    private String description;
     @ToString.Exclude
     private List<SeatDTO> seats;
 }

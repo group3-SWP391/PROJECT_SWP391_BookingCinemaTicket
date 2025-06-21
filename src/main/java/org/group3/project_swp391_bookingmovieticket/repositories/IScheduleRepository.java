@@ -15,4 +15,6 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT s FROM Schedule s WHERE s.id= :scheduleId")
     Schedule findByScheduleId(@Param("scheduleId") Integer scheduleId);
 
+
+
 }

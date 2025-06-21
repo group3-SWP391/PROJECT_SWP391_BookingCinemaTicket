@@ -74,11 +74,13 @@
                                 <img th:src="${schedule.branch.imgURL}" style="width: 150px; height: 100px">
                                 <div class="theater__name">
                                         	<span class="name">
-                                        		<span class="subname" th:text="${schedule.room.name}"></span>
+                                        		<span class="subname" th:text="'Room '+ ${schedule.room.name}"></span>
                                         	</span>
                                     <p class="showtime" th:text="'Start date: '+${schedule.startDate}"
                                        style="font-size: 15px"></p>
                                     <p class="showtime" th:text="'Start time: '+${schedule.startTime}"
+                                       style="font-size: 15px"></p>
+                                    <p class="showtime" th:text="'Room type: ' + ${schedule.room.roomType}"
                                        style="font-size: 15px"></p>
                                 </div>
                             </div>
