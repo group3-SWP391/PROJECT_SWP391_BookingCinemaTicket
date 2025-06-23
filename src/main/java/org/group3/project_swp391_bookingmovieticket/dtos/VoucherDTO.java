@@ -1,10 +1,14 @@
 package org.group3.project_swp391_bookingmovieticket.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class VoucherDTO {
 
     private String code;
@@ -14,16 +18,11 @@ public class VoucherDTO {
     private LocalDateTime endDate;
     private Boolean isUsed;
     private Integer orderId;
-
-    public VoucherDTO() {}
-
-    public VoucherDTO(String code, Integer userId, Double discountPercentage, LocalDateTime startDate, LocalDateTime endDate, Boolean isUsed, Integer orderId) {
-        this.code = code;
-        this.userId = userId;
-        this.discountPercentage = discountPercentage;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.isUsed = isUsed;
-        this.orderId = orderId;
-    }
+    private Double fixedDiscount;
+    private Double minOrderValue;
+    private String applicableEvents;
+    private String applicableTicketTypes;
+    private String applicableUserTypes;
+    private Integer maxUsageCount;
+    private Integer currentUsageCount;
 }
