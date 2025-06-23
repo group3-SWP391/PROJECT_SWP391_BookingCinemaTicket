@@ -29,7 +29,6 @@ public class BookingFilter implements Filter {
             if (queryString != null) {
                 currentUrl += "?" + queryString;
             }
-
             String redirectUrl = "/home?redirectUrl=" + URLEncoder.encode(currentUrl, StandardCharsets.UTF_8) +
                     "&showLoginModal=true";
 

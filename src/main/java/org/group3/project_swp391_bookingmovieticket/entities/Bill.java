@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -30,4 +31,9 @@ public class Bill {
     @JoinColumn(nullable = false,name="user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    @OneToMany(mappedBy = "bill",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+    private List<Ticket> tickets;
 }

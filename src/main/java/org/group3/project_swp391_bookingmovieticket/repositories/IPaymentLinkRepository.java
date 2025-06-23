@@ -12,4 +12,7 @@ public interface IPaymentLinkRepository extends JpaRepository<PaymentLink, Integ
     List<PaymentLink> findAllByStatus(String status);
 
     PaymentLink findByOrderCode(long orderCode);
+
+    boolean existsByOrderCodeAndStatus(long orderCode, String status);
+
 }

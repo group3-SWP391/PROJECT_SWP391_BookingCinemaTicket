@@ -85,8 +85,12 @@
                                 </div>
                             </div>
                             <div class="timeKeepSlot">
-                                <p class="title__text" style="font-size: 20px;">Count down end movie</p><span
-                                    class="time" style="font-size: 22px;"></span>
+                                <p class="title__text mt-2" style="font-size: 20px; font-weight: bold">
+                                    Available seat:
+                                    <span th:text="${availableSeats} + ' / ' + ${totalSeats}"></span>
+                                </p>
+                                <p class="title__text" style="font-size: 20px; font-weight: bold">Count down end movie</p><span
+                                    class="time" style="font-size: 20px;"></span>
                             </div>
                         </div>
                         <div class="chooseSlot" style="width: 1000px">
@@ -143,6 +147,8 @@
                         <span class="film__age--C" th:text="${schedule.room.name}"></span>
                         <span class="film__name" th:text="${schedule.movie.name}"></span>
                         <p class="film__detail" th:text="${schedule.startDate}+' - '+${schedule.startTime}"></p>
+                        <p class="film__detail" th:text="${schedule.room.getRoomType()}"></p>
+                        <p class="film__detail" th:text="${schedule.movie.getLanguage()}"></p>
                         <p class="theater__name" th:text="${schedule.branch.name}"></p>
                         <p class="film__address" th:text="${schedule.branch.locationDetail}"></p>
                     </div>
@@ -459,6 +465,15 @@
         for (var l = 0; l < p.length; l++) r(p[l]);
         var f = i;
         t()
-    }([])</script>
+    }([])
+</script>
+<script>
+    // Nếu người dùng ấn "Back", reload trang để lấy dữ liệu thật từ server
+    window.onpageshow = function(event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            window.location.reload();
+        }
+    };
+</script>
 </body>
 </html>

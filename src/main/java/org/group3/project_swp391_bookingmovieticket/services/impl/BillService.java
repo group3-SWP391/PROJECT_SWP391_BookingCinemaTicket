@@ -8,7 +8,6 @@ import org.group3.project_swp391_bookingmovieticket.entities.Ticket;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.repositories.*;
 import org.group3.project_swp391_bookingmovieticket.services.IBillService;
-import org.group3.project_swp391_bookingmovieticket.services.IScheduleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,12 +42,12 @@ public class BillService implements IBillService {
 
     @Override
     public List<Bill> findAll() {
-        return List.of();
+        return billRepository.findAll();
     }
 
     @Override
     public Optional<Bill> findById(Integer id) {
-        return Optional.empty();
+        return billRepository.findById(id);
     }
 
     @Override
@@ -62,34 +62,52 @@ public class BillService implements IBillService {
 
     @Transactional
     @Override
-    public void createNewBill(BookingRequestDTO bookingRequestDTO) {
+    public Bill createNewBill(BookingRequestDTO bookingRequestDTO) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
+
         Schedule schedule = scheduleRepository.getById(bookingRequestDTO.getScheduleId());
-        if (schedule.getStartDate().compareTo(date) > 0 ||
-                (schedule.getStartDate().compareTo(date) == 0 && schedule.getStartTime().compareTo(time) > 0)) {
-            User user = userRepository.getById(bookingRequestDTO.getUserId());
 
-            Bill billToCreate = new Bill();
-            billToCreate.setUser(user);
-            billToCreate.setCreatedTime(LocalDateTime.now());
-            billToCreate.setPrice(bookingRequestDTO.getTotalPrice());
-            Bill createdBill = billRepository.save(billToCreate);
-
-            bookingRequestDTO.getListSeatId().forEach(seatId -> {
-                // nếu kh rỗng
-                if (!ticketRepository.findTicketsBySchedule_IdAndSeat_Id(bookingRequestDTO.getScheduleId(), seatId)
-                        .isEmpty()) {
-                    throw new RuntimeException("Someone was quicker and booked the seat, please choose again!");
-                }
-                Ticket ticket = new Ticket();
-                ticket.setSchedule(schedule);
-                ticket.setSeat(seatRepository.getById(seatId));
-                ticket.setBill(createdBill);
-                ticketRepository.save(ticket);
-            });
-        } else {
+        // Kiểm tra nếu lịch chiếu đã diễn ra
+        if (schedule.getStartDate().isBefore(date) ||
+                (schedule.getStartDate().isEqual(date) && schedule.getStartTime().isBefore(time))) {
             throw new RuntimeException("The schedule has ended, you cannot book a seat!");
         }
+
+        User user = userRepository.getById(bookingRequestDTO.getUserId());
+
+        // Tạo bill
+        Bill bill = new Bill();
+        bill.setUser(user);
+        bill.setCreatedTime(LocalDateTime.now());
+        bill.setPrice(bookingRequestDTO.getTotalPrice());
+
+        List<Ticket> ticketList = new ArrayList<>();
+
+        for (Integer seatId : bookingRequestDTO.getListSeatId()) {
+            // Kiểm tra ghế đã bị người khác đặt chưa
+            boolean isAlreadyBooked = !ticketRepository
+                    .findTicketsBySchedule_IdAndSeat_Id(bookingRequestDTO.getScheduleId(), seatId)
+                    .isEmpty();
+            System.out.println(isAlreadyBooked);
+
+            if (isAlreadyBooked) {
+                throw new RuntimeException("Someone was quicker and booked seat " + seatId + ", please choose again!");
+            }
+
+            Ticket ticket = new Ticket();
+            ticket.setSchedule(schedule);
+            ticket.setSeat(seatRepository.getById(seatId));
+            ticket.setBill(bill); // gắn ngược lại vào bill
+
+            ticketList.add(ticket);
+        }
+
+        // Gắn danh sách ticket vào bill
+        bill.setTickets(ticketList);
+
+        // Nhờ cascade = ALL, save bill sẽ tự save ticket
+        return billRepository.save(bill);
     }
+
 }

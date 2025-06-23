@@ -77,7 +77,7 @@ public class CheckoutController {
             final String description = "Seat " + listSeatName;
             final String returnUrl = baseUrl + "/bill/create_bill";
             final String cancelUrl = baseUrl + "/bill/cancel_screen";
-            final int price = bookingRequestDTO.getTotalPrice();
+            final int price = 5000;
 
             String currentTimeString = String.valueOf(System.currentTimeMillis());
             long orderCode = Long.parseLong(currentTimeString.substring(currentTimeString.length() - 6));
@@ -110,7 +110,7 @@ public class CheckoutController {
             paymentLink.setSeatList(String.join(",", listSeatName));
             paymentLink.setTotalPrice(price);
             paymentLink.setCreatedAt(LocalDateTime.now());
-            paymentLinkService.insert(paymentLink);
+            paymentLinkService.save(paymentLink);
 
             Map<String, String> response = new HashMap<>();
             response.put("checkoutUrl", checkoutUrl);

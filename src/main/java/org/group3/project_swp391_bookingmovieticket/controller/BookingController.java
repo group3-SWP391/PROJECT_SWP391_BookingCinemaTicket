@@ -43,6 +43,9 @@ public class BookingController {
         User user = (User) session.getAttribute("userLogin");
 
         List<SeatDTO> seats = seatService.getSeatsByScheduleIdAndUserId(scheduleId, user.getId());
+        long availableSeats = seats.stream()
+                .filter(seat -> seat.isActive() && !seat.isOccupied() && !seat.isChecked())
+                .count();
 
         // lấy tổng số ghế / cho số row
         int seatsPerRow = roomService.findRoomByScheduleId(scheduleId).getRowCount();
@@ -55,6 +58,8 @@ public class BookingController {
                 .toList();
 
         model.addAttribute("schedule", scheduleService.getScheduleByScheduleId(scheduleId));
+        model.addAttribute("totalSeats", capacity);
+        model.addAttribute("availableSeats", availableSeats);
         model.addAttribute("seats", seats);
         model.addAttribute("rowLabels", rowLabels);
         model.addAttribute("seatsPerRow", seatsPerRow);

@@ -36,8 +36,8 @@ public class PaymentLinkService implements IPaymentLinkService {
     }
 
     @Override
-    public PaymentLink insert(PaymentLink paymentLink) {
-        return paymentLinkRepository.save(paymentLink);
+    public void save(PaymentLink paymentLink) {
+        paymentLinkRepository.save(paymentLink);
     }
 
     @Override
@@ -52,6 +52,11 @@ public class PaymentLinkService implements IPaymentLinkService {
     @Override
     public PaymentLink findByOrderCode(long orderCode) {
         return paymentLinkRepository.findByOrderCode(orderCode);
+    }
+
+    @Override
+    public boolean existsByOrderCodeAndStatus(long orderCode, String status) {
+        return paymentLinkRepository.existsByOrderCodeAndStatus(orderCode, "PAID");
     }
 
 
