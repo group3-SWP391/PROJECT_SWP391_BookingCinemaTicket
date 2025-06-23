@@ -22,7 +22,7 @@ public class TicketService implements ITicketService {
 
     @Override
     public Optional<Ticket> findById(Integer id) {
-        return Optional.empty();
+        return ticketRepository.findById(id);
     }
 
     @Override

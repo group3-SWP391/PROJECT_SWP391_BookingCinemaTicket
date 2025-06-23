@@ -24,10 +24,7 @@ import vn.payos.type.PaymentData;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class CheckoutController {
@@ -80,7 +77,9 @@ public class CheckoutController {
             final int price = 5000;
 
             String currentTimeString = String.valueOf(System.currentTimeMillis());
-            long orderCode = Long.parseLong(currentTimeString.substring(currentTimeString.length() - 6));
+            int randomPart = new Random().nextInt(900) + 100; // random 3 chữ số từ 100–999
+            String combined = currentTimeString.substring(currentTimeString.length() - 6) + randomPart;
+            long orderCode = Long.parseLong(combined);
 
             ItemData item = ItemData.builder()
                     .name(productName)
