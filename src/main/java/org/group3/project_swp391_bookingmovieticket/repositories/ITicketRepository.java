@@ -25,4 +25,10 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
             "ORDER BY t.id DESC")
     List<Ticket> findTicketsOfCurrentUserAndScheduleId(@Param("userId") Integer userId,
                                                   @Param("scheduleId") Integer scheduleId);
+
+    @Query("SELECT t FROM Ticket t " +
+            "JOIN t.bill b " +
+            "JOIN PaymentLink p ON p.bill.id = b.id " +
+            "WHERE p.orderCode = :orderCode")
+    Ticket findTicketsByOrderCode(@Param("orderCode") long orderCode);
 }

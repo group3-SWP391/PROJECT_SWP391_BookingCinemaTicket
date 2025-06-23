@@ -39,4 +39,9 @@ public class TicketService implements ITicketService {
     public void saveAll(List<Ticket> tickets) {
         ticketRepository.saveAll(tickets);
     }
+
+    @Override
+    public Ticket findTicketsByOrderCode(long orderCode) {
+        return ticketRepository.findTicketsByOrderCode(orderCode);
+    }
 }

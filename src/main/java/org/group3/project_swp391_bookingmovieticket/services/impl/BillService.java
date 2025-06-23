@@ -89,8 +89,6 @@ public class BillService implements IBillService {
             boolean isAlreadyBooked = !ticketRepository
                     .findTicketsBySchedule_IdAndSeat_Id(bookingRequestDTO.getScheduleId(), seatId)
                     .isEmpty();
-            System.out.println(isAlreadyBooked);
-
             if (isAlreadyBooked) {
                 throw new RuntimeException("Someone was quicker and booked seat " + seatId + ", please choose again!");
             }

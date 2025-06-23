@@ -40,4 +40,8 @@ public class PaymentLink {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id", referencedColumnName = "id")
     private Schedule schedule;
+
+    @OneToOne
+    @JoinColumn(name = "bill_id") // Cột trong bảng payment_link trỏ đến bill.id
+    private Bill bill;
 }

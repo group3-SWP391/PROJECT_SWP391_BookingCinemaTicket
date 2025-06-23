@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ITicketService extends IGeneralService<Ticket>{
     void saveAll(List<Ticket> tickets);
+    Ticket findTicketsByOrderCode(long orderCode);
 }

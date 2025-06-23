@@ -109,6 +109,10 @@ Author: Webstrot
 									</h3>
 								</div>
 							</div>
+							<div class="st_bcc_tecket_bottom_right_wrapper">
+								<img th:src="@{${qrTicket.qrImageURL}}" alt="qr image" style="height: 150px; width: 150px"/>
+								<h4>QR ticket here</h4>
+							</div>
 							<div class="st_bcc_tecket_bottom_left_price_wrapper" style="padding-top: 20px">
 								<h4>Total Amount</h4>
 								<h5 th:text="${session.bookingRequestDTO.totalPrice}"></h5>

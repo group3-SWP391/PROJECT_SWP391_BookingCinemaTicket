@@ -38,17 +38,17 @@ public class QRCodeGenerator {
 
     public static String saveQrToLocal(byte[] qrBytes, String fileName) {
         try {
-            // Đường dẫn tới thư mục lưu ảnh QR trong static
-            String folderPath = "src/main/resources/static/qrs/";
+            // Lưu ngoài thư mục resources
+            String folderPath = "upload-dir/qrs/";
             Path outputPath = Paths.get(folderPath + fileName);
 
             // Tạo thư mục nếu chưa có
             Files.createDirectories(outputPath.getParent());
 
-            // Ghi ảnh vào file
+            // Ghi file
             Files.write(outputPath, qrBytes);
 
-            // Trả về đường dẫn tương đối để lưu DB (Spring sẽ phục vụ ảnh từ static/)
+            // Trả về đường dẫn URL truy cập
             return "/qrs/" + fileName;
 
         } catch (IOException e) {

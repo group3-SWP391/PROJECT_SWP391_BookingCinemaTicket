@@ -36,4 +36,7 @@ public class Bill {
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     private List<Ticket> tickets;
+
+    @OneToOne(mappedBy = "bill")
+    private PaymentLink paymentLink;
 }

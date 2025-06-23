@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.group3.project_swp391_bookingmovieticket.constant.CommonConst;
 import org.group3.project_swp391_bookingmovieticket.dtos.BookingRequestDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.Bill;
-import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
-import org.group3.project_swp391_bookingmovieticket.entities.Ticket;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.entities.*;
 import org.group3.project_swp391_bookingmovieticket.services.TicketEmailService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.BillService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.PaymentLinkService;
@@ -58,12 +55,16 @@ public class BillController {
         }
 
         // 2. Chỉ xử lý tạo bill nếu status từ PayOS là PAID
+        PaymentLink paymentLink = null;
         if ("PAID".equals(status)) {
             BookingRequestDTO dto = (BookingRequestDTO) request.getSession().getAttribute("bookingRequestDTO");
 
             // Tạo bill và cập nhật trạng thái thanh toán
             Bill bill = billService.createNewBill(dto);
-            paymentLinkService.updateStatusByOrderCode(orderCode, status);
+            paymentLink = paymentLinkService.findByOrderCode(orderCode);
+            paymentLink.setBill(bill);
+            paymentLink.setStatus(status);
+            paymentLinkService.save(paymentLink);
 
             try {
                 User user = (User) request.getSession().getAttribute("userLogin");
@@ -122,13 +123,18 @@ public class BillController {
     public String confirmationScreen(@RequestParam("orderCode") long orderCode,
                                      HttpServletRequest request,
                                      Model model) {
+        System.out.println("orderCode: " + orderCode);
         BookingRequestDTO bookingRequestDTO = (BookingRequestDTO) request.getSession().getAttribute("bookingRequestDTO");
         if (bookingRequestDTO == null) {
+            System.out.println("bookingRequestDTO is null");
             return "redirect:/home";
         }
         Optional<Schedule> scheduleOpt = scheduleService.findById(bookingRequestDTO.getScheduleId());
         scheduleOpt.ifPresent(schedule -> model.addAttribute("scheduleOrder", schedule));
         model.addAttribute("paymentLink", paymentLinkService.findByOrderCode(orderCode));
+        System.out.println("=============================");
+        model.addAttribute("qrTicket", ticketService.findTicketsByOrderCode(orderCode));
+        System.out.println("QR URL = " + ticketService.findTicketsByOrderCode(orderCode).getQrImageURL());
         model.addAttribute(CommonConst.USER_LOGIN_DTO, new UserLoginDTO());
         return "confirmation_screen";
     }
