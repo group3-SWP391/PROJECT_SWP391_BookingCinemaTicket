@@ -2,6 +2,8 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,14 +36,21 @@ public class PaymentLink {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
     @OneToOne
-    @JoinColumn(name = "bill_id") // Cột trong bảng payment_link trỏ đến bill.id
+    @JoinColumn(name = "bill_id")
     private Bill bill;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "popcorn_drink_id")
+    private PopcornDrink popcornDrink;
 }

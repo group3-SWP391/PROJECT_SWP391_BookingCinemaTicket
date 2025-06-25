@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--
+Template Name: Movie Pro
+Version: 1.0.0
+Author: Webstrot
+
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js}"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js}"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--[endif]-->
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_single_second.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:14:41 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8"/>
+    <title>Movie Pro Responsive HTML Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Movie Pro"/>
+    <meta name="keywords" content="Movie Pro"/>
+    <meta name="author" content=""/>
+    <meta name="MobileOptimized" content="320"/>
+    <!--Template style -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+    <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{none}"/>
+    <!-- favicon links -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+</head>
+
+<body>
+<!-- preloader Start -->
+<div id="preloader">
+    <div id="status">
+        <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
+    </div>
+</div>
+
+
+<!-- prs navigation Start -->
+<header lang="vi" th:include="fragments/navigation :: navigation"></header>
+<!-- prs navigation End -->
+
+<!-- st slider sidebar wrapper Start -->
+<div class="st_slider_index_sidebar_main_wrapper st_slider_index_sidebar_main_wrapper_md float_left">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="st_indx_slider_main_container float_left">
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 50px;">
+                            <div class="ne_busness_main_slider_wrapper float_left">
+                                <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
+                                    <h2 style="font-size: 40px; color: #ff4444; padding-bottom: 50px; text-align: center;">Choose popcorn and drink</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 tab-content">
+                            <div role="tabpanel" class="tab-pane active">
+                                <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
+                                <div class="row">
+                                    <div th:each="popcornDrink : ${allPopcornDrink}" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-12">
+                                        <div class="prs_upcom_movie_box_wrapper"
+                                             style="height: 100%; display: flex; flex-direction: column;">
+                                            <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
+                                                <img th:src="${popcornDrink.imageUrl}" alt="movie_img"
+                                                     style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+                                            </div>
+                                            <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
+                                                <div class="prs_upcom_movie_content_box_inner">
+                                                    <h2 th:text="${popcornDrink.name}"
+                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px; width: 100%">
+                                                    </h2>
+                                                    <div style="font-size: 0.9rem; color: #333;">
+                                                        <p th:text="${popcornDrink.description}"> </p>
+                                                    </div>
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                                                        <!-- Price -->
+                                                        <span style="font-size: 1rem; font-weight: bold; color: #d9534f;" th:text="'Price: ' + ${popcornDrink.price}">Price</span>
+                                                        <!-- Quantity Input -->
+                                                        <div style="padding-right: 100px">
+                                                            <input type="number" class="form-control" value="0" min="0" name="quantity" style="width: 60px; height: 35px; padding: 5px; text-align: center;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- hết mỗi phim -->
+                                </div> <!-- hết row -->
+                            </div> <!-- hết tab-panel -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- st slider sidebar wrapper End -->
+
+<!-- prs footer Wrapper Start -->
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- prs footer Wrapper End -->
+
+<!-- st login wrapper Start -->
+<div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
+<!-- st login wrapper End -->
+
+<!--main js file start-->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<!--main js file end-->
+</body>
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_single_second.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:14:51 GMT -->
+</html>

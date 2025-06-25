@@ -19,8 +19,8 @@ public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @CreatedDate
 
+    @CreatedDate
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 

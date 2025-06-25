@@ -8,5 +8,6 @@ public class BookingRequestDTO {
     private Integer userId;
     private Integer scheduleId;
     private List<Integer> listSeatId;
+    private PopcornDrinkDTO popcornDrink;
     private Integer totalPrice;
 }

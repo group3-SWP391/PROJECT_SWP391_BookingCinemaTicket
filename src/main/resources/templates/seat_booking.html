@@ -89,7 +89,8 @@
                                     Available seat:
                                     <span th:text="${availableSeats} + ' / ' + ${totalSeats}"></span>
                                 </p>
-                                <p class="title__text" style="font-size: 20px; font-weight: bold">Count down end movie</p><span
+                                <p class="title__text" style="font-size: 20px; font-weight: bold">Count down end
+                                    movie</p><span
                                     class="time" style="font-size: 20px;"></span>
                             </div>
                         </div>
@@ -469,7 +470,7 @@
 </script>
 <script>
     // Nếu người dùng ấn "Back", reload trang để lấy dữ liệu thật từ server
-    window.onpageshow = function(event) {
+    window.onpageshow = function (event) {
         if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
             window.location.reload();
         }

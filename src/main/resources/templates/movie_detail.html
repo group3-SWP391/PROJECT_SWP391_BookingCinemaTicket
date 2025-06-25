@@ -71,8 +71,7 @@ Author: Webstrot
                         </a>
                         <h3 th:text="${movieDetail.name}">Movie name</h3>
                         <p th:text="${movieDetail.language}">Movie language</p>
-                        <h4 th:text="${movieDetail.categories}">Movie category</h4>
-                        <h6 th:text="${movieDetail.format}" style="color: white; margin-top: 10px">Movie format</h6>
+                        <h4 th:text="'Category: ' + ${movieDetail.categories}">Movie category</h4>
                     </div>
                     <div class="st_video_slide_social float_left">
                         <div class="st_slider_rating_btn_heart st_slider_rating_btn_heart_5th">
