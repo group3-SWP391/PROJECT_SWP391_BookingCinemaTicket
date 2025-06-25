@@ -33,7 +33,8 @@ public class DirectorService implements IDirectorService {
 
     @Override
     public Optional<DirectorDTO> findById(Integer id) {
-        return Optional.empty();
+        return directorRepository.findById(id)
+                .map(director -> modelMapper.map(director, DirectorDTO.class));
     }
 
     @Override

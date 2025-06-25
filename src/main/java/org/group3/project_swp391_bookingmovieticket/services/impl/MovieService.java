@@ -6,6 +6,9 @@ import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepositor
 import org.group3.project_swp391_bookingmovieticket.services.IMovieService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -97,10 +100,14 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<MovieDTO> findMovieSameCategory(String categoryName) {
-        return movieRepository.findMovieSameCategory(categoryName)
-                .stream()
-                .map(movie -> modelMapper.map(movie, MovieDTO.class))
-                .collect(Collectors.toList());
+    public Page<MovieDTO> findByCategory(String categoryName, Pageable pageable) {
+        Page<Movie> moviePage = movieRepository.findByCategories(categoryName, pageable);
+        return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));
+    }
+
+    @Override
+    public Page<MovieDTO> findMovieByDirector(int directorId, Pageable pageable) {
+        Page<Movie> moviePage = movieRepository.findByDirectorId(directorId, pageable);
+        return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 }

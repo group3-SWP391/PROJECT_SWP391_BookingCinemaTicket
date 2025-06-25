@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Movie Pro Responsive HTML Template</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="Movie Pro" />
+  <meta name="keywords" content="Movie Pro" />
+  <meta name="author" content="" />
+  <meta name="MobileOptimized" content="320" />
+  <!--Template style -->
+  <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}" />
+  <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{none}" />
+  <!-- favicon links -->
+  <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}" />
+</head>
+
+<body>
+<!-- preloader Start -->
+<div id="preloader">
+  <div id="status">
+    <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
+  </div>
+</div>
+
+<!-- prs navigation Start -->
+<header lang="vi" th:include="fragments/navigation :: navigation"></header>
+<!-- prs navigation End -->
+
+<div class="st_slider_index_sidebar_main_wrapper st_slider_index_sidebar_main_wrapper_md float_left">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+        <div class="st_indx_slider_main_container float_left">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="st_md_summ_pera float_left">
+                <h1 style="padding-bottom: 10px; color: #ff4444">Director</h1>
+                <p th:text="${director.get().name}" style="padding-bottom: 20px; font-weight: 700; color: black; font-size: 30px"></p>
+                <img th:src="@{${director.get().imageUrl}}" alt="img" class="director-img">
+                <p th:text="'Birth date: ' + ${director.get().birthDate}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
+                <p th:text="'Nationality: ' + ${director.get().nationality}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
+                <p th:text="'Awards: ' + ${director.get().awards}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
+                <p th:text="${director.get().description}" style="color: #555;font-weight: 500"></p>
+              </div>
+            </div>
+
+            <div class="col-md-12" style="margin-top: 50px;">
+              <div class="ne_busness_main_slider_wrapper float_left">
+                <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
+                  <h2 style="font-size: 27px; color: #ff4444; padding-bottom: 15px;">Movies by Director</h2>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 tab-content">
+              <div role="tabpanel" class="tab-pane active">
+                <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
+                <div class="row">
+                  <div th:each="movie : ${movieByDirector}" class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div class="prs_upcom_movie_box_wrapper" style="height: 100%; display: flex; flex-direction: column;">
+                      <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
+                        <img th:src="${movie.smallImageURL}" alt="movie_img"
+                             style="width: 80%; height: 200px; object-fit: cover; border-radius: 4px; display: block;" />
+                        <div class="prs_upcom_movie_img_overlay"></div>
+                        <div class="prs_upcom_movie_img_btn_wrapper">
+                          <ul>
+                            <li><a title='title' rel='external' class="test-popup-link" th:href="${movie.trailerURLWatchLink}">View Trailer</a></li>
+                            <li><a th:href="@{/movie/detail(movieId=${movie.id})}">View Details</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
+                        <div class="prs_upcom_movie_content_box_inner">
+                          <h2 th:text="${movie.name}" style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px"></h2>
+                          <div style="font-size: 0.9rem; color: #333;">
+                            <p><strong>Thể loại: </strong> <span th:text="${movie.categories}">Movie category</span></p>
+                            <p><strong>Thời gian: </strong><span th:text="${movie.duration + ' minutes'}">Movie duration</span></p>
+                            <p><strong>Khởi chiếu: </strong><span th:text="${movie.releaseDate}">Movie releaseDate</span></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> <!-- hết mỗi phim -->
+                </div> <!-- hết row -->
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
+                  <div class="pager_wrapper gc_blog_pagination">
+                    <ul class="pagination">
+                      <!-- Nút Previous -->
+                      <li th:if="${movieByDirector.hasPrevious()}">
+                        <a th:href="@{/director-detail(directorId=${director.get().id}, page=${movieByDirector.number - 1})}">
+                          <i class="flaticon-left-arrow"></i>
+                        </a>
+                      </li>
+
+                      <!-- Các số trang -->
+                      <li th:each="i : ${#numbers.sequence(0, movieByDirector.totalPages - 1)}" th:classappend="${i == movieByDirector.number} ? 'active'">
+                        <a th:href="@{/director-detail(directorId=${director.get().id}, page=${i})}" th:text="${i + 1}"></a>
+                      </li>
+
+                      <!-- Nút Next -->
+                      <li th:if="${movieByDirector.hasNext()}">
+                        <a th:href="@{/director-detail(directorId=${director.get().id}, page=${movieByDirector.number + 1})}">
+                          <i class="flaticon-right-arrow"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div> <!-- hết tab-panel -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- prs footer Wrapper Start -->
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- prs footer Wrapper End -->
+
+<!-- st login wrapper Start -->
+<div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
+<!-- st login wrapper End -->
+
+<!--main js file start-->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<!--main js file end-->
+</body>
+
+</html>

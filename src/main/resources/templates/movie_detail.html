@@ -195,10 +195,12 @@ Author: Webstrot
         <div class="st_slider_rating_right">
             <div class="st_slider_rating_btn prs_animate_btn1">
                 <ul>
-                    <li data-animation="animated fadeInUp"><a th:href="@{/schedule/movieId(movieId=${movieDetail.id})}"
+                    <li data-animation="animated fadeInUp">
+                        <a th:href="@{/schedule/movieId(movieId=${movieDetail.id})}"
                                                               class="button button--tamaya prs_upcom_main_btn"
-                                                              data-text="book now"><span>book
-									now</span></a>
+                                                              data-text="book now">
+                        <span>book now</span>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -234,7 +236,11 @@ Author: Webstrot
                                                     <div class="st_md_summ_pera float_left">
                                                         <h4 style="padding-bottom: 20px; color: #ff4444">Director</h4>
                                                         <img th:src="@{/images/content/c1.jpg}" alt="img">
-                                                        <p th:text="${directorByMovie.name}" style="padding-top: 10px; font-weight: 700; color: black;"></p>
+                                                        <div style="padding-top: 10px; font-weight: 700; color: black;">
+                                                            <a th:href="@{/director-detail(directorId=${directorByMovie.id})}">
+                                                                <span th:text="${directorByMovie.name}"></span>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -264,7 +270,7 @@ Author: Webstrot
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 tab-content" id="movieListContainerCategory">
+                        <div class="col-12 tab-content">
                             <div role="tabpanel" class="tab-pane active">
                                 <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
                                 <div class="row">
@@ -290,7 +296,7 @@ Author: Webstrot
                                             <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
                                                 <div class="prs_upcom_movie_content_box_inner">
                                                     <h2 th:text="${movie.name}"
-                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px">
+                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px">
                                                         Movie name
                                                     </h2>
                                                     <div style="font-size: 0.9rem; color: #333;">
@@ -311,27 +317,35 @@ Author: Webstrot
                                         </div>
                                     </div> <!-- hết mỗi phim -->
                                 </div> <!-- hết row -->
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
-                                     style="display: flex; justify-content: center;">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
                                     <div class="pager_wrapper gc_blog_pagination">
                                         <ul class="pagination">
-                                            <li><a href="#"><i class="flaticon-left-arrow"></i></a>
+                                            <!-- Nút Previous -->
+                                            <li th:if="${movieSameCategory.hasPrevious()}">
+                                                <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number - 1})}">
+                                                    <i class="flaticon-left-arrow"></i>
+                                                </a>
                                             </li>
-                                            <li><a href="#">1</a>
+
+                                            <!-- Các số trang -->
+                                            <li th:each="i : ${#numbers.sequence(0, movieSameCategory.totalPages - 1)}"
+                                                th:classappend="${i == movieSameCategory.number} ? 'active'">
+                                                <a th:href="@{/movie/detail(movieId=${movieDetail.getId()}, page=${i})}" th:text="${i + 1}"></a>
                                             </li>
-                                            <li><a href="#">2</a>
-                                            </li>
-                                            <li><a href="#">3</a>
-                                            </li>
-                                            <li><a href="#">4</a>
-                                            </li>
-                                            <li><a href="#"><i class="flaticon-right-arrow"></i></a>
+
+                                            <!-- Nút Next -->
+                                            <li th:if="${movieSameCategory.hasNext()}">
+                                                <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number + 1})}">
+                                                    <i class="flaticon-right-arrow"></i>
+                                                </a>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
+
                             </div> <!-- hết tab-panel -->
-                        </div>                    </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">

@@ -6,6 +6,9 @@ import org.group3.project_swp391_bookingmovieticket.services.impl.DirectorServic
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieActorService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,17 +51,21 @@ public class MovieController {
 
     @GetMapping(value = "/detail")
     public String displayMovieDetail(@RequestParam(value = "movieId", required = false) Integer movieId,
+                                     @RequestParam(value = "page", defaultValue = "0") int page,
+                                     @RequestParam(value = "size", defaultValue = "6") int size,
                                      Model model) {
         if (movieId == null) {
             model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
             model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
             return "home";
         }
+
+        Pageable pageable = PageRequest.of(page, size);
         MovieDTO movieDetail = movieService.findMovieById(movieId);
-        model.addAttribute("movieSameCategory", movieService.findMovieSameCategory(movieDetail.getCategories()));
+        model.addAttribute("movieSameCategory", movieService.findByCategory(movieDetail.getCategories(), pageable));
         model.addAttribute("actorByMovie", movieActorService.findAllActorByMovieId(movieId));
         model.addAttribute("directorByMovie", directorService.findDirectorByMovieId(movieId));
-        model.addAttribute("movieDetail", movieService.findMovieById(movieId));
+        model.addAttribute("movieDetail", movieDetail);
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
         return "movie_detail";
     }

@@ -144,7 +144,7 @@
                 <div class="checkout__form">
                     <div class="total__price"><span class="price" data-price="0">0₫</span></div>
                     <div class="film__info">
-                        <span class="film__age--C" th:text="${schedule.room.name}"></span>
+                        <span class="film__age--C" th:text="'Room ' + ${schedule.room.name}"></span>
                         <span class="film__name" th:text="${schedule.movie.name}"></span>
                         <p class="film__detail" th:text="${schedule.startDate}+' - '+${schedule.startTime}"></p>
                         <p class="film__detail" th:text="${schedule.room.getRoomType()}"></p>
