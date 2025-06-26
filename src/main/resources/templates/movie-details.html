@@ -68,10 +68,38 @@
     <p><strong>Thời lượng:</strong> <span th:text="${movie.duration + ' minutes'}">Thời lượng</span></p>
     <p><strong>Khởi chiếu:</strong> <span th:text="${#temporals.format(movie.releaseDate, 'yyyy-MM-dd')}">Ngày khởi chiếu</span></p>
     <p><strong>Tóm tắt:</strong> <span th:text="${movie.longDescription}">Tóm tắt</span></p>
+    <h3>Bình luận</h3>
+    <div th:each="comment : ${comments}">
+        <p><strong th:text="${comment.user.fullname}"></strong>: <span th:text="${comment.content}"></span></p>
+        <p>
+            ❤️ <span th:text="${likesMap[comment.id]}">0</span> |
+            💔 <span th:text="${dislikesMap[comment.id]}">0</span>
+        </p>
+    </div>
+
+    <!-- THÊM FORM TẠI ĐÂY -->
+    <div th:if="${session.userLogin != null}">
+        <form th:action="@{/addComment}" method="post">
+            <input type="hidden" name="movieId" th:value="${movie.id}" />
+            <label for="content">Viết bình luận:</label><br />
+            <textarea name="content" id="content" rows="4" cols="50" required></textarea><br />
+            <button type="submit">Gửi bình luận</button>
+        </form>
+    </div>
+
+    <div th:if="${session.userLogin == null}">
+        <p>Vui lòng <a th:href="@{/login}">đăng nhập</a> để bình luận.</p>
+    </div>
+
+    <!-- Hiện lỗi nếu có -->
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
     <a th:href="${movie.trailerURL}" target="_blank">Xem Trailer</a>
     <br/>
     <a th:href="@{/movie-category}">Quay lại danh sách phim</a>
+
 </div>
+
 
 <!-- prs footer Wrapper Start -->
 <header lang="vi" th:include="fragments/footer"></header>
