@@ -31,5 +31,9 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Branch branch;
+
 
 }

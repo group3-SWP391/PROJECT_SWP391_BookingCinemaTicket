@@ -17,8 +17,17 @@ public class Room {
 
     private String name;
 
-    @Column(name = "total_area")
-    private double totalArea;
+    @Column(name = "room_type")
+    private String roomType;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "is_active")
+    private String active;
+
+    @Column(name = "row_count")
+    private Integer rowCount;
 
     @ManyToOne
     @JoinColumn(name = "branch_id")

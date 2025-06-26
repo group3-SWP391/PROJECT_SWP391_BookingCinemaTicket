@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Seat Selection</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .seat {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        font-size: 12px;
+        color: white;
+        transition: transform 0.2s;
+    }
+    .seat.available {
+        background-color: #22c55e; /* Xanh lá */
+    }
+    .seat.occupied {
+        background-color: #ef4444; /* Đỏ */
+        cursor: not-allowed;
+    }
+    .seat.vip {
+        background-color: #eab308; /* Vàng */
+    }
+    .seat.selected {
+        background-color: #3b82f6; /* Xanh dương */
+        transform: scale(1.1);
+    }
+    .seat:hover:not(.occupied) {
+        transform: scale(1.1);
+    }
+    .screen {
+        background: linear-gradient(to bottom, #1f2937, #374151);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .price-tooltip {
+        display: none;
+        position: absolute;
+        background-color: #1f2937;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        z-index: 10;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .total-price {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+<div class="container mx-auto p-6">
+  <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Seat Selection</h2>
+  <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+    <h3 class="text-xl font-semibold text-gray-700">Schedule Details</h3>
+    <p class="text-gray-600">Schedule ID: <span th:text="${schedule.id}"></span></p>
+    <p class="text-gray-600">Room: <span th:text="${schedule.room.name}"></span> (<span th:text="${schedule.room.roomType}"></span>)</p>
+    <p class="text-gray-600">Capacity: <span th:text="${schedule.room.capacity}"></span> seats</p>
+  </div>
+
+  <!-- Legend -->
+  <div class="flex justify-center mb-6 space-x-4">
+    <div class="flex items-center"><div class="w-5 h-5 bg-green-500 rounded mr-2"></div><span>Available</span></div>
+    <div class="flex items-center"><div class="w-5 h-5 bg-yellow-500 rounded mr-2"></div><span>VIP</span></div>
+    <div class="flex items-center"><div class="w-5 h-5 bg-red-500 rounded mr-2"></div><span>Occupied</span></div>
+    <div class="flex items-center"><div class="w-5 h-5 bg-blue-500 rounded mr-2"></div><span>Selected</span></div>
+  </div>
+
+  <!-- Screen -->
+  <div class="screen">SCREEN</div>
+
+
+  <div class="seat-grid relative" th:with="rowCount=${schedule.room.rowCount}, colCount=${schedule.room.capacity / schedule.room.rowCount}"
+       th:style="'display: grid; grid-template-columns: repeat(' + ${colCount} + ', 40px); gap: 8px; max-width: ' + (${colCount * 48} + 'px') + '; margin: 0 auto;'">
+    <div th:each="seat : ${seatList}"
+         th:class="${seat.isOccupied} ? 'seat occupied' : (${seat.isVip} ? 'seat vip' : 'seat available')"
+         th:text="${seat.name}"
+         th:data-seat-id="${seat.id}"
+         th:data-price="${schedule.price + (seat.isVip ? 20000 : 0)}"
+         onclick="toggleSeatSelection(this)">
+    </div>
+    <div id="priceTooltip" class="price-tooltip"></div>
+  </div>
+
+  <!-- Total Price Display -->
+  <div class="total-price">Total Price: <span id="totalPrice">0</span> VND</div>
+</div>
+
+<script>
+  const tooltip = document.getElementById('priceTooltip');
+  const totalPriceElement = document.getElementById('totalPrice');
+
+  function toggleSeatSelection(element) {
+      if (!element.classList.contains('occupied')) {
+          element.classList.toggle('selected');
+          const price = parseInt(element.getAttribute('data-price'));
+          if (element.classList.contains('selected')) {
+              tooltip.innerText = `Price: ${price} VND`;
+              const rect = element.getBoundingClientRect();
+              tooltip.style.display = 'block';
+              tooltip.style.left = `${rect.left + window.scrollX + 20}px`;
+              tooltip.style.top = `${rect.top + window.scrollY - 40}px`;
+          } else {
+              tooltip.style.display = 'none';
+          }
+          updateTotalPrice();
+      }
+  }
+
+  function updateTotalPrice() {
+      const selectedSeats = document.querySelectorAll('.seat.selected');
+      let total = 0;
+      selectedSeats.forEach(seat => {
+          total += parseInt(seat.getAttribute('data-price'));
+      });
+      totalPriceElement.textContent = total;
+  }
+
+  document.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('seat')) {
+          tooltip.style.display = 'none';
+      }
+  });
+</script>
+</body>
+</html>

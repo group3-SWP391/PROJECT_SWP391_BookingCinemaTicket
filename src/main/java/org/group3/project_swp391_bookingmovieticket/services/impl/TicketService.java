@@ -21,6 +21,7 @@ public class TicketService implements ITicketService {
 
     @Override
     public Optional findById(Integer id) {
+
         return Optional.empty();
     }
 
@@ -53,14 +54,26 @@ public class TicketService implements ITicketService {
                 }
             }
             return ticketIntegerHashMap;
-
-
-
         }else {
             return ticketIntegerHashMap;
         }
 
     }
+    @Override
+    public HashSet<Integer> findBookedSeatIdsBySchedule(int id) {
+        HashSet<Integer> integerHashSet = new HashSet<>();
+        List<Ticket> ticketList = findByScheduleId(id);
+        for (Ticket ticket: ticketList){
+            integerHashSet.add(ticket.getSeat().getId());
+        }
+        return integerHashSet;
+    }
+
+    @Override
+    public List<Ticket> findByScheduleId(int id) {
+        return ticketRepository.findByScheduleId(id);
+    }
+
 
     @Override
     public void remove(Integer id) {
