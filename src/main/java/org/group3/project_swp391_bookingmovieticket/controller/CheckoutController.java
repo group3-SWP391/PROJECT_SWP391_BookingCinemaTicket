@@ -3,9 +3,11 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.group3.project_swp391_bookingmovieticket.dtos.BookingRequestDTO;
+import org.group3.project_swp391_bookingmovieticket.dtos.PopcornDrinkDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.ScheduleDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.PaymentLink;
 import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
+import org.group3.project_swp391_bookingmovieticket.entities.Seat;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.services.impl.PaymentLinkService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.ScheduleService;
@@ -17,11 +19,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.payos.PayOS;
 import vn.payos.type.CheckoutResponseData;
 import vn.payos.type.ItemData;
 import vn.payos.type.PaymentData;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -59,19 +64,74 @@ public class CheckoutController {
         return "cancel";
     }
 
+    @PostMapping(value = "/check-duplicate-payment", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> checkDuplicatePayment(@RequestBody BookingRequestDTO bookingRequestDTO, HttpServletRequest request) {
+        System.out.println("Checking for duplicate payment link for schedule: " + bookingRequestDTO.getScheduleId());
+
+        // Kiểm tra nếu đã có payment link trùng lặp
+        boolean isDuplicate = paymentLinkService.existsBySchedule_IdAndSeatListAndStatus(
+                bookingRequestDTO.getScheduleId(),
+                seatService.findSeatNameById(bookingRequestDTO.getListSeatId().get(0))
+        );
+        System.out.println(isDuplicate + "status");
+
+        if (isDuplicate) {
+            // Nếu trùng lặp, trả về lỗi với thông báo
+            System.out.println("Duplicate payment link found");
+            return null; // Trả về false
+        }
+
+        // Nếu không có trùng lặp, gọi phương thức tạo payment link
+        return checkout(bookingRequestDTO, request);
+    }
+
     @PostMapping(value = "/create-payment-link", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> checkout(@RequestBody BookingRequestDTO bookingRequestDTO,
-                                      HttpServletRequest request) {
+    private ResponseEntity<?> checkout(@RequestBody BookingRequestDTO bookingRequestDTO,
+                                       HttpServletRequest request) {
+        System.out.println("CheckoutController checkout" + bookingRequestDTO);
+
         request.getSession().setAttribute("bookingRequestDTO", bookingRequestDTO);
         Schedule schedule = scheduleService.findById(bookingRequestDTO.getScheduleId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
 
-        List<String> listSeatName = seatService.findSeatNamesByIdList(bookingRequestDTO.getListSeatId());
 
+        List<String> listSeatName = new ArrayList<>();
+        // Lấy thông tin ghế và giá cho từng ghế từ danh sách List<Integer>
+        for (Integer seatId : bookingRequestDTO.getListSeatId()) {
+            System.out.println(seatId);
+            Seat seat = seatService.findById(seatId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat not found"));
+            System.out.println(seat + "seat");
+            String seatName = seat.getName();
+            double seatPrice = seat.isVip() ? schedule.getPrice() + 20000 : schedule.getPrice(); // Cộng thêm tiền cho ghế VIP
+
+            //Chuẩn hóa tiền có dạng xxx.xxx
+            DecimalFormat formatter = new DecimalFormat("#,###");  // Dấu phân cách là dấu "."
+            String formattedSeatPrice = formatter.format(seatPrice);
+
+            if (seat.isVip()) {
+                listSeatName.add(seatName + " (VIP, " + formattedSeatPrice + " VND)");
+            } else {
+                listSeatName.add(seatName + " (" + formattedSeatPrice + " VND)");
+            }
+        }
+
+        //listSeatName cho nội dung bank
+        List<String> listSeatNameBank = seatService.findSeatNamesByIdList(bookingRequestDTO.getListSeatId());
+
+
+        // lấy về các bòng và nước để set vào payment link
+        List<String> listPopcornDrinkName = new ArrayList<>();
+        if (bookingRequestDTO.getListPopcornDrink() != null) {
+            for (PopcornDrinkDTO dto : bookingRequestDTO.getListPopcornDrink()) {
+                String nameWithQuantity = dto.getName() + " (x" + dto.getQuantity() + ")";
+                listPopcornDrinkName.add(nameWithQuantity);
+            }
+        }
         try {
             final String baseUrl = getBaseUrl(request);
             final String productName = schedule.getMovie().getName();
-            final String description = "Seat " + listSeatName;
+            final String description = "Seat " + listSeatNameBank;
             final String returnUrl = baseUrl + "/bill/create_bill";
             final String cancelUrl = baseUrl + "/bill/cancel_screen";
             final int price = 5000;
@@ -109,6 +169,11 @@ public class CheckoutController {
             paymentLink.setSeatList(String.join(",", listSeatName));
             paymentLink.setTotalPrice(price);
             paymentLink.setCreatedAt(LocalDateTime.now());
+            if (bookingRequestDTO.getListPopcornDrink() != null) {
+                paymentLink.setListPopcornDrinkName(String.join(",", listPopcornDrinkName));
+            } else {
+                paymentLink.setListPopcornDrinkName(null);
+            }
             paymentLinkService.save(paymentLink);
 
             Map<String, String> response = new HashMap<>();

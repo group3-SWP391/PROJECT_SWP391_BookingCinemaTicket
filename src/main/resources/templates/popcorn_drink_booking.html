@@ -6,26 +6,40 @@ Author: Webstrot
 
 -->
 <!--[if IE 8]>
-<html lang="en" class="ie8 no-js}"> <![endif]-->
+<html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]>
-<html lang="en" class="ie9 no-js}"> <![endif]-->
+<html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
 <html lang="zxx">
 <!--[endif]-->
 
 
-<!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_single_second.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:14:41 GMT -->
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/confirmation_screen.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:02 GMT -->
 <!-- Added by HTTrack -->
 <meta http-equiv="content-type" content="text/html;charset=utf-8"/><!-- /Added by HTTrack -->
 <head>
     <meta charset="utf-8"/>
-    <title>Movie Pro Responsive HTML Template</title>
+    <title>Confirmation</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="description" content="Movie Pro"/>
     <meta name="keywords" content="Movie Pro"/>
     <meta name="author" content=""/>
     <meta name="MobileOptimized" content="320"/>
     <!--Template style -->
+    <link rel="apple-touch-icon" href="logo192.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <title>Seat booking</title>
+    <link th:href="@{/css/2.fd207d57.chunk.css}" rel="stylesheet"/>
+    <link th:href="@{/css/main.ffa69c8e.chunk.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
@@ -37,94 +51,135 @@ Author: Webstrot
     <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
-    <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{none}"/>
-    <!-- favicon links -->
+
+    <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
 </head>
 
-<body>
+<body class="booking_type_back">
 <!-- preloader Start -->
 <div id="preloader">
     <div id="status">
-        <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
+        <img src="images/header/horoscope.gif" id="preloader_image" alt="loader">
     </div>
 </div>
 
-
 <!-- prs navigation Start -->
-<header lang="vi" th:include="fragments/navigation :: navigation"></header>
+<header lang="vi" th:insert="fragments/navigation :: navigation"></header>
 <!-- prs navigation End -->
 
-<!-- st slider sidebar wrapper Start -->
-<div class="st_slider_index_sidebar_main_wrapper st_slider_index_sidebar_main_wrapper_md float_left">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div class="st_indx_slider_main_container float_left">
-                    <div class="row">
-                        <div class="col-md-12" style="margin-top: 50px;">
-                            <div class="ne_busness_main_slider_wrapper float_left">
-                                <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
-                                    <h2 style="font-size: 40px; color: #ff4444; padding-bottom: 50px; text-align: center;">Choose popcorn and drink</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 tab-content">
-                            <div role="tabpanel" class="tab-pane active">
-                                <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
-                                <div class="row">
-                                    <div th:each="popcornDrink : ${allPopcornDrink}" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-12">
-                                        <div class="prs_upcom_movie_box_wrapper"
-                                             style="height: 100%; display: flex; flex-direction: column;">
-                                            <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
-                                                <img th:src="${popcornDrink.imageUrl}" alt="movie_img"
-                                                     style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+<div id="root">
+    <div class="container-fluid bg-light" style="padding-top: 20px;">
+        <div class="bookTicket__content row mt-5">
+            <div class="checkOut__left col-md-9 col-sm-12 p-0">
+                <div class="bookSlot">
+                    <div class="bookSlot__content" style="overflow-x: scroll;">
+                        <h2 style="font-size: 40px; color: #ff4444; padding-bottom: 50px;padding-top: 40px; text-align: center;">
+                            Choose
+                            popcorn and drink</h2>
+                        <div class="row">
+                            <div th:each="popcornDrink : ${allPopcornDrink}"
+                                 class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="prs_upcom_movie_box_wrapper"
+                                     style="height: 100%; display: flex; flex-direction: column;"
+                                     th:data-id="${popcornDrink.id}">
+                                    <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
+                                        <img th:src="${popcornDrink.imageUrl}" alt="movie_img"
+                                             style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+                                    </div>
+                                    <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
+                                        <div class="prs_upcom_movie_content_box_inner">
+                                            <h2 th:text="${popcornDrink.name}"
+                                                style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px; width: 100%">
+                                            </h2>
+                                            <div style="font-size: 0.9rem; color: #333;">
+                                                <p th:text="${popcornDrink.description}"></p>
                                             </div>
-                                            <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2 th:text="${popcornDrink.name}"
-                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px; width: 100%">
-                                                    </h2>
-                                                    <div style="font-size: 0.9rem; color: #333;">
-                                                        <p th:text="${popcornDrink.description}"> </p>
-                                                    </div>
-                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-                                                        <!-- Price -->
-                                                        <span style="font-size: 1rem; font-weight: bold; color: #d9534f;" th:text="'Price: ' + ${popcornDrink.price}">Price</span>
-                                                        <!-- Quantity Input -->
-                                                        <div style="padding-right: 100px">
-                                                            <input type="number" class="form-control" value="0" min="0" name="quantity" style="width: 60px; height: 35px; padding: 5px; text-align: center;">
-                                                        </div>
-                                                    </div>
+                                            <div style="display: flex;
+                                             justify-content: space-between;
+                                              align-items: center;
+                                               margin-top: 15px;">
+                                                <span style="font-size: 1rem; font-weight: bold; color: #d9534f;"
+                                                      th:text="'Price: ' + ${popcornDrink.price}"
+                                                      class="popcorn-price"
+                                                      th:attr="data-price=${popcornDrink.price}">Price</span>
+                                                <div style="padding-right: 80px">
+                                                    <input type="number" class="form-control" value="0" min="0" max="${popcornDrink.quantity}"
+                                                           name="quantity"
+                                                           style="width: 60px; height: 35px; padding: 5px; text-align: center;"
+                                                           th:attr="max=${popcornDrink.quantity}">
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> <!-- hết mỗi phim -->
-                                </div> <!-- hết row -->
-                            </div> <!-- hết tab-panel -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="checkOut__right col-md-3 col-sm-12" style="padding-top: 50px">
+                <div class="checkout__form">
+                    <div class="total__price">
+                        <span class="price" th:attr="data-price=${bookingRequest.totalPrice}"
+                              th:text="${bookingRequest.totalPrice}">0₫</span>
+                    </div>
+                    <div class="film__info">
+                        <span class="film__age--C" th:text="'Room ' + ${schedule.get().room.name}"></span>
+                        <span class="film__name" th:text="${schedule.get().movie.name}"></span>
+                        <p class="film__detail" th:text="${schedule.get().startDate}+' - '+${schedule.get().startTime}">
+                        </p>
+                        <p class="film__detail" th:text="${schedule.get().room.getRoomType()}"></p>
+                        <p class="film__detail" th:text="${schedule.get().movie.getLanguage()}"></p>
+                        <p class="theater__name" th:text="${schedule.get().branch.name}"></p>
+                        <p class="film__address" th:text="${schedule.get().branch.locationDetail}"></p>
+                    </div>
+                    <div class="count__slot">
+                        <div>The chair is being selected: <span th:text="${listSeatChoose}"></span></div>
+                        <div class="slot"></div>
+                    </div>
+                    <div class="discountForm d-flex justify-content-between">
+                        <div class="discountForm__content"><label class="label__name">Discount code</label><input
+                                type="text" name="code" id="txtDiscountCode" class="form-control d-inline"
+                                placeholder="Enter here..."></div>
+                        <button id="btnCheckCode" class="btn mb-2">Apply</button>
+                    </div>
+                    <div class="payForm">
+                        <a class="pay__link" href="/#">
+                            <p class="text__notification">Please select a seat to display the appropriate payment
+                                method.</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="textNotification text-center"><i class="fa fa-info-circle text-danger mr-1"></i><span
+                        class="noti__text">The purchased ticket cannot be exchanged or refunded. The ticket code will be
+                        sent via message
+                        <span class="noti__link">SMS</span> (Zalo message) and <span
+                            class="noti__link">Email.</span></span></div>
+                <div id="btn-booking" class="btnBook" type="button">Payment</div>
+            </div>
         </div>
     </div>
 </div>
-<!-- st slider sidebar wrapper End -->
 
-<!-- prs footer Wrapper Start -->
-<header lang="vi" th:include="fragments/footer"></header>
-<!-- prs footer Wrapper End -->
 
-<!-- st login wrapper Start -->
+<!--&lt;!&ndash; prs footer Wrapper Start &ndash;&gt;-->
+<!--<header lang="vi" th:insert="fragments/footer"></header>-->
+<!--&lt;!&ndash; prs footer Wrapper End &ndash;&gt;-->
+
+<!-- Login Wrapper Start -->
 <div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
-<!-- st login wrapper End -->
+<!-- Login Wrapper End -->
 
 <!--main js file start-->
 <script th:src="@{/js/jquery_min.js}"></script>
-<script th:src="@{/js/modernizr.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
 <script th:src="@{/js/owl.carousel.js}"></script>
 <script th:src="@{/js/jquery.dlmenu.js}"></script>
 <script th:src="@{/js/jquery.sticky.js}"></script>
@@ -134,9 +189,169 @@ Author: Webstrot
 <script th:src="@{/js/venobox.min.js}"></script>
 <script th:src="@{/js/smothscroll_part1.js}"></script>
 <script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/jquery.countTo.js}"></script>
+<script th:src="@{/js/jquery.inview.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/movie_showing.js}"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
 <!--main js file end-->
+<script>
+    $(document).ready(function() {
+        // Lấy giá trị max từ thuộc tính data-max của input
+        var maxQuantity = $("input[name='quantity']").data("max");
+
+        // Cập nhật giá trị max cho input
+        $("input[name='quantity']").attr("max", maxQuantity);
+    });
+    $(document).ready(function () {
+        // Lấy giá trị từ thẻ span có class "price" và thuộc tính data-price
+        let priceValue = parseFloat($(".price").data("price"));
+
+        // Kiểm tra giá trị price có hợp lệ không, nếu không thì khởi tạo giá trị là 0
+        if (isNaN(priceValue)) {
+            priceValue = 0;
+        }
+
+        // Định dạng giá trị thành dạng tiền tệ Việt Nam
+        let formattedPrice = priceValue.toLocaleString('vi-VN') + "₫";
+
+        // Cập nhật lại giá trị vào trong thẻ span
+        $(".price").text(formattedPrice);
+    });
+    $(document).ready(function () {
+        $(".popcorn-price").each(function () {
+            const price = parseFloat($(this).data("price"));
+            if (!isNaN(price)) {
+                const formattedPrice = price.toLocaleString('vi-VN');
+                $(this).text(`Price: ${formattedPrice}₫`);
+            }
+        });
+    });
+
+    let selectedItems = [];
+    $(document).ready(function () {
+        // Khởi tạo biến để theo dõi tổng giá và các sản phẩm đã chọn
+        const $priceElement = $(".price");
+        let totalPrice = parseFloat($(".price").data("price")) || 0;
+
+        // Lắng nghe sự kiện khi thay đổi số lượng sản phẩm
+        $("input[name='quantity']").on("change", function () {
+            let quantity = $(this).val();
+            let price = parseFloat($(this)
+                .closest(".prs_upcom_movie_box_wrapper")
+                .find(".popcorn-price")
+                .data("price")); // Lấy giá từ data-price
+            let productName = $(this).closest(".prs_upcom_movie_box_wrapper").find("h2").text();
+            let productId = $(this).closest(".prs_upcom_movie_box_wrapper").data("id");
+
+            if (quantity > 0) {
+                // Kiểm tra xem sản phẩm đã có trong danh sách chưa
+                let existingItem = selectedItems.find(item => item.name === productName);
+
+                if (existingItem) {
+                    // Nếu sản phẩm đã có, cập nhật số lượng và giá trị
+                    totalPrice -= existingItem.price;  // Giảm giá cũ của sản phẩm
+                    existingItem.quantity = quantity;  // Cập nhật số lượng
+                    existingItem.price = price * quantity;  // Cập nhật giá mới
+                } else {
+                    // Nếu chưa có, thêm sản phẩm mới vào danh sách
+                    selectedItems.push({id: productId, name: productName, quantity: quantity, price: price * quantity});
+                }
+
+                // Cập nhật tổng giá
+                totalPrice += price * quantity;
+
+            } else {
+                // Nếu số lượng bằng 0, lấy sản phẩm để trừ đúng số tiền
+                let existingItem = selectedItems.find(item => item.name === productName);
+                if (existingItem) {
+                    totalPrice -= existingItem.price;
+                }
+                // Xóa sản phẩm khỏi danh sách
+                selectedItems = selectedItems.filter(item => item.name !== productName);
+            }
+
+            // Cập nhật giá hiển thị trên giao diện
+            $priceElement.text(totalPrice.toLocaleString('vi-VN') + "₫");
+
+            // Cập nhật lại data-price trong HTML để đồng bộ với giá trị trong JavaScript
+            $priceElement.data("price", totalPrice);
+
+            // Cập nhật danh sách sản phẩm đã chọn
+            let selectedItemsText = selectedItems.map(item => `${item.name} x${item.quantity}`).join(", ");
+            $(".count__slot .slot").text("Selected: " + selectedItemsText);
+            console.log(selectedItemsText + "selectedItemsText")
+            console.log("selectedItems:", JSON.stringify(selectedItems, null, 2));
+        });
+    });
+    $("#btn-booking").click(function () {
+
+        const scheduleId = [[${schedule.get().id}]];
+        const userId = [[${session.userLogin.id}]];
+        const listSeatId = [[${bookingRequest.listSeatId}]];
+        const totalPrice = Number($(".price").data("price"));
+
+        const selectedItemsData = selectedItems.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        }));
+
+        const payload = {
+            scheduleId: scheduleId,
+            userId: userId,
+            listSeatId: listSeatId,
+            listPopcornDrink: selectedItemsData,
+            totalPrice: totalPrice
+        };
+
+        console.log("payload:", payload);
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/check-duplicate-payment",
+            data: JSON.stringify(payload),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                // Chuyển người dùng đến trang thanh toán
+                if (data.checkoutUrl) {
+                    window.location.href = data.checkoutUrl;
+                } else {
+                    alert("Error creating payment link, please check the transaction history, do not repeat.");
+                }
+            },
+            error: function (e) {
+                console.error(e);
+                $("#text-error").html("Error creating payment link, please check the transaction history, do not repeat.");
+                $("#error").addClass("swal-overlay--show-modal");
+            }
+        });
+    });
+</script>
 </body>
 
-<!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_single_second.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:14:51 GMT -->
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/confirmation_screen.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:07 GMT -->
 </html>

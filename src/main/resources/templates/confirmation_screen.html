@@ -42,6 +42,50 @@ Author: Webstrot
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+
+	<style>
+		.st_bcc_tecket_bottom_inner_right {
+			font-family: Arial, sans-serif;
+			padding: 20px;
+			border-radius: 8px;
+			background-color: #f9f9f9;
+		}
+
+		.st_bcc_tecket_bottom_inner_right i {
+			font-size: 24px;
+			color: #6A5ACD;
+		}
+
+		h3 {
+			font-size: 18px;
+			color: #333;
+			margin-bottom: 10px;
+		}
+
+		.popcorn-drink-table {
+			width: 100%;
+			border-collapse: collapse; /* Xóa khoảng cách giữa các ô */
+			margin-top: 10px;
+		}
+
+		.popcorn-drink-table th,
+		.popcorn-drink-table td {
+			padding: 8px 12px;
+			text-align: left;
+			border: 1px solid #ddd;
+		}
+
+		.popcorn-drink-table th {
+			background-color: #6A5ACD;
+			color: white;
+			font-size: 16px;
+		}
+
+		.popcorn-drink-table td {
+			background-color: #fff;
+		}
+	</style>
+
 </head>
 
 <body class="booking_type_back">
@@ -103,11 +147,31 @@ Author: Webstrot
 										<img th:src="@{/images/content/pur2.png}" alt="pur2 image" />
 									</div>
 								</div>
-								<div class="st_bcc_tecket_bottom_inner_right"> <i class="fas fa-chair"></i>
-									<h3>SEAT <br>
-										<span th:text="${paymentLink.getSeatList().toString()}"></span>
+								<div class="st_bcc_tecket_bottom_inner_right">
+									<i class="fas fa-chair"></i>
+									<h3>TICKET DETAIL<br>
+										<span th:text="'SEAT: ' + ${paymentLink.getSeatList().toString()}" style="font-weight: bold; font-size: 15px"></span>
 									</h3>
+
+									<h4>POPCORN AND DRINK</h4>
+									<table class="popcorn-drink-table">
+										<thead>
+										<tr>
+											<th>Product</th>
+											<th>Quantity</th>
+											<th>Price</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr th:each="popcornAndDrink : ${session.bookingRequestDTO.listPopcornDrink}">
+											<td class="product-name" th:text="${popcornAndDrink.name}"></td>
+											<td class="quantity" th:text="${popcornAndDrink.quantity}"></td>
+											<td class="price" th:attr="data-price=${popcornAndDrink.price}" th:text="${popcornAndDrink.price}"></td>
+										</tr>
+										</tbody>
+									</table>
 								</div>
+
 							</div>
 							<div class="st_bcc_tecket_bottom_right_wrapper">
 								<img th:src="@{${qrTicket.qrImageURL}}" alt="qr image" style="height: 150px; width: 150px"/>
@@ -170,6 +234,17 @@ Author: Webstrot
 <script th:src="@{/js/custom.js}"></script>
 <script th:src="@{/js/movie_showing.js}"></script>
 <!--main js file end-->
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const priceElements = document.querySelectorAll(".price");
+
+		priceElements.forEach(function (el) {
+			const rawPrice = parseFloat(el.getAttribute("data-price"));
+			const formatted = rawPrice.toLocaleString('vi-VN'); // format kiểu 75.000
+			el.textContent = formatted;
+		});
+	});
+</script>
 </body>
 
 

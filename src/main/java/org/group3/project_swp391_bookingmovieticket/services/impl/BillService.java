@@ -2,6 +2,7 @@ package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import jakarta.transaction.Transactional;
 import org.group3.project_swp391_bookingmovieticket.dtos.BookingRequestDTO;
+import org.group3.project_swp391_bookingmovieticket.dtos.PopcornDrinkDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.Bill;
 import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
 import org.group3.project_swp391_bookingmovieticket.entities.Ticket;
@@ -84,6 +85,14 @@ public class BillService implements IBillService {
 
         List<Ticket> ticketList = new ArrayList<>();
 
+        List<String> listPopcornDrinkName = new ArrayList<>();
+        if (bookingRequestDTO.getListPopcornDrink() != null) {
+            for (PopcornDrinkDTO dto : bookingRequestDTO.getListPopcornDrink()) {
+                String nameWithQuantity = dto.getName() + " (x" + dto.getQuantity() + ")";
+                listPopcornDrinkName.add(nameWithQuantity);
+            }
+        }
+
         for (Integer seatId : bookingRequestDTO.getListSeatId()) {
             // Kiểm tra ghế đã bị người khác đặt chưa
             boolean isAlreadyBooked = !ticketRepository
@@ -97,6 +106,10 @@ public class BillService implements IBillService {
             ticket.setSchedule(schedule);
             ticket.setSeat(seatRepository.getById(seatId));
             ticket.setBill(bill); // gắn ngược lại vào bill
+            // thêm list bỏng nước vào
+            if (bookingRequestDTO.getListPopcornDrink() != null) {
+                ticket.setListPopcornDrinkName(String.join(",", listPopcornDrinkName));
+            }
 
             ticketList.add(ticket);
         }

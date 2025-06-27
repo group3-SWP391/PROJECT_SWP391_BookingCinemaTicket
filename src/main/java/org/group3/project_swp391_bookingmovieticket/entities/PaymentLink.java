@@ -26,7 +26,7 @@ public class PaymentLink {
     @Column(nullable = false, length = 50)
     private String status; // PENDING, PAID, CANCELLED
 
-    @Column(name = "seat_list", columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "seat_list")
     private String seatList;
 
     @Column(name = "total_price", nullable = false)
@@ -49,8 +49,6 @@ public class PaymentLink {
     @JoinColumn(name = "bill_id")
     private Bill bill;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "popcorn_drink_id")
-    private PopcornDrink popcornDrink;
+    @Column(name = "popcorn_drink_list")
+    private String listPopcornDrinkName;
 }

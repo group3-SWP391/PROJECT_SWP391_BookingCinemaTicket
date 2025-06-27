@@ -174,81 +174,7 @@
                                 <span class="noti__link">SMS</span> (Zalo message) and <span
                             class="noti__link">Email</span>
                                 đã nhập. </span></div>
-                <div id="btn-booking" class="btnBook" type="button">Payment</div>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="success" class="swal-overlay notify " tabindex="-1">
-    <div class="swal-modal" role="dialog" aria-modal="true">
-        <div class="swal-icon swal-icon--success">
-            <span class="swal-icon--success__line swal-icon--success__line--long"></span>
-            <span class="swal-icon--success__line swal-icon--success__line--tip"></span>
-
-            <div class="swal-icon--success__ring"></div>
-            <div class="swal-icon--success__hide-corners"></div>
-        </div>
-        <div class="swal-title">Thanh toán thành công</div>
-        <div class="swal-text" style=""></div>
-        <div class="swal-footer">
-            <div class="swal-button-container">
-
-                <button class="swal-button swal-button--confirm">OK</button>
-
-                <div class="swal-button__loader">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-<div id="error" class="swal-overlay notify" tabindex="-1">
-    <div class="swal-modal" role="dialog" aria-modal="true">
-        <div class="swal-icon swal-icon--error">
-            <div class="swal-icon--error__x-mark">
-                <span class="swal-icon--error__line swal-icon--error__line--left"></span>
-                <span class="swal-icon--error__line swal-icon--error__line--right"></span>
-            </div>
-        </div>
-        <div id="text-error" class="swal-title">Có người nhanh tay đặt chỗ của bạn</div>
-        <div class="swal-footer">
-            <div class="swal-button-container">
-
-                <button class="swal-button swal-button--confirm">OK</button>
-
-                <div class="swal-button__loader">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-<div id="error-time" class="swal-overlay" tabindex="-1">
-    <div class="swal-modal" role="dialog" aria-modal="true">
-        <div class="swal-icon swal-icon--error">
-            <div class="swal-icon--error__x-mark">
-                <span class="swal-icon--error__line swal-icon--error__line--left"></span>
-                <span class="swal-icon--error__line swal-icon--error__line--right"></span>
-            </div>
-        </div>
-        <div class="swal-title">Lịch chiếu đã đóng, vui lòng chọn lịch chiếu khác!</div>
-        <div class="swal-footer">
-            <div class="swal-button-container">
-
-                <button id="notify-error" class="swal-button swal-button--confirm">OK</button>
-
-                <div class="swal-button__loader">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-
+                <div id="btn-booking" class="btnBook" type="button">Choose popcorn and drink</div>
             </div>
         </div>
     </div>
@@ -341,46 +267,45 @@
         }, 1000);
 
         //submit form booking
+
+        // Xử lý sự kiện khi người dùng nhấn "Choose popcorn and drink"
         $("#btn-booking").click(function () {
-            if (dataParameter.length != 0) {
-                const scheduleId = [[${schedule.id}]];
-                const userId = [[${session.userLogin.id}]];
-                const totalPrice = Number($(".price").data("price"));
-                ;
+            const selectedSeats = dataParameter;  // Lưu danh sách ghế đã chọn
+            const scheduleId = [[${schedule.id}]];  // ID lịch chiếu từ Thymeleaf
+            const userId = [[${session.userLogin.id}]];  // ID người dùng từ phiên đăng nhập
+            const totalPrice = Number($(".price").data("price"));  // Tổng giá trị từ trang
 
-                const payload = {
-                    scheduleId: scheduleId,
-                    userId: userId,
-                    listSeatId: dataParameter,
-                    totalPrice: totalPrice
-                };
-
-                console.log("Sending data:", payload);
-
-                $.ajax({
-                    type: "POST",
-                    url: "http://localhost:8080/create-payment-link",
-                    data: JSON.stringify(payload),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        // Chuyển người dùng đến trang thanh toán
-                        if (data.checkoutUrl) {
-                            window.location.href = data.checkoutUrl;
-                        } else {
-                            alert("Không lấy được link thanh toán.");
-                        }
-                    },
-                    error: function (e) {
-                        console.error(e);
-                        $("#text-error").html("Lỗi khi tạo link thanh toán.");
-                        $("#error").addClass("swal-overlay--show-modal");
-                    }
-                });
-            } else {
-                $("#text-error").html("Bạn chưa chọn chỗ ngồi!");
-                $("#error").addClass("swal-overlay--show-modal");
+            // Kiểm tra nếu không có ghế nào được chọn
+            if (selectedSeats.length === 0) {
+                alert("Bạn chưa chọn ghế. Vui lòng chọn ghế trước khi tiếp tục.");
+                return;
             }
+
+            // Tạo đối tượng bookingRequest
+            const bookingRequest = {
+                userId: userId,
+                scheduleId: scheduleId,
+                listSeatId: selectedSeats,
+                totalPrice: totalPrice
+            };
+
+            // Chuyển đối tượng bookingRequest thành chuỗi query string
+            const queryString = $.param(bookingRequest);
+
+            // Gửi yêu cầu GET với dữ liệu qua URL
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/pick-popcorn-drink?" + queryString,  // Truyền dữ liệu trong URL
+                success: function (data) {
+                    window.location.href = "http://localhost:8080/pick-popcorn-drink?" + queryString;  // Chuyển hướng tới trang chọn bỏng và nước
+                },
+                error: function (e) {
+                    console.error("Error during request:", e);
+                    alert("Có lỗi xảy ra khi gửi yêu cầu.");
+                }
+            });
         });
+
 
         //close notify
         $(".notify").click(function (e) {
@@ -468,13 +393,13 @@
         t()
     }([])
 </script>
-<script>
-    // Nếu người dùng ấn "Back", reload trang để lấy dữ liệu thật từ server
-    window.onpageshow = function (event) {
-        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-            window.location.reload();
-        }
-    };
-</script>
+<!--<script>-->
+<!--    // Nếu người dùng ấn "Back", reload trang để lấy dữ liệu thật từ server-->
+<!--    window.onpageshow = function (event) {-->
+<!--        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {-->
+<!--            window.location.reload();-->
+<!--        }-->
+<!--    };-->
+<!--</script>-->
 </body>
 </html>

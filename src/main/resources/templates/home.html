@@ -289,6 +289,13 @@ Author: Webstrot
         $('#myModal').modal('show');
     });
 </script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    [[#if (${errorMessage} != null)]]
+    alert([[${errorMessage}]]);
+    [[/if]]
+    /*]]>*/
+</script>
 </body>
 
 

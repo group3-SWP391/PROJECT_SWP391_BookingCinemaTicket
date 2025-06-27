@@ -2,10 +2,12 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "popcorn_drink")
 @Data
+@NoArgsConstructor
 public class PopcornDrink {
 
     @Id
@@ -16,7 +18,7 @@ public class PopcornDrink {
     private String name;
 
     @Column(name = "price")
-    private Double price;
+    private double price;
 
     @Column(name = "category")
     private String category;
@@ -28,6 +30,6 @@ public class PopcornDrink {
     private String description;
 
     @Column(name = "quantity")
-    private Integer quantity;
+    private int quantity;
 
 }

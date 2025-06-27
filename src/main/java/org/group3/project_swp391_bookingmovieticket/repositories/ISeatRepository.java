@@ -13,4 +13,7 @@ public interface ISeatRepository extends JpaRepository<Seat, Integer> {
 
     @Query("SELECT s.name FROM Seat s WHERE s.id IN :ids")
     List<String> findSeatNamesByIdList(@Param("ids") List<Integer> ids);
+
+    @Query("SELECT s.name FROM Seat s WHERE s.id = :id")
+    String findSeatNameById(@Param("id") Integer id);
 }

@@ -101,6 +101,11 @@ public class SeatService implements ISeatService {
         return seatRepository.findSeatNamesByIdList(ids);
     }
 
+    @Override
+    public String findSeatNameById(Integer id) {
+        return seatRepository.findSeatNameById(id);
+    }
+
 
     @Override
     public List<Seat> findAll() {
@@ -109,7 +114,7 @@ public class SeatService implements ISeatService {
 
     @Override
     public Optional<Seat> findById(Integer id) {
-        return Optional.empty();
+        return seatRepository.findById(id);
     }
 
     @Override

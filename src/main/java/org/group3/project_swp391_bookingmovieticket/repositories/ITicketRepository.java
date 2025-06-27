@@ -30,5 +30,5 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
             "JOIN t.bill b " +
             "JOIN PaymentLink p ON p.bill.id = b.id " +
             "WHERE p.orderCode = :orderCode")
-    Ticket findTicketsByOrderCode(@Param("orderCode") long orderCode);
+    List<Ticket> findTicketsByOrderCode(@Param("orderCode") long orderCode);
 }

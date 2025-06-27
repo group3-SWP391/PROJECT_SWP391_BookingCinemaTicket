@@ -41,7 +41,12 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public Ticket findTicketsByOrderCode(long orderCode) {
+    public List<Ticket> findTicketsByOrderCode(long orderCode) {
         return ticketRepository.findTicketsByOrderCode(orderCode);
+    }
+
+    @Override
+    public List<Ticket> findTicketsBySchedule_IdAndSeat_Id(Integer scheduleId, Integer seatId) {
+        return ticketRepository.findTicketsBySchedule_IdAndSeat_Id(scheduleId, seatId);
     }
 }

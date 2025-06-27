@@ -32,8 +32,6 @@ public class Ticket {
     @JoinColumn(name = "bill_id", nullable = false)
     private Bill bill;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "popcorn_drink_id")
-    private PopcornDrink popcornDrink;
+    @Column(name = "popcorn_drink_list")
+    private String listPopcornDrinkName;
 }

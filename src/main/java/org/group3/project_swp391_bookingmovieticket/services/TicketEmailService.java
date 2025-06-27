@@ -23,7 +23,9 @@ public class TicketEmailService {
                                  String branchName,
                                  String seatName,
                                  String movieFormat,
+                                 String listPopcornAndDrinkName,
                                  byte[] qrBytes) throws MessagingException {
+        System.out.println(listPopcornAndDrinkName + "send email");
 
         String htmlContent = """
                 <h2>🎬 Thank you, %s, for booking your ticket with us!</h2>
@@ -34,11 +36,12 @@ public class TicketEmailService {
                     <tr><td><strong>⏰ Time:</strong></td><td>%s</td></tr>
                     <tr><td><strong>🏢 Cinema:</strong></td><td>%s</td></tr>
                     <tr><td><strong>💺 Seat:</strong></td><td>%s</td></tr>
-                    <tr><td><strong>🎞️ Format:</strong></td><td>3D</td></tr>
+                    <tr><td><strong>🎞️ Format:</strong></td><td>%s</td></tr>
+                     <tr><td><strong>🍿🍹 Popcorn & Drinks:</strong></td><td>%s</td></tr>
                 </table>
                 <p style="margin-top: 15px;">🎟️ Your QR code ticket is attached. Please present it at the cinema entrance.</p>
                 <p style="color: gray;">Enjoy your movie experience!</p>
-                """.formatted(customerName, movieName, showDate, showTime, branchName, seatName, movieFormat);
+                """.formatted(customerName, movieName, showDate, showTime, branchName, seatName, movieFormat, listPopcornAndDrinkName);
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true); // multipart=true

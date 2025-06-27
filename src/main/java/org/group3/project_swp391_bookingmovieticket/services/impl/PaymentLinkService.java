@@ -1,6 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.entities.PaymentLink;
+import org.group3.project_swp391_bookingmovieticket.entities.Seat;
 import org.group3.project_swp391_bookingmovieticket.repositories.IPaymentLinkRepository;
 import org.group3.project_swp391_bookingmovieticket.services.IPaymentLinkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +60,9 @@ public class PaymentLinkService implements IPaymentLinkService {
         return paymentLinkRepository.existsByOrderCodeAndStatus(orderCode, "PAID");
     }
 
+    @Override
+    public boolean existsBySchedule_IdAndSeatListAndStatus(int scheduleId, String id) {
+        return paymentLinkRepository.existsBySchedule_IdAndSeatListAndStatus(scheduleId, id);
+    }
 
 }

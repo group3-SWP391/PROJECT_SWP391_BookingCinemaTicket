@@ -26,7 +26,7 @@ public class PopcornDrinkService implements IPopcornDrinkService {
 
     @Override
     public Optional<PopcornDrink> findById(Integer id) {
-        return Optional.empty();
+        return popcornDrinkRepository.findById(id);
     }
 
     @Override
@@ -37,5 +37,10 @@ public class PopcornDrinkService implements IPopcornDrinkService {
     @Override
     public void remove(Integer id) {
 
+    }
+
+    @Override
+    public void save(PopcornDrink popcornDrink) {
+        popcornDrinkRepository.save(popcornDrink);
     }
 }
