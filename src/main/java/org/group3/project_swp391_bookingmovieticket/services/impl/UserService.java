@@ -96,6 +96,11 @@ public class UserService implements IUserService {
         }
     }
 
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+
     @Override
     public Optional<User> findByPhoneAndPassword(String phone, String password) {
         System.out.println("Searching for phone: " + phone + ", password: " + password);
@@ -115,11 +120,6 @@ public class UserService implements IUserService {
         return Optional.empty();
     }
 
-    @Override
-    public void saveTransactionHistory(Integer userId, Integer billId, String movieName, Integer seatId, Double price, String status) {
-        String sql = "INSERT INTO transaction_history (user_id, bill_id, movie_name, seat_id, price, status) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, userId, billId, movieName, seatId, price, status);
-    }
 
     @Override
     public void changePassword(Integer userId, String newPassword) {
@@ -167,4 +167,26 @@ public class UserService implements IUserService {
             return false;
         }
     }
+
+    @Override
+    public boolean isEmailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public boolean isPhoneExists(String phone) {
+        return userRepository.findByPhone(phone).isPresent();
+    }
+
+    @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public void updateUserInfo(User user) {
+        update(user);
+    }
+
 }

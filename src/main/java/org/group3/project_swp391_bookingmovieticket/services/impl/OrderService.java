@@ -2,8 +2,8 @@ package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import jakarta.transaction.Transactional;
 import org.group3.project_swp391_bookingmovieticket.dtos.OrderDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.Order;
-import org.group3.project_swp391_bookingmovieticket.repositories.OrderRepository;
+import org.group3.project_swp391_bookingmovieticket.entities.*;
+import org.group3.project_swp391_bookingmovieticket.repositories.*;
 import org.group3.project_swp391_bookingmovieticket.services.IOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +20,11 @@ public class OrderService implements IOrderService {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private VoucherService voucherService;
+    @Autowired private OrderRepository orderRepository;
+    @Autowired private VoucherService voucherService;
+    @Autowired private IUserRepository userRepository;
+    @Autowired private BillRepository billRepository;
+    @Autowired private SeatRepository seatRepository;
 
     @Override
     public List<Order> getAllOrders() {
@@ -38,40 +38,53 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional
-    public Order createOrder(OrderDTO orderDTO) {
-        logger.info("Creating order for userId: {}", orderDTO.getUserId());
+    public Order createOrder(OrderDTO dto) {
+        logger.info("Creating order for userId: {}", dto.getUserId());
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        Bill bill = billRepository.findById(dto.getBillId())
+                .orElseThrow(() -> new IllegalArgumentException("Bill not found"));
+        Seat seat = seatRepository.findById(dto.getSeatId())
+                .orElseThrow(() -> new IllegalArgumentException("Seat not found"));
+
         Order order = new Order(
-                orderDTO.getUserId(),
-                orderDTO.getBillId(),
-                orderDTO.getMovieName(),
-                orderDTO.getSeatId(),
-                orderDTO.getPrice() != null ? orderDTO.getPrice() : BigDecimal.ZERO,
-                orderDTO.getTransactionDate() != null ? orderDTO.getTransactionDate() : LocalDateTime.now(),
-                orderDTO.getStatus()
+                user,
+                bill,
+                dto.getMovieName(), // ✅ Lưu movieName
+                seat,
+                dto.getPrice() != null ? dto.getPrice() : BigDecimal.ZERO,
+                dto.getTransactionDate() != null ? dto.getTransactionDate() : LocalDateTime.now(),
+                dto.getStatus()
         );
+
         Order savedOrder = orderRepository.save(order);
-        logger.info("Order saved with ID: {}", savedOrder.getId());
+
         try {
-            voucherService.generateVoucherForUser(order.getUserId());
-            logger.info("Voucher generation attempted for userId: {}", order.getUserId());
+            voucherService.generateVoucherForUser(user.getId());
+            logger.info("Voucher generation attempted for userId: {}", user.getId());
         } catch (Exception e) {
-            logger.error("Failed to generate voucher for userId: {}. Error: {}", order.getUserId(), e.getMessage(), e);
+            logger.error("Failed to generate voucher for userId: {}. Error: {}", user.getId(), e.getMessage(), e);
         }
+
         return savedOrder;
     }
 
     @Override
-    public Order updateOrder(Integer id, OrderDTO orderDTO) {
-        Optional<Order> existingOrder = orderRepository.findById(id);
-        if (existingOrder.isPresent()) {
-            Order order = existingOrder.get();
-            order.setUserId(orderDTO.getUserId());
-            order.setBillId(orderDTO.getBillId());
-            order.setMovieName(orderDTO.getMovieName());
-            order.setSeatId(orderDTO.getSeatId());
-            order.setPrice(orderDTO.getPrice() != null ? orderDTO.getPrice() : order.getPrice());
-            order.setTransactionDate(orderDTO.getTransactionDate() != null ? orderDTO.getTransactionDate() : order.getTransactionDate());
-            order.setStatus(orderDTO.getStatus());
+    public Order updateOrder(Integer id, OrderDTO dto) {
+        Optional<Order> optional = orderRepository.findById(id);
+        if (optional.isPresent()) {
+            Order order = optional.get();
+
+            order.setUser(userRepository.findById(dto.getUserId()).orElseThrow());
+            order.setBill(billRepository.findById(dto.getBillId()).orElseThrow());
+            order.setMovieName(dto.getMovieName()); // ✅ Sửa movieName
+            order.setSeat(seatRepository.findById(dto.getSeatId()).orElseThrow());
+
+            order.setPrice(dto.getPrice() != null ? dto.getPrice() : order.getPrice());
+            order.setTransactionDate(dto.getTransactionDate() != null ? dto.getTransactionDate() : order.getTransactionDate());
+            order.setStatus(dto.getStatus());
+
             return orderRepository.save(order);
         }
         throw new RuntimeException("Order not found with id: " + id);
@@ -93,7 +106,13 @@ public class OrderService implements IOrderService {
 
     public Order saveOrder(Order order) {
         Order savedOrder = orderRepository.save(order);
-        voucherService.generateVoucherForUser(order.getUserId());
+        voucherService.generateVoucherForUser(order.getUser().getId());
         return savedOrder;
+    }
+
+    public boolean hasWatchedMovie(Integer userId, String movieName) {
+        List<Order> orders = orderRepository.findByUserIdAndMovieName(userId, movieName);
+        return orders.stream()
+                .anyMatch(order -> order.getTransactionDate().isBefore(LocalDateTime.now()));
     }
 }

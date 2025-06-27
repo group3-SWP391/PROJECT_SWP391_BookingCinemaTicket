@@ -5,12 +5,10 @@ import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.*;
-import org.group3.project_swp391_bookingmovieticket.repositories.AdvertisingContactRequestRepository;
-import org.group3.project_swp391_bookingmovieticket.repositories.ContactRequestRepository;
-import org.group3.project_swp391_bookingmovieticket.repositories.VoucherRepository;
-import org.group3.project_swp391_bookingmovieticket.services.impl.EmailService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.OrderService;
+import org.group3.project_swp391_bookingmovieticket.repositories.*;
+import org.group3.project_swp391_bookingmovieticket.services.ICommentReactionService;
+import org.group3.project_swp391_bookingmovieticket.services.ICommentService;
+import org.group3.project_swp391_bookingmovieticket.services.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +18,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -41,8 +41,27 @@ public class HomeController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private VoucherService voucherService;
+
     @Autowired
     private VoucherRepository voucherRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private IMovieRepository movieRepository;
+
+    @Autowired
+    private ICommentService commentService;
+
+    @Autowired
+    private FavoriteService favoriteService;
+
+    @Autowired
+    private ICommentReactionService reactionService;
 
     @GetMapping
     public String displayHomePage(Model model, HttpServletRequest request) {
@@ -144,11 +163,46 @@ public class HomeController {
     }
 
     @GetMapping("/movie-details")
-    public String movieDetails(@RequestParam("id") int id, Model model) {
-        Optional<MovieDTO> movieOptional = movieService.findById(id);
-        model.addAttribute("movie", movieOptional.get());
-        model.addAttribute("userDTO", new UserDTO());
-        return "movie_details";
+    public String movieDetails(@RequestParam("id") Integer movieId, Model model, HttpSession session) {
+        Optional<Movie> optionalMovie = movieRepository.findById(movieId);
+        if (optionalMovie.isEmpty()) {
+            model.addAttribute("error", "Không tìm thấy phim với ID: " + movieId);
+            return "error"; // trang error.html hoặc redirect về /movie-category
+        }
+
+        Movie movie = optionalMovie.get();
+        List<Comment> comments = commentService.getCommentsByMovieId(movieId);
+        Map<Integer, Long> likesMap = comments.stream()
+                .collect(Collectors.toMap(Comment::getId, c -> reactionService.countLikes(c)));
+        Map<Integer, Long> dislikesMap = comments.stream()
+                .collect(Collectors.toMap(Comment::getId, c -> reactionService.countDislikes(c)));
+
+        model.addAttribute("movie", movie);
+        model.addAttribute("comments", comments);
+        model.addAttribute("likesMap", likesMap);
+        model.addAttribute("dislikesMap", dislikesMap);
+        User user = (User) session.getAttribute("userLogin");
+        boolean hasOrdered = false;
+        boolean isFavorite = false;
+
+        if (user != null) {
+            hasOrdered = orderRepository.existsByUser_IdAndMovieName(user.getId(), movie.getName());
+        }if (user != null) {
+            isFavorite = favoriteService.isFavorite(user, movie);
+        }
+        model.addAttribute("isFavorite", isFavorite);
+        model.addAttribute("hasOrdered", hasOrdered);
+
+
+        return "movie-details";
+    }
+
+
+    @GetMapping("/voucher/{id}")
+    public String viewVoucherDetail(@PathVariable Integer id, Model model) {
+        Voucher voucher = voucherService.getVoucherById(id);
+        model.addAttribute("voucher", voucher);
+        return "voucher_detail";
     }
 
     @GetMapping("/my-account")
@@ -159,7 +213,9 @@ public class HomeController {
                 model.addAttribute("error", "Please log in to view your account.");
                 return "redirect:/login";
             }
+
             System.out.println("User loaded in myAccount: " + user.getFullname() + ", " + user.getPhone() + ", " + user.getEmail());
+
             List<Order> orders;
             try {
                 orders = orderService.getOrdersByUserId(user.getId());
@@ -171,23 +227,36 @@ public class HomeController {
                 model.addAttribute("error", "Failed to load order history: " + e.getMessage());
                 orders = List.of();
             }
+
             List<Voucher> vouchers;
             try {
-                vouchers = voucherRepository.findValidVouchersByUserId(user.getId(), LocalDateTime.now());
+                vouchers = voucherRepository.findAll();
             } catch (Exception e) {
-                model.addAttribute("error", "Failed to load your voucher: " + e.getMessage());
+                model.addAttribute("error", "Failed to load vouchers: " + e.getMessage());
                 vouchers = List.of();
             }
+            List<Favorite> favoriteList;
+            try {
+                favoriteList = favoriteService.getFavorites(user);
+            } catch (Exception e) {
+                model.addAttribute("error", "Failed to load favorite list: " + e.getMessage());
+                favoriteList = List.of();
+            }
+
             model.addAttribute("user", user);
             model.addAttribute("orders", orders);
             model.addAttribute("vouchers", vouchers);
             model.addAttribute("userDTO", new UserDTO());
+            model.addAttribute("favoriteList", favoriteService.getFavorites(user));
+
             return "myAccount";
         } catch (Exception e) {
             model.addAttribute("error", "An error occurred while loading the account page: " + e.getMessage());
             return "error";
         }
     }
+
+
 
     @PostMapping("/contact")
     public String handleContactForm(@RequestParam String fullName,

@@ -1,15 +1,18 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.entities.Voucher;
 import org.group3.project_swp391_bookingmovieticket.services.impl.UserService;
+import org.group3.project_swp391_bookingmovieticket.services.impl.VoucherService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
 @Controller
 public class OtpController {
@@ -19,100 +22,141 @@ public class OtpController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private VoucherService voucherService;
+
     @PostMapping("/initiate-update-profile")
-    public String initiateUpdateProfile(@ModelAttribute User user, HttpSession session, Model model) {
+    public String initiateUpdateProfile(@ModelAttribute User user,
+                                        HttpSession session, Model model) {
         try {
-            session.setAttribute("pendingUser", user);
-            userService.initiateUpdateProfile(user);
-            model.addAttribute("userId", user.getId());
-            model.addAttribute("action", "UPDATE_PROFILE");
+            User currentUser = getSessionUser(session);
+
+            if (userService.isEmailExists(user.getEmail()) && !user.getEmail().equals(currentUser.getEmail())) {
+                model.addAttribute("error", "Email đã tồn tại trong hệ thống.");
+                model.addAttribute("user", currentUser);
+                return "myAccount";
+            }
+
+            if (userService.isPhoneExists(user.getPhone()) && !user.getPhone().equals(currentUser.getPhone())) {
+                model.addAttribute("error", "Số điện thoại đã tồn tại trong hệ thống.");
+                model.addAttribute("user", currentUser);
+                return "myAccount";
+            }
+
+            // Chuẩn bị user mới để xác nhận OTP
+            User pendingUser = new User(currentUser);
+            pendingUser.setFullname(user.getFullname());
+            pendingUser.setEmail(user.getEmail());
+            pendingUser.setPhone(user.getPhone());
+
+            String otp = generateOtp();
+            session.setAttribute("otp", otp);
+            session.setAttribute("pendingUser", pendingUser);
+
+            userService.initiateUpdateProfile(currentUser); // Gửi email
+
+            model.addAttribute("userId", currentUser.getId());
+            model.addAttribute("action", "UPDATE_PROFILE_EMAIL");
             return "otp-verification";
         } catch (Exception e) {
-            logger.error("Error initiating update profile for userId: {}", user.getId(), e);
+            logger.error("Error initiating profile update", e);
             model.addAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại.");
-            User currentUser = (User) session.getAttribute("userLogin");
-            model.addAttribute("user", currentUser != null ? currentUser : new User());
+            model.addAttribute("user", getSessionUserOrNew(session));
             return "myAccount";
         }
     }
 
     @PostMapping("/initiate-change-password")
-    public String initiateChangePassword(
-            @RequestParam("currentPassword") String currentPassword,
-            @RequestParam("newPassword") String newPassword,
-            HttpSession session, Model model) {
+    public String initiateChangePassword(@RequestParam("currentPassword") String currentPassword,
+                                         @RequestParam("newPassword") String newPassword,
+                                         HttpSession session, Model model) {
         try {
-            User user = (User) session.getAttribute("userLogin");
-            if (user == null) {
-                logger.warn("userLogin is null in session");
-                model.addAttribute("error", "Phiên đã hết hạn. Vui lòng đăng nhập lại.");
-                model.addAttribute("user", new User());
-                return "myAccount";
-            }
+            User user = getSessionUser(session);
             if (userService.findByUsernameAndPassword(user.getEmail(), currentPassword).isPresent()) {
                 session.setAttribute("newPassword", newPassword);
                 userService.initiateChangePassword(user.getId(), user.getEmail());
+
                 model.addAttribute("userId", user.getId());
-                model.addAttribute("action", "CHANGE_PASSWORD");
+                model.addAttribute("action", "CHANGE_PASSWORD_EMAIL");
                 return "otp-verification";
             } else {
-                logger.info("Current password is incorrect for userId: {}", user.getId());
                 model.addAttribute("error", "Mật khẩu hiện tại không đúng.");
-                // Đảm bảo user không null khi render
                 model.addAttribute("user", user);
                 return "myAccount";
             }
         } catch (Exception e) {
-            User sessionUser = (User) session.getAttribute("userLogin");
-            String userId = (sessionUser != null) ? String.valueOf(sessionUser.getId()) : "unknown";
-            logger.error("Error initiating change password for userId: {}", userId, e);
+            logger.error("Error initiating password change", e);
             model.addAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại.");
-            model.addAttribute("user", sessionUser != null ? sessionUser : new User());
+            model.addAttribute("user", getSessionUserOrNew(session));
             return "myAccount";
         }
     }
 
     @PostMapping("/verify-otp")
-    public String verifyOtp(
-            @RequestParam("otpCode") String otpCode,
-            @RequestParam("userId") Integer userId,
-            @RequestParam("action") String action,
-            HttpSession session, Model model) {
+    public String verifyOtp(@RequestParam("otpCode") String otpCode,
+                            @RequestParam("userId") Integer userId,
+                            @RequestParam("action") String action,
+                            HttpSession session, Model model) {
         try {
             logger.info("Verifying OTP: {} for userId: {}, action: {}", otpCode, userId, action);
-            if ("UPDATE_PROFILE".equals(action)) {
+            boolean isValid = false;
+
+            if (action.equals("UPDATE_PROFILE_EMAIL")) {
                 User user = (User) session.getAttribute("pendingUser");
-                if (user == null) {
-                    logger.warn("pendingUser is null for userId: {}", userId);
-                    model.addAttribute("error", "Dữ liệu phiên không hợp lệ. Vui lòng thử lại.");
-                } else if (userService.verifyUpdateProfile(userId, otpCode, user)) {
+                String realOtp = (String) session.getAttribute("otp");
+                isValid = otpCode.equals(realOtp);
+                if (isValid && user != null) {
+                    userService.save(user);
                     session.setAttribute("userLogin", user);
-                    model.addAttribute("success", "Hồ sơ được cập nhật thành công.");
-                } else {
-                    logger.info("OTP verification failed for UPDATE_PROFILE");
-                    model.addAttribute("error", "OTP không hợp lệ hoặc đã hết hạn, vui lòng thử lại.");
+                    session.removeAttribute("pendingUser");
+                    session.removeAttribute("otp");
+                    model.addAttribute("success", "Cập nhật thông tin thành công.");
                 }
-            } else if ("CHANGE_PASSWORD".equals(action)) {
+            } else if (action.equals("CHANGE_PASSWORD_EMAIL")) {
                 String newPassword = (String) session.getAttribute("newPassword");
-                if (newPassword == null) {
-                    logger.warn("newPassword is null for userId: {}", userId);
-                    model.addAttribute("error", "Dữ liệu phiên không hợp lệ. Vui lòng thử lại.");
-                } else if (userService.verifyChangePassword(userId, otpCode, newPassword)) {
-                    model.addAttribute("success", "Đã thay đổi mật khẩu thành công.");
-                } else {
-                    logger.info("OTP verification failed for CHANGE_PASSWORD");
-                    model.addAttribute("error", "OTP không hợp lệ hoặc đã hết hạn, vui lòng thử lại.");
+                isValid = newPassword != null && userService.verifyChangePassword(userId, otpCode, newPassword);
+                if (isValid) {
+                    session.removeAttribute("newPassword");
+                    model.addAttribute("success", "Đổi mật khẩu thành công.");
                 }
             }
-            User currentUser = (User) session.getAttribute("userLogin");
-            model.addAttribute("user", currentUser != null ? currentUser : new User());
+
+            if (!isValid) {
+                model.addAttribute("error", "Mã OTP không hợp lệ hoặc đã hết hạn.");
+            }
+
+            model.addAttribute("user", getSessionUserOrNew(session));
             return "myAccount";
+
         } catch (Exception e) {
-            logger.error("Error verifying OTP for userId: {}, action: {}", userId, action, e);
-            model.addAttribute("error", "Đã xảy ra lỗi trong quá trình xác minh. Vui lòng thử lại.");
-            User currentUser = (User) session.getAttribute("userLogin");
-            model.addAttribute("user", currentUser != null ? currentUser : new User());
+            logger.error("Error verifying OTP", e);
+            model.addAttribute("error", "Đã xảy ra lỗi trong quá trình xác minh.");
+            model.addAttribute("user", getSessionUserOrNew(session));
             return "myAccount";
         }
+    }
+
+    private User getSessionUser(HttpSession session) {
+        User user = (User) session.getAttribute("userLogin");
+        if (user == null) throw new IllegalStateException("Session user not found");
+        return user;
+    }
+
+    private User getSessionUserOrNew(HttpSession session) {
+        User user = (User) session.getAttribute("userLogin");
+        return (user != null) ? user : new User();
+    }
+
+    private String generateOtp() {
+        return String.valueOf((int)(Math.random() * 900000) + 100000);
+    }
+
+    @ModelAttribute("vouchers")
+    public List<Voucher> loadVouchers(HttpSession session) {
+        User user = (User) session.getAttribute("userLogin");
+        if (user != null) {
+            return voucherService.getValidVouchers(user.getId());
+        }
+        return List.of();
     }
 }

@@ -6,13 +6,33 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    @Query("SELECT o FROM Order o WHERE o.userId = :userId")
+
+    // Tìm đơn hàng theo user id
+    @Query("SELECT o FROM Order o WHERE o.user.id = :userId")
     List<Order> findByUserId(@Param("userId") Integer userId);
 
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.userId = :userId")
+    // Đếm đơn hàng theo user id
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.user.id = :userId")
     long countByUserId(@Param("userId") Integer userId);
+
+    @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND o.movieName = :movieTitle")
+    List<Order> findByUserIdAndMovieTitle(@Param("userId") Integer userId,
+                                          @Param("movieTitle") String movieTitle);
+
+    @Query("SELECT CASE WHEN COUNT(o) > 0 THEN true ELSE false END " +
+            "FROM Order o WHERE o.user.id = :userId AND o.movieName = :movieTitle AND o.transactionDate < :before")
+    boolean existsByUserIdAndMovieTitleAndTransactionDateBefore(@Param("userId") Integer userId,
+                                                                @Param("movieTitle") String movieTitle,
+                                                                @Param("before") LocalDateTime before);
+
+    List<Order> findByUserIdAndMovieName(Integer userId, String movieName);
+
+    boolean existsByUser_IdAndMovieName(Integer userId, String movieName);
+
+
 }

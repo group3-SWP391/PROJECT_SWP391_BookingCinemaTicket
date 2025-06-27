@@ -2,6 +2,11 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.Comment;
+import org.group3.project_swp391_bookingmovieticket.entities.Movie;
+import org.group3.project_swp391_bookingmovieticket.repositories.IMovieRepository;
+import org.group3.project_swp391_bookingmovieticket.services.ICommentReactionService;
+import org.group3.project_swp391_bookingmovieticket.services.ICommentService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,12 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/movie")
 public class MovieController {
 
     @Autowired
     private MovieService movieService;
+
+
 
     @GetMapping
     public String displayMovieAll() {
@@ -78,4 +86,7 @@ public class MovieController {
         model.addAttribute("userDTO", new UserDTO());
         return "movie_category";
     }
+
+
+
 }

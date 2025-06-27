@@ -8,6 +8,6 @@ public class SeatDTO {
     private String name;
     private Boolean isActive;
     private Boolean isVip;
-    private boolean isOccupied;
+    private boolean isOccupied = false;
     private boolean isChecked;
 }

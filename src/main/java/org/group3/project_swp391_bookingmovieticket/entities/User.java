@@ -1,19 +1,13 @@
 package org.group3.project_swp391_bookingmovieticket.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "[user]")
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -39,4 +33,16 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    public User() {}
+
+    public User(User other) {
+        this.id = other.id;
+        this.username = other.username;
+        this.password = other.password;
+        this.fullname = other.fullname;
+        this.phone = other.phone;
+        this.email = other.email;
+        this.role = other.role;
+    }
 }

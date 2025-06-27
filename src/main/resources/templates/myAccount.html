@@ -132,18 +132,85 @@
         #orderHistory th, #voucherHistory th {
             background-color: #f2f2f2;
         }
+        .favorite-list-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .favorite-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            width: 280px;
+            padding: 15px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .favorite-card:hover {
+            transform: scale(1.02);
+        }
+
+        .favorite-card h4 {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .favorite-card p {
+            font-size: 14px;
+            color: #777;
+            margin: 5px 0 10px;
+        }
+
+        .favorite-card a {
+            display: inline-block;
+            margin: 8px 5px;
+            padding: 6px 12px;
+            background-color: #2196F3;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .favorite-card a:hover {
+            background-color: #1976D2;
+        }
+
+        .favorite-card form {
+            display: inline;
+        }
+
+        .favorite-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
     </style>
     <script>
         function hideAllForms() {
-            document.getElementById('updateProfileForm').style.display = 'none';
+            document.getElementById('updateProfileSection').style.display = 'none';
             document.getElementById('changePasswordForm').style.display = 'none';
             document.getElementById('orderHistory').style.display = 'none';
             document.getElementById('voucherHistory').style.display = 'none';
+            document.getElementById('showFavoriteList').style.display = 'none';
         }
 
         function showUpdateProfile() {
             hideAllForms();
-            document.getElementById('updateProfileForm').style.display = 'block';
+            document.getElementById('updateProfileSection').style.display = 'block';
+        }
+
+        function showFavoriteList() {
+            hideAllForms();
+            document.getElementById('showFavoriteList').style.display = 'block';
         }
 
         function showChangePassword() {
@@ -161,10 +228,27 @@
             document.getElementById('voucherHistory').style.display = 'block';
         }
 
+        function isValidPhoneNumber(phone) {
+            var phoneRegex = /^0\d{9}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function handleSubmit() {
+            var phoneInput = document.getElementById("phone").value;
+
+            if (!isValidPhoneNumber(phoneInput)) {
+                alert("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng (VD: 0912345678).");
+                return false;
+            }
+            return true;
+        }
+
         window.onload = function() {
             document.getElementById('accountInfo').style.display = 'block';
         };
     </script>
+
+
 </head>
 <body>
 <!-- Navigation Start -->
@@ -202,21 +286,32 @@
     <button class="toggle-button" onclick="showChangePassword()">Change Password</button>
     <button class="toggle-button" onclick="showOrder()">History Order</button>
     <button class="toggle-button" onclick="showVoucher()">My Voucher</button>
+    <button class="toggle-button" onclick="showFavoriteList()">Favorite List</button>
     <button class="toggle-button" onclick="showVoucher()">Wait to payment</button>
 
-    <div id="updateProfileForm" class="form-section">
+    <div id="updateProfileSection" class="form-section">
         <h3>Update Profile</h3>
-        <form th:action="@{/initiate-update-profile}" method="post">
-            <input type="hidden" name="id" th:value="${user.id} ?: ${session.userLogin?.id}">
+        <form id="updateProfileForm" th:action="@{/initiate-update-profile}" method="post" onsubmit="return handleSubmit()">
+            <input type="hidden" name="id" th:value="${user.id} ?: ${session.userLogin?.id}" />
             <label for="fullname">Full Name:</label>
-            <input type="text" id="fullname" name="fullname" th:value="${user.fullname} ?: ${session.userLogin?.fullname}" required>
+            <input type="text" id="fullname" name="fullname" th:value="${user.fullname} ?: ${session.userLogin?.fullname}" required />
             <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone" th:value="${user.phone} ?: ${session.userLogin?.phone}">
+            <input type="text" id="phone" name="phone"
+                   pattern="^0\d{9}$"
+                   title="Số điện thoại phải bắt đầu bằng 0 và gồm 10 chữ số (VD: 0912345678)"
+                   th:value="${user.phone} ?: ${session.userLogin?.phone}" required />
+
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" th:value="${user.email} ?: ${session.userLogin?.email}" required>
+            <input type="email" id="email" name="email" th:value="${user.email} ?: ${session.userLogin?.email}" required />
+            <div>
+                <label>Chọn phương thức xác nhận:</label><br />
+                <input type="radio" name="verifyMethod" value="email" checked /> Qua Email
+                <input type="radio" id="smsRadio" name="verifyMethod" value="sms" /> Qua Số điện thoại (OTP)
+            </div>
             <button type="submit">Save Changes</button>
             <label>Lưu ý: Kiểm tra kỹ lại thông tin trước khi đổi thông tin</label>
         </form>
+
     </div>
 
     <div id="changePasswordForm" class="form-section">
@@ -245,18 +340,44 @@
             <tr th:each="order : ${orders}">
                 <td th:text="${order.id}"></td>
                 <td th:text="${order.movieName}"></td>
-                <td th:text="${order.seatId}"></td>
+                <td th:text="${order.seat.name}"></td>
                 <td th:text="${order.price}"></td>
                 <td th:text="${#temporals.format(order.transactionDate, 'yyyy-MM-dd HH:mm')}"></td>
                 <td th:text="${order.status}"></td>
             </tr>
         </table>
+
+    </div>
+
+    <div id="showFavoriteList" class="form-section">
+        <h3>Danh sách phim yêu thích</h3>
+
+        <div th:if="${favoriteList.isEmpty()}" style="text-align: center;">
+            Chưa có phim nào yêu thích
+        </div>
+
+        <div class="favorite-list-container" th:unless="${favoriteList.isEmpty()}">
+            <div class="favorite-card" th:each="fav : ${favoriteList}">
+                <h4 th:text="${fav.movie.name}">Tên phim</h4>
+
+                <img th:src="${fav.movie.smallImageUrl}" alt="Poster" />
+
+                <p><strong>Thể loại:</strong> <span th:text="${fav.movie.categories}">Thể loại</span></p>
+
+                <a th:href="@{/movie-details(id=${fav.movie.id})}">Xem chi tiết</a>
+
+                <form th:action="@{/favorite/toggle}" method="post" style="display:inline-block; margin-top: 10px;">
+                    <input type="hidden" name="movieId" th:value="${fav.movie.id}" />
+                    <button type="submit" class="btn btn-danger btn-sm">Bỏ thích</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div id="voucherHistory" class="form-section">
         <h3>My Voucher</h3>
-        <div th:if="${vouchers.isEmpty()}">
-            <p>No vouchers available.</p>
+        <div th:if="${vouchers != null and vouchers.isEmpty()}">
+        <p>No vouchers available.</p>
         </div>
         <table th:unless="${vouchers.isEmpty()}">
             <tr>
@@ -264,14 +385,19 @@
                 <th>Discount (%)</th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                <th>Details</th>
             </tr>
             <tr th:each="voucher : ${vouchers}">
                 <td th:text="${voucher.code}"></td>
                 <td th:text="${voucher.discountPercentage}"></td>
                 <td th:text="${#temporals.format(voucher.startDate, 'yyyy-MM-dd HH:mm')}"></td>
                 <td th:text="${#temporals.format(voucher.endDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td><a th:href="@{'/voucher/' + ${voucher.id}}">View</a></td>
             </tr>
         </table>
+        <label>Chú ý: 🎁 Khám phá ưu đãi đặc biệt dành riêng cho bạn!
+            Tại đây, bạn sẽ tìm thấy những voucher hấp dẫn được cá nhân hóa theo sở thích và lịch sử mua sắm của bạn. Đừng bỏ lỡ cơ hội nhận ưu đãi độc quyền và tiết kiệm mỗi ngày. Quà tặng luôn sẵn sàng — chỉ chờ bạn mở ra!
+        </label>
     </div>
 
     <div th:if="${error}" class="error" th:text="${error}"></div>

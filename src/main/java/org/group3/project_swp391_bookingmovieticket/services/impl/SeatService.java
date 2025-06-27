@@ -2,6 +2,7 @@ package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.SeatDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.Room;
+import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
 import org.group3.project_swp391_bookingmovieticket.entities.Seat;
 import org.group3.project_swp391_bookingmovieticket.repositories.IScheduleRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.ISeatRepository;
@@ -10,9 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +23,7 @@ public class SeatService {
     private IScheduleRepository scheduleRepository;
     @Autowired
     private ITicketRepository ticketRepository;
+
 
     @Autowired
     private ModelMapper modelMapper;
@@ -80,4 +80,48 @@ public class SeatService {
         dto.setIsVip(seat.getIsVip());
         return dto;
     }
+
+    public Map<Integer, int[]> getSeatStatsByRoomIdList(List<Integer> roomIds, Integer scheduleId) {
+        Map<Integer, int[]> seatStats = new HashMap<>();
+        for (Integer roomId : roomIds) {
+            List<Seat> seats = seatRepository.findByRoomId(roomId);
+            int total = seats.size();
+
+            List<Seat> occupiedSeats = ticketRepository.findTicketsBySchedule_Id(scheduleId)
+                    .stream().map(t -> t.getSeat()).toList();
+
+            int available = (int) seats.stream()
+                    .filter(seat -> !occupiedSeats.contains(seat))
+                    .count();
+
+            seatStats.put(roomId, new int[]{available, total});
+        }
+        return seatStats;
+    }
+
+    public Map<Integer, Map<Integer, int[]>> getSeatStatsByRoomsAndSchedules(List<Schedule> schedules) {
+        Map<Integer, Map<Integer, int[]>> stats = new HashMap<>();
+
+        for (Schedule schedule : schedules) {
+            Integer roomId = schedule.getRoom().getId();
+            Integer scheduleId = schedule.getId();
+
+            List<Seat> allSeats = seatRepository.findByRoomId(roomId);
+            int total = allSeats.size();
+
+            List<Seat> occupied = ticketRepository.findTicketsBySchedule_Id(scheduleId)
+                    .stream().map(t -> t.getSeat()).toList();
+
+            int available = (int) allSeats.stream()
+                    .filter(seat -> !occupied.contains(seat))
+                    .count();
+
+            stats.computeIfAbsent(roomId, k -> new HashMap<>())
+                    .put(scheduleId, new int[]{available, total});
+        }
+
+        return stats;
+    }
+
+
 }

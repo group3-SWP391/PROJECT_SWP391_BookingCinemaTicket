@@ -33,4 +33,6 @@ public class Seat {
     @ManyToOne
     private Ticket ticket; // và Ticket có schedule
 
+
+
 }

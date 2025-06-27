@@ -35,33 +35,35 @@ public class BookingController {
     @GetMapping("/{scheduleId}")
     public String displayRoomAndSeat(@PathVariable("scheduleId") Integer scheduleId,
                                      Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // Use false to avoid creating a new session
+        HttpSession session = request.getSession(false); // Không tạo session mới
         User user = (session != null) ? (User) session.getAttribute("userLogin") : null;
         Integer userId = (user != null) ? user.getId() : 0;
 
-        // Get seats, handle userId = 0 appropriately in SeatService
+        // Lấy danh sách ghế đã đặt
         List<SeatDTO> seats = seatService.getSeatsByScheduleIdAndUserId(scheduleId, userId);
 
-        // Giả sử mỗi hàng có 10 ghế
-        int seatsPerRow = 10;
-        int totalRows = (int) Math.ceil((double) seats.size() / seatsPerRow);
+        // Cấu hình số ghế mỗi hàng
+        final int seatsPerRow = 10;
+        int totalSeats = seats.size();
+        int totalRows = (int) Math.ceil((double) totalSeats / seatsPerRow);
 
-        // Tạo danh sách ký hiệu hàng: A, B, C, D, ...
+        // Tạo ký hiệu hàng từ A, B, C,...
         List<String> rowLabels = IntStream.range(0, totalRows)
                 .mapToObj(i -> String.valueOf((char) ('A' + i)))
                 .toList();
 
-        // Add attributes to model
+        // Đưa dữ liệu vào model
         model.addAttribute("schedule", scheduleService.getScheduleByScheduleId(scheduleId));
         model.addAttribute("seats", seats);
         model.addAttribute("rowLabels", rowLabels);
         model.addAttribute("seatsPerRow", seatsPerRow);
-        model.addAttribute("userDTO", convertUserToDTO(user)); // Use converted user or null
-        model.addAttribute("eventId", "movie_event_1"); // Adjust based on Schedule entity
-        model.addAttribute("ticketType", "regular"); // Adjust based on Schedule or Seat
+        model.addAttribute("userDTO", convertUserToDTO(user));
+        model.addAttribute("eventId", "movie_event_1"); // Có thể tuỳ chỉnh theo lịch
+        model.addAttribute("ticketType", "regular");    // Có thể tuỳ chỉnh theo loại ghế
 
         return "seat_booking";
     }
+
 
     private UserDTO convertUserToDTO(User user) {
         if (user == null) {

@@ -25,4 +25,7 @@ public class VoucherDTO {
     private String applicableUserTypes;
     private Integer maxUsageCount;
     private Integer currentUsageCount;
+    private String conditionText;
+    private String imgVoucher;
+
 }

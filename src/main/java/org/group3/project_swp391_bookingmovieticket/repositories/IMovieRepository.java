@@ -17,4 +17,6 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> getMovieByCategory(@Param("categoryName") String categoryName);
 
     List<Movie> findByIsShowing(Integer isShowing);
+
+
 }

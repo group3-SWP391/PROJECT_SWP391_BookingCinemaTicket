@@ -63,22 +63,36 @@
 <!-- Title Wrapper End -->
 <div class="container">
     <h1 th:text="${movie.name}">Tên phim</h1>
-    <img th:src="${movie.smallImageURL}" alt="Poster" style="width: 300px; height: auto;" />
+    <img th:src="${movie.smallImageUrl}" alt="Poster" style="width: 300px; height: auto;" />
     <p><strong>Thể loại:</strong> <span th:text="${movie.categories}">Thể loại</span></p>
     <p><strong>Thời lượng:</strong> <span th:text="${movie.duration + ' minutes'}">Thời lượng</span></p>
     <p><strong>Khởi chiếu:</strong> <span th:text="${#temporals.format(movie.releaseDate, 'yyyy-MM-dd')}">Ngày khởi chiếu</span></p>
+    <!-- Nút yêu thích -->
+    <form th:action="@{/favorite/toggle}" method="post" style="display: inline;">
+        <input type="hidden" name="movieId" th:value="${movie.id}" />
+        <button type="submit" style="background: none; border: none;">
+            <i class="fa" th:classappend="${isFavorite} ? ' fa-heart text-danger' : ' fa-heart-o'"></i>
+        </button>
+    </form>
+
     <p><strong>Tóm tắt:</strong> <span th:text="${movie.longDescription}">Tóm tắt</span></p>
     <h3>Bình luận</h3>
-    <div th:each="comment : ${comments}">
-        <p><strong th:text="${comment.user.fullname}"></strong>: <span th:text="${comment.content}"></span></p>
-        <p>
-            ❤️ <span th:text="${likesMap[comment.id]}">0</span> |
-            💔 <span th:text="${dislikesMap[comment.id]}">0</span>
-        </p>
+    <div th:if="${comments != null and #lists.isEmpty(comments)}">
+        <p>Chưa có bình luận nào.</p>
     </div>
 
-    <!-- THÊM FORM TẠI ĐÂY -->
-    <div th:if="${session.userLogin != null}">
+    <!-- Nếu chưa đăng nhập -->
+    <div th:if="${session.userLogin == null}">
+        <p>Vui lòng <a th:href="@{/login}">đăng nhập</a> để bình luận.</p>
+    </div>
+
+    <!-- Nếu đã đăng nhập nhưng chưa xem phim -->
+    <div th:if="${session.userLogin != null and !hasOrdered}">
+        <p style="color: red;">Bạn cần xem phim trước khi đánh giá bộ phim nhé.</p>
+    </div>
+
+    <!-- Nếu đã đăng nhập và đã xem phim -->
+    <div th:if="${session.userLogin != null and hasOrdered}">
         <form th:action="@{/addComment}" method="post">
             <input type="hidden" name="movieId" th:value="${movie.id}" />
             <label for="content">Viết bình luận:</label><br />
@@ -87,14 +101,54 @@
         </form>
     </div>
 
-    <div th:if="${session.userLogin == null}">
-        <p>Vui lòng <a th:href="@{/login}">đăng nhập</a> để bình luận.</p>
+
+    <!-- Vòng lặp bình luận chính -->
+    <div th:each="comment : ${comments}" style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
+        <p><strong th:text="${comment.user.fullname}">Người dùng</strong> đã bình luận:</p>
+        <p th:text="${comment.content}">Nội dung</p>
+        <p><i>Thời gian:</i> <span th:text="${#temporals.format(comment.createdAt, 'dd/MM/yyyy HH:mm')}">---</span></p>
+
+        <!-- Like/Dislike -->
+        <form th:action="@{/like}" method="post" style="display:inline;">
+            <input type="hidden" name="commentId" th:value="${comment.id}" />
+            <input type="hidden" name="movieId" th:value="${movie.id}" />
+            <button type="submit">👍 <span th:text="${likesMap[comment.id]}">0</span></button>
+        </form>
+        <form th:action="@{/dislike}" method="post" style="display:inline;">
+            <input type="hidden" name="commentId" th:value="${comment.id}" />
+            <input type="hidden" name="movieId" th:value="${movie.id}" />
+            <button type="submit">👎 <span th:text="${dislikesMap[comment.id]}">0</span></button>
+        </form>
+
+        <!-- Trả lời bình luận -->
+        <div th:if="${session.userLogin != null}">
+            <button type="button" th:attr="onclick=|toggleReplyForm(${comment.id})|">Trả lời</button>
+
+            <form th:action="@{/replyComment}" method="post"
+                  th:attr="id=|reply-form-${comment.id}|" style="display: none; margin-top: 10px;">
+                <input type="hidden" name="movieId" th:value="${movie.id}" />
+                <input type="hidden" name="parentCommentId" th:value="${comment.id}" />
+                <textarea name="content" rows="2" cols="50" required placeholder="Trả lời bình luận..."></textarea><br />
+                <button type="submit">Gửi trả lời</button>
+            </form>
+        </div>
+
+
+        <div th:if="${session.userLogin == null}">
+            <p><i>Đăng nhập để trả lời bình luận.</i></p>
+        </div>
+        <!-- Danh sách câu trả lời -->
+        <div style="margin-left: 20px; margin-top: 10px;" th:each="reply : ${comment.replies}">
+            <p><strong th:text="${reply.user.fullname}">Người trả lời</strong>: <span th:text="${reply.content}">Nội dung trả lời</span></p>
+            <p><i>Thời gian:</i> <span th:text="${#temporals.format(reply.createdAt, 'dd/MM/yyyy HH:mm')}">---</span></p>
+        </div>
     </div>
+
 
     <!-- Hiện lỗi nếu có -->
     <div th:if="${error}" class="error" th:text="${error}"></div>
 
-    <a th:href="${movie.trailerURL}" target="_blank">Xem Trailer</a>
+    <a th:href="${movie.trailerUrl}" target="_blank">Xem Trailer</a>
     <br/>
     <a th:href="@{/movie-category}">Quay lại danh sách phim</a>
 
@@ -133,6 +187,17 @@
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
+<script>
+    function toggleReplyForm(commentId) {
+        const form = document.getElementById('reply-form-' + commentId);
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+</script>
+
 </body>
 
 </html>

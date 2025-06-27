@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -153,6 +154,14 @@ public class VoucherService {
     public Voucher getVoucherByCode(String code) {
         logger.debug("Fetching voucher by code: {}", code);
         return voucherRepository.findByCode(code).orElse(null);
+    }
+
+    public List<Voucher> getAllVouchers() {
+        return voucherRepository.findAll();
+    }
+    public Voucher getVoucherById(Integer id) {
+        return voucherRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Voucher not found with ID: " + id));
     }
 
 }

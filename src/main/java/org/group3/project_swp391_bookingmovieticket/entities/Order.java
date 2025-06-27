@@ -8,27 +8,29 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "[order]")
+@Table(name = "[order]") // tránh lỗi từ khóa SQL
 @Data
 @NoArgsConstructor
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "bill_id", nullable = false)
-    private Integer billId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bill_id", nullable = false)
+    private Bill bill;
 
     @Column(name = "movie_name", nullable = false, length = 255)
     private String movieName;
 
-    @Column(name = "seat_id", nullable = false)
-    private Integer seatId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seat_id", nullable = false)
+    private Seat seat;
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
@@ -42,11 +44,11 @@ public class Order {
     @Transient
     private String transactionDateFormatted;
 
-    public Order(Integer userId, Integer billId, String movieName, Integer seatId, BigDecimal price, LocalDateTime transactionDate, String status) {
-        this.userId = userId;
-        this.billId = billId;
+    public Order(User user, Bill bill, String movieName, Seat seat, BigDecimal price, LocalDateTime transactionDate, String status) {
+        this.user = user;
+        this.bill = bill;
         this.movieName = movieName;
-        this.seatId = seatId;
+        this.seat = seat;
         this.price = price;
         this.transactionDate = transactionDate;
         this.status = status;
