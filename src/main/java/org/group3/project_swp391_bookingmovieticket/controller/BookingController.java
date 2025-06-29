@@ -9,7 +9,6 @@ import org.group3.project_swp391_bookingmovieticket.services.impl.ScheduleServic
 import org.group3.project_swp391_bookingmovieticket.services.impl.SeatService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

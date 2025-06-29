@@ -2,9 +2,11 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.BranchDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.Branch;
+import org.group3.project_swp391_bookingmovieticket.entities.Room;
 import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
 import org.group3.project_swp391_bookingmovieticket.repositories.IBranchRepository;
 import org.group3.project_swp391_bookingmovieticket.repositories.IScheduleRepository;
+import org.group3.project_swp391_bookingmovieticket.repositories.RoomRepository;
 import org.group3.project_swp391_bookingmovieticket.services.impl.SeatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,9 @@ public class TheaterController {
 
     @Autowired
     private IBranchRepository branchRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Autowired
     private IScheduleRepository scheduleRepository;
@@ -64,50 +69,68 @@ public class TheaterController {
             Model model,
             @RequestParam("branchId") Integer branchId,
             @RequestParam(value = "date", required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate) {
-
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate,
+            @RequestParam(value = "roomId", required = false) String roomIdRaw,
+            @RequestParam(value = "startHour", required = false) Integer startHour
+    ) {
         Logger logger = LoggerFactory.getLogger(TheaterController.class);
-        logger.info("Fetching theater detail for branchId: {}", branchId);
+        logger.info("▶️ Fetching theater detail for branchId: {}", branchId);
 
+        // Lấy chi tiết rạp
         Branch branch = branchRepository.findById(branchId).orElse(null);
         if (branch == null) {
-            logger.error("Branch with id {} not found", branchId);
+            logger.error("⛔ Branch with id {} not found", branchId);
             return "redirect:/select-theater";
         }
         model.addAttribute("branch", branch);
 
-        // Nếu chưa chọn ngày thì lấy ngày hôm nay
+        // Xử lý roomId (chuỗi rỗng ➝ null ➝ Integer)
+        Integer roomId = null;
+        if (roomIdRaw != null && !roomIdRaw.isBlank()) {
+            try {
+                roomId = Integer.valueOf(roomIdRaw);
+            } catch (NumberFormatException e) {
+                logger.warn("⚠️ Invalid roomId received: '{}'", roomIdRaw);
+            }
+        }
+        logger.info("📌 Filter roomId: {}", roomId);
+
+        // Ngày được chọn (mặc định là hôm nay nếu không chọn)
         if (selectedDate == null) {
             selectedDate = LocalDate.now();
         }
         model.addAttribute("selectedDate", selectedDate);
 
-        // Lấy tất cả lịch chiếu tại rạp
+        // Lấy danh sách lịch chiếu tại rạp
         List<Schedule> schedules = scheduleRepository.findByBranchId(branchId);
         model.addAttribute("schedules", schedules != null ? schedules : List.of());
 
         if (schedules != null && !schedules.isEmpty()) {
-            LocalDate finalDate = selectedDate; // dùng cho lambda
+            LocalDate finalDate = selectedDate;
             LocalDateTime now = LocalDateTime.now();
 
+            Integer finalRoomId = roomId;
             List<Schedule> filteredSchedules = schedules.stream()
-                    .filter(s -> !s.getEndDate().isBefore(finalDate))     // chưa hết chiếu
-                    .filter(s -> !s.getStartDate().isAfter(finalDate))    // đã bắt đầu
+                    // còn chiếu
+                    .filter(s -> !s.getEndDate().isBefore(finalDate))
+                    // đã bắt đầu chiếu
+                    .filter(s -> !s.getStartDate().isAfter(finalDate))
                     .filter(s -> {
-                        LocalDateTime showDateTime = LocalDateTime.of(finalDate, s.getStartTime());
-                        return showDateTime.isAfter(now); // chỉ lấy suất chưa chiếu
+                        LocalDateTime showTime = LocalDateTime.of(finalDate, s.getStartTime());
+                        return showTime.isAfter(now); // chưa chiếu
                     })
+                    .filter(s -> finalRoomId == null || s.getRoom().getId().equals(finalRoomId)) // lọc theo phòng
+                    .filter(s -> startHour == null || s.getStartTime().getHour() == startHour) // lọc theo giờ
                     .collect(Collectors.toList());
 
-            // Tính ghế trống và sức chứa theo từng lịch chiếu
             Map<Integer, Map<Integer, Integer>> availableSeatsMap = new HashMap<>();
             Map<Integer, Integer> capacityMap = new HashMap<>();
 
             for (Schedule schedule : filteredSchedules) {
-                int roomId = schedule.getRoom().getId();
+                int room = schedule.getRoom().getId();
                 int scheduleId = schedule.getId();
 
-                var seats = seatService.getSeatsByScheduleIdAndUserId(scheduleId, 0); // userId = 0 để lấy toàn bộ
+                var seats = seatService.getSeatsByScheduleIdAndUserId(scheduleId, 0);
 
                 long available = seats.stream()
                         .filter(seat -> Boolean.TRUE.equals(seat.getIsActive())
@@ -116,30 +139,40 @@ public class TheaterController {
                         .count();
 
                 int capacity = schedule.getRoom().getCapacity();
-
-                availableSeatsMap.computeIfAbsent(roomId, k -> new HashMap<>())
+                availableSeatsMap.computeIfAbsent(room, k -> new HashMap<>())
                         .put(scheduleId, (int) available);
-                capacityMap.put(roomId, capacity);
+                capacityMap.put(room, capacity);
             }
 
-            model.addAttribute("availableSeatsMap", availableSeatsMap);
-            model.addAttribute("capacityMap", capacityMap);
-
-            // Nhóm theo tên phim
+            // Nhóm theo phim
             Map<String, List<Schedule>> groupedSchedules = filteredSchedules.stream()
                     .collect(Collectors.groupingBy(
-                            schedule -> schedule.getMovie().getName(),
+                            s -> s.getMovie().getName(),
                             LinkedHashMap::new,
                             Collectors.toList()
                     ));
-            model.addAttribute("groupedSchedules", groupedSchedules);
 
+            model.addAttribute("availableSeatsMap", availableSeatsMap);
+            model.addAttribute("capacityMap", capacityMap);
+            model.addAttribute("groupedSchedules", groupedSchedules);
         } else {
+            // Nếu không có lịch chiếu
             model.addAttribute("availableSeatsMap", new HashMap<>());
             model.addAttribute("capacityMap", new HashMap<>());
             model.addAttribute("groupedSchedules", new HashMap<>());
+            logger.info("ℹ️ No schedules available for filtering.");
         }
+
+        // Thêm danh sách phòng để hiển thị dropdown lọc
+        List<Room> availableRooms = roomRepository.findByBranchId(branchId);
+        model.addAttribute("availableRooms", availableRooms);
+
+        // Giữ lại bộ lọc UI
+        model.addAttribute("selectedRoomId", roomId);
+        model.addAttribute("selectedStartHour", startHour);
 
         return "theater-detail";
     }
+
+
 }

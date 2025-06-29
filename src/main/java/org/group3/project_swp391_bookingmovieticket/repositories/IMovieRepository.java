@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> findByNameContainingIgnoreCase(String movieName);
@@ -17,6 +18,7 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> getMovieByCategory(@Param("categoryName") String categoryName);
 
     List<Movie> findByIsShowing(Integer isShowing);
-
-
+    Movie findEntityById(Integer id);
+    Movie findByName(String name);
+    Optional<Movie> findById(Integer id);
 }

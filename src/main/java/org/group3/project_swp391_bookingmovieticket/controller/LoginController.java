@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -51,16 +52,28 @@ public class LoginController {
     }
 
     @PostMapping("/update-profile")
-    public String updateProfile(@ModelAttribute User user, Model model, HttpSession session) {
+    public String updateProfile(@ModelAttribute User user, RedirectAttributes redirectAttributes, HttpSession session) {
         User currentUser = (User) session.getAttribute("userLogin");
         if (currentUser == null) {
-            model.addAttribute("error", "Please log in to update your profile.");
+            redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập.");
             return "redirect:/login";
         }
+
         user.setId(currentUser.getId());
-        userService.update(user);
-        session.setAttribute("userLogin", user);
-        model.addAttribute("success", "Profile updated successfully!");
+
+        if (userService.isEmailOrPhoneExists(user)) {
+            redirectAttributes.addFlashAttribute("error", "Vui lòng kiểm tra lại thông tin. Thay đổi có thể sai hoặc thông tin đã tồn tại trên hệ thống.");
+            return "redirect:/my-account";
+        }
+
+        try {
+            userService.update(user);
+            session.setAttribute("userLogin", user);
+            redirectAttributes.addFlashAttribute("success", "Cập nhật thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi cập nhật: " + e.getMessage());
+        }
+
         return "redirect:/my-account";
     }
 

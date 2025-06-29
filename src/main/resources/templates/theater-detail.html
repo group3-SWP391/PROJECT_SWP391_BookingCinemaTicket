@@ -23,7 +23,32 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}" />
     <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}" />
     <style>
-        /* CSS giữ nguyên như bạn đã cung cấp */
+        .filter-bar {
+            display: table-caption;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar select,
+        .filter-bar button {
+            padding: 6px 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .filter-bar button {
+            background-color: #0984e3;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-bar button:hover {
+            background-color: #74b9ff;
+        }
         * {
             box-sizing: border-box;
             margin: 0;
@@ -192,9 +217,6 @@
             border-radius: 8px;
         }
 
-        .hidden {
-            display: none !important;
-        }
 
         .buttons {
             display: flex;
@@ -315,7 +337,7 @@
     <div class="date-picker">
         <form method="get" action="/theater-detail">
             <input type="hidden" name="branchId" th:value="${branch.id}" />
-            <label for="date">Chọn ngày:</label>
+            <label for="date">Các phim đang có</label>
             <select name="date" id="date" onchange="this.form.submit()">
                 <option th:each="i : ${#numbers.sequence(0,6)}"
                         th:value="${#temporals.format(T(java.time.LocalDate).now().plusDays(i), 'yyyy-MM-dd')}"
@@ -325,6 +347,34 @@
             </select>
         </form>
     </div>
+
+    <!--lọc theo phòng và giờ chiếu -->
+    <div class="filter-bar" style="margin-bottom: 20px;">
+        <form method="get" action="/theater-detail">
+            <input type="hidden" name="branchId" th:value="${branch.id}" />
+            <input type="hidden" name="date" th:value="${selectedDate}" />
+
+            <label for="roomFilter">Phòng:</label>
+            <select name="roomId" id="roomFilter">
+                <option value="">Tất cả</option>
+                <option th:each="room : ${availableRooms}" th:value="${room.id}" th:text="${room.name}"
+                        th:selected="${room.id == selectedRoomId}"></option>
+            </select>
+
+            <label for="timeFilter">Giờ chiếu:</label>
+            <select name="startHour" id="timeFilter">
+                <option value="">Tất cả</option>
+                <option th:each="i : ${#numbers.sequence(8, 23)}"
+                        th:value="${i}"
+                        th:text="${i + ':00'}"
+                        th:selected="${i == selectedStartHour}">
+                </option>
+            </select>
+
+            <button type="submit">Lọc</button>
+        </form>
+    </div>
+
 
     <div class="schedule-container" id="schedule-container">
         <div th:each="entry : ${groupedSchedules}">

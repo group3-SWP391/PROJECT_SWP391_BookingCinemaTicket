@@ -239,6 +239,9 @@
             if (!isValidPhoneNumber(phoneInput)) {
                 alert("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng (VD: 0912345678).");
                 return false;
+            }    if (nameInput.trim() === "" || emailInput.trim() === "") {
+                alert("Vui lòng kiểm tra lại thông tin. Thay đổi có thể sai hoặc thông tin đã tồn tại trên hệ thống.");
+                return false;
             }
             return true;
         }
@@ -291,8 +294,9 @@
 
     <div id="updateProfileSection" class="form-section">
         <h3>Update Profile</h3>
-        <form id="updateProfileForm" th:action="@{/initiate-update-profile}" method="post" onsubmit="return handleSubmit()">
-            <input type="hidden" name="id" th:value="${user.id} ?: ${session.userLogin?.id}" />
+        <form id="updateProfileForm" th:action="@{/update-profile}" method="post" onsubmit="return handleSubmit()">
+
+        <input type="hidden" name="id" th:value="${user.id} ?: ${session.userLogin?.id}" />
             <label for="fullname">Full Name:</label>
             <input type="text" id="fullname" name="fullname" th:value="${user.fullname} ?: ${session.userLogin?.fullname}" required />
             <label for="phone">Phone:</label>
@@ -316,15 +320,21 @@
 
     <div id="changePasswordForm" class="form-section">
         <h3>Change Password</h3>
-        <form th:action="@{/initiate-change-password}" method="post">
+        <form th:action="@{/initiate-change-password}" method="post" onsubmit="return validatePasswordChangeForm()">
             <label for="currentPassword">Current Password:</label>
             <input type="password" id="currentPassword" name="currentPassword" required>
+
             <label for="newPassword">New Password:</label>
             <input type="password" id="newPassword" name="newPassword" required>
+
+            <label for="confirmNewPassword">Re-enter New Password:</label>
+            <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+
             <button type="submit">Submit</button>
-            <label>Lưu ý: Kiểm tra kỹ lại mật khẩu trước khi đổi</label>
+            <label>Lưu ý: Mật khẩu mới phải được nhập chính xác hai lần.</label>
         </form>
     </div>
+
 
     <div id="orderHistory" class="form-section">
         <h3>Transaction History</h3>
@@ -352,7 +362,7 @@
     <div id="showFavoriteList" class="form-section">
         <h3>Danh sách phim yêu thích</h3>
 
-        <div th:if="${favoriteList.isEmpty()}" style="text-align: center;">
+        <div th:if="${favoriteList != null and favoriteList.isEmpty()}" style="text-align: center;">
             Chưa có phim nào yêu thích
         </div>
 
@@ -436,5 +446,18 @@
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
 <script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
+<script>
+    function validatePasswordChangeForm() {
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+        if (newPassword !== confirmNewPassword) {
+            alert("Mật khẩu mới không khớp. Vui lòng nhập lại.");
+            return false;
+        }
+        return true;
+    }
+</script>
+
 </body>
 </html>

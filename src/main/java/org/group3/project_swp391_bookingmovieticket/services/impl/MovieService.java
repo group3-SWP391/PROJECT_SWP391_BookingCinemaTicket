@@ -37,12 +37,10 @@ public class MovieService implements IMovieService {
 
     @Override
     public void update(MovieDTO movieDTO) {
-        // TODO: Implement update logic
     }
 
     @Override
     public void remove(Integer id) {
-        // TODO: Implement remove logic
     }
 
     @Override
@@ -52,6 +50,8 @@ public class MovieService implements IMovieService {
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());
     }
+
+
 
     @Override
     public List<String> getMovieCategories() {
@@ -81,4 +81,9 @@ public class MovieService implements IMovieService {
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
                 .collect(Collectors.toList());
     }
+
+    public Movie findEntityById(Integer id) {
+        return movieRepository.findById(id).orElse(null);
+    }
+
 }

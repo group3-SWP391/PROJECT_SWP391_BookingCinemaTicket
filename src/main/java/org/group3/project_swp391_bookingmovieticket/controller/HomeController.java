@@ -2,7 +2,6 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.*;
 import org.group3.project_swp391_bookingmovieticket.repositories.*;
@@ -32,6 +31,9 @@ public class HomeController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Autowired
     private ContactRequestRepository contactRequestRepository;
@@ -177,6 +179,9 @@ public class HomeController {
         Map<Integer, Long> dislikesMap = comments.stream()
                 .collect(Collectors.toMap(Comment::getId, c -> reactionService.countDislikes(c)));
 
+
+        List<Review> reviews = reviewService.getReviewsForMovie(movieId);
+        model.addAttribute("reviews", reviews);
         model.addAttribute("movie", movie);
         model.addAttribute("comments", comments);
         model.addAttribute("likesMap", likesMap);

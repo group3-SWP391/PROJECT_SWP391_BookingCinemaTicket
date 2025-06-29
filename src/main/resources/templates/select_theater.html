@@ -65,6 +65,17 @@
 <div class="container">
     <div class="left-panel">
         <h2>Danh Sách Rạp</h2>
+
+        <select id="branchSelect" class="form-select" style="width: 100%; margin-bottom: 20px; padding: 10px; border-radius: 5px;">
+            <option value="">-- Chọn chi nhánh --</option>
+            <option th:each="name : ${branchNames}"
+                    th:value="@{/select-theater(name=${name})}"
+                    th:text="${name}"
+                    th:selected="${name == param.name}">
+            </option>
+        </select>
+
+        <!-- Danh sách chi nhánh -->
         <div class="branch-list" th:each="name : ${branchNames}">
             <a th:href="@{/select-theater(name=${name})}"
                th:text="${name}"
@@ -74,11 +85,23 @@
     <div class="right-panel">
         <div th:if="${addresses != null and not #lists.isEmpty(addresses)}">
             <h2>Danh sách địa chỉ</h2>
+
+            <!-- Dropdown chọn địa chỉ -->
+            <select id="addressSelect" class="form-select" style="width: 100%; margin-bottom: 20px; padding: 10px; border-radius: 5px;">
+                <option value="">-- Chọn địa chỉ --</option>
+                <option th:each="address : ${addresses}"
+                        th:value="@{/theater-detail(branchId=${address.id})}"
+                        th:text="${address.name + ' - ' + address.diaChi}">
+                </option>
+            </select>
+
+            <!-- Danh sách địa chỉ -->
             <div class="address-list" th:each="address : ${addresses}">
                 <a th:href="@{/theater-detail(branchId=${address.id})}"
                    th:text="${address.name + ' - ' + address.diaChi}"></a>
             </div>
         </div>
+
         <div th:if="${selectedBranch != null}" class="branch-detail">
             <h2 th:text="${selectedBranch.name}"></h2>
             <img th:src="${selectedBranch.imgurl}" alt="Branch Image" class="branch-image"
@@ -94,5 +117,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('branchSelect')?.addEventListener('change', function () {
+        if (this.value) window.location.href = this.value;
+    });
+
+    document.getElementById('addressSelect')?.addEventListener('change', function () {
+        if (this.value) window.location.href = this.value;
+    });
+</script>
+
 </body>
 </html>

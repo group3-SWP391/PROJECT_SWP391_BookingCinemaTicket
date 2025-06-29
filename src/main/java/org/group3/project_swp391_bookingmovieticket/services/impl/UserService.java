@@ -189,4 +189,13 @@ public class UserService implements IUserService {
         update(user);
     }
 
+    public boolean isEmailOrPhoneExists(User user) {
+        Optional<User> byEmailOpt = userRepository.findByEmail(user.getEmail());
+        Optional<User> byPhoneOpt = userRepository.findByPhone(user.getPhone());
+
+        return (byEmailOpt.isPresent() && !byEmailOpt.get().getId().equals(user.getId())) ||
+                (byPhoneOpt.isPresent() && !byPhoneOpt.get().getId().equals(user.getId()));
+    }
+
+
 }
