@@ -1,7 +1,7 @@
 :root {
     --manager-primary: #2c3e50;
     --manager-primary-light: #34495e;
-    --manager-accent: #27ae60;
+    --manager-accent: #ff4444;
     --manager-sidebar-width: 280px;
     --curtain-red: #c0392b;
     --gold: #f1c40f;
@@ -133,7 +133,7 @@ body {
     text-align: center;
     margin-bottom: 30px;
     padding: 20px;
-    background: linear-gradient(45deg, var(--manager-accent), #2ecc71);
+    background: linear-gradient(45deg, var(--manager-accent), #ff4444);
     border-radius: 15px;
     color: white;
     position: relative;
@@ -194,14 +194,14 @@ body {
 
 /* Header bar */
 .manager-header {
-    background: linear-gradient(90deg, var(--manager-accent) 0%, #2ecc71 100%) !important;
+    background: #ff4444 !important;
     border: none;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .bg-dark {
-    background: linear-gradient(90deg, var(--manager-accent) 0%, #2ecc71 100%) !important;
-}
+    background: #ff4444 !important;
+}   
 
 /* Card Metrics */
 .card-metric {
@@ -222,7 +222,7 @@ body {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, var(--manager-accent), #2ecc71, var(--gold));
+    background: linear-gradient(90deg, var(--manager-accent), #ff4444, var(--gold));
 }
 
 .card-metric:hover {
@@ -262,12 +262,12 @@ body {
 }
 
 .manager-main::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--manager-accent), #2ecc71);
+    background: linear-gradient(180deg, var(--manager-accent), #ff4444);
     border-radius: 4px;
 }
 
 .manager-main::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #2ecc71, var(--manager-accent));
+    background: linear-gradient(180deg, #ff4444, var(--manager-accent));
 }
 
 /* Cinema decorative elements */
