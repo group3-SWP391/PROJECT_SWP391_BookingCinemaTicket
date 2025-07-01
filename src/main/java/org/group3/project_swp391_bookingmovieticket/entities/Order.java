@@ -43,6 +43,26 @@ public class Order {
 
     @Transient
     private String transactionDateFormatted;
+    @Column(name = "order_code")
+    private Integer orderCode;
+
+    @Column(name = "check_out_url", length = 1000)
+    private String checkOutUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
+
+    @Column(name = "seat_list", columnDefinition = "nvarchar(max)")
+    private String seatList;
+
+    @Column(name = "total_price", precision = 10, scale = 2)
+    private BigDecimal totalPrice;
+
+
+    @Column(name = "popcorn_drink_list", columnDefinition = "nvarchar(max)")
+    private String popcornDrinkList;
+
 
     public Order(User user, Bill bill, String movieName, Seat seat, BigDecimal price, LocalDateTime transactionDate, String status) {
         this.user = user;
@@ -53,4 +73,8 @@ public class Order {
         this.transactionDate = transactionDate;
         this.status = status;
     }
+
+
+
+
 }

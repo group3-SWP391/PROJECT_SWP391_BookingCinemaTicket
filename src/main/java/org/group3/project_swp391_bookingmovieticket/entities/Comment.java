@@ -37,5 +37,12 @@ public class Comment {
     @Transient
     private long dislikeCount;
 
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentReaction> reactions = new ArrayList<>();
+
+
 }
 

@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface IOrderService {
     List<Order> getAllOrders();
     Optional<Order> getOrderById(Integer id);
+
+    List<Order> getPaidOrdersByUserId(Integer userId);
+
     Order createOrder(OrderDTO orderDTO);
     Order updateOrder(Integer id, OrderDTO orderDTO);
     void deleteOrder(Integer id);

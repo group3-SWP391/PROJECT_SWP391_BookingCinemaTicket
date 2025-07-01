@@ -9,6 +9,10 @@ import org.group3.project_swp391_bookingmovieticket.services.ICommentReactionSer
 import org.group3.project_swp391_bookingmovieticket.services.ICommentService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -165,42 +169,64 @@ public class HomeController {
     }
 
     @GetMapping("/movie-details")
-    public String movieDetails(@RequestParam("id") Integer movieId, Model model, HttpSession session) {
+    public String movieDetails(@RequestParam("id") Integer movieId,
+                               @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
+                               @RequestParam(value = "reviewPage", defaultValue = "0") int reviewPage,
+                               Model model,
+                               HttpSession session) {
+
         Optional<Movie> optionalMovie = movieRepository.findById(movieId);
         if (optionalMovie.isEmpty()) {
             model.addAttribute("error", "Không tìm thấy phim với ID: " + movieId);
-            return "error"; // trang error.html hoặc redirect về /movie-category
+            return "error"; // hoặc redirect về trang chính
         }
 
         Movie movie = optionalMovie.get();
-        List<Comment> comments = commentService.getCommentsByMovieId(movieId);
+
+        // Phân trang
+        Pageable commentPageable = PageRequest.of(commentPage, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable reviewPageable = PageRequest.of(reviewPage, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<Comment> commentPageResult = commentService.getCommentsByMovieId(movieId, commentPageable);
+        Page<Review> reviewPageResult = reviewService.getReviewsForMovie(movieId, reviewPageable);
+
+        // Đánh giá và bình luận lấy từ Page
+        List<Comment> comments = commentPageResult.getContent();
+        List<Review> reviews = reviewPageResult.getContent();
+
+        // Like/Dislike maps
         Map<Integer, Long> likesMap = comments.stream()
                 .collect(Collectors.toMap(Comment::getId, c -> reactionService.countLikes(c)));
+
         Map<Integer, Long> dislikesMap = comments.stream()
                 .collect(Collectors.toMap(Comment::getId, c -> reactionService.countDislikes(c)));
 
-
-        List<Review> reviews = reviewService.getReviewsForMovie(movieId);
-        model.addAttribute("reviews", reviews);
+        // Gán dữ liệu vào model
         model.addAttribute("movie", movie);
         model.addAttribute("comments", comments);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("commentPage", commentPageResult);
+        model.addAttribute("reviewPage", reviewPageResult);
         model.addAttribute("likesMap", likesMap);
         model.addAttribute("dislikesMap", dislikesMap);
+
+        // Kiểm tra người dùng đã đặt vé hoặc đã yêu thích
         User user = (User) session.getAttribute("userLogin");
         boolean hasOrdered = false;
         boolean isFavorite = false;
 
         if (user != null) {
             hasOrdered = orderRepository.existsByUser_IdAndMovieName(user.getId(), movie.getName());
-        }if (user != null) {
             isFavorite = favoriteService.isFavorite(user, movie);
         }
-        model.addAttribute("isFavorite", isFavorite);
-        model.addAttribute("hasOrdered", hasOrdered);
 
+        model.addAttribute("hasOrdered", hasOrdered);
+        model.addAttribute("isFavorite", isFavorite);
 
         return "movie-details";
     }
+
+
 
 
     @GetMapping("/voucher/{id}")
@@ -220,7 +246,8 @@ public class HomeController {
             }
 
             System.out.println("User loaded in myAccount: " + user.getFullname() + ", " + user.getPhone() + ", " + user.getEmail());
-
+            List<Order> paidOrders = orderService.getPaidOrdersByUserId(user.getId());
+            model.addAttribute("paidOrders", paidOrders);
             List<Order> orders;
             try {
                 orders = orderService.getOrdersByUserId(user.getId());

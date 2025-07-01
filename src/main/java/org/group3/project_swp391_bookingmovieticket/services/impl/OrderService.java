@@ -20,11 +20,18 @@ public class OrderService implements IOrderService {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
-    @Autowired private OrderRepository orderRepository;
-    @Autowired private VoucherService voucherService;
-    @Autowired private IUserRepository userRepository;
-    @Autowired private BillRepository billRepository;
-    @Autowired private SeatRepository seatRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private VoucherService voucherService;
+    @Autowired
+    private IUserRepository userRepository;
+    @Autowired
+    private BillRepository billRepository;
+    @Autowired
+    private SeatRepository seatRepository;
+    @Autowired
+    private IScheduleRepository scheduleRepository;
 
     @Override
     public List<Order> getAllOrders() {
@@ -35,6 +42,12 @@ public class OrderService implements IOrderService {
     public Optional<Order> getOrderById(Integer id) {
         return orderRepository.findById(id);
     }
+
+    @Override
+    public List<Order> getPaidOrdersByUserId(Integer userId) {
+        return orderRepository.findByUserIdAndStatus(userId, "PAID");
+    }
+
 
     @Override
     @Transactional
@@ -51,7 +64,7 @@ public class OrderService implements IOrderService {
         Order order = new Order(
                 user,
                 bill,
-                dto.getMovieName(), // ✅ Lưu movieName
+                dto.getMovieName(),
                 seat,
                 dto.getPrice() != null ? dto.getPrice() : BigDecimal.ZERO,
                 dto.getTransactionDate() != null ? dto.getTransactionDate() : LocalDateTime.now(),

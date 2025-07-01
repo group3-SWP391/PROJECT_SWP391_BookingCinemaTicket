@@ -20,4 +20,11 @@ public class OrderDTO {
     private BigDecimal price;
     private LocalDateTime transactionDate;
     private String status;
+    private Integer orderCode;
+    private String checkOutUrl;
+    private Integer scheduleId;
+    private String seatList;
+    private BigDecimal totalPrice;
+    private LocalDateTime createdAt;
+    private String popcornDrinkList;
 }

@@ -34,5 +34,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     boolean existsByUser_IdAndMovieName(Integer userId, String movieName);
 
+    List<Order> findByUserIdAndStatus(Integer userId, String status);
 
 }
