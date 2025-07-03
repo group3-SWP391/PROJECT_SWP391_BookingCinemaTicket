@@ -5,6 +5,7 @@ import org.group3.project_swp391_bookingmovieticket.constant.CommonConst;
 import org.group3.project_swp391_bookingmovieticket.dtos.BookingRequestDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.PopcornDrinkDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
+import org.group3.project_swp391_bookingmovieticket.dtos.UserRegisterDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.*;
 import org.group3.project_swp391_bookingmovieticket.services.TicketEmailService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.*;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_REGISTER_DTO;
+
 @Controller
 @RequestMapping("/bill")
 public class BillController {
@@ -33,6 +36,9 @@ public class BillController {
 
     @Autowired
     private BillService billService;
+
+    @Autowired
+    private MovieService movieService;
 
     @Autowired
     private ScheduleService scheduleService;
@@ -64,6 +70,14 @@ public class BillController {
         PaymentLink paymentLink = null;
         if ("PAID".equals(status)) {
             BookingRequestDTO dto = (BookingRequestDTO) request.getSession().getAttribute("bookingRequestDTO");
+
+            // Tăng lượt view của phim khi người dùng thanh toán thành công
+            Optional<Movie> movieOpt = movieService.findMovieEntityById(dto.getMovieId());
+            if (movieOpt.isPresent()) {
+                Movie movie = movieOpt.get();
+                movie.setViews(movie.getViews() + 1);
+                movieService.save(movie);
+            }
 
             // Tạo bill và cập nhật trạng thái thanh toán
             Bill bill = billService.createNewBill(dto);
@@ -165,6 +179,7 @@ public class BillController {
         model.addAttribute("paymentLink", paymentLinkService.findByOrderCode(orderCode));
         model.addAttribute("qrTicket", ticketService.findTicketsByOrderCode(orderCode).get(0));
         model.addAttribute(CommonConst.USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
         return "confirmation_screen";
     }
 
@@ -174,6 +189,7 @@ public class BillController {
                                Model model) {
         paymentLinkService.updateStatusByOrderCode(orderCode, status);
         model.addAttribute(CommonConst.USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
         return "cancel_screen";
     }
 }

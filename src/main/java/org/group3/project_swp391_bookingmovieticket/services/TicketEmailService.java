@@ -3,16 +3,39 @@ package org.group3.project_swp391_bookingmovieticket.services;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import java.util.Random;
 
 @Service
 public class TicketEmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
+    public String generateVerificationCode() {
+        Random rand = new Random();
+        return String.format("%06d", rand.nextInt(1000000));
+    }
+
+    public void sendVerificationEmail(String to, String code) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(to);
+        message.setSubject("Email Verification Code Register");
+        message.setText("Your verification code is: " + code + "The verification code only exists for 5 minutes.");
+
+        mailSender.send(message);
+    }
+
 
     public void sendTicketWithQr(String toEmail,
                                  String subject,

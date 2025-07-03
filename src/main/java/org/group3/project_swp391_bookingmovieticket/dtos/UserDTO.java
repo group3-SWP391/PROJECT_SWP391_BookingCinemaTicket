@@ -1,13 +1,15 @@
 package org.group3.project_swp391_bookingmovieticket.dtos;
 
-import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import org.group3.project_swp391_bookingmovieticket.entities.Role;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
-
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class UserDTO {
 
     private Integer id;

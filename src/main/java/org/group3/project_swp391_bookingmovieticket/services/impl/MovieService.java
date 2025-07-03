@@ -34,7 +34,8 @@ public class MovieService implements IMovieService {
 
     @Override
     public Optional<MovieDTO> findById(Integer id) {
-        return Optional.empty();
+        return movieRepository.findById(id)
+                .map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 
     @Override
@@ -109,5 +110,15 @@ public class MovieService implements IMovieService {
     public Page<MovieDTO> findMovieByDirector(int directorId, Pageable pageable) {
         Page<Movie> moviePage = movieRepository.findByDirectorId(directorId, pageable);
         return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));
+    }
+
+    @Override
+    public Optional<Movie> findMovieEntityById(Integer id) {
+        return movieRepository.findById(id);
+    }
+
+    @Override
+    public void save(Movie movie) {
+        movieRepository.save(movie);
     }
 }

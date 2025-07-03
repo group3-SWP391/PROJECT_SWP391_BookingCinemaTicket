@@ -10,11 +10,13 @@ public class BookingRequestDTO {
     private List<Integer> listSeatId;
     private List<PopcornDrinkDTO> listPopcornDrink;
     private Integer totalPrice;
+    private Integer movieId;
 
-    public BookingRequestDTO(Integer userId, Integer scheduleId, List<Integer> listSeatId, Integer totalPrice) {
+    public BookingRequestDTO(Integer userId, Integer scheduleId, List<Integer> listSeatId, Integer totalPrice, Integer movieId) {
         this.userId = userId;
         this.scheduleId = scheduleId;
         this.listSeatId = listSeatId;
         this.totalPrice = totalPrice;
+        this.movieId = movieId;
     }
 }

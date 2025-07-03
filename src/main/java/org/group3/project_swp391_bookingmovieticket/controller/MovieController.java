@@ -2,6 +2,7 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
+import org.group3.project_swp391_bookingmovieticket.dtos.UserRegisterDTO;
 import org.group3.project_swp391_bookingmovieticket.services.impl.DirectorService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieActorService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.MOVIE_HIGH_VIEW;
-import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_LOGIN_DTO;
+import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.*;
+
 @Controller
 @RequestMapping("/movie")
 public class MovieController {
@@ -41,10 +42,13 @@ public class MovieController {
         if (movieNameSearch == null || movieNameSearch.trim().isEmpty() || movieNameSearch.trim().equalsIgnoreCase(" ")) {
             model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
             model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
             return "home";
         } else {
             model.addAttribute("movieSearch", movieService.findByMovieName(movieNameSearch));
             model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+
         }
         return "movie_search";
     }
@@ -57,6 +61,8 @@ public class MovieController {
         if (movieId == null) {
             model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
             model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+
             return "home";
         }
 
@@ -67,6 +73,8 @@ public class MovieController {
         model.addAttribute("directorByMovie", directorService.findDirectorByMovieId(movieId));
         model.addAttribute("movieDetail", movieDetail);
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+
         return "movie_detail";
     }
 
@@ -76,6 +84,8 @@ public class MovieController {
         model.addAttribute("movieByCategory", movieService.getMovieByCategory(categoryName.trim()));
         model.addAttribute("categoryName", categoryName);
         model.addAttribute(USER_LOGIN_DTO,  new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+
         return "movie_category";
     }
 
@@ -85,6 +95,8 @@ public class MovieController {
         if (status == null || status.trim().isEmpty()) {
             model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
             model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+
             return "home";
         } else {
             if (status.equalsIgnoreCase("now-showing")) {
@@ -96,6 +108,7 @@ public class MovieController {
             }
         }
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
         return "movie_showing";
     }
 }

@@ -2,6 +2,7 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
+import org.group3.project_swp391_bookingmovieticket.dtos.UserRegisterDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.services.impl.PaymentLinkService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.TicketService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_LOGIN_DTO;
+import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_REGISTER_DTO;
 
 @Controller
 public class TicketController {
@@ -33,9 +35,11 @@ public class TicketController {
             model.addAttribute("ticketCheck", ticketService.findById(ticketId));
             model.addAttribute("paymentLink", paymentLinkService.findByOrderCode(orderCode));
             model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
             return "staff-ticket-check";
         }
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
         return "redirect:/movie/detail?movieId=" + movieId;
     }
 }

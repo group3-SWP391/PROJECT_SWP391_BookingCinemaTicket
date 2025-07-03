@@ -7,4 +7,7 @@ import java.util.Optional;
 
 public interface IUserService extends IGeneralService<User> {
     Optional<User> findByEmailAndPassword(String email, String password);
+    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
+    void save(User user);
 }

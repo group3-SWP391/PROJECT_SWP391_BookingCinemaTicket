@@ -286,15 +286,27 @@ Author: Webstrot
 <!--main js file end-->
 <script th:if="${showLoginModal}">
     $(document).ready(function () {
-        $('#myModal').modal('show');
+        $('#loginModal').modal('show');
     });
 </script>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    [[#if (${errorMessage} != null)]]
-    alert([[${errorMessage}]]);
-    [[/if]]
-    /*]]>*/
+<script th:if="${showRegisterModal}">
+    $(document).ready(function () {
+        $('#signUpModal').modal('show');
+    });
+</script>
+<script>
+    document.getElementById("signUpForm").onsubmit = function(event) {
+        var password = document.getElementById("passwordRegister").value.trim(); // Loại bỏ khoảng trắng đầu và cuối
+        var confirmPassword = document.getElementById("confirmPassword").value.trim(); // Loại bỏ khoảng trắng đầu và cuối
+
+
+        // Kiểm tra xem mật khẩu và mật khẩu xác nhận có trùng khớp không
+        if (password !== confirmPassword) {
+            alert("Confirm password do not match with password.");
+            event.preventDefault(); // Ngừng gửi form
+            return;
+        }
+    };
 </script>
 </body>
 

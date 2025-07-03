@@ -313,6 +313,7 @@ Author: Webstrot
         const userId = [[${session.userLogin.id}]];
         const listSeatId = [[${bookingRequest.listSeatId}]];
         const totalPrice = Number($(".price").data("price"));
+        const movieId = [[${bookingRequest.movieId}]];
 
         const selectedItemsData = selectedItems.map(item => ({
             id: item.id,
@@ -326,7 +327,8 @@ Author: Webstrot
             userId: userId,
             listSeatId: listSeatId,
             listPopcornDrink: selectedItemsData,
-            totalPrice: totalPrice
+            totalPrice: totalPrice,
+            movieId: movieId
         };
 
         console.log("payload:", payload);

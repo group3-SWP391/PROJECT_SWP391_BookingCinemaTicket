@@ -274,6 +274,7 @@
             const scheduleId = [[${schedule.id}]];  // ID lịch chiếu từ Thymeleaf
             const userId = [[${session.userLogin.id}]];  // ID người dùng từ phiên đăng nhập
             const totalPrice = Number($(".price").data("price"));  // Tổng giá trị từ trang
+            const movieId = [[${schedule.movie.id}]];
 
             // Kiểm tra nếu không có ghế nào được chọn
             if (selectedSeats.length === 0) {
@@ -286,7 +287,8 @@
                 userId: userId,
                 scheduleId: scheduleId,
                 listSeatId: selectedSeats,
-                totalPrice: totalPrice
+                totalPrice: totalPrice,
+                movieId: movieId
             };
 
             // Chuyển đối tượng bookingRequest thành chuỗi query string
@@ -330,9 +332,8 @@
         }
         return h + " giờ " + m + " phút " + s + " giây ";
     }
-
-
 </script>
+
 <script>
     !function (e) {
         function r(r) {
@@ -393,13 +394,6 @@
         t()
     }([])
 </script>
-<!--<script>-->
-<!--    // Nếu người dùng ấn "Back", reload trang để lấy dữ liệu thật từ server-->
-<!--    window.onpageshow = function (event) {-->
-<!--        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {-->
-<!--            window.location.reload();-->
-<!--        }-->
-<!--    };-->
-<!--</script>-->
+
 </body>
 </html>

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dtos.RoomDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.SeatDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
+import org.group3.project_swp391_bookingmovieticket.dtos.UserRegisterDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.services.impl.RoomService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.ScheduleService;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_LOGIN_DTO;
+import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_REGISTER_DTO;
 
 
 @Controller
@@ -64,6 +66,7 @@ public class BookingController {
         model.addAttribute("rowLabels", rowLabels);
         model.addAttribute("seatsPerRow", seatsPerRow);
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
         return "seat_booking";
     }
 

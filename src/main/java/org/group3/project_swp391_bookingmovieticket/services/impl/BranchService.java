@@ -40,22 +40,28 @@ public class BranchService implements IBranchService {
 
     @Override
     public List<BranchDTO> getBranchByMovie(Integer movieId) {
+        // lấy về time hiện tại
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
+
         List<BranchDTO> branchDTOList = new ArrayList<>();
+        // duyệt qua tất các branch có chiếu movie đó
         for (Branch branch : branchRepository.getBranchByMovie(movieId)) {
             BranchDTO branchDTO = modelMapper.map(branch, BranchDTO.class);
             branchDTO.setScheduleList(new ArrayList<>());
+            // duyệt qua những lịch chiếu bộ phim cần tìm có trong branch đó
             for (Schedule schedule : branch.getScheduleList()) {
-                // Chỉ lấy lịch của phim có movieId đúng
+                // Chỉ lấy những schedule của phim có movieId đúng với movie đang tìm vì schedule có thể chứa lịch của phim khác
                 if (schedule.getMovie().getId() != movieId) {
                     continue;
                 }
+                // Nếu time khả dụng thì add vào
                 if (schedule.getStartDate().isAfter(today) ||
                         (schedule.getStartDate().isEqual(today) && schedule.getStartTime().isAfter(now))) {
                     branchDTO.getScheduleList().add(modelMapper.map(schedule, ScheduleDTO.class));
                 }
             }
+            // nếu như có schedule hợp lệ thì sẽ sắp xếp theo time
             if (!branchDTO.getScheduleList().isEmpty()) {
                 branchDTO.setGroupedScheduleByRoomName(
                         branchDTO.getScheduleList()
@@ -90,7 +96,7 @@ public class BranchService implements IBranchService {
                             branchDTO.getScheduleList()
                                     .stream()
                                     .sorted(Comparator.comparing(ScheduleDTO::getStartTime))
-                                    .collect(Collectors.groupingBy(schedule -> schedule.getRoom().getName()))
+                                    .collect(Collectors.groupingBy(schedule -> schedule.getRoom().getRoomType()))
                     );
                     branchDTOList.add(branchDTO);
                 }

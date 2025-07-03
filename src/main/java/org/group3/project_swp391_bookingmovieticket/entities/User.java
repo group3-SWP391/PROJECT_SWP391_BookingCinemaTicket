@@ -9,6 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -43,5 +48,11 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-
+    public User(String username, String password, String fullName, String email, String phone) {
+        this.username = username;
+        this.password = password;
+        this.fullname = fullName;
+        this.email = email;
+        this.phone = phone;
+    }
 }
