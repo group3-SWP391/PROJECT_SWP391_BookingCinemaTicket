@@ -5,7 +5,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <form th:action="@{/login}" th:object="${userLoginDTO}" method="post">
+                <form th:action="@{/login}"  id="login-form" th:object="${userLoginDTO}" method="post">
                     <input type="hidden" name="redirectUrl" th:value="${redirectUrl}"/>
                     <div class="st_pop_form_heading_wrapper float_left">
                         <h3>Log in</h3>
@@ -25,21 +25,27 @@
                         </div>
                     </div>
                     <div class="st_form_pop_fp float_left">
-                        <h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a></h3>
+                        <h3><a th:href="@{none}" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot
+                            Password?</a></h3>
                     </div>
-                    <div class="st_form_pop_login_btn float_left">
-                        <button type="submit" class="btn btn-primary">Log in</button>
+
+                    <div style="margin-top: 10px; margin-bottom: 10px;">
+                        <div class="g-recaptcha" data-sitekey="6LeY3nUrAAAAAOUYLbZTQHBqdysJVpRGajtZ3l2N"></div>
+                        <div style="color: red; padding-top: 100px" id="errorCaptcha"></div>
+                    </div>
+
+                    <div class="st_form_pop_login_btn float_left"  style="margin-bottom: 5px; padding-top: 100px">
+                        <button type="button" class="btn btn-primary" onclick="checkCaptcha()">Log in</button>
                         <p th:text="${errorLogin}" style="font-weight: bold; color: red"></p>
                     </div>
                     <div class="st_form_pop_login_btn float_left">
                         <p th:text="${successMessageRegister}" style="font-weight: bold; color: green"></p>
                     </div>
                     <div class="st_form_pop_or_btn float_left"><h4>or</h4></div>
-                    <div class="st_form_pop_facebook_btn float_left"><a th:href="@{none}">Connect with Facebook</a></div>
                     <div class="st_form_pop_gmail_btn float_left"><a th:href="@{none}">Connect with Google</a></div>
                     <div class="st_form_pop_signin_btn float_left">
-                        <h4>Don’t have an account? <a data-toggle="modal" data-target="#signUpModal" href="#">Sign Up</a></h4>
-                        <h5>I agree to the <a th:href="@{none}">Terms & Conditions</a> & <a th:href="@{none}">Privacy Policy</a></h5>
+                        <h4>Don’t have an account? <a data-toggle="modal" data-target="#signUpModal" href="#">Sign
+                            Up</a></h4>
                     </div>
                 </form>
             </div>
@@ -75,28 +81,31 @@
                     </div>
                     <div class="st_profile_input" style="padding-bottom: 2px">
                         <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" placeholder="Full name" th:field="*{fullName}" class="form-control" required>
+                        <input type="text" id="fullName" placeholder="Full name" th:field="*{fullName}"
+                               class="form-control" required>
                         <div th:if="${#fields.hasErrors('fullName')}" style="color: red;">
                             <span th:errors="*{fullName}"></span>
                         </div>
                     </div>
                     <div class="st_profile_input" style="padding-bottom: 2px">
                         <label for="userName">User Name</label>
-                        <input type="text" id="userName" placeholder="User name" th:field="*{userName}" class="form-control" required>
+                        <input type="text" id="userName" placeholder="User name" th:field="*{userName}"
+                               class="form-control" required>
                         <div th:if="${#fields.hasErrors('userName')}" style="color: red;">
                             <span th:errors="*{userName}"></span>
                         </div>
                     </div>
                     <div class="st_profile_input" style="padding-bottom: 2px">
                         <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="Email" th:field="*{email}" class="form-control" >
+                        <input type="email" id="email" placeholder="Email" th:field="*{email}" class="form-control">
                         <div th:if="${#fields.hasErrors('email')}" style="color: red;">
                             <span th:errors="*{email}"></span>
                         </div>
                     </div>
                     <div class="st_profile_input" style="padding-bottom: 2px">
                         <label for="phone">Phone</label>
-                        <input type="text" id="phone" placeholder="Phone" th:field="*{phone}" class="form-control" required>
+                        <input type="text" id="phone" placeholder="Phone" th:field="*{phone}" class="form-control"
+                               required>
                         <div th:if="${#fields.hasErrors('phone')}" style="color: red;">
                             <span th:errors="*{phone}"></span>
                         </div>
@@ -105,7 +114,8 @@
                     <!-- Password -->
                     <div class="st_profile_input" style="padding-bottom: 2px">
                         <label for="passwordRegister">Password</label>
-                        <input type="password" id="passwordRegister" placeholder="Password" th:field="*{password}" class="form-control">
+                        <input type="password" id="passwordRegister" placeholder="Password" th:field="*{password}"
+                               class="form-control">
                         <div th:if="${#fields.hasErrors('password')}" style="color: red;">
                             <span th:errors="*{password}"></span>
                         </div>
@@ -114,18 +124,21 @@
                     <!-- Confirm Password -->
                     <div class="st_profile_input" style="padding-bottom: 2px">
                         <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-control" >
+                        <input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-control">
                     </div>
 
                     <!-- Checkbox for Terms & Conditions -->
                     <div class="st_form_pop_signin_btn text-center">
                         <label>
                             <input type="checkbox" id="agreeTerms" required>
-                            I agree to the <a href="#" th:href="@{none}">Terms & Conditions</a> & <a href="#" th:href="@{none}">Privacy Policy</a>
+                            I agree to the <a href="#" th:href="@{none}">Terms & Conditions</a> & <a href="#"
+                                                                                                     th:href="@{none}">Privacy
+                            Policy</a>
                         </label>
                     </div>
 
-                    <div th:if="${errorMessageRegister != null}" class="alert alert-danger text-center" style="margin-top: 10px;">
+                    <div th:if="${errorMessageRegister != null}" class="alert alert-danger text-center"
+                         style="margin-top: 10px;">
                         <p th:text="${errorMessageRegister}"></p>
                     </div>
 

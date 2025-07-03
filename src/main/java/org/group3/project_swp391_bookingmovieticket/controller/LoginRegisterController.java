@@ -44,6 +44,7 @@ public class LoginRegisterController {
                                 BindingResult bindingResult,
                                 Model model,
                                 HttpServletRequest request) {
+
         String redirectUrl = request.getParameter("redirectUrl");
         if (bindingResult.hasErrors()) {
             // Debugging: In ra các lỗi trong BindingResult
@@ -67,6 +68,7 @@ public class LoginRegisterController {
             if (redirectUrl != null && !redirectUrl.isEmpty()) {
                 return "redirect:" + redirectUrl;
             }
+            System.out.println("đã đưang nhập");
             return "redirect:/home";
         } else {
             model.addAttribute("errorLogin", "Invalid username or password");

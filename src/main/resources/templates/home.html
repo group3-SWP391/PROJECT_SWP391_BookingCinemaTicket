@@ -308,6 +308,23 @@ Author: Webstrot
         }
     };
 </script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+    function checkCaptcha() {
+        const response = grecaptcha.getResponse();
+        const errorCaptcha = document.getElementById("errorCaptcha");
+
+        console.log("Captcha response:", response);
+
+        if (response.length === 0) {
+            errorCaptcha.textContent = "Please verify that you are not a robot!";
+            console.log("Captcha not verified");
+        } else {
+            console.log("Captcha verified, submitting form...");
+            document.getElementById("login-form").submit();
+        }
+    }
+</script>
 </body>
 
 
