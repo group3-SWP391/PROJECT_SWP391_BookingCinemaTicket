@@ -53,18 +53,18 @@ public class RoomServiceImpl implements IRoomService {
     }
     
     @Override
-    public List<Room> getRoomsByCinemaId(Integer cinemaId) {
-        return roomRepository.findByCinemaId(cinemaId);
+    public List<Room> getRoomsByBranchId(Integer branchId) {
+        return roomRepository.findByBranchId(branchId);
     }
     
     @Override
-    public List<Room> getActiveRoomsByCinemaId(Integer cinemaId) {
-        return roomRepository.findByCinemaIdAndIsActive(cinemaId, 1);
+    public List<Room> getActiveRoomsByBranchId(Integer branchId) {
+        return roomRepository.findByBranchIdAndIsActive(branchId, 1);
     }
     
     @Override
-    public Optional<Room> getRoomByNameAndCinemaId(String name, Integer cinemaId) {
-        return roomRepository.findByNameAndCinemaId(name, cinemaId);
+    public Optional<Room> getRoomByNameAndBranchId(String name, Integer branchId) {
+        return roomRepository.findByNameAndBranchId(name, branchId);
     }
     
     @Override
@@ -73,8 +73,8 @@ public class RoomServiceImpl implements IRoomService {
     }
     
     @Override
-    public List<Room> getRoomsByTypeAndCinema(String roomType, Integer cinemaId) {
-        return roomRepository.findByRoomTypeAndCinemaId(roomType, cinemaId);
+    public List<Room> getRoomsByTypeAndBranch(String roomType, Integer branchId) {
+        return roomRepository.findByRoomTypeAndBranchId(roomType, branchId);
     }
     
     @Override
@@ -83,8 +83,8 @@ public class RoomServiceImpl implements IRoomService {
     }
     
     @Override
-    public List<Room> getRoomsWithMinCapacity(Integer capacity, Integer cinemaId) {
-        return roomRepository.findByCapacityGreaterThanEqualAndCinemaId(capacity, cinemaId);
+    public List<Room> getRoomsWithMinCapacity(Integer capacity, Integer branchId) {
+        return roomRepository.findByCapacityGreaterThanEqualAndBranchId(capacity, branchId);
     }
     
     @Override
@@ -93,29 +93,29 @@ public class RoomServiceImpl implements IRoomService {
     }
     
     @Override
-    public List<Room> getActiveRoomsWithCinema() {
-        return roomRepository.findActiveRoomsWithCinema(1);
+    public List<Room> getActiveRoomsWithBranch() {
+        return roomRepository.findActiveRoomsWithBranch(1);
     }
     
     @Override
-    public Long countRoomsByCinemaId(Integer cinemaId) {
-        return roomRepository.countRoomsByCinemaId(cinemaId);
+    public Long countRoomsByBranchId(Integer branchId) {
+        return roomRepository.countRoomsByBranchId(branchId);
     }
     
     @Override
-    public Long countActiveRoomsByCinemaId(Integer cinemaId) {
-        return roomRepository.countActiveRoomsByCinemaId(cinemaId);
+    public Long countActiveRoomsByBranchId(Integer branchId) {
+        return roomRepository.countActiveRoomsByBranchId(branchId);
     }
     
     @Override
-    public Long getTotalCapacityByCinemaId(Integer cinemaId) {
-        Long capacity = roomRepository.getTotalCapacityByCinemaId(cinemaId);
+    public Long getTotalCapacityByBranchId(Integer branchId) {
+        Long capacity = roomRepository.getTotalCapacityByBranchId(branchId);
         return capacity != null ? capacity : 0L;
     }
     
     @Override
-    public List<Room> getLargestRoomsInCinema(Integer cinemaId) {
-        return roomRepository.findLargestRoomInCinema(cinemaId);
+    public List<Room> getLargestRoomsInBranch(Integer branchId) {
+        return roomRepository.findLargestRoomInBranch(branchId);
     }
     
     @Override
@@ -144,8 +144,8 @@ public class RoomServiceImpl implements IRoomService {
     }
     
     @Override
-    public boolean isRoomNameUniqueInCinema(String name, Integer cinemaId) {
-        return !roomRepository.findByNameAndCinemaId(name, cinemaId).isPresent();
+    public boolean isRoomNameUniqueInBranch(String name, Integer branchId) {
+        return !roomRepository.findByNameAndBranchId(name, branchId).isPresent();
     }
     
     @Override

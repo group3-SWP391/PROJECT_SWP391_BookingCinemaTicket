@@ -4,96 +4,85 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <div th:fragment="content" class="cinema-stage">
-        <!-- Cinema-themed Building Icon -->
+    <div th:fragment="content" class="branch-stage">
+        <!-- Branch-themed Building Icon -->
         <div class="movie-reel">
             🏢
         </div>
         
         <!-- Dashboard Content Wrapper -->
         <div class="dashboard-content">
-            <!-- Add Cinema Button -->
-            <button type="button" class="btn-add-movie" data-toggle="modal" data-target="#cinemaModal" id="addCinemaBtn">
-                <i class="fa fa-plus-circle"></i> Add New Cinema
+            <!-- Add Branch Button -->
+            <button type="button" class="btn-add-movie" data-toggle="modal" data-target="#branchModal" id="addBranchBtn">
+                <i class="fa fa-plus-circle"></i> Add New Branch
             </button>
 
-            <!-- Cinema Management Header -->
+            <!-- Branch Management Header -->
             <div class="movie-management-header">
                 <h1>
                     <i class="fa fa-building"></i>
-                    Cinema Management System
+                    Branch Management System
                 </h1>
             </div>
 
-            <!-- Cinema Table Container -->
+            <!-- Branch Table Container -->
             <div class="movie-table-container">
                 <table class="table movie-table">
                     <thead>
                         <tr>
-                            <th>Cinema Name</th>
-                            <th>Address</th>
-                            <th>Contact</th>
+                            <th>Branch Name</th>
+                            <th>Location</th>
+                            <th>Phone No</th>
                             <th>Rooms</th>
                             <th>Total Capacity</th>
-                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="cinema : ${cinemas}">
+                        <tr th:each="branch : ${branchs}">
                             <td>
-                                <strong th:text="${cinema.name}">Cinema Name</strong>
+                                <strong th:text="${branch.name}">Branch Name</strong>
                                 <br>
-                                <small class="text-muted" th:text="${cinema.description}" th:if="${cinema.description != null}">Cinema Description</small>
+                                <small class="text-muted" th:text="${branch.description}" th:if="${branch.description != null}">Branch Description</small>
                             </td>
                             <td>
-                                <span th:text="${cinema.address}" th:if="${cinema.address != null}">Cinema Address</span>
-                                <span class="text-muted" th:if="${cinema.address == null}">No Address</span>
+                                <span th:text="${branch.location}" th:if="${branch.location != null}">Branch Location</span>
+                                <span class="text-muted" th:if="${branch.location == null}">No Location</span>
                             </td>
                             <td>
-                                <div th:if="${cinema.phone != null}">
-                                    <i class="fa fa-phone"></i> <span th:text="${cinema.phone}">Phone</span>
+                                <div th:if="${branch.phoneNo != null}">
+                                    <i class="fa fa-phoneNo"></i> <span th:text="${branch.phoneNo}">Phone</span>
                                 </div>
-                                <div th:if="${cinema.email != null}">
-                                    <i class="fa fa-envelope"></i> <span th:text="${cinema.email}">Email</span>
-                                </div>
-                                <span class="text-muted" th:if="${cinema.phone == null and cinema.email == null}">No Contact</span>
+                                <span class="text-muted" th:if="${branch.phoneNo == null}">No Contact</span>
                             </td>
                             <td>
-                                <span class="room-count-badge" th:text="${cinema.activeRoomCount} + ' rooms'">5 rooms</span>
+                                <span class="room-count-badge" th:text="${branch.activeRoomCount} + ' rooms'">5 rooms</span>
                                 <br>
                                 <button type="button" class="btn btn-sm btn-info" 
-                                        th:data-cinema-id="${cinema.id}"
-                                        onclick="viewRooms(this.dataset.cinemaId)">
+                                        th:data-branch-id="${branch.id}"
+                                        onclick="viewRooms(this.dataset.branchId)">
                                     <i class="fa fa-eye"></i> View Rooms
                                 </button>
                             </td>
                             <td>
-                                <span class="capacity-badge" th:text="${cinema.totalCapacity} + ' seats'">500 seats</span>
-                            </td>
-                            <td>
-                                <span class="status-badge" 
-                                      th:classappend="${cinema.isActive == 1 ? 'status-showing' : 'status-not-showing'}"
-                                      th:text="${cinema.isActive == 1 ? 'Active' : 'Inactive'}">
-                                    Active
-                                </span>
+                                <span class="capacity-badge" th:text="${branch.totalCapacity} + ' seats'">500 seats</span>
                             </td>
                             <td>
                                 <div class="action-buttons">
                                     <button type="button" class="btn-action btn-edit" 
-                                            th:data-cinema-id="${cinema.id}"
-                                            onclick="editCinema(this.dataset.cinemaId)">
+                                            th:data-branch-id="${branch.id}"
+                                            onclick="editBranch(this.dataset.branchId)">
                                         <i class="fa fa-edit"></i> Edit
                                     </button>
-                                    <button type="button" class="btn-action btn-info" 
-                                            th:data-cinema-id="${cinema.id}"
-                                            onclick="manageRooms(this.dataset.cinemaId)">
-                                        <i class="fa fa-cogs"></i> Rooms
-                                    </button>
+<!--                                    <button type="button" class="btn-action btn-info" -->
+<!--                                            th:data-branch-id="${branch.id}"-->
+<!--                                            onclick="manageRooms(this.dataset.branchId)">-->
+<!--                                        <i class="fa fa-cogs"></i> Rooms-->
+<!--                                    </button>-->
                                     <button type="button" class="btn-action btn-delete" 
-                                            th:data-cinema-id="${cinema.id}"
-                                            th:data-cinema-name="${cinema.name}"
-                                            onclick="deleteCinema(this.dataset.cinemaId, this.dataset.cinemaName)">
+                                            th:data-branch-id="${branch.id}"
+                                            th:data-branch-name="${branch.name}"
+                                            onclick="deleteBranch(this.dataset.branchId, this.dataset.branchName)">
                                         <i class="fa fa-trash"></i> Delete
                                     </button>
                                 </div>
@@ -104,68 +93,53 @@
             </div>
         </div>
 
-        <!-- Cinema Modal -->
-        <div class="modal fade" id="cinemaModal" tabindex="-1" role="dialog" aria-labelledby="cinemaModalLabel">
+        <!-- Branch Modal -->
+        <div class="modal fade" id="branchModal" tabindex="-1" role="dialog" aria-labelledby="branchModalLabel">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="cinemaModalLabel">
-                            <i class="fa fa-building"></i> Add New Cinema
+                        <h4 class="modal-title" id="branchModalLabel">
+                            <i class="fa fa-building"></i> Add New Branch
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="cinemaForm">
-                            <input type="hidden" id="cinemaId" name="cinemaId">
+                        <form id="branchForm">
+                            <input type="hidden" id="branchId" name="branchId">
                             
                             <div class="form-group">
-                                <label for="cinemaName">Cinema Name * <small class="text-muted">(max 255 chars)</small></label>
-                                <input type="text" class="form-control" id="cinemaName" name="name" maxlength="255" required>
+                                <label for="branchName">Branch Name * <small class="text-muted">(max 255 chars)</small></label>
+                                <input type="text" class="form-control" id="branchName" name="name" maxlength="255" required>
                             </div>
-
-                            <div class="form-group">
-                                <label for="cinemaAddress">Address <small class="text-muted">(max 500 chars)</small></label>
-                                <textarea class="form-control" id="cinemaAddress" name="address" rows="3" maxlength="500" 
-                                          placeholder="Enter full cinema address"></textarea>
-                            </div>
-
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="cinemaPhone">Phone <small class="text-muted">(max 20 chars)</small></label>
-                                        <input type="text" class="form-control" id="cinemaPhone" name="phone" maxlength="20" 
-                                               placeholder="e.g. 028-3822-3456">
+                                        <label for="branchLocation">Location <small class="text-muted">(max 255 chars)</small></label>
+                                        <textarea class="form-control" id="branchLocation" name="location" rows="3" maxlength="500"
+                                                  placeholder="Enter full branch location"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="cinemaEmail">Email <small class="text-muted">(max 100 chars)</small></label>
-                                        <input type="email" class="form-control" id="cinemaEmail" name="email" maxlength="100" 
-                                               placeholder="e.g. info@cinema.com">
+                                        <label for="branchPhone">Phone <small class="text-muted">(max 20 chars)</small></label>
+                                        <input type="text" class="form-control" id="branchPhone" name="phoneNo" maxlength="20"
+                                               placeholder="e.g. 028-3822-3456">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="cinemaDescription">Description <small class="text-muted">(max 1000 chars)</small></label>
-                                <textarea class="form-control" id="cinemaDescription" name="description" rows="4" maxlength="1000" 
-                                          placeholder="Brief description of the cinema"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="cinemaStatus">Status</label>
-                                <select class="form-control" id="cinemaStatus" name="isActive">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
+                                <label for="branchDescription">Description <small class="text-muted">(max 1000 chars)</small></label>
+                                <textarea class="form-control" id="branchDescription" name="description" rows="4" maxlength="1000" 
+                                          placeholder="Brief description of the branch"></textarea>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn-save-movie" onclick="saveCinema()">Save Cinema</button>
+                        <button type="button" class="btn-save-movie" onclick="saveBranch()">Save Branch</button>
                     </div>
                 </div>
             </div>
@@ -173,11 +147,11 @@
 
         <!-- Room Management Modal -->
         <div class="modal fade" id="roomModal" tabindex="-1" role="dialog" aria-labelledby="roomModalLabel">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="roomModalLabel">
-                            <i class="fa fa-cogs"></i> Manage Rooms - <span id="roomModalCinemaName">Cinema Name</span>
+                            <i class="fa fa-cogs"></i> Manage Rooms - <span id="roomModalBranchName">Branch Name</span>
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
                             <span aria-hidden="true">&times;</span>
@@ -200,7 +174,7 @@
                                 <div class="card-body">
                                     <form id="roomForm">
                                         <input type="hidden" id="roomId" name="roomId">
-                                        <input type="hidden" id="roomCinemaId" name="cinemaId">
+                                        <input type="hidden" id="roomBranchId" name="branchId">
                                         
                                         <div class="row">
                                             <div class="col-md-6">

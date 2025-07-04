@@ -1,10 +1,10 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.Cinema;
+import org.group3.project_swp391_bookingmovieticket.entities.Branch;
 import org.group3.project_swp391_bookingmovieticket.entities.Room;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.services.ICinemaService;
+import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
 import org.group3.project_swp391_bookingmovieticket.services.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,195 +19,190 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/manager")
-public class ManagerCinemaController {
+public class ManagerBranchController {
 
     @Autowired
-    private ICinemaService cinemaService;
+    private IBranchService branchService;
 
     @Autowired
     private IRoomService roomService;
 
-    // Cinema Management Pages
-    @GetMapping("/cinemas")
-    public String showCinemasManagement(Model model, HttpSession session) {
+    // Branch Management Pages
+    @GetMapping("/branchs")
+    public String showBranchsManagement(Model model, HttpSession session) {
         User user = (User) session.getAttribute("userLogin");
         if (user == null) {
             return "redirect:/login";
         }
 
-        List<Cinema> cinemas = cinemaService.getCinemasWithRooms();
-        model.addAttribute("cinemas", cinemas);
-        model.addAttribute("content", "manager/cinemas");
+        List<Branch> branchs = branchService.getBranchsWithRooms();
+        model.addAttribute("branchs", branchs);
+        model.addAttribute("content", "manager/branchs");
 
         return "manager/layout";
     }
 
-    @GetMapping("/cinemas/{id}/rooms")
-    public String showCinemaRooms(@PathVariable Integer id, Model model, HttpSession session) {
-        User user = (User) session.getAttribute("userLogin");
-        if (user == null) {
-            return "redirect:/login";
-        }
-
-        Optional<Cinema> cinema = cinemaService.getCinemaById(id);
-        if (!cinema.isPresent()) {
-            return "redirect:/manager/cinemas";
-        }
-
-        List<Room> rooms = roomService.getRoomsByCinemaId(id);
-        model.addAttribute("cinema", cinema.get());
-        model.addAttribute("rooms", rooms);
-        model.addAttribute("content", "manager/cinema-rooms");
-
-        return "manager/layout";
-    }
-
-    // Cinema CRUD Operations
-    @PostMapping("/cinemas")
+    @GetMapping("/branchs/{id}/rooms")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> saveCinema(@RequestBody Map<String, String> cinemaData) {
+    public ResponseEntity<Map<String, Object>> showBranchRooms(@PathVariable Integer id, Model model, HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Branch> Branch = branchService.getBranchById(id);
+        if (Branch.isEmpty()) {
+            response.put("success", false);
+            response.put("message", "No branch exists");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        List<Room> rooms = roomService.getRoomsByBranchId(id);
+        response.put("success", true);
+        response.put("message", "Get rooms!");
+        response.put("rooms", rooms);
+        return ResponseEntity.ok(response);
+    }
+
+    // Branch CRUD Operations
+    @PostMapping("/branchs")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> saveBranch(@RequestBody Map<String, String> branchData) {
         Map<String, Object> response = new HashMap<>();
         
         try {
             // Validation
-            String validationError = validateCinemaData(cinemaData);
+            String validationError = validateBranchData(branchData);
             if (validationError != null) {
                 response.put("success", false);
                 response.put("message", validationError);
                 return ResponseEntity.badRequest().body(response);
             }
 
-            Cinema cinema = new Cinema();
-            cinema.setName(cinemaData.get("name"));
-            cinema.setAddress(cinemaData.get("address"));
-            cinema.setPhone(cinemaData.get("phone"));
-            cinema.setEmail(cinemaData.get("email"));
-            cinema.setDescription(cinemaData.get("description"));
-            cinema.setIsActive(1);
-
-            Cinema savedCinema = cinemaService.saveCinema(cinema);
+            Branch Branch = new Branch();
+            Branch.setName(branchData.get("name"));
+            Branch.setLocation(branchData.get("location"));
+            Branch.setPhoneNo(branchData.get("phoneNo"));
+            Branch.setDescription(branchData.get("description"));
+            Branch savedBranch = branchService.saveBranch(Branch);
 
             response.put("success", true);
-            response.put("message", "Cinema added successfully!");
-            response.put("cinema", savedCinema);
+            response.put("message", "Branch added successfully!");
+            response.put("Branch", savedBranch);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error saving cinema: " + e.getMessage());
+            response.put("message", "Error saving Branch: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/cinemas/{id}")
+    @GetMapping("/branchs/{id}")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> getCinema(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> getBranch(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            Optional<Cinema> cinema = cinemaService.getCinemaById(id);
-            if (cinema.isPresent()) {
-                List<Room> rooms = roomService.getRoomsByCinemaId(id);
-                Long roomCount = roomService.countRoomsByCinemaId(id);
-                Long totalCapacity = roomService.getTotalCapacityByCinemaId(id);
+            Optional<Branch> Branch = branchService.getBranchById(id);
+            if (Branch.isPresent()) {
+                List<Room> rooms = roomService.getRoomsByBranchId(id);
+                Long roomCount = roomService.countRoomsByBranchId(id);
+                Long totalCapacity = roomService.getTotalCapacityByBranchId(id);
                 
                 response.put("success", true);
-                response.put("cinema", cinema.get());
+                response.put("Branch", Branch.get());
                 response.put("rooms", rooms);
                 response.put("roomCount", roomCount);
                 response.put("totalCapacity", totalCapacity);
             } else {
                 response.put("success", false);
-                response.put("message", "Cinema not found");
+                response.put("message", "Branch not found");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error retrieving cinema: " + e.getMessage());
+            response.put("message", "Error retrieving Branch: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/cinemas/{id}")
+    @PutMapping("/branchs/{id}")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> updateCinema(@PathVariable Integer id, @RequestBody Map<String, String> cinemaData) {
+    public ResponseEntity<Map<String, Object>> updateBranch(@PathVariable Integer id, @RequestBody Map<String, String> branchData) {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            Optional<Cinema> cinemaOpt = cinemaService.getCinemaById(id);
-            if (cinemaOpt.isPresent()) {
+            Optional<Branch> branchOpt = branchService.getBranchById(id);
+            if (branchOpt.isPresent()) {
                 // Validation
-                String validationError = validateCinemaData(cinemaData);
+                String validationError = validateBranchData(branchData);
                 if (validationError != null) {
                     response.put("success", false);
                     response.put("message", validationError);
                     return ResponseEntity.badRequest().body(response);
                 }
 
-                Cinema cinema = cinemaOpt.get();
-                cinema.setName(cinemaData.get("name"));
-                cinema.setAddress(cinemaData.get("address"));
-                cinema.setPhone(cinemaData.get("phone"));
-                cinema.setEmail(cinemaData.get("email"));
-                cinema.setDescription(cinemaData.get("description"));
+                Branch Branch = branchOpt.get();
+                Branch.setName(branchData.get("name"));
+                Branch.setLocation(branchData.get("location"));
+                Branch.setPhoneNo(branchData.get("phoneNo"));
+                Branch.setDescription(branchData.get("description"));
 
-                Cinema savedCinema = cinemaService.updateCinema(cinema);
+                Branch savedBranch = branchService.updateBranch(Branch);
 
                 response.put("success", true);
-                response.put("message", "Cinema updated successfully!");
-                response.put("cinema", savedCinema);
+                response.put("message", "Branch updated successfully!");
+                response.put("Branch", savedBranch);
             } else {
                 response.put("success", false);
-                response.put("message", "Cinema not found");
+                response.put("message", "Branch not found");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error updating cinema: " + e.getMessage());
+            response.put("message", "Error updating Branch: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/cinemas/{id}")
+    @DeleteMapping("/branchs/{id}")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> deleteCinema(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> deleteBranch(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            if (cinemaService.existsById(id)) {
-                cinemaService.deleteCinema(id);
+            if (branchService.existsById(id)) {
+                branchService.deleteBranch(id);
                 response.put("success", true);
-                response.put("message", "Cinema deleted successfully!");
+                response.put("message", "Branch deleted successfully!");
             } else {
                 response.put("success", false);
-                response.put("message", "Cinema not found");
+                response.put("message", "Branch not found");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error deleting cinema: " + e.getMessage());
+            response.put("message", "Error deleting Branch: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
     }
 
     // Room CRUD Operations
-    @PostMapping("/cinemas/{cinemaId}/rooms")
+    @PostMapping("/branchs/{branchId}/rooms")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> saveRoom(@PathVariable Integer cinemaId, @RequestBody Map<String, Object> roomData) {
+    public ResponseEntity<Map<String, Object>> saveRoom(@PathVariable Integer branchId, @RequestBody Map<String, Object> roomData) {
         Map<String, Object> response = new HashMap<>();
         
         try {
             // Validation
-            String validationError = validateRoomData(roomData, cinemaId);
+            String validationError = validateRoomData(roomData, branchId);
             if (validationError != null) {
                 response.put("success", false);
                 response.put("message", validationError);
                 return ResponseEntity.badRequest().body(response);
             }
 
-            Optional<Cinema> cinema = cinemaService.getCinemaById(cinemaId);
-            if (!cinema.isPresent()) {
+            Optional<Branch> Branch = branchService.getBranchById(branchId);
+            if (!Branch.isPresent()) {
                 response.put("success", false);
-                response.put("message", "Cinema not found");
+                response.put("message", "Branch not found");
                 return ResponseEntity.badRequest().body(response);
             }
 
@@ -216,7 +211,7 @@ public class ManagerCinemaController {
             room.setCapacity(Integer.parseInt(roomData.get("capacity").toString()));
             room.setRoomType((String) roomData.get("roomType"));
             room.setDescription((String) roomData.get("description"));
-            room.setCinema(cinema.get());
+            room.setBranch(Branch.get());
             
             if (roomData.get("rowCount") != null) {
                 room.setRowCount(Integer.parseInt(roomData.get("rowCount").toString()));
@@ -271,7 +266,7 @@ public class ManagerCinemaController {
                 Room room = roomOpt.get();
                 
                 // Validation
-                String validationError = validateRoomData(roomData, room.getCinema().getId());
+                String validationError = validateRoomData(roomData, room.getBranch().getId());
                 if (validationError != null) {
                     response.put("success", false);
                     response.put("message", validationError);
@@ -330,11 +325,11 @@ public class ManagerCinemaController {
     }
 
     // Additional API endpoints
-    @GetMapping("/api/cinemas/active")
+    @GetMapping("/api/branchs/active")
     @ResponseBody
-    public ResponseEntity<List<Cinema>> getActiveCinemas() {
-        List<Cinema> cinemas = cinemaService.getActiveCinemas();
-        return ResponseEntity.ok(cinemas);
+    public ResponseEntity<List<Branch>> getActiveBranchs() {
+        List<Branch> branchs = branchService.getAllBranchs();
+        return ResponseEntity.ok(branchs);
     }
 
     @GetMapping("/api/rooms/types")
@@ -345,30 +340,27 @@ public class ManagerCinemaController {
     }
 
     // Validation methods
-    private String validateCinemaData(Map<String, String> cinemaData) {
-        if (cinemaData.get("name") == null || cinemaData.get("name").trim().isEmpty()) {
-            return "Cinema name is required";
+    private String validateBranchData(Map<String, String> branchData) {
+        if (branchData.get("name") == null || branchData.get("name").trim().isEmpty()) {
+            return "Branch name is required";
         }
-        if (cinemaData.get("name").length() > 255) {
-            return "Cinema name cannot exceed 255 characters";
+        if (branchData.get("name").length() > 255) {
+            return "Branch name cannot exceed 255 characters";
         }
-        if (cinemaData.get("address") != null && cinemaData.get("address").length() > 500) {
-            return "Address cannot exceed 500 characters";
+        if (branchData.get("location") != null && branchData.get("location").length() > 500) {
+            return "location cannot exceed 500 characters";
         }
-        if (cinemaData.get("phone") != null && cinemaData.get("phone").length() > 20) {
+        if (branchData.get("phoneNo") != null && branchData.get("phoneNo").length() > 20) {
             return "Phone number cannot exceed 20 characters";
         }
-        if (cinemaData.get("email") != null && cinemaData.get("email").length() > 100) {
-            return "Email cannot exceed 100 characters";
-        }
-        if (cinemaData.get("description") != null && cinemaData.get("description").length() > 1000) {
+        if (branchData.get("description") != null && branchData.get("description").length() > 1000) {
             return "Description cannot exceed 1000 characters";
         }
         
         return null;
     }
 
-    private String validateRoomData(Map<String, Object> roomData, Integer cinemaId) {
+    private String validateRoomData(Map<String, Object> roomData, Integer branchId) {
         if (roomData.get("name") == null || roomData.get("name").toString().trim().isEmpty()) {
             return "Room name is required";
         }
@@ -380,7 +372,7 @@ public class ManagerCinemaController {
         }
         
         try {
-            Integer capacity = Integer.parseInt(roomData.get("capacity").toString());
+            int capacity = Integer.parseInt(roomData.get("capacity").toString());
             if (capacity <= 0) {
                 return "Room capacity must be greater than 0";
             }

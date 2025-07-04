@@ -12,49 +12,49 @@ import java.util.Optional;
 @Repository
 public interface IRoomRepository extends JpaRepository<Room, Integer> {
     
-    // Find all rooms by cinema ID
-    List<Room> findByCinemaId(Integer cinemaId);
+    // Find all rooms by Branch ID
+    List<Room> findByBranchId(Integer branchId);
     
-    // Find active rooms by cinema ID
-    List<Room> findByCinemaIdAndIsActive(Integer cinemaId, Integer isActive);
+    // Find active rooms by Branch ID
+    List<Room> findByBranchIdAndIsActive(Integer branchId, Integer isActive);
     
-    // Find room by name and cinema ID
-    Optional<Room> findByNameAndCinemaId(String name, Integer cinemaId);
+    // Find room by name and Branch ID
+    Optional<Room> findByNameAndBranchId(String name, Integer branchId);
     
     // Find rooms by room type
     List<Room> findByRoomType(String roomType);
     
-    // Find rooms by room type and cinema ID
-    List<Room> findByRoomTypeAndCinemaId(String roomType, Integer cinemaId);
+    // Find rooms by room type and Branch ID
+    List<Room> findByRoomTypeAndBranchId(String roomType, Integer branchId);
     
     // Find rooms by capacity range
     List<Room> findByCapacityBetween(Integer minCapacity, Integer maxCapacity);
     
-    // Find rooms by capacity and cinema ID
-    List<Room> findByCapacityGreaterThanEqualAndCinemaId(Integer capacity, Integer cinemaId);
+    // Find rooms by capacity and Branch ID
+    List<Room> findByCapacityGreaterThanEqualAndBranchId(Integer capacity, Integer branchId);
     
     // Find all active rooms
     List<Room> findByIsActive(Integer isActive);
     
-    // Custom query to find rooms with cinema details
-    @Query("SELECT r FROM Room r JOIN FETCH r.cinema WHERE r.isActive = :isActive")
-    List<Room> findActiveRoomsWithCinema(@Param("isActive") Integer isActive);
+    // Custom query to find rooms with Branch details
+    @Query("SELECT r FROM Room r JOIN FETCH r.branch WHERE r.isActive = :isActive")
+    List<Room> findActiveRoomsWithBranch(@Param("isActive") Integer isActive);
     
-    // Find largest room in a cinema
-    @Query("SELECT r FROM Room r WHERE r.cinema.id = :cinemaId AND r.isActive = 1 ORDER BY r.capacity DESC")
-    List<Room> findLargestRoomInCinema(@Param("cinemaId") Integer cinemaId);
+    // Find largest room in a Branch
+    @Query("SELECT r FROM Room r WHERE r.branch.id = :branchId AND r.isActive = 1 ORDER BY r.capacity DESC")
+    List<Room> findLargestRoomInBranch(@Param("branchId") Integer branchId);
     
-    // Count rooms by cinema ID
-    @Query("SELECT COUNT(r) FROM Room r WHERE r.cinema.id = :cinemaId")
-    Long countRoomsByCinemaId(@Param("cinemaId") Integer cinemaId);
+    // Count rooms by Branch ID
+    @Query("SELECT COUNT(r) FROM Room r WHERE r.branch.id = :branchId")
+    Long countRoomsByBranchId(@Param("branchId") Integer branchId);
     
-    // Count active rooms by cinema ID
-    @Query("SELECT COUNT(r) FROM Room r WHERE r.cinema.id = :cinemaId AND r.isActive = 1")
-    Long countActiveRoomsByCinemaId(@Param("cinemaId") Integer cinemaId);
+    // Count active rooms by Branch ID
+    @Query("SELECT COUNT(r) FROM Room r WHERE r.branch.id = :branchId AND r.isActive = 1")
+    Long countActiveRoomsByBranchId(@Param("branchId") Integer branchId);
     
-    // Get total capacity of all rooms in a cinema
-    @Query("SELECT SUM(r.capacity) FROM Room r WHERE r.cinema.id = :cinemaId AND r.isActive = 1")
-    Long getTotalCapacityByCinemaId(@Param("cinemaId") Integer cinemaId);
+    // Get total capacity of all rooms in a Branch
+    @Query("SELECT SUM(r.capacity) FROM Room r WHERE r.branch.id = :branchId AND r.isActive = 1")
+    Long getTotalCapacityByBranchId(@Param("branchId") Integer branchId);
     
     // Find rooms by room type and active status
     List<Room> findByRoomTypeAndIsActive(String roomType, Integer isActive);

@@ -33,18 +33,18 @@ public class Room {
     private Integer seatsPerRow;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cinema_id", nullable = false)
+    @JoinColumn(name = "branch_id", nullable = false)
     @JsonBackReference
-    private Cinema cinema;
+    private Branch branch;
     
     // Constructors
     public Room() {}
     
-    public Room(String name, Integer capacity, String roomType, Cinema cinema) {
+    public Room(String name, Integer capacity, String roomType, Branch branch) {
         this.name = name;
         this.capacity = capacity;
         this.roomType = roomType;
-        this.cinema = cinema;
+        this.branch = branch;
         this.isActive = 1;
     }
     
@@ -113,12 +113,12 @@ public class Room {
         this.seatsPerRow = seatsPerRow;
     }
     
-    public Cinema getCinema() {
-        return cinema;
+    public Branch getBranch() {
+        return branch;
     }
     
-    public void setCinema(Cinema cinema) {
-        this.cinema = cinema;
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
     
     @Override
@@ -129,7 +129,7 @@ public class Room {
                 ", capacity=" + capacity +
                 ", roomType='" + roomType + '\'' +
                 ", isActive=" + isActive +
-                ", cinemaId=" + (cinema != null ? cinema.getId() : null) +
+                ", branchId=" + (branch != null ? branch.getId() : null) +
                 '}';
     }
 }

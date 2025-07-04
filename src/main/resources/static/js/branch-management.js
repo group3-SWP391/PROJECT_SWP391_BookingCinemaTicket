@@ -1,41 +1,38 @@
-// Cinema Management JavaScript
-let currentCinemaId = null;
+// Branch Management JavaScript
+let currentBranchId = null;
 let currentRoomId = null;
 
-// Cinema Management Functions
-function editCinema(cinemaId) {
-    fetch(`/manager/cinemas/${cinemaId}`)
+// Branch Management Functions
+function editBranch(branchId) {
+    fetch(`/manager/branchs/${branchId}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const cinema = data.cinema;
-                document.getElementById('cinemaId').value = cinema.id;
-                document.getElementById('cinemaName').value = cinema.name || '';
-                document.getElementById('cinemaAddress').value = cinema.address || '';
-                document.getElementById('cinemaPhone').value = cinema.phone || '';
-                document.getElementById('cinemaEmail').value = cinema.email || '';
-                document.getElementById('cinemaDescription').value = cinema.description || '';
-                document.getElementById('cinemaStatus').value = cinema.isActive;
-                
-                document.getElementById('cinemaModalLabel').innerHTML = '<i class="fa fa-edit"></i> Edit Cinema';
-                $('#cinemaModal').modal('show');
+                const branch = data.Branch;
+                document.getElementById('branchId').value = branch.id;
+                document.getElementById('branchName').value = branch.name || '';
+                document.getElementById('branchLocation').value = branch.location || '';
+                document.getElementById('branchPhone').value = branch.phoneNo || '';
+                document.getElementById('branchDescription').value = branch.description || '';
+                document.getElementById('branchModalLabel').innerHTML = '<i class="fa fa-edit"></i> Edit Branch';
+                $('#branchModal').modal('show');
             } else {
-                alert('Error loading cinema: ' + data.message);
+                alert('Error loading branch: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error loading cinema');
+            alert('Error loading branch');
         });
 }
 
-function saveCinema() {
-    const form = document.getElementById('cinemaForm');
+function saveBranch() {
+    const form = document.getElementById('branchForm');
     const formData = new FormData(form);
-    const cinemaId = document.getElementById('cinemaId').value;
+    const branchId = document.getElementById('branchId').value;
     
-    const url = cinemaId ? `/manager/cinemas/${cinemaId}` : '/manager/cinemas';
-    const method = cinemaId ? 'PUT' : 'POST';
+    const url = branchId ? `/manager/branchs/${branchId}` : '/manager/branchs';
+    const method = branchId ? 'PUT' : 'POST';
     
     const data = {};
     formData.forEach((value, key) => {
@@ -53,7 +50,7 @@ function saveCinema() {
     .then(data => {
         if (data.success) {
             alert(data.message);
-            $('#cinemaModal').modal('hide');
+            $('#branchModal').modal('hide');
             location.reload();
         } else {
             alert('Error: ' + data.message);
@@ -61,13 +58,13 @@ function saveCinema() {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error saving cinema');
+        alert('Error saving branch');
     });
 }
 
-function deleteCinema(cinemaId, cinemaName) {
-    if (confirm(`Are you sure you want to delete cinema "${cinemaName}"? This will also delete all associated rooms.`)) {
-        fetch(`/manager/cinemas/${cinemaId}`, {
+function deleteBranch(branchId, branchName) {
+    if (confirm(`Are you sure you want to delete branch "${branchName}"? This will also delete all associated rooms.`)) {
+        fetch(`/manager/branchs/${branchId}`, {
             method: 'DELETE'
         })
         .then(response => response.json())
@@ -81,34 +78,34 @@ function deleteCinema(cinemaId, cinemaName) {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting cinema');
+            alert('Error deleting branch');
         });
     }
 }
 
 // Room Management Functions
-function manageRooms(cinemaId) {
-    currentCinemaId = cinemaId;
+function manageRooms(branchId) {
+    currentBranchId = branchId;
     
-    // Get cinema name for modal title
-    fetch(`/manager/cinemas/${cinemaId}`)
+    // Get branch name for modal title
+    fetch(`/manager/branchs/${branchId}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                document.getElementById('roomModalCinemaName').textContent = data.cinema.name;
-                document.getElementById('roomCinemaId').value = cinemaId;
-                loadRooms(cinemaId);
+                document.getElementById('roomModalBranchName').textContent = data.Branch?.name;
+                document.getElementById('roomBranchId').value = branchId;
+                loadRooms(branchId);
                 $('#roomModal').modal('show');
             }
         });
 }
 
-function viewRooms(cinemaId) {
-    manageRooms(cinemaId);
+function viewRooms(branchId) {
+    manageRooms(branchId);
 }
 
-function loadRooms(cinemaId) {
-    fetch(`/manager/cinemas/${cinemaId}/rooms`)
+function loadRooms(branchId) {
+    fetch(`/manager/branchs/${branchId}/rooms`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -145,7 +142,7 @@ function loadRooms(cinemaId) {
 function showAddRoomForm() {
     document.getElementById('roomForm').reset();
     document.getElementById('roomId').value = '';
-    document.getElementById('roomCinemaId').value = currentCinemaId;
+    document.getElementById('roomBranchId').value = currentBranchId;
     document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-plus"></i> Add New Room';
     document.getElementById('roomFormContainer').style.display = 'block';
     currentRoomId = null;
@@ -180,7 +177,7 @@ function saveRoom() {
     const formData = new FormData(form);
     const roomId = document.getElementById('roomId').value;
     
-    const url = roomId ? `/manager/rooms/${roomId}` : `/manager/cinemas/${currentCinemaId}/rooms`;
+    const url = roomId ? `/manager/rooms/${roomId}` : `/manager/branchs/${currentBranchId}/rooms`;
     const method = roomId ? 'PUT' : 'POST';
     
     const data = {};
@@ -200,7 +197,7 @@ function saveRoom() {
         if (data.success) {
             alert(data.message);
             cancelRoomForm();
-            loadRooms(currentCinemaId);
+            loadRooms(currentBranchId);
         } else {
             alert('Error: ' + data.message);
         }
@@ -220,7 +217,7 @@ function deleteRoom(roomId, roomName) {
         .then(data => {
             if (data.success) {
                 alert(data.message);
-                loadRooms(currentCinemaId);
+                loadRooms(currentBranchId);
             } else {
                 alert('Error: ' + data.message);
             }
@@ -249,16 +246,16 @@ function calculateCapacity() {
 
 // Document ready and modal event handlers
 $(document).ready(function() {
-    // Reset form when cinema modal is closed
-    $('#cinemaModal').on('hidden.bs.modal', function () {
-        document.getElementById('cinemaForm').reset();
-        document.getElementById('cinemaId').value = '';
-        document.getElementById('cinemaModalLabel').innerHTML = '<i class="fa fa-building"></i> Add New Cinema';
+    // Reset form when branch modal is closed
+    $('#branchModal').on('hidden.bs.modal', function () {
+        document.getElementById('branchForm').reset();
+        document.getElementById('branchId').value = '';
+        document.getElementById('branchModalLabel').innerHTML = '<i class="fa fa-building"></i> Add New Branch';
     });
 
     // Reset room form when room modal is closed
     $('#roomModal').on('hidden.bs.modal', function () {
         cancelRoomForm();
-        currentCinemaId = null;
+        currentBranchId = null;
     });
 }); 

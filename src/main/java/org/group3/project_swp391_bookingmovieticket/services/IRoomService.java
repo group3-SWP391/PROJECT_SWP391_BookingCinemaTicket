@@ -14,26 +14,26 @@ public interface IRoomService {
     Room updateRoom(Room room);
     void deleteRoom(Integer id);
     
-    // Room by cinema
-    List<Room> getRoomsByCinemaId(Integer cinemaId);
-    List<Room> getActiveRoomsByCinemaId(Integer cinemaId);
-    Optional<Room> getRoomByNameAndCinemaId(String name, Integer cinemaId);
+    // Room by branch
+    List<Room> getRoomsByBranchId(Integer branchId);
+    List<Room> getActiveRoomsByBranchId(Integer branchId);
+    Optional<Room> getRoomByNameAndBranchId(String name, Integer branchId);
     
     // Room types and capacity
     List<Room> getRoomsByType(String roomType);
-    List<Room> getRoomsByTypeAndCinema(String roomType, Integer cinemaId);
+    List<Room> getRoomsByTypeAndBranch(String roomType, Integer branchId);
     List<Room> getRoomsByCapacityRange(Integer minCapacity, Integer maxCapacity);
-    List<Room> getRoomsWithMinCapacity(Integer capacity, Integer cinemaId);
+    List<Room> getRoomsWithMinCapacity(Integer capacity, Integer branchId);
     
     // Active rooms
     List<Room> getActiveRooms();
-    List<Room> getActiveRoomsWithCinema();
+    List<Room> getActiveRoomsWithBranch();
     
     // Room statistics
-    Long countRoomsByCinemaId(Integer cinemaId);
-    Long countActiveRoomsByCinemaId(Integer cinemaId);
-    Long getTotalCapacityByCinemaId(Integer cinemaId);
-    List<Room> getLargestRoomsInCinema(Integer cinemaId);
+    Long countRoomsByBranchId(Integer branchId);
+    Long countActiveRoomsByBranchId(Integer branchId);
+    Long getTotalCapacityByBranchId(Integer branchId);
+    List<Room> getLargestRoomsInBranch(Integer branchId);
     
     // Room type operations
     List<Room> getActiveRoomsByType(String roomType);
@@ -42,7 +42,7 @@ public interface IRoomService {
     // Validation
     boolean existsById(Integer id);
     boolean isActiveRoom(Integer id);
-    boolean isRoomNameUniqueInCinema(String name, Integer cinemaId);
+    boolean isRoomNameUniqueInBranch(String name, Integer branchId);
     
     // Activate/Deactivate
     void activateRoom(Integer id);
