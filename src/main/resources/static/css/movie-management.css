@@ -96,7 +96,7 @@
 }
 
 .btn-add-movie {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 50%, #58d68d 100%);
+    background: linear-gradient(135deg, #27ae60 0%, #ff4444 50%, #58d68d 100%);
     color: white;
     border: none;
     padding: 15px 30px;
@@ -131,7 +131,7 @@
 }
 
 .btn-add-movie:hover {
-    background: linear-gradient(135deg, #2ecc71 0%, #58d68d 50%, #85e4a3 100%);
+    background: linear-gradient(135deg, #ff4444 0%, #58d68d 50%, #85e4a3 100%);
     transform: translateY(-4px) scale(1.05);
     box-shadow: 0 12px 35px rgba(39, 174, 96, 0.5);
     color: white;
@@ -150,7 +150,7 @@
 
 /* Modal Styles */
 .modal-header {
-    background: linear-gradient(90deg, var(--manager-accent) 0%, #2ecc71 100%);
+    background: linear-gradient(90deg, var(--manager-accent) 0%, #ff4444 100%);
     color: white;
     border-bottom: none;
     border-radius: 5px 5px 0 0;
@@ -234,7 +234,7 @@
 }
 
 .btn-add-actor {
-    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    background: linear-gradient(45deg, #27ae60, #ff4444);
     color: white;
     border: none;
     padding: 5px 10px;
@@ -245,12 +245,12 @@
 }
 
 .btn-add-actor:hover {
-    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    background: linear-gradient(45deg, #ff4444, #27ae60);
     transform: translateY(-2px);
 }
 
 .btn-save-movie {
-    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    background: linear-gradient(45deg, #27ae60, #ff4444);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -261,7 +261,7 @@
 }
 
 .btn-save-movie:hover {
-    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    background: linear-gradient(45deg, #ff4444, #27ae60);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
@@ -292,7 +292,7 @@
 }
 
 .status-showing {
-    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    background: linear-gradient(45deg, #27ae60, #ff4444);
     color: white;
 }
 

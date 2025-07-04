@@ -6,39 +6,64 @@
 </head>
 
 <body>
-    <header th:fragment="header" class="manager-header" style="padding: 15px 0;">
-        <div class="container-fluid" style="display: flex;justify-content: space-between; align-items: center;">
-            <h4 class="pull-left" style="margin: 0; color: #fff; font-weight: bold; flex: 1;">
-                <i class="fa fa-film" style="margin-right: 10px;"></i>Manager Page
-            </h4>
-            <div class="pull-right" style="margin-top: 2px;">
+    <header th:fragment="header" class="manager-header" style="padding: 15px 0; background: #1b1b1b;">
+        <div  style="display: flex;justify-content: space-between; align-items: center;width: 100%; background: #ff4444;">
+            <div class="prs_logo_main_wrapper" style="display: flex; align-items: center;">
+                <a th:href="@{/manager/dashboard}" style="display: flex; align-items: center; text-decoration: none;">
+                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                         x="0px" y="0px" width="35px" height="30px" viewBox="0 0 46.996 40" enable-background="new 0 0 46.996 40" 
+                         xml:space="preserve" style="margin-right: 10px;">
+                        <g>
+                            <g>
+                                <path fill="#ffffff" d="M39.919,19.833C39.919,8.88,30.984,0,19.959,0C8.937,0,0,8.88,0,19.833
+                                    c0,10.954,8.937,19.834,19.959,19.834C30.984,39.666,39.919,30.787,39.919,19.833z M35.675,14.425
+                                    c0.379,0,0.686,0.307,0.686,0.683s-0.305,0.683-0.686,0.683c-0.38,0-0.688-0.307-0.688-0.683S35.295,14.425,35.675,14.425z
+                                    M34.482,20.461c0,0.491-0.025,0.976-0.071,1.452l-11.214-4.512l6.396-7.733C32.592,12.311,34.482,16.167,34.482,20.461z
+                                    M19.083,2.277c0.379,0,0.687,0.305,0.687,0.682c0,0.378-0.306,0.684-0.687,0.684c-0.378,0-0.686-0.306-0.686-0.684
+                                    C18.396,2.584,18.704,2.277,19.083,2.277z M19.959,6.031c1.916,0,3.743,0.372,5.416,1.042l-6.335,7.662l-6.252-6.82
+                                    C14.906,6.718,17.351,6.031,19.959,6.031z M3.128,16.473c-0.378,0-0.687-0.306-0.687-0.684c0-0.377,0.307-0.682,0.687-0.682
+                                    c0.38,0,0.686,0.305,0.686,0.682C3.814,16.167,3.508,16.473,3.128,16.473z M5.535,22.119c-0.063-0.545-0.098-1.098-0.098-1.658
+                                    c0-3.612,1.339-6.911,3.547-9.444l6.502,7.095L5.535,22.119z M10.462,35.354c-0.379,0-0.687-0.306-0.687-0.683
+                                    s0.307-0.682,0.687-0.682c0.379,0,0.687,0.305,0.687,0.682S10.842,35.354,10.462,35.354z M6.925,26.828l10.4-4.186l0.239,12.052
+                                    C12.88,33.921,8.956,30.922,6.925,26.828z M19.513,22.326c-1.529,0-2.771-1.232-2.771-2.752c0-1.521,1.241-2.753,2.771-2.753
+                                    c1.53,0,2.771,1.232,2.771,2.753C22.284,21.096,21.043,22.326,19.513,22.326z M29.939,33.99c-0.378,0-0.686-0.308-0.686-0.683
+                                    c0-0.377,0.307-0.683,0.686-0.683s0.688,0.306,0.688,0.683C30.626,33.683,30.319,33.99,29.939,33.99z M22.482,34.672
+                                    l-0.246-12.388l10.846,4.365C31.098,30.799,27.177,33.854,22.482,34.672z M35.314,34.585c-1.837,1.531-6.061,4.306-6.061,4.306
+                                    C37.652,36.448,45.953,40,45.953,40l1.043-8.658C41.41,30.454,38.125,32.244,35.314,34.585z"/>
+                            </g>
+                        </g>
+                    </svg>
+                    <span style="color: #ffffff; font-size: 20px; font-weight: bold;">Movie Pro</span>
+                </a>
+                <span style="color: #ffffff; margin-left: 20px; font-size: 16px;">Manager Page</span>
+            </div>
+            <div style="display: flex; align-items: center;">
                 <div th:if="${session.userLogin != null}" style="display: inline-block;">
                     <a class="btn"
-                        style="margin-right: 10px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; padding: 8px 15px;"
+                        style="margin-right: 10px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 8px 15px;"
                         th:href="@{/manager/dashboard}">
                         <i class="fa fa-user" style="margin-right: 5px;"></i>
                         <span th:text="${session.userLogin.fullname}">James</span>
                     </a>
                     <!-- Profile Button -->
-                    <a href="/manager/profile" class="btn btn-light"
-                        style="margin-right: 10px; background: rgba(255,255,255,0.9); color: #27ae60; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;">
+                    <a href="/manager/profile" class="btn"
+                        style="margin-right: 10px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 8px 15px;">
                         <i class="fa fa-cog" style="margin-right: 5px;"></i>Profile
                     </a>
                     <a class="btn"
-                        style="background: rgba(231, 76, 60, 0.9); color: #fff; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;"
+                        style="background: rgba(231, 76, 60, 0.9); color: #fff; border: none; border-radius: 5px; padding: 8px 15px;"
                         th:href="@{/log-out}">
                         <i class="fa fa-sign-out" style="margin-right: 5px;"></i>Log out
                     </a>
                 </div>
                 <div th:if="${session.userLogin == null}" style="display: inline-block;">
-                    <a class="btn btn-light"
-                        style="color: #27ae60; background: #fff; border: none; border-radius: 5px; padding: 8px 15px; font-weight: 600;"
+                    <a class="btn"
+                        style="color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 8px 15px;"
                         data-toggle="modal" data-target="#myModal">
                         <i class="fa fa-user-plus" style="margin-right: 5px;"></i>Sign up
                     </a>
                 </div>
             </div>
-            <div style="clear: both;"></div>
         </div>
     </header>
 </body>
