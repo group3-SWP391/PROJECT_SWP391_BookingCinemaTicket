@@ -120,9 +120,9 @@
             <div class="row" style="margin-bottom: 30px;">
                 <div class="col-xs-12 col-sm-6 col-lg-3">
                     <div class="card-metric text-center">
-                        <div class="card-icon" style="color: #27ae60;"><i class="fa fa-money"></i></div>
+                        <div class="card-icon" style="color: #ff4444;"><i class="fa fa-money"></i></div>
                         <div class="card-title">Total Revenue</div>
-                        <div class="card-value" style="color: #27ae60;" th:text="${revenue != null ? #numbers.formatDecimal(revenue, 2, 'COMMA', 0, 'POINT') + ' $' : '00 $'}">00 $</div>
+                        <div class="card-value" style="color: #ff4444;" th:text="${revenue != null ? #numbers.formatDecimal(revenue, 2, 'COMMA', 0, 'POINT') + ' $' : '00 $'}">00 $</div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-lg-3">
@@ -200,7 +200,7 @@
                             <td th:text="${m.ticketSold}"></td>
                             <td th:text="${m.lastShowDate}"></td>
                             <td>
-                                <a th:href="@{/manager/movie/{id}(id=${m.id})}" class="btn btn-sm" style="background: linear-gradient(45deg, #27ae60, #ff4444); color: white; border: none; border-radius: 5px; padding: 5px 12px;">
+                                <a th:href="@{/manager/movie/{id}(id=${m.id})}" class="btn btn-sm" style="background: linear-gradient(45deg, #ff4444, #ff4444); color: white; border: none; border-radius: 5px; padding: 5px 12px;">
                                     <i class="fa fa-eye" style="margin-right: 3px;"></i>Details
                                 </a>
                             </td>
@@ -289,13 +289,13 @@
                         datasets: [{
                             label: 'Total Revenue ($)',
                             data: getMonthlyRevenueData(), // initially all movies
-                            borderColor: '#27ae60',
+                            borderColor: '#ff4444',
                             backgroundColor: 'rgba(39, 174, 96, 0.1)',
                             fill: true,
                             tension: 0.1,
                             pointRadius: 5,
                             pointHoverRadius: 8,
-                            pointBackgroundColor: '#27ae60',
+                            pointBackgroundColor: '#ff4444',
                             pointBorderColor: '#fff',
                             pointBorderWidth: 2
                         }]

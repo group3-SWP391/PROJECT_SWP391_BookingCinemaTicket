@@ -1,12 +1,14 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.*;
 import org.group3.project_swp391_bookingmovieticket.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,7 +49,7 @@ public class  ManagerMovieController {
     private static final String UPLOAD_DIR = "uploads/movies/";
     
     private String saveFile(MultipartFile file, String type) throws IOException {
-        if (file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             return null;
         }
         
@@ -111,40 +113,7 @@ public class  ManagerMovieController {
         }
         return embedUrl;
     }
-    
-    private String validateMovieData(String name, String categories, String language,
-                                   String shortDescription, String longDescription, String trailerYoutubeUrl) {
-        if (name == null || name.trim().isEmpty()) {
-            return "Movie name is required";
-        }
-        if (categories == null || categories.trim().isEmpty()) {
-            return "Categories are required";
-        }
-        if (language == null || language.trim().isEmpty()) {
-            return "Language is required";
-        }
-        if (name.length() > 255) {
-            return "Movie name cannot exceed 255 characters";
-        }
-        if (categories.length() > 100) {
-            return "Categories cannot exceed 100 characters";
-        }
-        if (language.length() > 255) {
-            return "Language cannot exceed 255 characters";
-        }
-        if (shortDescription != null && shortDescription.length() > 500) {
-            return "Short description cannot exceed 500 characters";
-        }
-        if (longDescription != null && longDescription.length() > 1000) {
-            return "Long description cannot exceed 1000 characters";
-        }
-        if (trailerYoutubeUrl != null && trailerYoutubeUrl.length() > 1000) {
-            return "YouTube URL cannot exceed 1000 characters";
-        }
-        
-        return null; // No validation errors
-    }
-    
+
     private String validateDirectorData(String name, String description) {
         if (name == null || name.trim().isEmpty()) {
             return "Director name is required";
@@ -207,93 +176,82 @@ public class  ManagerMovieController {
 
     @PostMapping("/movies")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> saveMovie(
-            @RequestParam("name") String name,
-            @RequestParam("duration") Integer duration,
-            @RequestParam("categories") String categories,
-            @RequestParam("language") String language,
-            @RequestParam(value = "rated", required = false) String rated,
-            @RequestParam(value = "ratingId", required = false) Integer ratingId,
-            @RequestParam(value = "format", required = false) String format,
-            @RequestParam("isShowing") Integer isShowing,
-            @RequestParam(value = "directorId", required = false) Integer directorId,
-            @RequestParam(value = "shortDescription", required = false) String shortDescription,
-            @RequestParam(value = "longDescription", required = false) String longDescription,
-            @RequestParam(value = "smallImageFile", required = false) MultipartFile smallImageFile,
-            @RequestParam(value = "largeImageFile", required = false) MultipartFile largeImageFile,
-            @RequestParam(value = "trailerFile", required = false) MultipartFile trailerFile,
-            @RequestParam(value = "trailerYoutubeUrl", required = false) String trailerYoutubeUrl,
-            @RequestParam(value = "trailerType", required = false, defaultValue = "upload") String trailerType,
-            @RequestParam(value = "actors", required = false) String actorsJson,
-            @RequestParam(value = "_method", required = false) String method,
-            @RequestParam(value = "movieId", required = false) Integer movieId) {
+    public ResponseEntity<Map<String, Object>> saveMovie(@ModelAttribute MovieDTO movieDTO, BindingResult bindingResult) {
         Map<String, Object> response = new HashMap<>();
         
-        String validationError = validateMovieData(name, categories, language, shortDescription, longDescription, trailerYoutubeUrl);
-        if (validationError != null) {
+        if (bindingResult.hasErrors()) {
             response.put("success", false);
-            response.put("message", validationError);
+            response.put("message", bindingResult.getAllErrors().get(0).getDefaultMessage());
             return ResponseEntity.badRequest().body(response);
         }
         
         try {
-            boolean isUpdate = "PUT".equals(method) && movieId != null;
+            boolean isUpdate = movieDTO.getMovieId() != null;
             Movie movie;
             
             if (isUpdate) {
-                Optional<Movie> movieOpt = movieRepository.findById(movieId);
+                Optional<Movie> movieOpt = movieRepository.findById(movieDTO.getMovieId());
                 if (!movieOpt.isPresent()) {
                     response.put("success", false);
                     response.put("message", "Movie not found");
                     return ResponseEntity.ok(response);
                 }
                 movie = movieOpt.get();
-                movieActorRepository.deleteByMovie_Id(movieId);
+                movieActorRepository.deleteByMovie_Id(movieDTO.getMovieId());
             } else {
                 movie = new Movie();
                 movie.setViews(0);
                 movie.setReleaseDate(new Date());
-                if (movieId != null) {
+                if (movieDTO.getMovieId() != null) {
                     movie.setEndDate(new Date());
                 }
             }
             
-            movie.setName(name);
-            movie.setCategories(categories);
-            movie.setDuration(duration);
-            movie.setLanguage(language);
-            movie.setRated(rated);
-            movie.setShortDescription(shortDescription);
-            movie.setLongDescription(longDescription);
-            movie.setFormat(format != null ? format.trim() : null);
-            movie.setIsShowing(isShowing);
+            movie.setName(movieDTO.getName());
+            movie.setCategories(movieDTO.getCategories());
+            movie.setDuration(movieDTO.getDuration());
+            movie.setLanguage(movieDTO.getLanguage());
+            //movie.setRated(movieDTO.getRatingId());
+            movie.setShortDescription(movieDTO.getShortDescription());
+            movie.setLongDescription(movieDTO.getLongDescription());
+            movie.setFormat(movieDTO.getFormat() != null ? movieDTO.getFormat().trim() : null);
+            movie.setIsShowing(movieDTO.getIsShowing());
 
             try {
-                String smallImagePath = saveFile(smallImageFile, "images");
-                String largeImagePath = saveFile(largeImageFile, "images");
+                String smallImagePath = saveFile(movieDTO.getSmallImageFile(), "images");
+                String largeImagePath = saveFile(movieDTO.getLargeImageFile(), "images");
                 
                 if (smallImagePath != null) {
                     movie.setSmallImageUrl(smallImagePath);
-                }
-                if (largeImagePath != null) {
-                    movie.setLargeImageUrl(largeImagePath);
+                } else if (isUpdate) {
+                    movie.setSmallImageUrl(movieDTO.getSmallImageUrl());
                 }
                 
-                if ("youtube".equals(trailerType) && trailerYoutubeUrl != null && !trailerYoutubeUrl.trim().isEmpty()) {
-                    String processedYoutubeUrl = processYouTubeUrl(trailerYoutubeUrl.trim());
+                if (largeImagePath != null) {
+                    movie.setLargeImageUrl(largeImagePath);
+                } else if (isUpdate) {
+                    movie.setLargeImageUrl(movieDTO.getLargeImageUrl());
+                }
+                
+                if (movieDTO.getTrailerUrl() != null && !movieDTO.getTrailerUrl().trim().isEmpty()) {
+                    String processedYoutubeUrl = processYouTubeUrl(movieDTO.getTrailerUrl().trim());
                     if (processedYoutubeUrl != null) {
                         movie.setTrailerUrlWatchLink(processedYoutubeUrl);
                     } else {
                         response.put("success", false);
                         response.put("message", "Invalid YouTube URL format");
-                                return ResponseEntity.ok(response);
-                    }
-                } else if ("upload".equals(trailerType) && trailerFile != null && !trailerFile.isEmpty()) {
-                    String trailerPath = saveFile(trailerFile, "videos");
-                    if (trailerPath != null) {
-                        movie.setTrailerUrlWatchLink(trailerPath);
+                        return ResponseEntity.ok(response);
                     }
                 }
+//                else if (movieDTO.getTrailerFile() != null && !movieDTO.getTrailerFile().isEmpty()) {
+//                    String trailerPath = saveFile(movieDTO.getTrailerFile(), "videos");
+//                    if (trailerPath != null) {
+//                        movie.setTrailerUrlWatchLink(trailerPath);
+//                    }
+//                }
+//                else if (isUpdate) {
+//                    movie.setTrailerUrlWatchLink(movieDTO.getTrailerUrl());
+//                }
 
             } catch (IOException e) {
                 response.put("success", false);
@@ -301,13 +259,13 @@ public class  ManagerMovieController {
                 return ResponseEntity.ok(response);
             }
 
-            if (directorId != null) {
-                Optional<Director> director = directorRepository.findById(directorId);
+            if (movieDTO.getDirectorId() != null) {
+                Optional<Director> director = directorRepository.findById(movieDTO.getDirectorId());
                 director.ifPresent(movie::setDirector);
             }
 
-            if (ratingId != null) {
-                Optional<Rating> rating = ratingRepository.findById(ratingId);
+            if (movieDTO.getRatingId() != null) {
+                Optional<Rating> rating = ratingRepository.findById(movieDTO.getRatingId());
                 rating.ifPresent(movie::setRating);
             }
 
@@ -317,18 +275,16 @@ public class  ManagerMovieController {
 
             Movie savedMovie = movieRepository.save(movie);
 
-            if (actorsJson != null && !actorsJson.trim().isEmpty()) {
+            if (movieDTO.getActorsJson() != null && !movieDTO.getActorsJson().trim().isEmpty()) {
                 try {
                     ObjectMapper objectMapper = new ObjectMapper();
                     @SuppressWarnings("unchecked")
-                    List<Map<String, Object>> actorList = objectMapper.readValue(actorsJson, List.class);
+                    List<Map<String, Object>> actorList = objectMapper.readValue(movieDTO.getActorsJson(), List.class);
 
                     for (Map<String, Object> actorData : actorList) {
-
                         if (actorData.get("actorId") != null && actorData.get("characterName") != null) {
                             String characterName = (String) actorData.get("characterName");
                             
-                            // Validate character name length
                             if (characterName.length() > 255) {
                                 response.put("success", false);
                                 response.put("message", "Character name '" + characterName + "' cannot exceed 255 characters");
@@ -406,90 +362,6 @@ public class  ManagerMovieController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/movies/{id}")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> updateMovie(@PathVariable Integer id, @RequestBody Map<String, Object> movieData) {
-        Map<String, Object> response = new HashMap<>();
-        
-        try {
-            Optional<Movie> movieOpt = movieRepository.findById(id);
-            if (movieOpt.isPresent()) {
-                Movie movie = movieOpt.get();
-                
-                movie.setName((String) movieData.get("name"));
-                movie.setCategories((String) movieData.get("categories"));
-                movie.setDuration(Integer.parseInt(movieData.get("duration").toString()));
-                movie.setLanguage((String) movieData.get("language"));
-                movie.setRated((String) movieData.get("rated"));
-                movie.setShortDescription((String) movieData.get("shortDescription"));
-                movie.setLongDescription((String) movieData.get("longDescription"));
-                movie.setLargeImageUrl((String) movieData.get("largeImageUrl"));
-                movie.setSmallImageUrl((String) movieData.get("smallImageUrl"));
-                
-                if (movieData.get("trailerUrl") != null) {
-                    movie.setTrailerUrlWatchLink((String) movieData.get("trailerUrl"));
-                }
-                movie.setFormat((String) movieData.get("format"));
-                movie.setIsShowing(Integer.parseInt(movieData.get("isShowing").toString()));
-
-                if (movieData.get("directorId") != null) {
-                    Integer directorId = Integer.parseInt(movieData.get("directorId").toString());
-                    Optional<Director> director = directorRepository.findById(directorId);
-                    director.ifPresent(movie::setDirector);
-                }
-
-                if (movieData.get("ratingId") != null) {
-                    Integer ratingId = Integer.parseInt(movieData.get("ratingId").toString());
-                    Optional<Rating> rating = ratingRepository.findById(ratingId);
-                    rating.ifPresent(movie::setRating);
-                }
-
-                Movie savedMovie = movieRepository.save(movie);
-
-                movieActorRepository.deleteByMovie_Id(id);
-                
-                @SuppressWarnings("unchecked")
-                List<Map<String, Object>> actorList = (List<Map<String, Object>>) movieData.get("actors");
-
-                if (actorList != null && !actorList.isEmpty()) {
-                    for (Map<String, Object> actorData : actorList) {
-
-                        if (actorData.get("actorId") != null && actorData.get("characterName") != null) {
-                            String characterName = (String) actorData.get("characterName");
-                            
-                            // Validate character name length
-                            if (characterName.length() > 255) {
-                                response.put("success", false);
-                                response.put("message", "Character name '" + characterName + "' cannot exceed 255 characters");
-                                return ResponseEntity.badRequest().body(response);
-                            }
-                            
-                            Integer actorId = Integer.parseInt(actorData.get("actorId").toString());
-                            
-                            Optional<Actor> actor = actorRepository.findById(actorId);
-                            if (actor.isPresent()) {
-                                MovieActor movieActor = new MovieActor();
-                                movieActor.setMovie(savedMovie);
-                                movieActor.setActor(actor.get());
-                                movieActor.setNameInMovie(characterName);
-                                movieActorRepository.save(movieActor);
-                            }
-                        }
-                    }
-                }
-                response.put("success", true);
-                response.put("message", "Movie updated successfully!");
-            } else {
-                response.put("success", false);
-                response.put("message", "Movie not found");
-            }
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Error updating movie: " + e.getMessage());
-        }
-
-        return ResponseEntity.ok(response);
-    }
 
     @DeleteMapping("/movies/{id}")
     @ResponseBody

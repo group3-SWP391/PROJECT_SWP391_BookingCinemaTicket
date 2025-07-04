@@ -96,7 +96,7 @@
 }
 
 .btn-add-movie {
-    background: linear-gradient(135deg, #27ae60 0%, #ff4444 50%, #58d68d 100%);
+    background: linear-gradient(135deg, #ae2727 0%, #ff4444 50%, #d65858 100%);
     color: white;
     border: none;
     padding: 15px 30px;
@@ -131,7 +131,7 @@
 }
 
 .btn-add-movie:hover {
-    background: linear-gradient(135deg, #ff4444 0%, #58d68d 50%, #85e4a3 100%);
+    background: linear-gradient(135deg, #ff4444 0%, #ff4444 50%, #e48585 100%);
     transform: translateY(-4px) scale(1.05);
     box-shadow: 0 12px 35px rgba(39, 174, 96, 0.5);
     color: white;
@@ -234,7 +234,7 @@
 }
 
 .btn-add-actor {
-    background: linear-gradient(45deg, #27ae60, #ff4444);
+    background: linear-gradient(45deg, #ff4444, #ff4444);
     color: white;
     border: none;
     padding: 5px 10px;
@@ -245,12 +245,12 @@
 }
 
 .btn-add-actor:hover {
-    background: linear-gradient(45deg, #ff4444, #27ae60);
+    background: linear-gradient(45deg, #ff4444, #ff4444);
     transform: translateY(-2px);
 }
 
 .btn-save-movie {
-    background: linear-gradient(45deg, #27ae60, #ff4444);
+    background: linear-gradient(45deg, #ff4444, #ff4444);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -261,7 +261,7 @@
 }
 
 .btn-save-movie:hover {
-    background: linear-gradient(45deg, #ff4444, #27ae60);
+    background: linear-gradient(45deg, #ff4444, #ff4444);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
@@ -292,7 +292,7 @@
 }
 
 .status-showing {
-    background: linear-gradient(45deg, #27ae60, #ff4444);
+    background: linear-gradient(45deg, #ff4444, #ff4444);
     color: white;
 }
 
@@ -410,7 +410,7 @@
 }
 
 .file-upload-area.dragover {
-    border-color: #27ae60;
+    border-color: #ff4444;
     background: rgba(39, 174, 96, 0.1);
     transform: scale(1.02);
 }
@@ -551,7 +551,7 @@
 }
 
 .current-file-icon {
-    color: #27ae60;
+    color: #ff4444;
     font-size: 1.2rem;
 }
 
