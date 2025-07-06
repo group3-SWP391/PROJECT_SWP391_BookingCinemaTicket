@@ -1,158 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Manager Staff</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
-<!-- templates/manager/employees.html -->
-<div class="container mt-4" xmlns:th="http://www.thymeleaf.org" th:fragment="content">
-    <h2 class="mb-3 text-center">Quản lý nhân viên</h2>
+<div th:fragment="content" class="dashboard-content">
+    <!-- Nút thêm nhân viên -->
+    <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#employeeModal" onclick="openCreateEmployeeModal()">
+        <i class="fa fa-plus-circle"></i> Add Employee
+    </button>
 
-    <div class="mb-3 text-end">
-        <button class="btn btn-success" onclick="showCreateModal()">+ Thêm nhân viên</button>
+    <!-- Tiêu đề -->
+    <h2 class="text-center">Manager Staff</h2>
+
+    <!-- Bảng danh sách nhân viên -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped movie-table">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Họ tên</th>
+                <th>Tài khoản</th>
+                <th>SĐT</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${employees}">
+                <td th:text="${e.id}">1</td>
+                <td th:text="${e.fullname}">Tên</td>
+                <td th:text="${e.username}">Tài khoản</td>
+                <td th:text="${e.phone}">SĐT</td>
+                <td th:text="${e.email}">Email</td>
+                <td th:text="${e.role.name}">manager</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" th:onclick="'showEditModal(' + ${e.id} + ')'">
+                        <i class="fa fa-edit"></i> Sửa
+                    </button>
+                    <button class="btn btn-sm btn-danger" th:onclick="'deleteEmployee(' + ${e.id} + ')'">
+                        <i class="fa fa-trash"></i> Xoá
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Họ tên</th>
-            <th>Tài khoản</th>
-            <th>SĐT</th>
-            <th>Email</th>
-            <th>Vai trò</th>
-            <th>Thao tác</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="e : ${employees}">
-            <td th:text="${e.id}"></td>
-            <td th:text="${e.fullname}"></td>
-            <td th:text="${e.username}"></td>
-            <td th:text="${e.phone}"></td>
-            <td th:text="${e.email}"></td>
-            <td th:text="${e.role.name}"></td>
-            <td>
-                <button class="btn btn-sm btn-primary"
-                        th:attr="onclick='showEditModal(' + ${e.id} + ')'">Sửa</button>
-                <button class="btn btn-sm btn-danger"
-                        th:attr="onclick='deleteEmployee(' + ${e.id} + ')'">Xoá</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 
-<!-- Modal -->
-<div class="modal" tabindex="-1" style="display:none;" id="employeeModal">
-    <div class="modal-dialog">
+<!-- Modal tạo/sửa nhân viên -->
+<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form id="employeeForm">
-                <div class="modal-header">
-                    <h5 class="modal-title">Thông tin nhân viên</h5>
-                    <button type="button" class="btn-close" onclick="closeModal()"></button>
-                </div>
-                <div class="modal-body">
+            <div class="modal-header">
+                <h5 class="modal-title" id="employeeModalLabel"><i class="fa fa-user-plus"></i> Nhân viên</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:white">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="employeeForm">
                     <input type="hidden" id="employeeId">
-
-                    <div class="mb-3">
-                        <label>Họ tên</label>
-                        <input type="text" id="fullname" class="form-control" required>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fullname">Họ tên</label>
+                            <input type="text" class="form-control" id="fullname" name="fullname" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="username">Tài khoản</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label>Tài khoản</label>
-                        <input type="text" id="username" class="form-control" required>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="phone">SĐT</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label>Số điện thoại</label>
-                        <input type="text" id="phone" class="form-control" required>
+                    <div class="form-row">
+                        <div class="form-group col-md-6" id="passwordField">
+                            <label for="password">Mật khẩu</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="roleId">Vai trò</label>
+                            <select class="form-control" id="roleId" name="roleId" required>
+                                <option value="">-- Chọn vai trò --</option>
+                                <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}">role</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" id="email" class="form-control">
-                    </div>
-                    <div class="mb-3" id="passwordGroup">
-                        <label>Mật khẩu</label>
-                        <input type="password" id="password" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Vai trò</label>
-                        <select id="roleId" class="form-select">
-                            <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}"></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Lưu</button>
-                    <button class="btn btn-secondary" type="button" onclick="closeModal()">Huỷ</button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+                <button type="button" class="btn btn-primary" onclick="saveEmployee()">Lưu</button>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- JavaScript xử lý -->
 <script>
-    function showCreateModal() {
+    function openCreateEmployeeModal() {
         document.getElementById("employeeForm").reset();
         document.getElementById("employeeId").value = "";
-        document.getElementById("passwordGroup").style.display = "block";
-        document.getElementById("employeeModal").style.display = "block";
+        document.getElementById("passwordField").style.display = "block";
+        $('#employeeModal').modal('show');
     }
 
     function showEditModal(id) {
-        fetch(`/api/users/` + id)
+        fetch('/api/users/' + id)
             .then(res => res.json())
             .then(data => {
-                document.getElementById("employeeId").value = data.id;
-                document.getElementById("fullname").value = data.fullname;
-                document.getElementById("username").value = data.username;
-                document.getElementById("phone").value = data.phone;
-                document.getElementById("email").value = data.email;
-                document.getElementById("roleId").value = data.role.id;
-                document.getElementById("passwordGroup").style.display = "none";
-                document.getElementById("employeeModal").style.display = "block";
+                $('#employeeId').val(data.id);
+                $('#fullname').val(data.fullname);
+                $('#username').val(data.username);
+                $('#phone').val(data.phone);
+                $('#email').val(data.email);
+                $('#roleId').val(data.role.id);
+                $('#passwordField').hide(); // ẩn password khi sửa
+                $('#employeeModal').modal('show');
             });
     }
 
-    function closeModal() {
-        document.getElementById("employeeModal").style.display = "none";
-    }
-
-    document.getElementById("employeeForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const id = document.getElementById("employeeId").value;
-        const body = {
-            fullname: document.getElementById("fullname").value,
-            username: document.getElementById("username").value,
-            phone: document.getElementById("phone").value,
-            email: document.getElementById("email").value,
-            roleId: parseInt(document.getElementById("roleId").value)
+    function saveEmployee() {
+        const id = $('#employeeId').val();
+        const employee = {
+            fullname: $('#fullname').val(),
+            username: $('#username').val(),
+            phone: $('#phone').val(),
+            email: $('#email').val(),
+            roleId: $('#roleId').val()
         };
 
         if (id) {
-            fetch(`/manager/employees/` + id, {
+            fetch(`/manager/employees/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(employee)
             }).then(() => location.reload());
         } else {
-            body.password = document.getElementById("password").value;
-            fetch(`/manager/employees`, {
+            employee.password = $('#password').val();
+            fetch('/manager/employees', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(employee)
             }).then(() => location.reload());
         }
-    });
+    }
 
     function deleteEmployee(id) {
-        if (confirm("Bạn có chắc chắn muốn xóa nhân viên này?")) {
-            fetch(`/manager/employees/` + id, { method: 'DELETE' })
+        if (confirm("Bạn có chắc chắn muốn xoá nhân viên này?")) {
+            fetch(`/manager/employees/${id}`, {method: 'DELETE'})
                 .then(() => location.reload());
         }
     }
 </script>
-
 </body>
 </html>
