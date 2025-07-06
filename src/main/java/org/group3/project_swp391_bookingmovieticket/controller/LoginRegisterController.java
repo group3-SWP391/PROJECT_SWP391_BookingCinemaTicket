@@ -3,11 +3,13 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.group3.project_swp391_bookingmovieticket.dtos.FacebookAccount;
 import org.group3.project_swp391_bookingmovieticket.dtos.GoogleAccount;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserRegisterDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.Role;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.services.FacebookAccountService;
 import org.group3.project_swp391_bookingmovieticket.services.GoogleAccountService;
 import org.group3.project_swp391_bookingmovieticket.services.TicketEmailService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.UserService;
@@ -37,6 +39,9 @@ public class LoginRegisterController {
 
     @Autowired
     private GoogleAccountService googleAccountService;
+
+    @Autowired
+    private FacebookAccountService facebookAccountService;
 
     @GetMapping("/login")
     public String userLoginGet(Model model) {
@@ -269,6 +274,39 @@ public class LoginRegisterController {
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorLogin", "Google login failed. Please try again.");
+            redirectAttributes.addFlashAttribute("showLoginModal", true);
+            return "redirect:/home";
+        }
+    }
+
+    @GetMapping("/login-by-facebook")
+    public String loginByFacebook(@RequestParam("code") String code,
+                                  HttpSession session,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            String accessToken = facebookAccountService.getAccessToken(code);
+            FacebookAccount fbUser = facebookAccountService.getUserInfo(accessToken);
+
+            User user;
+            if (userService.existsByEmail(fbUser.getEmail())) {
+                user = userService.findByEmail(fbUser.getEmail()).get();
+            } else {
+                user = new User();
+                user.setEmail(fbUser.getEmail());
+                user.setFullname(fbUser.getName());
+                user.setUsername(fbUser.getEmail().split("@")[0]);
+                user.setPassword("");
+                Role role = new Role();
+                role.setId(2); // customer
+                user.setRole(role);
+                userService.save(user);
+            }
+
+            session.setAttribute("userLogin", user);
+            return "redirect:/home";
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorLogin", "Facebook login failed.");
             redirectAttributes.addFlashAttribute("showLoginModal", true);
             return "redirect:/home";
         }

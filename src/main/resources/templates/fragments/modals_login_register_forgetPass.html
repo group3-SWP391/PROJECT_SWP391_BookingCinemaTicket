@@ -42,6 +42,11 @@
                         <p th:text="${successMessageRegister}" style="font-weight: bold; color: green"></p>
                     </div>
                     <div class="st_form_pop_or_btn float_left"><h4>or</h4></div>
+                    <div class="st_form_pop_facebook_btn float_left">
+                        <a th:href="@{https://www.facebook.com/v13.0/dialog/oauth?client_id=1856286568279277&redirect_uri=http://localhost:8080/login-by-facebook&scope=email}">
+                            Connect with Facebook
+                        </a>
+                    </div>
                     <div class="st_form_pop_gmail_btn float_left"><a th:href="@{https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/login-by-gg&response_type=code&client_id=826051367830-tbih05md3ra9dk5pf0q5f2t67o8k8vsh.apps.googleusercontent.com}">Connect with Google</a></div>
                     <div class="st_form_pop_signin_btn float_left">
                         <h4>Don’t have an account? <a data-toggle="modal" data-target="#signUpModal" href="#">Sign
