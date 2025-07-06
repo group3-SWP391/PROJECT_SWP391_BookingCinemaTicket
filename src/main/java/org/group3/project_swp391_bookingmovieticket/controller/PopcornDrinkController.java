@@ -60,6 +60,7 @@ public class PopcornDrinkController {
 
         model.addAttribute("bookingRequest", new BookingRequestDTO(userId, scheduleId, listSeatId, totalPrice, movieId));
         model.addAttribute("listSeatChoose", seatService.findSeatNamesByIdList(listSeatId));
+        model.addAttribute("totalPriceSeat", totalPrice);
         model.addAttribute("allPopcornDrink", popcornDrinkService.findAll());
         model.addAttribute("schedule", scheduleService.findById(scheduleId));
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());

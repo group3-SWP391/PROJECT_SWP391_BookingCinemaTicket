@@ -140,7 +140,6 @@ Author: Webstrot
                         <p class="film__address" th:text="${schedule.get().branch.locationDetail}"></p>
                     </div>
                     <div class="count__slot">
-                        <div>The chair is being selected: <span th:text="${listSeatChoose}"></span></div>
                         <div class="slot"></div>
                     </div>
                     <div class="discountForm d-flex justify-content-between">
@@ -150,10 +149,15 @@ Author: Webstrot
                         <button id="btnCheckCode" class="btn mb-2">Apply</button>
                     </div>
                     <div class="payForm">
-                        <a class="pay__link" href="/#">
-                            <p class="text__notification">Please select a seat to display the appropriate payment
-                                method.</p>
-                        </a>
+                        <div style="font-weight: bold; font-size: 20px">Total price seat
+                            <span id="seat-display"
+                                  th:text="${listSeatChoose} + ' :'"
+                                  th:attr="data-price=${totalPriceSeat}"></span>
+                        </div>
+                        <div style="font-weight: bold; font-size: 20px; padding-top: 5px">Total popcorn and drink :
+                            <span id="popcorn-price-display">0₫</span>
+                        </div>
+                        <div class="slot"></div>
                     </div>
                 </div>
                 <div class="textNotification text-center"><i class="fa fa-info-circle text-danger mr-1"></i><span
@@ -219,140 +223,103 @@ Author: Webstrot
 <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
 <!--main js file end-->
 <script>
-    $(document).ready(function() {
-        // Lấy giá trị max từ thuộc tính data-max của input
-        var maxQuantity = $("input[name='quantity']").data("max");
+    let selectedItems = [];
+    let popcornTotalPrice = 0;
 
-        // Cập nhật giá trị max cho input
-        $("input[name='quantity']").attr("max", maxQuantity);
-    });
     $(document).ready(function () {
-        // Lấy giá trị từ thẻ span có class "price" và thuộc tính data-price
-        let priceValue = parseFloat($(".price").data("price"));
+        // ===== Định dạng giá vé ghế ngồi =====
+        const seatSpan = $("#seat-display");
+        const seatText = seatSpan.text().trim();
+        const seatPrice = parseInt(seatSpan.data("price")) || 0;
+        seatSpan.text(`${seatText} ${seatPrice.toLocaleString('vi-VN')}₫`);
 
-        // Kiểm tra giá trị price có hợp lệ không, nếu không thì khởi tạo giá trị là 0
-        if (isNaN(priceValue)) {
-            priceValue = 0;
-        }
+        // ===== Hiển thị giá tổng ban đầu =====
+        const $priceElement = $(".price");
+        const formattedTotal = (seatPrice).toLocaleString('vi-VN') + "₫";
+        $priceElement.text(formattedTotal);
+        $priceElement.data("price", seatPrice);
 
-        // Định dạng giá trị thành dạng tiền tệ Việt Nam
-        let formattedPrice = priceValue.toLocaleString('vi-VN') + "₫";
-
-        // Cập nhật lại giá trị vào trong thẻ span
-        $(".price").text(formattedPrice);
-    });
-    $(document).ready(function () {
+        // ===== Format giá từng món bỏng nước =====
         $(".popcorn-price").each(function () {
             const price = parseFloat($(this).data("price"));
             if (!isNaN(price)) {
-                const formattedPrice = price.toLocaleString('vi-VN');
-                $(this).text(`Price: ${formattedPrice}₫`);
+                $(this).text(`Price: ${price.toLocaleString('vi-VN')}₫`);
             }
         });
-    });
 
-    let selectedItems = [];
-    $(document).ready(function () {
-        // Khởi tạo biến để theo dõi tổng giá và các sản phẩm đã chọn
-        const $priceElement = $(".price");
-        let totalPrice = parseFloat($(".price").data("price")) || 0;
-
-        // Lắng nghe sự kiện khi thay đổi số lượng sản phẩm
+        // ===== Bắt sự kiện thay đổi số lượng =====
         $("input[name='quantity']").on("change", function () {
-            let quantity = $(this).val();
-            let price = parseFloat($(this)
-                .closest(".prs_upcom_movie_box_wrapper")
-                .find(".popcorn-price")
-                .data("price")); // Lấy giá từ data-price
-            let productName = $(this).closest(".prs_upcom_movie_box_wrapper").find("h2").text();
-            let productId = $(this).closest(".prs_upcom_movie_box_wrapper").data("id");
+            const quantity = parseInt($(this).val());
+            const $wrapper = $(this).closest(".prs_upcom_movie_box_wrapper");
+            const pricePerItem = parseFloat($wrapper.find(".popcorn-price").data("price"));
+            const name = $wrapper.find("h2").text();
+            const id = $wrapper.data("id");
 
+            let existing = selectedItems.find(item => item.name === name);
             if (quantity > 0) {
-                // Kiểm tra xem sản phẩm đã có trong danh sách chưa
-                let existingItem = selectedItems.find(item => item.name === productName);
-
-                if (existingItem) {
-                    // Nếu sản phẩm đã có, cập nhật số lượng và giá trị
-                    totalPrice -= existingItem.price;  // Giảm giá cũ của sản phẩm
-                    existingItem.quantity = quantity;  // Cập nhật số lượng
-                    existingItem.price = price * quantity;  // Cập nhật giá mới
+                if (existing) {
+                    popcornTotalPrice -= existing.price;
+                    existing.quantity = quantity;
+                    existing.price = pricePerItem * quantity;
                 } else {
-                    // Nếu chưa có, thêm sản phẩm mới vào danh sách
-                    selectedItems.push({id: productId, name: productName, quantity: quantity, price: price * quantity});
+                    selectedItems.push({ id, name, quantity, price: pricePerItem * quantity });
                 }
-
-                // Cập nhật tổng giá
-                totalPrice += price * quantity;
-
+                popcornTotalPrice += pricePerItem * quantity;
             } else {
-                // Nếu số lượng bằng 0, lấy sản phẩm để trừ đúng số tiền
-                let existingItem = selectedItems.find(item => item.name === productName);
-                if (existingItem) {
-                    totalPrice -= existingItem.price;
-                }
-                // Xóa sản phẩm khỏi danh sách
-                selectedItems = selectedItems.filter(item => item.name !== productName);
+                if (existing) popcornTotalPrice -= existing.price;
+                selectedItems = selectedItems.filter(item => item.name !== name);
             }
 
-            // Cập nhật giá hiển thị trên giao diện
-            $priceElement.text(totalPrice.toLocaleString('vi-VN') + "₫");
+            // 👉 Cập nhật tổng giá popcorn
+            $("#popcorn-price-display").text(popcornTotalPrice.toLocaleString('vi-VN') + "₫");
 
-            // Cập nhật lại data-price trong HTML để đồng bộ với giá trị trong JavaScript
-            $priceElement.data("price", totalPrice);
+            // 👉 Tổng toàn bộ
+            const total = seatPrice + popcornTotalPrice;
+            $priceElement.text(total.toLocaleString('vi-VN') + "₫");
+            $priceElement.data("price", total);
 
-            // Cập nhật danh sách sản phẩm đã chọn
-            let selectedItemsText = selectedItems.map(item => `${item.name} x${item.quantity}`).join(", ");
-            $(".count__slot .slot").text("Selected: " + selectedItemsText);
-            console.log(selectedItemsText + "selectedItemsText")
-            console.log("selectedItems:", JSON.stringify(selectedItems, null, 2));
+            // 👉 Cập nhật danh sách đã chọn
+            const selectedItemsText = selectedItems.map(i => `${i.name} x${i.quantity}`).join(", ");
+            $(".count__slot .slot").text("Selected popcorn and drink: " + selectedItemsText);
         });
-    });
-    $("#btn-booking").click(function () {
 
-        const scheduleId = [[${schedule.get().id}]];
-        const userId = [[${session.userLogin.id}]];
-        const listSeatId = [[${bookingRequest.listSeatId}]];
-        const totalPrice = Number($(".price").data("price"));
-        const movieId = [[${bookingRequest.movieId}]];
+        // ===== Gửi khi nhấn Payment =====
+        $("#btn-booking").click(function () {
+            const payload = {
+                scheduleId: [[${schedule.get().id}]],
+                userId: [[${session.userLogin.id}]],
+                listSeatId: [[${bookingRequest.listSeatId}]],
+                totalPrice: parseInt($(".price").data("price")),
+                movieId: [[${bookingRequest.movieId}]],
+                listPopcornDrink: selectedItems.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    quantity: item.quantity,
+                    price: item.price
+                }))
+            };
 
-        const selectedItemsData = selectedItems.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity
-        }));
-
-        const payload = {
-            scheduleId: scheduleId,
-            userId: userId,
-            listSeatId: listSeatId,
-            listPopcornDrink: selectedItemsData,
-            totalPrice: totalPrice,
-            movieId: movieId
-        };
-
-        console.log("payload:", payload);
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8080/check-duplicate-payment",
-            data: JSON.stringify(payload),
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                // Chuyển người dùng đến trang thanh toán
-                if (data.checkoutUrl) {
-                    window.location.href = data.checkoutUrl;
-                } else {
-                    alert("Error creating payment link, please check the transaction history, do not repeat.");
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8080/check-duplicate-payment",
+                data: JSON.stringify(payload),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.checkoutUrl) {
+                        window.location.href = data.checkoutUrl;
+                    } else {
+                        alert("Error creating payment link, please check the transaction history, do not repeat.");
+                    }
+                },
+                error: function () {
+                    $("#text-error").html("Error creating payment link, please check the transaction history, do not repeat.");
+                    $("#error").addClass("swal-overlay--show-modal");
                 }
-            },
-            error: function (e) {
-                console.error(e);
-                $("#text-error").html("Error creating payment link, please check the transaction history, do not repeat.");
-                $("#error").addClass("swal-overlay--show-modal");
-            }
+            });
         });
     });
 </script>
+
 </body>
 
 <!-- Mirrored from www.webstrot.com/html/moviepro/html/confirmation_screen.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:07 GMT -->
