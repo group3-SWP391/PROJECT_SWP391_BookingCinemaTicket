@@ -10,4 +10,5 @@ public interface IUserService extends IGeneralService<User> {
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
     void save(User user);
+    Optional<User> findByEmail(String email);
 }

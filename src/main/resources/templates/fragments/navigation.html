@@ -53,7 +53,7 @@
                                 </div>
                                 <div th:if="${session.userLogin != null}">
                                     <a style="background: #1b1b1b" class="btn" th:href="@{none}">
-                                        <span style="color: white" th:text="${session.userLogin.fullname}">User</span>
+                                        <span style="color: white" th:text="${session.userLogin.username}">User</span>
                                     </a>
                                     <a style="background: #1b1b1b;" class="btn" th:href="@{/log-out}">
                                         <span style="color: white">Log out</span>

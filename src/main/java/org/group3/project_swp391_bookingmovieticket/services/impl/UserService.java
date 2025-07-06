@@ -54,4 +54,9 @@ public class UserService implements IUserService {
     public void save(User user) {
         userRepository.save(user);
     }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 }
