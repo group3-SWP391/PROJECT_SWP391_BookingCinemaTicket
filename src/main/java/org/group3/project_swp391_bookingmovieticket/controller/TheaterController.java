@@ -76,7 +76,7 @@ public class TheaterController {
         Logger logger = LoggerFactory.getLogger(TheaterController.class);
         logger.info("▶️ Fetching theater detail for branchId: {}", branchId);
 
-        // Lấy chi tiết rạp
+        // Lấy rap detail
         Branch branch = branchRepository.findById(branchId).orElse(null);
         if (branch == null) {
             logger.error("⛔ Branch with id {} not found", branchId);
@@ -84,7 +84,6 @@ public class TheaterController {
         }
         model.addAttribute("branch", branch);
 
-        // Xử lý roomId (chuỗi rỗng ➝ null ➝ Integer)
         Integer roomId = null;
         if (roomIdRaw != null && !roomIdRaw.isBlank()) {
             try {
@@ -111,7 +110,7 @@ public class TheaterController {
 
             Integer finalRoomId = roomId;
             List<Schedule> filteredSchedules = schedules.stream()
-                    // còn chiếu
+                    // van con chiéu
                     .filter(s -> !s.getEndDate().isBefore(finalDate))
                     // đã bắt đầu chiếu
                     .filter(s -> !s.getStartDate().isAfter(finalDate))
@@ -156,7 +155,7 @@ public class TheaterController {
             model.addAttribute("capacityMap", capacityMap);
             model.addAttribute("groupedSchedules", groupedSchedules);
         } else {
-            // Nếu không có lịch chiếu
+            // Nếu ko co lich chieu
             model.addAttribute("availableSeatsMap", new HashMap<>());
             model.addAttribute("capacityMap", new HashMap<>());
             model.addAttribute("groupedSchedules", new HashMap<>());
@@ -167,7 +166,6 @@ public class TheaterController {
         List<Room> availableRooms = roomRepository.findByBranchId(branchId);
         model.addAttribute("availableRooms", availableRooms);
 
-        // Giữ lại bộ lọc UI
         model.addAttribute("selectedRoomId", roomId);
         model.addAttribute("selectedStartHour", startHour);
 

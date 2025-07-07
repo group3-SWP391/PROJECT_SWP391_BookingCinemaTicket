@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "[order]") // tránh lỗi từ khóa SQL
+@Table(name = "[order]")
 @Data
 @NoArgsConstructor
 public class Order {

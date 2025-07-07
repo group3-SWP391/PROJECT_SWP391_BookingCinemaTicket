@@ -32,6 +32,8 @@ public class OrderService implements IOrderService {
     private SeatRepository seatRepository;
     @Autowired
     private IScheduleRepository scheduleRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public List<Order> getAllOrders() {
@@ -47,7 +49,6 @@ public class OrderService implements IOrderService {
     public List<Order> getPaidOrdersByUserId(Integer userId) {
         return orderRepository.findByUserIdAndStatus(userId, "PAID");
     }
-
 
     @Override
     @Transactional
@@ -91,7 +92,7 @@ public class OrderService implements IOrderService {
 
             order.setUser(userRepository.findById(dto.getUserId()).orElseThrow());
             order.setBill(billRepository.findById(dto.getBillId()).orElseThrow());
-            order.setMovieName(dto.getMovieName()); // ✅ Sửa movieName
+            order.setMovieName(dto.getMovieName());
             order.setSeat(seatRepository.findById(dto.getSeatId()).orElseThrow());
 
             order.setPrice(dto.getPrice() != null ? dto.getPrice() : order.getPrice());
@@ -123,9 +124,37 @@ public class OrderService implements IOrderService {
         return savedOrder;
     }
 
-    public boolean hasWatchedMovie(Integer userId, String movieName) {
-        List<Order> orders = orderRepository.findByUserIdAndMovieName(userId, movieName);
-        return orders.stream()
-                .anyMatch(order -> order.getTransactionDate().isBefore(LocalDateTime.now()));
+    public void checkAndNotifyWatchedMoviesForUser(Integer userId) {
+        List<Order> paidOrders = orderRepository.findByUserIdAndStatus(userId, "PAID");
+
+        for (Order order : paidOrders) {
+
+            Seat seat = order.getSeat();
+            if (seat == null || seat.getSchedule() == null) continue;
+
+            Schedule schedule = seat.getSchedule();
+            if (schedule.getEndDate() == null || schedule.getEndTime() == null || schedule.getMovie() == null) continue;
+
+            LocalDateTime endDateTime = LocalDateTime.of(schedule.getEndDate(), schedule.getEndTime());
+            if (endDateTime.isBefore(LocalDateTime.now())) {
+                Movie movie = schedule.getMovie();
+                Notification existing = notificationService.getUnreadNotificationByUserAndMovie(userId, movie.getId());
+                if (existing == null) {
+                    notificationService.addNotification(order.getUser(), movie);
+                }
+            }
+        }
+    }
+
+    public BigDecimal getTotalSpentInLast12Months(Integer userId) {
+        List<Order> paidOrders = orderRepository.findByUserIdAndStatus(userId, "PAID");
+        LocalDateTime twelveMonthsAgo = LocalDateTime.now().minusMonths(12);
+
+        return paidOrders.stream()
+                .filter(order -> order.getTransactionDate() != null
+                        && order.getTransactionDate().isAfter(twelveMonthsAgo)
+                        && order.getPrice() != null)
+                .map(Order::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

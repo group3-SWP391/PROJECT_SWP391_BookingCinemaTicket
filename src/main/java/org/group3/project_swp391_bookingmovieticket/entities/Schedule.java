@@ -32,6 +32,9 @@ public class Schedule {
     @Column(name = "start_time")
     private LocalTime startTime;
 
+    @Column(name = "end_time")
+    private LocalTime endTime;
+
     @Column(name = "format")
     private String format;
 

@@ -96,6 +96,4 @@ public class BookingController {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-
-
 }

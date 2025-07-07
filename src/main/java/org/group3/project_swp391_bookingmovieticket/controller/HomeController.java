@@ -2,6 +2,7 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.group3.project_swp391_bookingmovieticket.dtos.NotificationDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.*;
 import org.group3.project_swp391_bookingmovieticket.repositories.*;
@@ -17,18 +18,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Autowired
     private EmailService emailService;
@@ -38,6 +40,9 @@ public class HomeController {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     private ContactRequestRepository contactRequestRepository;
@@ -69,15 +74,37 @@ public class HomeController {
     @Autowired
     private ICommentReactionService reactionService;
 
-    @GetMapping
-    public String displayHomePage(Model model, HttpServletRequest request) {
+    @GetMapping({"/", "/home"})
+    public String showHomePage(HttpSession session, Model model, HttpServletRequest request) {
+        User user = (User) session.getAttribute("userLogin");
+
+        if (user == null) {
+            // Nếu chưa đăng nhập, không hiển thị thông báo
+            model.addAttribute("notifications", Collections.emptyList());
+        } else {
+            // Lấy thông báo chưa đọc từ DB
+            List<Notification> notifications = notificationRepository
+                    .findByUserIdAndIsReadFalseOrderByCreatedAtDesc(user.getId());
+
+            // Chuyển sang DTO để hiển thị gọn trong giao diện
+            List<NotificationDTO> notificationDTOs = notifications.stream()
+                    .map(n -> new NotificationDTO(n.getMessage(), n.getMovie().getId()))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("notifications", notificationDTOs);
+            System.out.println("DEBUG: notifications size = " + notificationDTOs.size());
+        }
+
+        // ⚠️ Đảm bảo luôn có dữ liệu cần thiết cho trang chủ
         request.getSession().setAttribute("movieAllLargeImageURL", movieService.findAll());
         model.addAttribute("categoryAll", movieService.getMovieCategories());
         model.addAttribute("movieAll", movieService.findAll());
         model.addAttribute("movieByCategory", movieService.findAll());
         model.addAttribute("userDTO", new UserDTO());
+
         return "home";
     }
+
 
     @GetMapping("/about")
     public String about(Model model) {
@@ -226,14 +253,18 @@ public class HomeController {
         return "movie-details";
     }
 
-
-
-
     @GetMapping("/voucher/{id}")
     public String viewVoucherDetail(@PathVariable Integer id, Model model) {
         Voucher voucher = voucherService.getVoucherById(id);
         model.addAttribute("voucher", voucher);
         return "voucher_detail";
+    }
+
+    private String getMemberLevel(BigDecimal totalSpent) {
+        if (totalSpent.compareTo(BigDecimal.valueOf(5_000_000)) >= 0) return "Kim cương";
+        if (totalSpent.compareTo(BigDecimal.valueOf(3_000_000)) >= 0) return "Vàng";
+        if (totalSpent.compareTo(BigDecimal.valueOf(1_000_000)) >= 0) return "Bạc";
+        return "Đồng";
     }
 
     @GetMapping("/my-account")
@@ -245,41 +276,43 @@ public class HomeController {
                 return "redirect:/login";
             }
 
-            System.out.println("User loaded in myAccount: " + user.getFullname() + ", " + user.getPhone() + ", " + user.getEmail());
-            List<Order> paidOrders = orderService.getPaidOrdersByUserId(user.getId());
-            model.addAttribute("paidOrders", paidOrders);
-            List<Order> orders;
-            try {
-                orders = orderService.getOrdersByUserId(user.getId());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                for (Order order : orders) {
+            List<NotificationDTO> notifications = notificationService.getUnreadNotifications(user.getId());
+            model.addAttribute("notifications", notifications);
+
+            // Lấy danh sách tất cả đơn hàng
+            List<Order> orders = orderService.getOrdersByUserId(user.getId());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            for (Order order : orders) {
+                if (order.getTransactionDate() != null) {
                     order.setTransactionDateFormatted(order.getTransactionDate().format(formatter));
                 }
-            } catch (Exception e) {
-                model.addAttribute("error", "Failed to load order history: " + e.getMessage());
-                orders = List.of();
             }
 
-            List<Voucher> vouchers;
-            try {
-                vouchers = voucherRepository.findAll();
-            } catch (Exception e) {
-                model.addAttribute("error", "Failed to load vouchers: " + e.getMessage());
-                vouchers = List.of();
-            }
-            List<Favorite> favoriteList;
-            try {
-                favoriteList = favoriteService.getFavorites(user);
-            } catch (Exception e) {
-                model.addAttribute("error", "Failed to load favorite list: " + e.getMessage());
-                favoriteList = List.of();
-            }
+            // Đơn hàng chờ thanh toán
+            List<Order> pendingOrders = orders.stream()
+                    .filter(o -> "PENDING".equalsIgnoreCase(o.getStatus()))
+                    .toList();
 
+            // Đơn hàng đã thanh toán
+            List<Order> paidOrders = orderService.getPaidOrdersByUserId(user.getId());
+
+            // Tổng chi tiêu trong 12 tháng gần nhất
+            BigDecimal totalSpent = orderService.getTotalSpentInLast12Months(user.getId());
+            String memberLevel = getMemberLevel(totalSpent);
+
+            // Lấy danh sách voucher và phim yêu thích
+            List<Voucher> vouchers = voucherRepository.findAll();
+            List<Favorite> favoriteList = favoriteService.getFavorites(user);
+
+            // Đẩy dữ liệu ra view
             model.addAttribute("user", user);
             model.addAttribute("orders", orders);
+            model.addAttribute("pendingOrders", pendingOrders);
+            model.addAttribute("paidOrders", paidOrders);
             model.addAttribute("vouchers", vouchers);
+            model.addAttribute("favoriteList", favoriteList);
             model.addAttribute("userDTO", new UserDTO());
-            model.addAttribute("favoriteList", favoriteService.getFavorites(user));
+            model.addAttribute("memberLevel", memberLevel);
 
             return "myAccount";
         } catch (Exception e) {
@@ -287,7 +320,6 @@ public class HomeController {
             return "error";
         }
     }
-
 
 
     @PostMapping("/contact")
