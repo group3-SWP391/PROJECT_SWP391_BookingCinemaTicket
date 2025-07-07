@@ -14,4 +14,5 @@ import java.util.List;
 public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT s FROM Schedule s WHERE s.branch.id = :branchId AND s.movie.name = :movieName AND s.startDate Between :startDate AND :endDate")
     List<Schedule> findByBranchMovieANDRange(@Param("branchId") Integer branchId, @Param("movieName") String movieName, @Param("startDate") LocalDate startTime, @Param("endDate") LocalDate endTime);
+    List<Schedule> findByBranchIdAndStartDate(Integer branchId, LocalDate localDateDay);
 }

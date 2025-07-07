@@ -58,4 +58,9 @@ public class ScheduleService implements IScheduleService {
 
         return scheduleTicketCountMap;
     }
+
+    @Override
+    public List<Schedule> findSchedulesByBranchAndDay(Integer branchId, LocalDate today) {
+        return iScheduleRepository.findByBranchIdAndStartDate(branchId, today);
+    }
 }

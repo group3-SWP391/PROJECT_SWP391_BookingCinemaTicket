@@ -18,7 +18,7 @@ public class Schedule {
     private double price;
 
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "start_time")
     private Time startTime;
