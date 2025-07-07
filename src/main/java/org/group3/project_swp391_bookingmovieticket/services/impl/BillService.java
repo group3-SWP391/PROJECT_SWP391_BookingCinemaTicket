@@ -1,28 +1,26 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
-import org.group3.project_swp391_bookingmovieticket.repositories.IBranchRepository;
-import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
+import org.group3.project_swp391_bookingmovieticket.entities.Bill;
+import org.group3.project_swp391_bookingmovieticket.repositories.IBillRepository;
+import org.group3.project_swp391_bookingmovieticket.services.IBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
-public class BranchService implements IBranchService {
+public class BillService implements IBillService {
     @Autowired
-    private IBranchRepository iBranchRepository;
+    private IBillRepository iBillRepository;
     @Override
     public List findAll() {
-        return iBranchRepository.findAll();
+        return List.of();
     }
 
     @Override
     public Optional findById(Integer id) {
-        return iBranchRepository.findById(id);
+        return Optional.empty();
     }
-
-
 
     @Override
     public void update(Object o) {
@@ -32,5 +30,10 @@ public class BranchService implements IBranchService {
     @Override
     public void remove(Integer id) {
 
+    }
+
+    @Override
+    public Bill save(Bill bill) {
+        return iBillRepository.save(bill);
     }
 }

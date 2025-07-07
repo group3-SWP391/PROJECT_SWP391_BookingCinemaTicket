@@ -7,12 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
 
 @Repository
 public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
-    @Query(value = "SELECT COUNT(t.bill_id) FROM ticket t JOIN schedule s ON t.schedule_id = s.id JOIN movie m ON s.movie_id = m.id WHERE m.name = :movieName", nativeQuery = true)
-    int countTicketsByMovieName(@Param("movieName") String movieName);
+    @Query(value = "SELECT COUNT(bill_id) FROM ticket WHERE schedule_id = :scheduleId", nativeQuery = true)
+    int countTicketsByScheduleId(@Param("scheduleId") Integer scheduleId);
     List<Ticket> findByScheduleId(int id);
+    List<Ticket> findByScheduleIdIn(List<Integer> scheduleId);
 }

@@ -6,6 +6,8 @@ import org.group3.project_swp391_bookingmovieticket.services.IScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -33,5 +35,11 @@ public class ScheduleService implements IScheduleService {
     @Override
     public void remove(Integer id) {
 
+    }
+
+
+    @Override
+    public List<Schedule> findSchedulesByBranchMovieAndDateRange(Integer branchId, String movieId, LocalDate today, LocalDate threeDay) {
+        return iScheduleRepository.findByBranchMovieANDRange(branchId, movieId, today, threeDay);
     }
 }

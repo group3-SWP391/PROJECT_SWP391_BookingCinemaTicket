@@ -2,70 +2,85 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Seat Selection</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .seat {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 5px;
-        font-size: 12px;
-        color: white;
-        transition: transform 0.2s;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      font-size: 12px;
+      color: white;
+      transition: transform 0.2s;
     }
-    .seat.available {
-        background-color: #22c55e; /* Xanh lá */
-    }
-    .seat.occupied {
-        background-color: #ef4444; /* Đỏ */
-        cursor: not-allowed;
-    }
-    .seat.vip {
-        background-color: #eab308; /* Vàng */
-    }
-    .seat.selected {
-        background-color: #3b82f6; /* Xanh dương */
-        transform: scale(1.1);
-    }
-    .seat:hover:not(.occupied) {
-        transform: scale(1.1);
-    }
+    .seat.available { background-color: #22c55e; }
+    .seat.occupied { background-color: #ef4444; cursor: not-allowed; }
+    .seat.vip { background-color: #eab308; }
+    .seat.selected { background-color: #3b82f6; transform: scale(1.1); }
+    .seat:hover:not(.occupied) { transform: scale(1.1); }
+
     .screen {
-        background: linear-gradient(to bottom, #1f2937, #374151);
-        color: white;
-        text-align: center;
-        padding: 10px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(to bottom, #1f2937, #374151);
+      color: white;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      margin: 0 auto 20px auto;
+      width: 100%;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .price-tooltip {
-        display: none;
-        position: absolute;
-        background-color: #1f2937;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 14px;
-        z-index: 10;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .summary-box {
+      background-color: #f9fafb;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      height: fit-content;
+      min-width: 220px;
     }
-    .total-price {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 18px;
-        font-weight: bold;
-    }
+
+    .notification {
+            position: fixed;
+            top: 20px;
+            right: -300px; /* Bắt đầu từ ngoài màn hình */
+            background-color: #ff4d4f; /* Màu nền đỏ để nổi bật */
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            z-index: 1000;
+            animation: slideInOut 3s ease-in-out forwards; /* Hiệu ứng chạy 3 giây */
+        }
+
+        /* Hiệu ứng slide in và slide out */
+        @keyframes slideInOut {
+            0% {
+                right: -300px; /* Ở ngoài màn hình */
+            }
+            20% {
+                right: 20px; /* Di chuyển vào trong */
+            }
+            80% {
+                right: 20px; /* Giữ nguyên vị trí */
+            }
+            100% {
+                right: -300px; /* Thụt ra ngoài */
+            }
+        }
   </style>
 </head>
 <body class="bg-gray-100 font-sans">
-<div class="container mx-auto p-6">
-  <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Seat Selection</h2>
-  <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+<div class="container mx-auto p-6 space-y-6">
+  <!-- Schedule Details -->
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full">
     <h3 class="text-xl font-semibold text-gray-700">Schedule Details</h3>
     <p class="text-gray-600">Schedule ID: <span th:text="${schedule.id}"></span></p>
     <p class="text-gray-600">Room: <span th:text="${schedule.room.name}"></span> (<span th:text="${schedule.room.roomType}"></span>)</p>
@@ -73,68 +88,120 @@
   </div>
 
   <!-- Legend -->
-  <div class="flex justify-center mb-6 space-x-4">
+  <div class="flex justify-center space-x-4">
     <div class="flex items-center"><div class="w-5 h-5 bg-green-500 rounded mr-2"></div><span>Available</span></div>
     <div class="flex items-center"><div class="w-5 h-5 bg-yellow-500 rounded mr-2"></div><span>VIP</span></div>
     <div class="flex items-center"><div class="w-5 h-5 bg-red-500 rounded mr-2"></div><span>Occupied</span></div>
     <div class="flex items-center"><div class="w-5 h-5 bg-blue-500 rounded mr-2"></div><span>Selected</span></div>
   </div>
 
-  <!-- Screen -->
-  <div class="screen">SCREEN</div>
+  <!-- SCREEN full width -->
+  <div class="screen w-full">SCREEN</div>
 
+  <!-- Ghế + Summary canh giữa -->
+  <div class="flex justify-center">
+    <div class="flex flex-col lg:flex-row items-start gap-6">
+      <!-- Seat Grid -->
+      <div>
+        <div class="seat-grid"
+             th:with="rowCount=${schedule.room.rowCount}, colCount=${schedule.room.capacity / schedule.room.rowCount}"
+             th:style="'display: grid; grid-template-columns: repeat(' + ${colCount} + ', 40px); gap: 8px; margin: 0 auto;'">
+          <div th:each="seat : ${seatList}"
+               th:class="${seat.isOccupied} ? 'seat occupied' : (${seat.isVip} ? 'seat vip' : 'seat available')"
+               th:text="${seat.name}"
+               th:data-seat-id="${seat.id}"
+               th:data-price="${schedule.price + (seat.isVip ? 20000 : 0)}"
+               th:data-seat-name="${seat.name}"
+               th:data-seat-type="${seat.isVip ? 'VIP' : 'Regular'}"
+               onclick="toggleSeatSelection(this)">
+          </div>
+        </div>
 
-  <div class="seat-grid relative" th:with="rowCount=${schedule.room.rowCount}, colCount=${schedule.room.capacity / schedule.room.rowCount}"
-       th:style="'display: grid; grid-template-columns: repeat(' + ${colCount} + ', 40px); gap: 8px; max-width: ' + (${colCount * 48} + 'px') + '; margin: 0 auto;'">
-    <div th:each="seat : ${seatList}"
-         th:class="${seat.isOccupied} ? 'seat occupied' : (${seat.isVip} ? 'seat vip' : 'seat available')"
-         th:text="${seat.name}"
-         th:data-seat-id="${seat.id}"
-         th:data-price="${schedule.price + (seat.isVip ? 20000 : 0)}"
-         onclick="toggleSeatSelection(this)">
+        <!-- Total Price -->
+        <div class="text-center mt-6 text-lg font-semibold">
+          Total Price: <span id="totalPrice">0</span> VND
+        </div>
+
+        <!-- Checkout Form -->
+        <form id="checkoutForm" th:action="@{/checkout}" method="post" class="text-center mt-4">
+          <input type="hidden" name="scheduleId" th:value="${schedule.id}" />
+          <input type="hidden" name="selectedSeats" id="selectedSeatsInput" />
+          <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+            Proceed to Payment
+          </button>
+        </form>
+      </div>
+
+      <!-- Summary -->
+      <div>
+        <div class="summary-box">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">Summary</h3>
+          <div id="seatSummaryText" class="text-gray-700 space-y-2">
+            <p>No seats selected.</p>
+          </div>
+          <p class="text-gray-800 font-bold mt-4">Total price: <span id="totalPriceSummary">0</span> VND</p>
+        </div>
+      </div>
+      <div class="notification" th:if="${error != null}" th:text="${error}"></div>
     </div>
-    <div id="priceTooltip" class="price-tooltip"></div>
   </div>
-
-  <!-- Total Price Display -->
-  <div class="total-price">Total Price: <span id="totalPrice">0</span> VND</div>
 </div>
 
 <script>
-  const tooltip = document.getElementById('priceTooltip');
   const totalPriceElement = document.getElementById('totalPrice');
+  const totalPriceSummary = document.getElementById('totalPriceSummary');
+  const seatSummaryText = document.getElementById('seatSummaryText');
 
   function toggleSeatSelection(element) {
-      if (!element.classList.contains('occupied')) {
-          element.classList.toggle('selected');
-          const price = parseInt(element.getAttribute('data-price'));
-          if (element.classList.contains('selected')) {
-              tooltip.innerText = `Price: ${price} VND`;
-              const rect = element.getBoundingClientRect();
-              tooltip.style.display = 'block';
-              tooltip.style.left = `${rect.left + window.scrollX + 20}px`;
-              tooltip.style.top = `${rect.top + window.scrollY - 40}px`;
-          } else {
-              tooltip.style.display = 'none';
-          }
-          updateTotalPrice();
-      }
+    if (!element.classList.contains('occupied')) {
+      element.classList.toggle('selected');
+      updateSummary();
+    }
   }
 
-  function updateTotalPrice() {
-      const selectedSeats = document.querySelectorAll('.seat.selected');
-      let total = 0;
-      selectedSeats.forEach(seat => {
-          total += parseInt(seat.getAttribute('data-price'));
-      });
-      totalPriceElement.textContent = total;
+  function updateSummary() {
+    const selectedSeats = document.querySelectorAll('.seat.selected');
+    let total = 0;
+    let vipCount = 0;
+    let regularCount = 0;
+    let vipPrice = 0;
+    let regularPrice = 0;
+
+    selectedSeats.forEach(seat => {
+      const price = parseInt(seat.getAttribute('data-price'));
+      const type = seat.getAttribute('data-seat-type');
+      total += price;
+
+      if (type === 'VIP') {
+        vipCount++;
+        vipPrice = price;
+      } else {
+        regularCount++;
+        regularPrice = price;
+      }
+    });
+
+    seatSummaryText.innerHTML = selectedSeats.length === 0
+      ? `<p>No seats selected.</p>`
+      : `
+        ${regularCount > 0 ? `<p>Regular: ${regularPrice.toLocaleString()} × ${regularCount}</p>` : ''}
+        ${vipCount > 0 ? `<p>VIP: ${vipPrice.toLocaleString()} × ${vipCount}</p>` : ''}
+      `;
+
+    totalPriceElement.textContent = total.toLocaleString();
+    totalPriceSummary.textContent = total.toLocaleString();
   }
 
-  document.addEventListener('click', (e) => {
-      if (!e.target.classList.contains('seat')) {
-          tooltip.style.display = 'none';
-      }
+  const checkoutForm = document.getElementById('checkoutForm');
+  const selectedSeatsInput = document.getElementById('selectedSeatsInput');
+
+  checkoutForm.addEventListener('submit', function () {
+    const selectedSeats = document.querySelectorAll('.seat.selected');
+    const seatIds = Array.from(selectedSeats).map(seat => seat.getAttribute('data-seat-id'));
+    selectedSeatsInput.value = seatIds.join(',');
   });
+
+  updateSummary();
 </script>
 </body>
 </html>

@@ -33,4 +33,9 @@ public class MovieService implements IMovieService {
     public void remove(Integer id) {
 
     }
+
+    @Override
+    public Optional<Movie> getMovieByName(String movieName) {
+        return iMovieRepository.findByNameIgnoreCase(movieName);
+    }
 }

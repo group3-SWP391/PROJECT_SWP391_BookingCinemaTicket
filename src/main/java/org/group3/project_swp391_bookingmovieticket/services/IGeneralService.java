@@ -1,5 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.services;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+
 import java.util.List;
 import java.util.Optional;
 

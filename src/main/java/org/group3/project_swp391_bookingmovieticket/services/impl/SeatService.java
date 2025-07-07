@@ -2,7 +2,6 @@ package org.group3.project_swp391_bookingmovieticket.services.impl;
 
 import org.group3.project_swp391_bookingmovieticket.entities.Seat;
 import org.group3.project_swp391_bookingmovieticket.repositories.ISeatRepository;
-import org.group3.project_swp391_bookingmovieticket.services.IGeneralService;
 import org.group3.project_swp391_bookingmovieticket.services.ISeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +18,23 @@ public class SeatService implements ISeatService {
     }
 
     @Override
+    public List<Seat> findSeatsByIds(List<Long> ids) {
+        return iSeatRepository.findByIdIn(ids);
+    }
+
+
+
+    @Override
     public List findAll() {
         return List.of();
     }
 
     @Override
     public Optional findById(Integer id) {
-        return Optional.empty();
+        return iSeatRepository.findById(id);
     }
+
+
 
     @Override
     public void update(Object o) {

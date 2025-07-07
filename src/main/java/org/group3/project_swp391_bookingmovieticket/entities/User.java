@@ -32,7 +32,7 @@ public class User {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 
 

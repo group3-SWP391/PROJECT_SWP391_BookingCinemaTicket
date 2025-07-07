@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.services.impl;
 
+import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
 import org.group3.project_swp391_bookingmovieticket.entities.Ticket;
 import org.group3.project_swp391_bookingmovieticket.repositories.ITicketRepository;
 import org.group3.project_swp391_bookingmovieticket.services.ITicketService;
@@ -21,42 +22,36 @@ public class TicketService implements ITicketService {
 
     @Override
     public Optional findById(Integer id) {
-
         return Optional.empty();
     }
+
+
 
     @Override
     public void update(Object o) {
 
     }
     @Override
-    public HashMap<Ticket, Integer> getMovieStatusByTicketCount(String date, String fromHour, String branch){
-        LocalTime t1 = LocalTime.parse(fromHour);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        List<Ticket> listInitial = findAll();
+    public HashMap<Ticket, Integer> getMovieStatusByTicketCount(List<Schedule> scheduleList){
         List<Ticket> ticketList = new ArrayList<>();
-        for(Ticket ticket: listInitial){
-            if(dateFormat.format(ticket.getSchedule().getStartDate()).equals(date) && ticket.getSchedule().getStartTime().toLocalTime().getHour() == t1.getHour()
-            && ticket.getSchedule().getBranch().getName().equals(branch)){
-                ticketList.add(ticket);
+        List<Integer> integerList = new ArrayList<>();
+        for (Schedule schedule:  scheduleList){
+           integerList.add(schedule.getId());
+
+        }
+        ticketList = ticketRepository.findByScheduleIdIn(integerList);
+        HashMap<Ticket, Integer> ticketIntegerHashMap = new HashMap<>();
+        int scheduleIdInitial = -1;
+        for (Ticket ticket: ticketList){
+            if(ticket.getSchedule().getId() != scheduleIdInitial){
+                int count = ticketRepository.countTicketsByScheduleId(ticket.getSchedule().getId());
+                ticketIntegerHashMap.put(ticket, count);
+                scheduleIdInitial = ticket.getSchedule().getId();
 
             }
+
         }
-        HashMap<Ticket, Integer> ticketIntegerHashMap = new HashMap<>();
-        if(!ticketList.isEmpty()){
-            String movieNameInitial = "";
-            for (Ticket ticket: ticketList){
-                if(!ticket.getSchedule().getMovie().getName().equals(movieNameInitial)){
-                    int count = ticketRepository.countTicketsByMovieName(ticket.getSchedule().getMovie().getName());
-                    ticketIntegerHashMap.put(ticket, count);
-                    movieNameInitial = ticket.getSchedule().getMovie().getName();
-                }
-            }
-            return ticketIntegerHashMap;
-        }else {
-            return ticketIntegerHashMap;
-        }
+        return ticketIntegerHashMap;
 
     }
     @Override
@@ -72,6 +67,11 @@ public class TicketService implements ITicketService {
     @Override
     public List<Ticket> findByScheduleId(int id) {
         return ticketRepository.findByScheduleId(id);
+    }
+
+    @Override
+    public void save(Ticket ticket) {
+        ticketRepository.save(ticket);
     }
 
 
