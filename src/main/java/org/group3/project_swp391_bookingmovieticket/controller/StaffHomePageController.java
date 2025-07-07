@@ -67,7 +67,7 @@ public class StaffHomePageController {
                 LocalDate today = LocalDate.now();
                 LocalDate threeDay = today.plusDays(3);
                 List<Schedule> scheduleList = iScheduleService.findSchedulesByBranchMovieAndDateRange(idBranch, idMovie, today, threeDay);
-                HashMap<Ticket, Integer> ticketIntegerHashMap = iTicketService.getMovieStatusByTicketCount(scheduleList);
+                HashMap<Schedule, Integer> ticketIntegerHashMap = iScheduleService.getTicketCountBySchedule(scheduleList);
                 model.addAttribute("moviesearch", movie);
                 model.addAttribute("movieTicketCount", ticketIntegerHashMap.entrySet());
                 model.addAttribute("branch", iBranchService.findById(user.getBranch().getId()).get());

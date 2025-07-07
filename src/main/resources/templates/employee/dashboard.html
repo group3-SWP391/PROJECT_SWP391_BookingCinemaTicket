@@ -131,21 +131,21 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="ticketmovie : ${movieTicketCount}">
+                    <tr th:each="schedulemovie : ${movieTicketCount}">
                         <td class="py-3 px-4">
-                            <a th:href="@{/employee/movie/detail/{id}(id=${ticketmovie.key.schedule.movie.id})}"
-                               th:text="${ticketmovie.key.schedule.movie.name}"
+                            <a th:href="@{/employee/movie/detail/{id}(id=${schedulemovie.key.movie.id})}"
+                               th:text="${schedulemovie.key.movie.name}"
                                class="text-blue-600 hover:underline"></a>
                         </td>
-                        <td class="py-3 px-4" th:text="${ticketmovie.key.schedule.startDate}"></td>
-                        <td class="py-3 px-4" th:text="${ticketmovie.key.schedule.startTime}"></td>
+                        <td class="py-3 px-4" th:text="${schedulemovie.key.startDate}"></td>
+                        <td class="py-3 px-4" th:text="${schedulemovie.key.startTime}"></td>
                         <td class="py-3 px-4"
-                            th:text="${'Đã đặt: ' + ticketmovie.value + ' / ' + ticketmovie.key.schedule.room.capacity + ' ghế'}">
+                            th:text="${'Đã đặt: ' + schedulemovie.value + ' / ' + schedulemovie.key.room.capacity + ' ghế'}">
                         </td>
-                        <td class="py-3 px-4" th:text="${ticketmovie.key.schedule.room.name}"></td>
+                        <td class="py-3 px-4" th:text="${schedulemovie.key.room.name}"></td>
                         <td class="py-3 px-4">
-                            <a th:if="${ticketmovie.value < ticketmovie.key.seat.room.capacity}"
-                               th:href="@{/employee/schedule/selectseat/{id}(id=${ticketmovie.key.schedule.id})}"
+                            <a th:if="${schedulemovie.value < schedulemovie.key.room.capacity}"
+                               th:href="@{/employee/schedule/selectseat/{id}(id=${schedulemovie.key.id})}"
                                class="btn-success py-2 px-4 text-white font-medium rounded-lg">Booking</a>
                         </td>
                     </tr>

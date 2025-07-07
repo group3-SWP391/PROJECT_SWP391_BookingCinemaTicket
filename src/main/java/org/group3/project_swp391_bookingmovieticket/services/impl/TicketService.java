@@ -31,29 +31,7 @@ public class TicketService implements ITicketService {
     public void update(Object o) {
 
     }
-    @Override
-    public HashMap<Ticket, Integer> getMovieStatusByTicketCount(List<Schedule> scheduleList){
-        List<Ticket> ticketList = new ArrayList<>();
-        List<Integer> integerList = new ArrayList<>();
-        for (Schedule schedule:  scheduleList){
-           integerList.add(schedule.getId());
 
-        }
-        ticketList = ticketRepository.findByScheduleIdIn(integerList);
-        HashMap<Ticket, Integer> ticketIntegerHashMap = new HashMap<>();
-        int scheduleIdInitial = -1;
-        for (Ticket ticket: ticketList){
-            if(ticket.getSchedule().getId() != scheduleIdInitial){
-                int count = ticketRepository.countTicketsByScheduleId(ticket.getSchedule().getId());
-                ticketIntegerHashMap.put(ticket, count);
-                scheduleIdInitial = ticket.getSchedule().getId();
-
-            }
-
-        }
-        return ticketIntegerHashMap;
-
-    }
     @Override
     public HashSet<Integer> findBookedSeatIdsBySchedule(int id) {
         HashSet<Integer> integerHashSet = new HashSet<>();

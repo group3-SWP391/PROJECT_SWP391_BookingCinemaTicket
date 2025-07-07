@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ITicketService extends IGeneralService {
-    HashMap<Ticket, Integer> getMovieStatusByTicketCount(List<Schedule> scheduleList);
+
     HashSet<Integer> findBookedSeatIdsBySchedule(int id);
     List<Ticket> findByScheduleId(int id);
     void save(Ticket ticket);
