@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface IUserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByPhoneAndPassword(String phone, String password);
     Optional<User> findByPhone(String phone);
+    List<User> findAllByRole_Name(String roleName);
 }

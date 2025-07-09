@@ -51,6 +51,11 @@ public class UserService implements IUserService {
         return userRepository.findByPhoneAndPassword(phone, password);
     }
 
+    @Override
+    public List<User> findAllByRoleName(String roleName) {
+        return userRepository.findAllByRole_Name(roleName);
+    }
+
     // === Các phương thức bổ sung cho profile ===
 
     public User findByPhone(String phone) {
