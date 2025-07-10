@@ -23,6 +23,7 @@ public class ManagerEmployeeController {
     @Autowired
     private IRoleRepository roleRepository;
 
+    // Hiển thị danh sách nhân viên
     @GetMapping("/employees")
     public String showEmployees(Model model, HttpSession session) {
         User manager = (User) session.getAttribute("userLogin");
@@ -33,10 +34,11 @@ public class ManagerEmployeeController {
 
         model.addAttribute("employees", employees);
         model.addAttribute("roles", roles);
-        model.addAttribute("content", "manager/employees"); // view: manager/layout.html
+        model.addAttribute("content", "manager/employees"); // render vào layout.html
         return "manager/layout";
     }
 
+    // Tạo nhân viên
     @PostMapping("/employees")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> createEmployee(@RequestBody Map<String, Object> employeeData) {
@@ -51,20 +53,20 @@ public class ManagerEmployeeController {
 
             if (userRepository.findByPhone(phone) != null) {
                 response.put("success", false);
-                response.put("message", "Phone number already exists.");
+                response.put("message", "Số điện thoại đã tồn tại.");
                 return ResponseEntity.ok(response);
             }
 
             Optional<Role> roleOpt = roleRepository.findById(roleId);
             if (!roleOpt.isPresent()) {
                 response.put("success", false);
-                response.put("message", "Invalid role ID.");
+                response.put("message", "Vai trò không hợp lệ.");
                 return ResponseEntity.ok(response);
             }
 
             User user = new User();
             user.setPhone(phone);
-            user.setPassword(password); // Hash in real app!
+            user.setPassword(password); // bạn nên hash mật khẩu trong ứng dụng thật
             user.setFullname(fullname);
             user.setUsername(username);
             user.setEmail(email);
@@ -73,15 +75,25 @@ public class ManagerEmployeeController {
             userRepository.save(user);
 
             response.put("success", true);
-            response.put("message", "Employee created successfully.");
+            response.put("message", "Thêm nhân viên thành công.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error creating employee: " + e.getMessage());
+            response.put("message", "Lỗi khi tạo nhân viên: " + e.getMessage());
             return ResponseEntity.ok(response);
         }
     }
 
+    // Lấy chi tiết nhân viên theo ID (sửa)
+    @GetMapping("/employees/{id}")
+    @ResponseBody
+    public ResponseEntity<User> getEmployeeById(@PathVariable int id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        return userOpt.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Cập nhật nhân viên
     @PutMapping("/employees/{id}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateEmployee(@PathVariable int id, @RequestBody Map<String, Object> employeeData) {
@@ -90,54 +102,51 @@ public class ManagerEmployeeController {
             Optional<User> userOpt = userRepository.findById(id);
             if (!userOpt.isPresent()) {
                 response.put("success", false);
-                response.put("message", "Employee not found.");
+                response.put("message", "Không tìm thấy nhân viên.");
                 return ResponseEntity.ok(response);
             }
 
             User user = userOpt.get();
-
             user.setFullname((String) employeeData.get("fullname"));
             user.setPhone((String) employeeData.get("phone"));
             user.setUsername((String) employeeData.get("username"));
             user.setEmail((String) employeeData.get("email"));
 
-            if (employeeData.get("roleId") != null) {
-                Integer roleId = (Integer) employeeData.get("roleId");
-                Optional<Role> roleOpt = roleRepository.findById(roleId);
-                roleOpt.ifPresent(user::setRole);
-            }
+            Integer roleId = (Integer) employeeData.get("roleId");
+            Optional<Role> roleOpt = roleRepository.findById(roleId);
+            roleOpt.ifPresent(user::setRole);
 
             userRepository.save(user);
 
             response.put("success", true);
-            response.put("message", "Employee updated successfully.");
+            response.put("message", "Cập nhật nhân viên thành công.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error updating employee: " + e.getMessage());
+            response.put("message", "Lỗi khi cập nhật: " + e.getMessage());
             return ResponseEntity.ok(response);
         }
     }
 
+    // Xoá nhân viên
     @DeleteMapping("/employees/{id}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deleteEmployee(@PathVariable int id) {
         Map<String, Object> response = new HashMap<>();
         try {
-            Optional<User> userOpt = userRepository.findById(id);
-            if (!userOpt.isPresent()) {
+            if (!userRepository.existsById(id)) {
                 response.put("success", false);
-                response.put("message", "Employee not found.");
+                response.put("message", "Không tìm thấy nhân viên.");
                 return ResponseEntity.ok(response);
             }
 
             userRepository.deleteById(id);
             response.put("success", true);
-            response.put("message", "Employee deleted successfully.");
+            response.put("message", "Xoá nhân viên thành công.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error deleting employee: " + e.getMessage());
+            response.put("message", "Lỗi khi xoá: " + e.getMessage());
             return ResponseEntity.ok(response);
         }
     }

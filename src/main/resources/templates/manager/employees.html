@@ -41,11 +41,13 @@
                 <td th:text="${e.email}">Email</td>
                 <td th:text="${e.role.name}">manager</td>
                 <td>
-                    <button class="btn btn-sm btn-primary" th:onclick="'showEditModal(' + ${e.id} + ')'">
-                        <i class="fa fa-edit"></i> Sửa
+                    <button class="btn btn-sm btn-primary"
+                            th:attr="onclick=|showEditModal(${e.id})|">
+                        <i class="fa fa-edit"></i> Edit
                     </button>
-                    <button class="btn btn-sm btn-danger" th:onclick="'deleteEmployee(' + ${e.id} + ')'">
-                        <i class="fa fa-trash"></i> Xoá
+                    <button class="btn btn-sm btn-danger"
+                            th:attr="onclick=|deleteEmployee(${e.id})|">
+                        <i class="fa fa-trash"></i> Fired
                     </button>
                 </td>
             </tr>
@@ -111,16 +113,18 @@
 </div>
 
 <!-- JavaScript xử lý -->
-<script>
-    function openCreateEmployeeModal() {
-        document.getElementById("employeeForm").reset();
-        document.getElementById("employeeId").value = "";
-        document.getElementById("passwordField").style.display = "block";
+    <script>
+        let deleteId = null;
+
+        function openCreateEmployeeModal() {
+        $('#employeeForm')[0].reset();
+        $('#employeeId').val('');
+        $('#passwordField').show();
         $('#employeeModal').modal('show');
     }
 
-    function showEditModal(id) {
-        fetch('/api/users/' + id)
+        function showEditModal(id) {
+        fetch(`/api/users/${id}`)
             .then(res => res.json())
             .then(data => {
                 $('#employeeId').val(data.id);
@@ -129,43 +133,72 @@
                 $('#phone').val(data.phone);
                 $('#email').val(data.email);
                 $('#roleId').val(data.role.id);
-                $('#passwordField').hide(); // ẩn password khi sửa
+                $('#passwordField').hide(); // ẩn mật khẩu khi edit
                 $('#employeeModal').modal('show');
             });
     }
 
-    function saveEmployee() {
+        function saveEmployee() {
         const id = $('#employeeId').val();
         const employee = {
-            fullname: $('#fullname').val(),
-            username: $('#username').val(),
-            phone: $('#phone').val(),
-            email: $('#email').val(),
-            roleId: $('#roleId').val()
-        };
+        fullname: $('#fullname').val(),
+        username: $('#username').val(),
+        phone: $('#phone').val(),
+        email: $('#email').val(),
+        roleId: $('#roleId').val()
+    };
 
         if (id) {
-            fetch(`/manager/employees/${id}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(employee)
-            }).then(() => location.reload());
-        } else {
-            employee.password = $('#password').val();
-            fetch('/manager/employees', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(employee)
-            }).then(() => location.reload());
-        }
+        fetch(`/manager/employees/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(employee)
+    }).then(() => location.reload());
+    } else {
+        employee.password = $('#password').val();
+        fetch('/manager/employees', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(employee)
+    }).then(() => location.reload());
+    }
     }
 
-    function deleteEmployee(id) {
-        if (confirm("Bạn có chắc chắn muốn xoá nhân viên này?")) {
-            fetch(`/manager/employees/${id}`, {method: 'DELETE'})
-                .then(() => location.reload());
-        }
+        function deleteEmployee(id) {
+        deleteId = id;
+        $('#confirmDeleteModal').modal('show');
     }
+
+        $('#confirmDeleteBtn').click(function () {
+        if (deleteId) {
+        fetch(`/manager/employees/${deleteId}`, {
+        method: 'DELETE'
+    }).then(() => {
+        $('#confirmDeleteModal').modal('hide');
+        location.reload();
+    });
+    }
+    });
 </script>
+
+<!-- Modal xác nhận xoá -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Xác nhận xoá</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xoá nhân viên này?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+                <button id="confirmDeleteBtn" class="btn btn-danger">Xoá</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
