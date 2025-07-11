@@ -33,6 +33,9 @@ public class Room {
     @Column(name = "seats_per_row")
     private Integer seatsPerRow;
     
+    @Column(name = "vip_seats", columnDefinition = "TEXT")
+    private String vipSeats; // Stores comma-separated VIP seat positions like "A1,A2,B1,B2"
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id", nullable = false)
     @JsonBackReference
@@ -113,6 +116,14 @@ public class Room {
     
     public void setSeatsPerRow(Integer seatsPerRow) {
         this.seatsPerRow = seatsPerRow;
+    }
+    
+    public String getVipSeats() {
+        return vipSeats;
+    }
+    
+    public void setVipSeats(String vipSeats) {
+        this.vipSeats = vipSeats;
     }
     
     public Branch getBranch() {

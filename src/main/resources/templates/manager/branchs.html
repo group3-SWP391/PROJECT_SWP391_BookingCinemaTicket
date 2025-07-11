@@ -135,6 +135,45 @@
                                 <textarea class="form-control" id="branchDescription" name="description" rows="4" maxlength="1000" 
                                           placeholder="Brief description of the branch"></textarea>
                             </div>
+                            
+                            <!-- Branch Image Upload Section -->
+                            <div class="media-upload-section">
+                                <h5 class="section-title">
+                                    <i class="fa fa-image"></i> Branch Image
+                                </h5>
+                                
+                                <div class="form-group">
+                                    <label for="branchImage">Image</label>
+                                    <div class="file-upload-container">
+                                        <div class="file-upload-area" id="branchImageUploadArea">
+                                            <div class="upload-icon">
+                                                <i class="fa fa-image"></i>
+                                            </div>
+                                            <div class="upload-text">
+                                                <span class="upload-title">Drop image here or click to browse</span>
+                                                <span class="upload-subtitle">PNG, JPG, GIF up to 10MB</span>
+                                            </div>
+                                            <input type="file" class="file-input" id="branchImage" 
+                                                   name="imageFile" accept="image/*">
+                                        </div>
+                                        
+                                        <div class="file-preview" id="branchImagePreview" style="display: none;">
+                                            <img class="preview-image" alt="Image Preview">
+                                            <div class="preview-overlay">
+                                                <button type="button" class="btn-remove-file" 
+                                                        onclick="removeBranchFilePreview('image')">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div class="file-info">
+                                                <span class="file-name"></span>
+                                                <span class="file-size"></span>
+                                            </div>
+                                            <input type="hidden" name="imgUrl" data-current-image="image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -200,25 +239,29 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="roomCapacity">Capacity *</label>
+                                                    <label for="roomCapacity">Capacity * <small class="text-muted">(total seats)</small></label>
                                                     <input type="number" class="form-control" id="roomCapacity" name="capacity" required min="1" 
-                                                           placeholder="e.g. 150">
+                                                           placeholder="e.g. 60" onchange="generateSeatLayout()">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="roomRowCount">Row Count</label>
-                                                    <input type="number" class="form-control" id="roomRowCount" name="rowCount" min="1" 
-                                                           placeholder="e.g. 15" onchange="calculateCapacity()">
+                                                    <label for="roomRowCount">Row Count * <small class="text-muted">(A, B, C...)</small></label>
+                                                    <input type="number" class="form-control" id="roomRowCount" name="rowCount" required min="1" max="26"
+                                                           placeholder="e.g. 10" onchange="generateSeatLayout()">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="roomSeatsPerRow">Seats per Row</label>
-                                                    <input type="number" class="form-control" id="roomSeatsPerRow" name="seatsPerRow" min="1" 
-                                                           placeholder="e.g. 10" onchange="calculateCapacity()">
+                                        </div>
+
+                                        <!-- Auto-calculated values display -->
+                                        <div class="row" id="calculatedValues" style="display: none;">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-info">
+                                                    <strong>Auto-calculated:</strong> 
+                                                    <span id="seatsPerRowDisplay">0</span> seats per row
+                                                    <span id="extraSeatsDisplay" style="display: none;"> (with <span id="extraSeatsCount">0</span> extra seats in first rows)</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -235,6 +278,28 @@
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
+                                        </div>
+
+                                        <!-- Seat Layout Preview -->
+                                        <div id="seatLayoutPreview" style="display: none;">
+                                            <hr>
+                                            <h6><i class="fa fa-eye"></i> Seat Layout Preview</h6>
+                                            <div class="seat-layout-container">
+                                                <div class="screen-indicator">
+                                                    <div class="screen">🎬 SCREEN</div>
+                                                </div>
+                                                <div id="seatLayoutGrid" class="seat-grid">
+                                                    <!-- Dynamic seat layout will be generated here -->
+                                                </div>
+                                                <div class="seat-legend">
+                                                    <span class="seat-legend-item">
+                                                        <span class="seat-sample regular"></span> Regular
+                                                    </span>
+                                                    <span class="seat-legend-item">
+                                                        <span class="seat-sample vip"></span> VIP
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="form-group">
