@@ -2,6 +2,20 @@
 let currentBranchId = null;
 let currentRoomId = null;
 
+function initializeBranchManagement() {
+    // Check if we're on the branches page by looking for the branch modal
+    const branchModal = document.getElementById('branchModal');
+    if (!branchModal) {
+        // Not on the branches page, skip initialization
+        return;
+    }
+    
+    // Branch management specific initialization can go here if needed
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeBranchManagement);
+
 // Branch Management Functions
 function editBranch(branchId) {
     fetch(`/manager/branchs/${branchId}`)

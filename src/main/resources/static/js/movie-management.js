@@ -4,6 +4,13 @@ let actorRowCount = 0;
 let actorOptions = [];
 
 function initializeMovieManagement() {
+    // Check if we're on the movies page by looking for the movie modal
+    const movieModal = document.getElementById('movieModal');
+    if (!movieModal) {
+        // Not on the movies page, skip initialization
+        return;
+    }
+    
     const actorOptionsElement = document.getElementById('actorOptionsData');
     if (actorOptionsElement) {
         try {
@@ -57,8 +64,13 @@ let retryCount = 0;
 const maxRetries = 10;
 
 function waitForElementsAndInitialize() {
-    const addMovieBtn = document.getElementById('addMovieBtn');
     const movieModal = document.getElementById('movieModal');
+    // Only proceed if we're on a page that has the movie modal
+    if (!movieModal) {
+        return;
+    }
+    
+    const addMovieBtn = document.getElementById('addMovieBtn');
     
     if (addMovieBtn && movieModal) {
         if (!addMovieBtn.hasEventListener) {
