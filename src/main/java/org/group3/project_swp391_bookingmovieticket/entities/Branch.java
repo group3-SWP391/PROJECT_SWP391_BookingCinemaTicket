@@ -47,6 +47,8 @@ public class Branch {
         this.description = description;
         this.rooms = rooms;
     }
+    
+
 
     public Integer getId() {
         return id;
