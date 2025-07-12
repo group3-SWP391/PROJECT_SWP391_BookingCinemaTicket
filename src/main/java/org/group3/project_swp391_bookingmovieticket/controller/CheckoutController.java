@@ -1,10 +1,8 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.group3.project_swp391_bookingmovieticket.dtos.BookingRequestDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.PopcornDrinkDTO;
-import org.group3.project_swp391_bookingmovieticket.dtos.ScheduleDTO;
 import org.group3.project_swp391_bookingmovieticket.entities.PaymentLink;
 import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
 import org.group3.project_swp391_bookingmovieticket.entities.Seat;
@@ -19,20 +17,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.payos.PayOS;
 import vn.payos.type.CheckoutResponseData;
 import vn.payos.type.ItemData;
 import vn.payos.type.PaymentData;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
 public class CheckoutController {
+
     private final PayOS payOS;
 
     @Autowired
@@ -47,21 +43,6 @@ public class CheckoutController {
     public CheckoutController(PayOS payOS) {
         super();
         this.payOS = payOS;
-    }
-
-    @RequestMapping(value = "/")
-    public String Index() {
-        return "index";
-    }
-
-    @RequestMapping(value = "/success")
-    public String Success() {
-        return "success";
-    }
-
-    @RequestMapping(value = "/cancel")
-    public String Cancel() {
-        return "cancel";
     }
 
     @PostMapping(value = "/check-duplicate-payment", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -133,7 +114,7 @@ public class CheckoutController {
             final String productName = schedule.getMovie().getName();
             final String description = "Seat " + listSeatNameBank;
             final String returnUrl = baseUrl + "/bill/create_bill";
-            final String cancelUrl = baseUrl + "/bill/cancel_screen";
+            final String cancelUrl = baseUrl + "/bill/cancel_bill";
             final int price = 5000;
 
             String currentTimeString = String.valueOf(System.currentTimeMillis());

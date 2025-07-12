@@ -59,7 +59,6 @@ public class BillController {
                              RedirectAttributes redirectAttributes) {
 
 
-
         // 1. Nếu bill đã được xử lý trước đó → chuyển thẳng đến confirmation screen
         if (paymentLinkService.existsByOrderCodeAndStatus(orderCode, "PAID")) {
             redirectAttributes.addAttribute("orderCode", orderCode);
@@ -183,11 +182,15 @@ public class BillController {
         return "confirmation_screen";
     }
 
-    @GetMapping("/cancel_screen")
-    public String cancelScreen(@RequestParam("orderCode") long orderCode,
-                               @RequestParam("status") String status,
-                               Model model) {
+    @GetMapping("/cancel_bill")
+    public String cancelBill(@RequestParam("orderCode") long orderCode,
+                             @RequestParam("status") String status) {
         paymentLinkService.updateStatusByOrderCode(orderCode, status);
+        return "redirect:/bill/cancel_screen";
+    }
+
+    @GetMapping("/cancel_screen")
+    public String cancelScreen(Model model) {
         model.addAttribute(CommonConst.USER_LOGIN_DTO, new UserLoginDTO());
         model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
         return "cancel_screen";

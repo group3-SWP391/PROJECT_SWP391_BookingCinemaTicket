@@ -23,7 +23,7 @@ public class PaymentLink {
     @Column(name = "check_out_url", nullable = false, length = 1000)
     private String checkoutUrl;
 
-    @Column(nullable = false, length = 50)
+    @Column( name = "status",nullable = false, length = 50)
     private String status; // PENDING, PAID, CANCELLED
 
     @Column(name = "seat_list")
