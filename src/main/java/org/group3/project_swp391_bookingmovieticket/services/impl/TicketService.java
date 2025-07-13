@@ -25,12 +25,13 @@ public class TicketService implements ITicketService {
         return Optional.empty();
     }
 
-
-
     @Override
-    public void update(Object o) {
+    public void update(Ticket ticket) {
 
     }
+
+
+
 
     @Override
     public HashSet<Integer> findBookedSeatIdsBySchedule(int id) {
@@ -49,6 +50,7 @@ public class TicketService implements ITicketService {
 
     @Override
     public void save(Ticket ticket) {
+
         ticketRepository.save(ticket);
     }
 

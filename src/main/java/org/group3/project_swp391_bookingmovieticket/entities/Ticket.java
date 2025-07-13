@@ -31,6 +31,9 @@ public class Ticket {
     @JoinColumn(name = "seat_id", referencedColumnName = "id")
     private Seat seat;
 
+    @Column(name = "popcorn_drink_list")
+    private String listPopcornDrinkName;
+
 
 }
 

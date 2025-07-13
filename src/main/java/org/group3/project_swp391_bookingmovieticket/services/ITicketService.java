@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-public interface ITicketService extends IGeneralService {
+public interface ITicketService extends IGeneralService<Ticket> {
 
     HashSet<Integer> findBookedSeatIdsBySchedule(int id);
     List<Ticket> findByScheduleId(int id);

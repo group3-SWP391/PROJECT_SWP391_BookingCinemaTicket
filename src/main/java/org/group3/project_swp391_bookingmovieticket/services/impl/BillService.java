@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public class BillService implements IBillService {
+    @Override
+    public void update(Bill bill) {
+
+    }
+
     @Autowired
     private IBillRepository iBillRepository;
     @Override
@@ -22,10 +27,7 @@ public class BillService implements IBillService {
         return Optional.empty();
     }
 
-    @Override
-    public void update(Object o) {
 
-    }
 
     @Override
     public void remove(Integer id) {
@@ -34,6 +36,7 @@ public class BillService implements IBillService {
 
     @Override
     public Bill save(Bill bill) {
+
         return iBillRepository.save(bill);
     }
 }

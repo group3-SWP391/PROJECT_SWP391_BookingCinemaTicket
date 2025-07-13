@@ -3,6 +3,7 @@ package org.group3.project_swp391_bookingmovieticket.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -14,7 +15,7 @@ public class Bill {
     private Integer id;
 
     @Column(name = "created_time")
-    private Date createdTime;
+    private LocalDateTime createdTime;
 
     private double price;
 

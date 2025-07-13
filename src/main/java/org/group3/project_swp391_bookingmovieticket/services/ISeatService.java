@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ISeatService extends IGeneralService{
     List<Seat> getListSeatById(int roomId);
-    List<Seat> findSeatsByIds(List<Long> ids);
+    List<Seat> findSeatsByIds(List<Integer> ids);
 
 }

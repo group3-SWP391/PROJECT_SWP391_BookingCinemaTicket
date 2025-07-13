@@ -18,7 +18,7 @@ public class SeatService implements ISeatService {
     }
 
     @Override
-    public List<Seat> findSeatsByIds(List<Long> ids) {
+    public List<Seat> findSeatsByIds(List<Integer> ids) {
         return iSeatRepository.findByIdIn(ids);
     }
 

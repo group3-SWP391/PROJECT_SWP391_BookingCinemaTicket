@@ -24,8 +24,11 @@ public class MovieService implements IMovieService {
         return movie;
     }
 
+
+
     @Override
-    public void update(Object o) {
+    public void update(Movie movie) {
+        iMovieRepository.save(movie);
 
     }
 
