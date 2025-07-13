@@ -55,9 +55,12 @@ public class TicketService implements ITicketService {
 
 
         for (Bill b : bills) {
-            Optional<Ticket> ticket = iTicketRepository.findById(b.getId());
+            Optional<Ticket> ticketOptional = iTicketRepository.findById(b.getId());
+            if(ticketOptional.isPresent()){
+                ticketList.add(ticketOptional.get());
+            }
 
-            ticketList.add(ticket.get());
+
         }
         return ticketList;
 

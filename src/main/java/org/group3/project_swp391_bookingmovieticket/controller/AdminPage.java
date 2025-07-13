@@ -42,7 +42,7 @@ public class AdminPage {
     public String getAllEmployee(Model model){
         List<User> listUser = new ArrayList<>();
         for (User user: iUserService.findAll() ){
-            if(user.getRole().getName().equalsIgnoreCase("Employee")){
+            if(user.getRole().getName().equalsIgnoreCase("STAFF")){
                 listUser.add(user);
             }
         }

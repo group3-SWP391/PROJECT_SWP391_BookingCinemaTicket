@@ -1,8 +1,11 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
+import org.group3.project_swp391_bookingmovieticket.entities.Branch;
 import org.group3.project_swp391_bookingmovieticket.entities.Role;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.repositories.IBranchRepository;
+import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
 import org.group3.project_swp391_bookingmovieticket.services.IRoleService;
 import org.group3.project_swp391_bookingmovieticket.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +22,21 @@ import java.util.Optional;
 @Controller
 public class EmployeeController {
     @Autowired
+    private IBranchService iBranchService;
+    @Autowired
     private IUserService iUserService;
     @Autowired
     private IRoleService iRoleService;
 
     @GetMapping("/add/employee")
     public String addEmployeePage(Model model){
-        Optional<Role> role =  iRoleService.findByName("employee");
+        //Lấy ra tất cả chi nhánh
+        List<Branch> branchList = iBranchService.findAll();
+        Optional<Role> role =  iRoleService.findByName("STAFF");
         UserDTO userDTO = new UserDTO();
         userDTO.setRole(role.get());
-
         model.addAttribute("employee", userDTO);
+        model.addAttribute("listbranch", branchList);
         return "admin/add-employee";
 
     }
@@ -49,6 +56,12 @@ public class EmployeeController {
         user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
         user.setEmail(userDTO.getEmail());
+        user.setStatus(true);
+        Optional<Branch> branchOptional = iBranchService.findById(userDTO.getBranchId());
+        if(branchOptional.isPresent()){
+            user.setBranch(branchOptional.get());
+        }
+
 
 
 
@@ -57,39 +70,53 @@ public class EmployeeController {
     }
     @GetMapping("/employee/delete/{id}")
     public String delete(@PathVariable int id, Model model){
-        try {
-            iUserService.delete(id);
-            return "redirect:/admin/employee";
+        Optional<User> user = iUserService.getUserByID(id);
+        if(user.isPresent()){
+            if(!user.get().getStatus()){
+                iUserService.delete(id);
+                return "redirect:/admin/employee";
 
-        }catch (IllegalArgumentException iae){
-            model.addAttribute("error", iae.getMessage());
 
+
+
+            }else{
+                model.addAttribute("error", "No delete customer because status is true");
+                return "admin/error1";
+            }
+        }else{
+            model.addAttribute("error", "No delete customer because status is true");
+            return "admin/error1";
 
         }
-        return "admin/error1";
+
+
+
+
     }
     @GetMapping("/employee/showfromupdate/{id}")
     public String showFormForUpdate(@PathVariable int id, Model model){
-        try {
+        List<Branch> branchList = iBranchService.findAll();
+
             Optional<User> user = iUserService.getUserByID(id);
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(user.get().getId());
-            userDTO.setFullname(user.get().getFullname());
-            userDTO.setUsername(user.get().getUsername());
-            userDTO.setPassword(user.get().getPassword());
-            userDTO.setEmail(user.get().getEmail());
-            userDTO.setPhone(user.get().getPhone());
-            userDTO.setRole(user.get().getRole());
+            if(user.isPresent()) {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setId(user.get().getId());
+                userDTO.setFullname(user.get().getFullname());
+                userDTO.setUsername(user.get().getUsername());
+                userDTO.setPassword(user.get().getPassword());
+                userDTO.setEmail(user.get().getEmail());
+                userDTO.setPhone(user.get().getPhone());
+                userDTO.setRole(user.get().getRole());
+                userDTO.setBranchId(user.get().getBranch().getId());
 
-            model.addAttribute("employee", userDTO);
-            return "admin/update-employee";
-
-        }catch (IllegalArgumentException iae){
-            model.addAttribute("error", iae.getMessage());
-
-
+                model.addAttribute("employee", userDTO);
+                model.addAttribute("listbranch", branchList);
+                return "admin/update-employee";
+            }else{
+                model.addAttribute("error", "With not found id "+id);
+                return "admin/error";
         }
-        return "admin/error";
+
     }
     @PostMapping("/employee/update")
     public String updateCustomer(@ModelAttribute("employee")@Valid UserDTO userDTO, BindingResult result){
@@ -104,7 +131,12 @@ public class EmployeeController {
         user.setPhone(userDTO.getPhone());
         user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
+        user.setStatus(true);
         user.setEmail(userDTO.getEmail());
+        Optional<Branch> branchOptional = iBranchService.findById(userDTO.getBranchId());
+        if(branchOptional.isPresent()){
+            user.setBranch(branchOptional.get());
+        }
 
         iUserService.save(user);
         return "redirect:/admin/employee";
@@ -118,7 +150,7 @@ public class EmployeeController {
             if(userList.isPresent()){
                 List<User> users = new ArrayList<>();
                 for(User user: userList.get()){
-                    if(user.getRole().getName().equalsIgnoreCase("Employee")){
+                    if(user.getRole().getName().equalsIgnoreCase("STAFF")){
                         users.add(user);
                     }
                 }

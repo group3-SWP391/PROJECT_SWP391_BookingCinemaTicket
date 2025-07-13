@@ -46,6 +46,16 @@
         border-radius: 4px;
         cursor: pointer;
     }
+    option{
+       width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+    }
+
+
 
     .back-link {
         display: block;
@@ -58,7 +68,7 @@
 </head>
 <body>
 <div class="form-container">
-  <h2>Update User</h2>
+  <h2>Update Staff</h2>
 
   <form th:action="@{/employee/update}" th:object="${employee}" method="post">
     <input type="hidden" th:field="*{id}" />
@@ -82,6 +92,11 @@
     <label>Email:</label>
     <input type="email" th:field="*{email}" />
     <div th:if="${#fields.hasErrors('email')}" th:errors = *{email} style="color:red"></div>
+
+    <label>Branch:</label>
+    <select th:field="*{branchId}"  >
+      <option th:each="branch: ${listbranch}" th:text="${branch.name}" th:value="${branch.id}" ></option>
+    </select>
 
 
 

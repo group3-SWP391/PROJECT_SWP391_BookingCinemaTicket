@@ -33,7 +33,8 @@ public class UserDTO {
             message = "Email không hợp lệ"
     )
     private String email;
-
     private Role role;
+    private Boolean status;
+    private Integer branchId;
     
 }

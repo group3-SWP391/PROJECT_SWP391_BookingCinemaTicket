@@ -150,14 +150,13 @@
     ← Back
   </a>
   <form action="/employee/search" method="get" style="display: flex; align-items: center; margin: 10px 0;">
-    <input type="text" name="keyword" placeholder="Search..." th:value="${keyword}"
+    <input type="text" name="keyword" placeholder="Search by fullname" th:value="${keyword}"
            style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; width: 200px; outline: none;">
     <button type="submit" style="margin-left: -30px; background: none; border: none; cursor: pointer; color: #666;">
       🔍
     </button>
   </form>
   <h2 th:text="${message}"></h2>
-
 
   <div class="card">
     <table class="table table-bordered table-striped">
@@ -166,6 +165,8 @@
         <th>Username</th>
         <th>Full Name</th>
         <th>Phone</th>
+        <th>Branch</th>
+        <th>Status</th>
         <th style="width: 200px;">Actions</th>
       </tr>
       </thead>
@@ -174,42 +175,46 @@
         <td th:text="${user.username}">username</td>
         <td th:text="${user.fullname}">fullname</td>
         <td th:text="${user.phone}">phone</td>
-        <td width="210px" height="90px" >
+        <td th:text="${user.branch.name}"></td>
+        <td th:text="${user.status}"></td>
+        <td width="210px" height="90px">
           <a th:href="@{'/employee/showfromupdate/' + ${user.id}}" class="btn btn-warning btn-sm" title="Edit">
             <i class="fas fa-edit icon"></i> Edit
           </a>
-          <a
-                  th:href="@{'/employee/delete/' + ${user.id}}"
-                  class="btn btn-danger btn-sm ml-2"
-                  onclick="return confirm('Are you sure you want to delete this user?');"
-                  title="Delete"
-          >
-            <i class="fas fa-trash-alt icon"></i> Delete</a>
-
+          <a th:href="@{'/employee/delete/' + ${user.id}}"
+             class="btn btn-danger btn-sm ml-2 delete-btn"
+             th:data-status="${user.status}"
+             title="Delete">
+            <i class="fas fa-trash-alt icon"></i> Delete
+          </a>
         </td>
       </tr>
       </tbody>
-
     </table>
   </div>
-
-
 </div>
 
-<script
-        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"
-></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9g6+M51uzH2p68HEf40GVa4r5G9Y+UctvE4Rk"
-        crossorigin="anonymous"
-></script>
-<script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"
-></script>
+        crossorigin="anonymous"></script>
+<script>
+  $(document).ready(function() {
+    $('.delete-btn').on('click', function(e) {
+      var status = $(this).data('status');
+      if (status === true) {
+        e.preventDefault();
+        alert('Cannot delete this employee because their status is true.');
+      } else {
+        return confirm('Are you sure you want to delete this user?');
+      }
+    });
+  });
+</script>
 </body>
 </html>

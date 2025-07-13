@@ -18,8 +18,7 @@ import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
-    @Autowired
-    private IBillRepository iBillRepository;
+
 
     @Override
     @Transactional
@@ -31,18 +30,9 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public void delete(int id) {
-        Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()){
-             if(iBillRepository.existsByUserId(id)){
-                 throw new IllegalArgumentException("Cannot delete because they have existing bills.");
+        userRepository.deleteById(id);
 
-             }else{
-                 userRepository.deleteById(id);
-             }
 
-        }else{
-            throw new IllegalArgumentException(" With id "+ id + " not found");
-        }
 
 
 
@@ -50,11 +40,8 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> getUserByID(int id) {
-        Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()){
-            return user;
-        }
-        throw new IllegalArgumentException(" With id "+ id + " not found");
+        return userRepository.findById(id);
+
 
 
 
