@@ -12,21 +12,21 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface IMovieRepository extends JpaRepository<Movie, Integer> {
-    List<Movie> findByNameContainingIgnoreCase(String movieName);
+    Page<Movie> findByNameContainingIgnoreCase(String movieName, Pageable pageable);
 
     @Query("SELECT DISTINCT m.categories FROM Movie m")
     List<String>getMovieCategories();
 
     @Query("SELECT m FROM Movie m WHERE m.releaseDate >= CURRENT_DATE  AND m.endDate >= CURRENT_DATE ")
-    List<Movie> findMovieComingSoon();
+    Page<Movie> findMovieComingSoon(Pageable pageable);
 
     @Query("SELECT m FROM Movie m WHERE m.categories LIKE %:categoryName%")
-    List<Movie> getMovieByCategory(@Param("categoryName") String categoryName);
+    Page<Movie> getMovieByCategory(@Param("categoryName") String categoryName, Pageable pageable);
 
     Movie findMovieById(Integer id);
 
     @Query("SELECT m FROM Movie m WHERE m.releaseDate <= CURRENT_DATE  AND m.endDate >= CURRENT_DATE ")
-    List<Movie> findMovieNowShowing();
+    Page<Movie> findMovieNowShowing(Pageable pageable);
 
     @Query(value = "SELECT TOP 8 * FROM movie m " +
             "WHERE YEAR(m.release_Date) = YEAR(GETDATE()) " +

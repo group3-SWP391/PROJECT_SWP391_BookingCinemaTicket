@@ -32,7 +32,6 @@ public class TicketEmailService {
         message.setTo(to);
         message.setSubject("Email Verification Code Register");
         message.setText("Your verification code is: " + code + "The verification code only exists for 5 minutes.");
-
         mailSender.send(message);
     }
 

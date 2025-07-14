@@ -49,11 +49,9 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<MovieDTO> findByMovieName(String movieName) {
-        return movieRepository.findByNameContainingIgnoreCase(movieName)
-                .stream()
-                .map(movie -> modelMapper.map(movie, MovieDTO.class))
-                .collect(Collectors.toList());
+    public Page<MovieDTO> findByMovieName(String movieName, Pageable pageable) {
+        Page<Movie> moviePage = movieRepository.findByNameContainingIgnoreCase(movieName, pageable);
+        return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 
     @Override
@@ -62,11 +60,9 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<MovieDTO> getMovieByCategory(String categoryName) {
-        return movieRepository.getMovieByCategory(categoryName)
-                .stream()
-                .map(movie -> modelMapper.map(movie, MovieDTO.class))
-                .collect(Collectors.toList());
+    public Page<MovieDTO> getMovieByCategory(String categoryName, Pageable pageable) {
+        Page<Movie> moviePage = movieRepository.getMovieByCategory(categoryName, pageable);
+        return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 
     @Override
@@ -77,19 +73,15 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<MovieDTO> findMovieNowShowing() {
-        return movieRepository.findMovieNowShowing()
-                .stream()
-                .map(movie -> modelMapper.map(movie, MovieDTO.class))
-                .collect(Collectors.toList());
+    public Page<MovieDTO> findMovieNowShowing(Pageable pageable) {
+        Page<Movie> moviePage = movieRepository.findMovieNowShowing(pageable);
+        return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 
     @Override
-    public List<MovieDTO> findMovieComingSoon() {
-        return movieRepository.findMovieComingSoon()
-                .stream()
-                .map(movie -> modelMapper.map(movie, MovieDTO.class))
-                .collect(Collectors.toList());
+    public Page<MovieDTO> findMovieComingSoon(Pageable pageable) {
+        Page<Movie> moviePage = movieRepository.findMovieComingSoon(pageable);
+        return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 
     @Override

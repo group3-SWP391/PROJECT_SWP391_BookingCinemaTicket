@@ -14,17 +14,17 @@ import java.util.Optional;
 
 public interface IMovieService extends IGeneralService<MovieDTO> {
 
-    List<MovieDTO> findByMovieName(String movieName);
+    Page<MovieDTO> findByMovieName(String movieName, Pageable pageable);
 
     List<String> getMovieCategories();
 
-    List<MovieDTO> findMovieComingSoon();
+    Page<MovieDTO> findMovieComingSoon(Pageable pageable);
 
-    List<MovieDTO> getMovieByCategory(String categoryName);
+    Page<MovieDTO> getMovieByCategory(String categoryName, Pageable pageable);
 
     MovieDTO findMovieById(Integer id);
 
-    List<MovieDTO> findMovieNowShowing();
+    Page<MovieDTO> findMovieNowShowing(Pageable pageable);
 
     List<MovieDTO> findMovieByViewDesc();
 

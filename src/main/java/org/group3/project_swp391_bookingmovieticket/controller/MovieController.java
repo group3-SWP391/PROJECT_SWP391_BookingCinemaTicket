@@ -1,4 +1,5 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
+
 import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
@@ -38,6 +39,8 @@ public class MovieController {
 
     @GetMapping("/search")
     public String displayAllMovies(@RequestParam(value = "movieNameSearch", required = false) String movieNameSearch,
+                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                   @RequestParam(value = "size", defaultValue = "6") int size,
                                    Model model) {
         if (movieNameSearch == null || movieNameSearch.trim().isEmpty() || movieNameSearch.trim().equalsIgnoreCase(" ")) {
             model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
@@ -45,7 +48,9 @@ public class MovieController {
             model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
             return "home";
         } else {
-            model.addAttribute("movieSearch", movieService.findByMovieName(movieNameSearch));
+            Pageable pageable = PageRequest.of(page, size);
+            model.addAttribute("movieSearch", movieService.findByMovieName(movieNameSearch, pageable));
+            model.addAttribute("movieNameSearch", movieNameSearch);
             model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
             model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
 
@@ -78,31 +83,36 @@ public class MovieController {
     }
 
     @GetMapping(value = "/category/return-view")
-    public String getMoviesByCategoryReturnView(@RequestParam(value = "categoryName", required = false)
-                                              String categoryName, Model model) {
-        model.addAttribute("movieByCategory", movieService.getMovieByCategory(categoryName.trim()));
+    public String getMoviesByCategoryReturnView(@RequestParam(value = "categoryName", required = false) String categoryName,
+                                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                                @RequestParam(value = "size", defaultValue = "6") int size,
+                                                Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        model.addAttribute("movieByCategory", movieService.getMovieByCategory(categoryName.trim(), pageable));
         model.addAttribute("categoryName", categoryName);
-        model.addAttribute(USER_LOGIN_DTO,  new UserLoginDTO());
+        model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
         model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
 
         return "movie_category";
     }
 
     @GetMapping(value = "/showing")
-    public String getMoviesShowing(@RequestParam(value = "status", required = false)
-                                              String status, Model model) {
+    public String getMoviesShowing(@RequestParam(value = "status", required = false) String status,
+                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                   @RequestParam(value = "size", defaultValue = "6") int size,
+                                   Model model) {
         if (status == null || status.trim().isEmpty()) {
             model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
             model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
             model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
-
             return "home";
         } else {
+            Pageable pageable = PageRequest.of(page, size);
             if (status.equalsIgnoreCase("now-showing")) {
-                model.addAttribute("movieShowing", movieService.findMovieNowShowing());
+                model.addAttribute("movieShowing", movieService.findMovieNowShowing(pageable));
                 model.addAttribute("status", "Now-showing");
             } else if (status.equalsIgnoreCase("coming-soon")) {
-                model.addAttribute("movieShowing", movieService.findMovieComingSoon());
+                model.addAttribute("movieShowing", movieService.findMovieComingSoon(pageable));
                 model.addAttribute("status", "Coming-soon");
             }
         }

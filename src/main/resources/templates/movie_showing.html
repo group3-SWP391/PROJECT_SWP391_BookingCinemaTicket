@@ -153,10 +153,34 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
+                                        <div class="pager_wrapper gc_blog_pagination">
+                                            <ul class="pagination">
+                                                <!-- Nút Previous -->
+                                                <li th:if="${movieShowing.hasPrevious()}">
+                                                    <a th:href="@{/movie/showing(status=${status}, page=${movieShowing.number - 1})}">
+                                                        <i class="flaticon-left-arrow"></i>
+                                                    </a>
+                                                </li>
+
+                                                <!-- Các số trang -->
+                                                <li th:each="i : ${#numbers.sequence(0, movieShowing.totalPages - 1)}"
+                                                    th:classappend="${i == movieShowing.number} ? 'active'">
+                                                    <a th:href="@{/movie/showing(status=${status}, page=${i})}" th:text="${i + 1}"></a>
+                                                </li>
+
+                                                <!-- Nút Next -->
+                                                <li th:if="${movieShowing.hasNext()}">
+                                                    <a th:href="@{/movie/showing(status=${status}, page=${movieShowing.number + 1})}">
+                                                        <i class="flaticon-right-arrow"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Web Series Slider End -->
                     </div>
                 </div>
             </div>
@@ -207,7 +231,7 @@
 bên trong thẻ này có chứa mã JavaScript, và Thymeleaf sẽ xử lý inline expression
 đặc biệt phù hợp với JavaScript. -->
 <script th:inline="javascript">
-    var movieShowingData = /*[[${movieShowing}]]*/ [];
+    var movieShowingData = /*[[${movieShowing.content}]]*/ [];
 </script>
 <!-- js for choose category -->
 <script>

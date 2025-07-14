@@ -165,6 +165,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
+                                        <div class="pager_wrapper gc_blog_pagination">
+                                            <ul class="pagination">
+                                                <!-- Nút Previous -->
+                                                <li th:if="${movieSearch.hasPrevious()}">
+                                                    <a th:href="@{/movie/search(movieNameSearch=${movieNameSearch}, page=${movieSearch.number - 1})}">
+                                                        <i class="flaticon-left-arrow"></i>
+                                                    </a>
+                                                </li>
+
+                                                <!-- Các số trang -->
+                                                <li th:each="i : ${#numbers.sequence(0, movieSearch.totalPages - 1)}"
+                                                    th:classappend="${i == movieSearch.number} ? 'active'">
+                                                    <a th:href="@{/movie/search(movieNameSearch=${movieNameSearch}, page=${i})}" th:text="${i + 1}"></a>
+                                                </li>
+
+                                                <!-- Nút Next -->
+                                                <li th:if="${movieSearch.hasNext()}">
+                                                    <a th:href="@{/movie/search(movieNameSearch=${movieNameSearch}, page=${movieSearch.number + 1})}">
+                                                        <i class="flaticon-right-arrow"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +240,7 @@
 <script th:src="@{/js/custom.js}"></script>
 
 <script th:inline="javascript">
-    var movieShowingData = /*[[${movieSearch}]]*/ [];
+    var movieShowingData = /*[[${movieSearch.content}]]*/ [];
 </script>
 
 <!-- js for choose category -->
