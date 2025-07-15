@@ -76,17 +76,17 @@
                             <li>
                                 <div th:if="${session.userLogin == null}">
                                     <a class="button button--tamaya" data-text="sign up" data-toggle="modal"
-                                       data-target="#myModal"><span>sign up</span></a>
+                                       data-target="#myModal"><span>Đăng nhập</span></a>
                                 </div>
                                 <div th:if="${session.userLogin != null}">
                                     <a style="background: #1b1b1b" class="btn" th:href="@{none}">
                                         <span style="color: white" th:text="${session.userLogin.fullname}">User</span>
                                     </a>
                                     <a style="background: #1b1b1b;" class="btn" th:href="@{/my-account}">
-                                        <span style="color: white">My account</span>
+                                        <span style="color: white">Tài khoản</span>
                                     </a>
                                     <a style="background: #1b1b1b;" class="btn" th:href="@{/log-out}">
-                                        <span style="color: white">Log out</span>
+                                        <span style="color: white">Đăng xuất</span>
                                     </a>
                                 </div>
                             </li>

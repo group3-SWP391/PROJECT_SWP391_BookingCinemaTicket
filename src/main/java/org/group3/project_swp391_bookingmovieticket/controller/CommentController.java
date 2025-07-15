@@ -41,7 +41,7 @@ public class CommentController {
                                @RequestParam("content") String content,
                                HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userLogin") == null) {
+         if (session == null || session.getAttribute("userLogin") == null) {
             return "redirect:/login";
         }
 
@@ -77,15 +77,23 @@ public class CommentController {
                                 @RequestParam("movieId") Integer movieId,
                                 HttpSession session) {
         User user = (User) session.getAttribute("userLogin");
+
         if (user != null) {
             Comment comment = commentRepository.findById(commentId).orElse(null);
-            if (comment != null && comment.getUser().getId().equals(user.getId())) {
-                System.out.println("Xóa comment: " + commentId + " của phim " + movieId);
-                commentRepository.delete(comment);
+            if (comment != null) {
+                boolean isOwner = comment.getUser().getId().equals(user.getId());
+                boolean isAdmin = "ADMIN".equalsIgnoreCase(user.getRole().getName());
+
+                if (isOwner || isAdmin) {
+                    commentRepository.delete(comment);
+                    System.out.println("Xóa comment: " + commentId + " của phim " + movieId);
+                }
             }
         }
+
         return "redirect:/movie-details?id=" + movieId;
     }
+
 
 
 }

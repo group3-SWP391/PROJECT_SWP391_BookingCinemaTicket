@@ -34,7 +34,7 @@ public class BookingController {
     @GetMapping("/{scheduleId}")
     public String displayRoomAndSeat(@PathVariable("scheduleId") Integer scheduleId,
                                      Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // Không tạo session mới
+        HttpSession session = request.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("userLogin") : null;
         Integer userId = (user != null) ? user.getId() : 0;
 
@@ -66,7 +66,7 @@ public class BookingController {
 
     private UserDTO convertUserToDTO(User user) {
         if (user == null) {
-            return new UserDTO(); // Return empty DTO for unauthenticated users
+            return new UserDTO();
         }
 
         UserDTO dto = new UserDTO();

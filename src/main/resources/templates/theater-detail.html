@@ -24,12 +24,22 @@
     <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}" />
     <style>
         .filter-bar {
-            display: table-caption;
+            display: flex;
             flex-wrap: wrap;
             gap: 10px;
             align-items: center;
+            justify-content: center;
             margin-bottom: 20px;
         }
+
+        .filter-bar form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+
 
         .filter-bar select,
         .filter-bar button {
@@ -389,7 +399,6 @@
                     <span th:text="${entry.key}"></span>
                     <div th:each="schedule : ${entry.value}">
                         <span th:text="'📽️Phòng: ' + ${schedule.room.name}"></span>
-                        <span th:text="'-🕒Chiếu lúc: ' + ${#temporals.format(schedule.startTime, 'HH:mm')}"></span>
                         <span th:text="'-💺Ghế còn trống: ' + ${availableSeatsMap[schedule.room.id][schedule.id]} + '/' + ${capacityMap[schedule.room.id]}"></span>
                         <div class="showtimes">
                             <a th:href="@{'/booking/' + ${schedule.id}}"

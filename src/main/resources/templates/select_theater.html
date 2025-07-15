@@ -46,87 +46,103 @@
 </head>
 <body>
 <header lang="vi" th:replace="fragments/navigation :: navigation"></header>
-<div class="prs_title_main_sec_wrapper">
-    <div class="prs_title_img_overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="prs_title_heading_wrapper">
-                    <h2>Chọn chi nhánh</h2>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li> &nbsp; > &nbsp; Theater</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="container">
     <div class="left-panel">
         <h2>Danh Sách Rạp</h2>
-
-        <select id="branchSelect" class="form-select" style="width: 100%; margin-bottom: 20px; padding: 10px; border-radius: 5px;">
-            <option value="">-- Chọn chi nhánh --</option>
-            <option th:each="name : ${branchNames}"
-                    th:value="@{/select-theater(name=${name})}"
-                    th:text="${name}"
-                    th:selected="${name == param.name}">
-            </option>
-        </select>
-
-        <!-- Danh sách chi nhánh -->
+        <input type="text" id="branchSearch" placeholder="Nhập tên chi nhánh..." style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 10px;" autocomplete="off">
+        <ul id="branchResults" style="list-style: none; padding: 0;"></ul>
         <div class="branch-list" th:each="name : ${branchNames}">
-            <a th:href="@{/select-theater(name=${name})}"
-               th:text="${name}"
-               th:class="${name == param.name} ? 'selected' : ''"></a>
+            <a th:href="@{/select-theater(name=${name})}" th:text="${name}" th:class="${name == param.name} ? 'selected' : ''"></a>
         </div>
     </div>
     <div class="right-panel">
         <div th:if="${addresses != null and not #lists.isEmpty(addresses)}">
             <h2>Danh sách địa chỉ</h2>
-
-            <!-- Dropdown chọn địa chỉ -->
-            <select id="addressSelect" class="form-select" style="width: 100%; margin-bottom: 20px; padding: 10px; border-radius: 5px;">
-                <option value="">-- Chọn địa chỉ --</option>
-                <option th:each="address : ${addresses}"
-                        th:value="@{/theater-detail(branchId=${address.id})}"
-                        th:text="${address.name + ' - ' + address.diaChi}">
-                </option>
-            </select>
-
-            <!-- Danh sách địa chỉ -->
+            <input type="text" id="addressSearch" placeholder="Nhập tên địa chỉ..." style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 10px;" autocomplete="off">
+            <ul id="addressResults" style="list-style: none; padding: 0;"></ul>
             <div class="address-list" th:each="address : ${addresses}">
-                <a th:href="@{/theater-detail(branchId=${address.id})}"
-                   th:text="${address.name + ' - ' + address.diaChi}"></a>
-            </div>
-        </div>
-
-        <div th:if="${selectedBranch != null}" class="branch-detail">
-            <h2 th:text="${selectedBranch.name}"></h2>
-            <img th:src="${selectedBranch.imgurl}" alt="Branch Image" class="branch-image"
-                 th:if="${!#strings.isEmpty(selectedBranch.imgurl)}"/>
-            <h3>Lịch Chiếu</h3>
-            <div th:each="schedule : ${schedules}" class="schedule">
-                <span th:text="|${schedule.movieName} - ${#temporals.format(schedule.startDate, 'dd/MM/yyyy')} ${#temporals.format(schedule.startTime, 'HH:mm')} - ${#numbers.formatDecimal(schedule.price, 0, 2)} VNĐ|"></span>
-                <img th:src="${selectedBranch.imgurl}" alt="Branch Image" th:if="${!#strings.isEmpty(selectedBranch.imgurl)}"/>
-            </div>
-            <div th:if="${#lists.isEmpty(schedules)}" class="no-schedule">
-                <p>Không có lịch chiếu tại rạp này.</p>
+                <a th:href="@{/theater-detail(branchId=${address.id})}" th:text="${address.name + ' - ' + address.diaChi}"></a>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    document.getElementById('branchSelect')?.addEventListener('change', function () {
-        if (this.value) window.location.href = this.value;
+<script th:inline="javascript">
+
+        const branches = /*[[${branchNames}]]*/ [];
+        const addresses = /*[[${addresses}]]*/ [];
+
+
+
+    const branchInput = document.getElementById('branchSearch');
+    const branchList = document.getElementById('branchResults');
+
+    const addressInput = document.getElementById('addressSearch');
+    const addressList = document.getElementById('addressResults');
+
+    branchInput.addEventListener('input', function () {
+        const keyword = this.value.toLowerCase();
+        branchList.innerHTML = '';
+        if (!keyword) return;
+
+        const results = branches.filter(name => name.toLowerCase().includes(keyword));
+        results.forEach(name => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = name;
+            a.href = `/select-theater?name=${encodeURIComponent(name)}`;
+            styleLink(a);
+            li.appendChild(a);
+            branchList.appendChild(li);
+        });
     });
 
-    document.getElementById('addressSelect')?.addEventListener('change', function () {
-        if (this.value) window.location.href = this.value;
+    branchInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const keyword = this.value.trim().toLowerCase();
+            const match = branches.find(name => name.toLowerCase() === keyword);
+            if (match) window.location.href = `/select-theater?name=${encodeURIComponent(match)}`;
+            else alert('Không tìm thấy chi nhánh.');
+        }
     });
+
+    addressInput.addEventListener('input', function () {
+        const keyword = this.value.toLowerCase();
+        addressList.innerHTML = '';
+        if (!keyword) return;
+
+        const results = addresses.filter(addr => (addr.name + ' - ' + addr.diaChi).toLowerCase().includes(keyword));
+        results.forEach(addr => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = `${addr.name} - ${addr.diaChi}`;
+            a.href = `/theater-detail?branchId=${addr.id}`;
+            styleLink(a);
+            li.appendChild(a);
+            addressList.appendChild(li);
+        });
+    });
+
+    addressInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const keyword = this.value.trim().toLowerCase();
+            const match = addresses.find(addr => (addr.name + ' - ' + addr.diaChi).toLowerCase() === keyword);
+            if (match) window.location.href = `/theater-detail?branchId=${match.id}`;
+            else alert('Không tìm thấy địa chỉ.');
+        }
+    });
+
+    function styleLink(a) {
+        a.style.display = 'block';
+        a.style.padding = '8px';
+        a.style.borderRadius = '5px';
+        a.style.background = '#ecf0f1';
+        a.style.marginBottom = '5px';
+        a.style.color = '#2980b9';
+        a.style.textDecoration = 'none';
+        a.addEventListener('mouseover', () => a.style.background = '#3498db');
+        a.addEventListener('mouseout', () => a.style.background = '#ecf0f1');
+    }
 </script>
-
 </body>
 </html>

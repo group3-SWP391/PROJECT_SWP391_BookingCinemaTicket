@@ -33,5 +33,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findByUserIdAndStatus(Integer userId, String status);
 
+    boolean existsByUser_Id(Integer userId);
 
 }

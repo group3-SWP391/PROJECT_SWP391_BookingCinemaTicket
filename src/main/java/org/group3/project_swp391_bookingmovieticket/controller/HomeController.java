@@ -105,37 +105,6 @@ public class HomeController {
         return "home";
     }
 
-
-    @GetMapping("/about")
-    public String about(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "about";
-    }
-
-    @GetMapping("/blog-category")
-    public String blogCategory(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "blog_category";
-    }
-
-    @GetMapping("/blog-single")
-    public String blogSingle(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "blog_single";
-    }
-
-    @GetMapping("/booking-type")
-    public String bookingType(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "booking_type";
-    }
-
-    @GetMapping("/confirmation-screen")
-    public String confirmationScreen(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "confirmation_screen";
-    }
-
     @GetMapping("/contact")
     public String contact(Model model) {
         try {
@@ -145,24 +114,6 @@ public class HomeController {
             model.addAttribute("error", "An error occurred while loading the contact page: " + e.getMessage());
             return "error";
         }
-    }
-
-    @GetMapping("/event-category")
-    public String eventCategory(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "event_category";
-    }
-
-    @GetMapping("/event-single")
-    public String eventSingle(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "event_single";
-    }
-
-    @GetMapping("/gallery")
-    public String gallery(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "gallery";
     }
 
     @GetMapping("/movie-booking")
@@ -183,17 +134,6 @@ public class HomeController {
         return "movie_category";
     }
 
-    @GetMapping("/movie-single")
-    public String movieSingle(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "movie_single";
-    }
-
-    @GetMapping("/movie-single-second")
-    public String movieSingleSecond(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
-        return "movie_single_second";
-    }
 
     @GetMapping("/movie-details")
     public String movieDetails(@RequestParam("id") Integer movieId,
@@ -217,11 +157,11 @@ public class HomeController {
         Page<Comment> commentPageResult = commentService.getCommentsByMovieId(movieId, commentPageable);
         Page<Review> reviewPageResult = reviewService.getReviewsForMovie(movieId, reviewPageable);
 
-        // Đánh giá và bình luận lấy từ Page
+        // lay ra list bluan va danh gia
         List<Comment> comments = commentPageResult.getContent();
         List<Review> reviews = reviewPageResult.getContent();
 
-        // Like/Dislike maps
+        // Like/Dislike
         Map<Integer, Long> likesMap = comments.stream()
                 .collect(Collectors.toMap(Comment::getId, c -> reactionService.countLikes(c)));
 
@@ -279,7 +219,7 @@ public class HomeController {
             List<NotificationDTO> notifications = notificationService.getUnreadNotifications(user.getId());
             model.addAttribute("notifications", notifications);
 
-            // Lấy danh sách tất cả đơn hàng
+            // take list order cua user
             List<Order> orders = orderService.getOrdersByUserId(user.getId());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             for (Order order : orders) {
@@ -321,6 +261,8 @@ public class HomeController {
         }
     }
 
+    private static final String SESSION_USER_LOGIN = "userLogin";
+
 
     @PostMapping("/contact")
     public String handleContactForm(@RequestParam String fullName,
@@ -328,8 +270,27 @@ public class HomeController {
                                     @RequestParam String phone,
                                     @RequestParam String requestType,
                                     @RequestParam String message,
-                                    Model model) {
+                                    Model model,
+                                    HttpServletRequest request,
+                                    HttpSession session) {
         try {
+            // Kiểm tra đăng nhập
+            User user = (User) session.getAttribute(SESSION_USER_LOGIN);
+            if (user == null) {
+                model.addAttribute("errorMessage", "Vui lòng đăng nhập để gửi khiếu nại hoặc góp ý.");
+                model.addAttribute("userDTO", new UserDTO());
+                return "contact";
+            }
+
+            // Kiểm tra đã từng đặt vé
+            boolean hasOrder = orderRepository.existsByUser_Id(user.getId());
+            if (!hasOrder) {
+                model.addAttribute("errorMessage", "Bạn cần từng đặt vé trước khi gửi khiếu nại hoặc góp ý.");
+                model.addAttribute("userDTO", new UserDTO());
+                return "contact";
+            }
+
+            // Tao ycau moi
             ContactRequest contactRequest = new ContactRequest();
             contactRequest.setFullName(fullName);
             contactRequest.setEmail(email);
@@ -337,51 +298,47 @@ public class HomeController {
             contactRequest.setRequestType(requestType);
             contactRequest.setMessage(message);
             contactRequest.setCreatedAt(LocalDateTime.now());
+            contactRequest.setUser(user);
+
             contactRequestRepository.save(contactRequest);
             System.out.println("Contact request saved successfully. CreatedAt: " + contactRequest.getCreatedAt());
 
+            // gui lại ndung theo ycau
             String emailSubject;
             String emailBody;
             switch (requestType) {
-                case "BOOKING":
-                    emailSubject = "Xác Nhận Yêu Cầu Đặt Vé Xem Phim";
-                    emailBody = "Chào " + fullName + ",\n\n" +
-                            "Chúng tôi đã nhận được yêu cầu đặt vé xem phim của bạn. Nội dung yêu cầu:\n" +
-                            message + "\n\n" +
-                            "Chúng tôi sẽ liên hệ lại với bạn sớm nhất qua số điện thoại " + phone + ".\n" +
-                            "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
-                    break;
                 case "COMPLAINT":
                     emailSubject = "Xác Nhận Khiếu Nại";
-                    emailBody = "Chào " + fullName + ",\n\n" +
-                            "Chúng tôi đã nhận được khiếu nại của bạn. Nội dung khiếu nại:\n" +
-                            message + "\n\n" +
-                            "Chúng tôi sẽ xem xét và phản hồi bạn trong thời gian sớm nhất.\n" +
-                            "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
+                    emailBody = "Chào " + fullName + ",\n\n"
+                            + "Chúng tôi đã nhận được khiếu nại của bạn. Nội dung khiếu nại:\n"
+                            + message + "\n\n"
+                            + "Chúng tôi sẽ xem xét và phản hồi bạn trong thời gian sớm nhất.\n"
+                            + "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
                     break;
                 case "FEEDBACK":
                     emailSubject = "Cảm Ơn Góp Ý Của Bạn";
-                    emailBody = "Chào " + fullName + ",\n\n" +
-                            "Cảm ơn bạn đã gửi góp ý cho chúng tôi. Nội dung góp ý:\n" +
-                            message + "\n\n" +
-                            "Chúng tôi rất trân trọng ý kiến của bạn và sẽ cải thiện dịch vụ tốt hơn.\n" +
-                            "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
+                    emailBody = "Chào " + fullName + ",\n\n"
+                            + "Cảm ơn bạn đã gửi góp ý cho chúng tôi. Nội dung góp ý:\n"
+                            + message + "\n\n"
+                            + "Chúng tôi rất trân trọng ý kiến của bạn và sẽ cải thiện dịch vụ tốt hơn.\n"
+                            + "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
                     break;
                 default:
                     emailSubject = "Xác Nhận Yêu Cầu";
-                    emailBody = "Chào " + fullName + ",\n\n" +
-                            "Chúng tôi đã nhận được yêu cầu của bạn. Nội dung:\n" +
-                            message + "\n\n" +
-                            "Chúng tôi sẽ phản hồi bạn sớm nhất có thể.\n" +
-                            "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
+                    emailBody = "Chào " + fullName + ",\n\n"
+                            + "Chúng tôi đã nhận được yêu cầu của bạn:\n"
+                            + message + "\n\n"
+                            + "Chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất.\n"
+                            + "Trân trọng,\nHệ thống đặt vé xem phim FPT Cinemas cảm ơn!!!";
             }
 
             emailService.sendEmail(email, emailSubject, emailBody);
             System.out.println("Email sent to: " + email);
 
-            model.addAttribute("successMessage", "Yêu cầu của bạn đã được gửi thành công!!!!!!! Vui lòng kiểm tra email để xem phản hồi.");
+            model.addAttribute("successMessage", "Yêu cầu của bạn đã được gửi thành công! Vui lòng kiểm tra email để xem phản hồi.");
             model.addAttribute("userDTO", new UserDTO());
             return "contact";
+
         } catch (Exception e) {
             System.out.println("Error in handleContactForm: " + e.getMessage());
             e.printStackTrace();
@@ -390,6 +347,7 @@ public class HomeController {
             return "contact";
         }
     }
+
 
     @GetMapping("/advertising-contact")
     public String advertisingContact(Model model, HttpSession session) {

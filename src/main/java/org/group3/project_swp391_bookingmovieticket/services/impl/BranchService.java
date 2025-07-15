@@ -6,7 +6,6 @@ import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
 import org.group3.project_swp391_bookingmovieticket.dtos.BranchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,8 +16,6 @@ public class BranchService implements IBranchService {
 
     @Autowired
     private IBranchRepository branchRepository;
-
-
 
     @Override
     public List<Branch> findAll() {
@@ -42,7 +39,7 @@ public class BranchService implements IBranchService {
 
     @Override
     public void remove(Integer id) {
-        // Implement removal logic if needed
+
     }
 
     @Override

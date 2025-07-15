@@ -343,7 +343,7 @@
                     <h2>Thông tin tài khoản</h2>
                     <ul>
                         <li><a th:href="@{/}">Home</a></li>
-                        <li> > My Account</li>
+                        <li> > Thông tin tài khoản</li>
                     </ul>
                 </div>
             </div>
@@ -352,7 +352,7 @@
 </div>
 <!-- Title Wrapper End -->
 
-<h1>My Account</h1>
+<h1>Tài khoản Cinema</h1>
 <div th:if="${session.userLogin}">
     <div id="accountInfo" class="account-info">
         <p><strong>Full Name:</strong> <span th:text="${user.fullname} ?: 'Not provided'"></span></p>
@@ -382,21 +382,25 @@
         </ul>
     </div>
 
-    <button class="toggle-button" onclick="showUpdateProfile()">Update Profile</button>
-    <button class="toggle-button" onclick="showChangePassword()">Change Password</button>
-    <button class="toggle-button" onclick="showOrder()">History Order</button>
-    <button class="toggle-button" onclick="showVoucher()">My Voucher</button>
-    <button class="toggle-button" onclick="showFavoriteList()">Favorite List</button>
-    <button class="toggle-button" onclick="showPendingPayment()">Wait to payment</button>
+    <button class="toggle-button" onclick="showUpdateProfile()">Đổi thông tin</button>
+    <button class="toggle-button" onclick="showChangePassword()">Đổi mật khẩu</button>
+    <button class="toggle-button" onclick="showOrder()">Lịch sử xem</button>
+    <button class="toggle-button" onclick="showVoucher()">Voucher</button>
+    <button class="toggle-button" onclick="showFavoriteList()">Yêu thích</button>
+    <button class="toggle-button" onclick="showPendingPayment()">Chờ thanh toán</button>
 
     <div id="updateProfileSection" class="form-section">
-        <h3>Update Profile</h3>
-        <form id="updateProfileForm" th:action="@{/update-profile}" method="post" onsubmit="return handleSubmit()">
+        <h3>Sửa thông tin</h3>
+        <form id="updateProfileForm"
+              th:action="@{/initiate-update-profile}"
+        method="post"
+        onsubmit="return handleSubmit()">
+
 
         <input type="hidden" name="id" th:value="${user.id} ?: ${session.userLogin?.id}" />
-            <label for="fullname">Full Name:</label>
+            <label for="fullname">Tên:</label>
             <input type="text" id="fullname" name="fullname" th:value="${user.fullname} ?: ${session.userLogin?.fullname}" required />
-            <label for="phone">Phone:</label>
+            <label for="phone">Điện thoại:</label>
             <input type="text" id="phone" name="phone"
                    pattern="^0\d{9}$"
                    title="Số điện thoại phải bắt đầu bằng 0 và gồm 10 chữ số (VD: 0912345678)"
@@ -409,25 +413,25 @@
                 <input type="radio" name="verifyMethod" value="email" checked /> Qua Email
                 <input type="radio" id="smsRadio" name="verifyMethod" value="sms" /> Qua Số điện thoại (OTP)
             </div>
-            <button type="submit">Save Changes</button>
+            <button type="submit">Lưu thay đổi</button>
             <label>Lưu ý: Kiểm tra kỹ lại thông tin trước khi đổi thông tin</label>
         </form>
 
     </div>
 
     <div id="changePasswordForm" class="form-section">
-        <h3>Change Password</h3>
+        <h3>Đổi mật khẩu</h3>
         <form th:action="@{/initiate-change-password}" method="post" onsubmit="return validatePasswordChangeForm()">
-            <label for="currentPassword">Current Password:</label>
+            <label for="currentPassword">Mật khẩu hiện tại:</label>
             <input type="password" id="currentPassword" name="currentPassword" required>
 
-            <label for="newPassword">New Password:</label>
+            <label for="newPassword">Mật khẩu mới:</label>
             <input type="password" id="newPassword" name="newPassword" required>
 
-            <label for="confirmNewPassword">Re-enter New Password:</label>
+            <label for="confirmNewPassword">Nhập lại mật khẩu mới:</label>
             <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
 
-            <button type="submit">Submit</button>
+            <button type="submit">Lưu</button>
             <label>Lưu ý: Mật khẩu mới phải được nhập chính xác hai lần.</label>
         </form>
     </div>
@@ -438,11 +442,11 @@
         <table>
             <tr>
                 <th>Order ID</th>
-                <th>Movie</th>
-                <th>Seat</th>
-                <th>Price(VND)</th>
-                <th>Date</th>
-                <th>Status</th>
+                <th>Phim</th>
+                <th>Ghế</th>
+                <th>Giá(VND)</th>
+                <th>Ngày</th>
+                <th>Trạng thái</th>
             </tr>
             <tr th:each="order : ${orders}">
                 <td th:text="${order.id}"></td>
@@ -490,17 +494,17 @@
         <table th:unless="${vouchers.isEmpty()}">
             <tr>
                 <th>Voucher Code</th>
-                <th>Discount (%)</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Details</th>
+                <th>Giảm giá (%)</th>
+                <th>Bắt đầu</th>
+                <th>Kết thúc</th>
+                <th>Chi tiết</th>
             </tr>
             <tr th:each="voucher : ${vouchers}">
                 <td th:text="${voucher.code}"></td>
                 <td th:text="${voucher.discountPercentage}"></td>
                 <td th:text="${#temporals.format(voucher.startDate, 'yyyy-MM-dd HH:mm')}"></td>
                 <td th:text="${#temporals.format(voucher.endDate, 'yyyy-MM-dd HH:mm')}"></td>
-                <td><a th:href="@{'/voucher/' + ${voucher.id}}">View</a></td>
+                <td><a th:href="@{'/voucher/' + ${voucher.id}}">Xem</a></td>
             </tr>
         </table>
         <label>Chú ý: 🎁 Khám phá ưu đãi đặc biệt dành riêng cho bạn!
@@ -546,8 +550,8 @@
 </div>
 <div th:unless="${session.userLogin}" th:text="'Please log in to view your account.'"></div>
 <div class="links">
-    <a th:href="@{/}">Back to Home</a>
-    <a th:href="@{/log-out}" th:unless="${session.userLogin == null}">Log Out</a>
+    <a th:href="@{/}">Trang chủ</a>
+    <a th:href="@{/log-out}" th:unless="${session.userLogin == null}">Đăng xuất</a>
 </div>
 <!-- Main JS Files -->
 <script th:src="@{/js/jquery_min.js}"></script>

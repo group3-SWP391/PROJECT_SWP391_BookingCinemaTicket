@@ -30,6 +30,10 @@ public class ContactRequest {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public ContactRequest() {
         this.createdAt = LocalDateTime.now();
     }
