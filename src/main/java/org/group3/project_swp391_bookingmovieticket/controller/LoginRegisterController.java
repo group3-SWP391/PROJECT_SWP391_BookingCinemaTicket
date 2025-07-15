@@ -14,6 +14,8 @@ import org.group3.project_swp391_bookingmovieticket.services.GoogleAccountServic
 import org.group3.project_swp391_bookingmovieticket.services.TicketEmailService;
 import org.group3.project_swp391_bookingmovieticket.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,6 +55,7 @@ public class LoginRegisterController {
     public String userLoginPost(@Valid @ModelAttribute("userLoginDTO") UserLoginDTO userLoginDTO,
                                 BindingResult bindingResult,
                                 Model model,
+                                RedirectAttributes redirectAttributes,
                                 HttpServletRequest request) {
 
         String redirectUrl = request.getParameter("redirectUrl");
@@ -70,21 +73,37 @@ public class LoginRegisterController {
         User user = new User();
         user.setEmail(userLoginDTO.getEmailLogin());
         user.setPassword(userLoginDTO.getPasswordLogin());
-        Optional<User> userExist = userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
+        Optional<User> userExist = userService.findByEmailAndPassword(user.getEmail());
+        System.out.println(userExist.get().getPassword()+"sql");
 
         if (userExist.isPresent()) {
+            // So sánh mật khẩu người dùng nhập với mật khẩu đã mã hóa trong CSDL
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
             // lưu user lên session để phân quyền và lấy thông tin
-            request.getSession().setAttribute("userLogin", userExist.get());
-            if (redirectUrl != null && !redirectUrl.isEmpty()) {
-                return "redirect:" + redirectUrl;
+            if (passwordEncoder.matches(userLoginDTO.getPasswordLogin(), userExist.get().getPassword())) {
+                // Lưu thông tin người dùng vào session và phân quyền
+                request.getSession().setAttribute("userLogin", userExist.get());
+                if (redirectUrl != null && !redirectUrl.isEmpty()) {
+                    return "redirect:" + redirectUrl;
+                }
+                System.out.println("Đã đăng nhập thành công");
+                return "redirect:/home";  // Chuyển hướng về trang chủ
+            } else {
+                redirectAttributes.addFlashAttribute("errorLogin", "Invalid password!");
+                redirectAttributes.addFlashAttribute("showLoginModal", true);
+                redirectAttributes.addFlashAttribute("userLoginDTO", userLoginDTO);
+                redirectAttributes.addFlashAttribute("redirectUrl", redirectUrl);
+                System.out.println("Lỗi: Mật khẩu không hợp lệ");
+                return "redirect:/home"
+                        + (redirectUrl != null ? "?redirectUrl=" + URLEncoder.encode(redirectUrl, StandardCharsets.UTF_8) : "?")
+                        + "&showLoginModal=true";
             }
-            System.out.println("đã đưang nhập");
-            return "redirect:/home";
         } else {
-            model.addAttribute("errorLogin", "Invalid username or password");
-            model.addAttribute("showLoginModal", true);
-            model.addAttribute("userLoginDTO", userLoginDTO);
-            model.addAttribute("redirectUrl", redirectUrl);
+            redirectAttributes.addFlashAttribute("errorLogin", "Invalid password!");
+            redirectAttributes.addFlashAttribute("showLoginModal", true);
+            redirectAttributes.addFlashAttribute("userLoginDTO", userLoginDTO);
+            redirectAttributes.addFlashAttribute("redirectUrl", redirectUrl);
             System.out.println("lỗi sai");
             return "redirect:/home"
                     + (redirectUrl != null ? "?redirectUrl=" + URLEncoder.encode(redirectUrl, StandardCharsets.UTF_8) : "?")
@@ -169,10 +188,13 @@ public class LoginRegisterController {
 
         // If code matches, redirect to success page
         if (code.equals(correctCode)) {
+            // Mã hóa mật khẩu
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(userRegisterDTO.getPassword());
             Role customerRole = new Role();
             customerRole.setId(2);
             User user =
-                    new User(userRegisterDTO.getUserName(), userRegisterDTO.getPassword(),
+                    new User(userRegisterDTO.getUserName(), hashedPassword,
                     userRegisterDTO.getFullName(), userRegisterDTO.getEmail(), userRegisterDTO.getPhone());
             user.setRole(customerRole);
             userService.save(user);

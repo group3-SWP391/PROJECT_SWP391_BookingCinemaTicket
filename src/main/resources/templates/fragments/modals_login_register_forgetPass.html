@@ -36,7 +36,8 @@
 
                     <div class="st_form_pop_login_btn float_left"  style="margin-bottom: 5px; padding-top: 100px">
                         <button type="button" class="btn btn-primary" onclick="checkCaptcha()">Log in</button>
-                        <p th:text="${errorLogin}" style="font-weight: bold; color: red"></p>
+                        <p th:if="${errorLogin != null}" th:text="${errorLogin}" style="font-weight: bold; color: red"></p>
+                        <p th:unless="${errorLogin != null}" style="font-weight: bold; color: green;">No login error occurred.</p>
                     </div>
                     <div class="st_form_pop_login_btn float_left">
                         <p th:text="${successMessageRegister}" style="font-weight: bold; color: green"></p>
