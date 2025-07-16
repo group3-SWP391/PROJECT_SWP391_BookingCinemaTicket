@@ -50,7 +50,7 @@ public class PaymentController {
         //Lưu items vào session để xử lý sau khi payos callback lại còn trừ đi
         session.setAttribute("listitems", items);
 
-        double totalPriceFood = 0;
+        Double totalPriceFood = 0.0;
         String popcorn_drink = "";
         for (Map.Entry<String, String> entry : items.entrySet()){
             String quantity = entry.getValue();
@@ -63,6 +63,7 @@ public class PaymentController {
             }
 
         }
+        session.setAttribute("totalPriceFood", totalPriceFood);
         
 
         List<Integer> seatIds = new ArrayList<>();
@@ -93,8 +94,22 @@ public class PaymentController {
 
 
         String seatList = "";
-        for (Seat seat : seats){
-            seatList += seat.getName()+",";
+        for(int i = 0; i < seats.size(); i++){
+            if(!seats.get(i).getIsVip() && i != seats.size() - 1){
+                seatList = seatList  + seats.get(i).getName() + "(" + (optionalSchedule.get().getPrice()) +"VND"+")"+",";
+            } else if (seats.get(i).getIsVip() && i != seats.size() - 1) {
+                seatList = seatList + seats.get(i).getName() + "(" + (optionalSchedule.get().getPrice() + 20000)+" VND"+")"+",";
+
+            }else{
+                if(!seats.get(i).getIsVip()){
+                    seatList = seatList  + seats.get(i).getName() + "(" + (optionalSchedule.get().getPrice())+" VND"+")";
+
+                }else{
+                    seatList = seatList + seats.get(i).getName() + "(" + (optionalSchedule.get().getPrice() + 20000)+" VND"+")";
+
+                }
+
+            }
         }
 
 
@@ -142,7 +157,7 @@ public class PaymentController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        model.addAttribute("messageerror", "Error when creating payment link");
+        model.addAttribute("messageerror", "Có lỗi trong quá trình thanh toán");
         return "employee/error";
 
 

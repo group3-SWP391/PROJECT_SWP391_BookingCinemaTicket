@@ -64,7 +64,9 @@
 </head>
 <body class="font-sans antialiased">
 <div class="container mx-auto px-4 py-8">
-    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Cinema Ticket Sales System</h2>
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Hệ thống bán vé xem phim
+
+    </h2>
 
     <!-- Tabs -->
     <ul class="flex border-b-2 border-blue-600 mb-6" id="ticketTabs" role="tablist">
@@ -76,7 +78,7 @@
                     data-bs-target="#schedule"
                     type="button"
                     role="tab">
-                <a th:href="@{/employee/page}" class="text-current no-underline">Quick showtime search</a>
+                <a th:href="@{/employee/page}" class="text-current no-underline">Lịch chiếu phim</a>
             </button>
         </li>
 
@@ -87,7 +89,17 @@
                     data-bs-target="#available"
                     type="button"
                     role="tab">
-                <a th:href="@{/employee/available-movies}" class="text-current no-underline">List of empty movies</a>
+                <a th:href="@{/employee/available-movies}" class="text-current no-underline">Danh sách phim còn suất hôm nay</a>
+            </button>
+        </li>
+        <li class="mr-2">
+            <button class="tab-button px-6 py-3 text-lg font-medium rounded-t-lg"
+
+                    data-bs-toggle="tab"
+                    data-bs-target="#available"
+                    type="button"
+                    role="tab">
+                <a th:href="@{/employee/verifyticket}" class="text-current no-underline">Xác minh vé</a>
             </button>
         </li>
 
@@ -97,13 +109,13 @@
     <div class="tab-content card p-6">
         <!-- Showtimes Tab -->
         <div class="tab-pane fade show active" id="schedule" role="tabpanel">
-            <h4 class="text-xl font-semibold text-gray-700 mb-6">View Showtime</h4>
-            <h5 class="text-xl font-semibold text-gray-700 mb-6" th:text="${'Branch: ' + branch.name}"></h5>
+            <h4 class="text-xl font-semibold text-gray-700 mb-6">Xem lịch chiếu</h4>
+            <h5 class="text-xl font-semibold text-gray-700 mb-6" th:text="${'Chi nhánh: ' + branch.name}"></h5>
             <form th:action="@{/employee/searchmovie}" method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
 
                 <div>
-                    <label for="filter-movie" class="block text-sm font-medium text-gray-700 mb-1">Movie</label>
+                    <label for="filter-movie" class="block text-sm font-medium text-gray-700 mb-1">Tra cứu phim</label>
                     <input type="text"
                            id="filter-movie"
                            name="movie"
@@ -112,7 +124,7 @@
                 </div>
                 <input type="hidden" name = "branch" th:value="${branch.id}">
                 <div class="flex items-end">
-                    <button type="submit" class="btn-primary w-full py-3 px-6 text-white font-medium rounded-lg">Search</button>
+                    <button type="submit" class="btn-primary w-full py-3 px-6 text-white font-medium rounded-lg">Tìm kiếm</button>
                 </div>
             </form>
 
@@ -122,11 +134,11 @@
                 <table class="table w-full text-sm text-gray-700">
                     <thead>
                     <tr>
-                        <th class="py-3 px-4 text-left">Movie</th>
-                        <th class="py-3 px-4 text-left">Date</th>
-                        <th class="py-3 px-4 text-left">Time</th>
-                        <th class="py-3 px-4 text-left">Status</th>
-                        <th class="py-3 px-4 text-left">Room</th>
+                        <th class="py-3 px-4 text-left">Phim</th>
+                        <th class="py-3 px-4 text-left">Ngày</th>
+                        <th class="py-3 px-4 text-left">Thời gian</th>
+                        <th class="py-3 px-4 text-left">Trạng thái</th>
+                        <th class="py-3 px-4 text-left">Phòng</th>
                         <th class="py-3 px-4 text-left"></th>
                     </tr>
                     </thead>
@@ -146,7 +158,7 @@
                         <td class="py-3 px-4">
                             <a th:if="${schedulemovie.value < schedulemovie.key.room.capacity}"
                                th:href="@{/employee/schedule/selectseat/{id}(id=${schedulemovie.key.id})}"
-                               class="btn-success py-2 px-4 text-white font-medium rounded-lg">Booking</a>
+                               class="btn-success py-2 px-4 text-white font-medium rounded-lg">Đặt vé</a>
                         </td>
                     </tr>
                     </tbody>

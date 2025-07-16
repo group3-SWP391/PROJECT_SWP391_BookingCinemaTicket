@@ -47,6 +47,7 @@
       background-color: #c0392b;
       transform: translateY(-3px);
     }
+
   </style>
 </head>
 <body class="bg-gradient-to-b from-gray-200 to-gray-300">
@@ -61,13 +62,19 @@
     </p>
     <p><strong>MovieName:</strong> <span th:text="${paymentLink.schedule.movie.name}"></span></p>
     <p><strong>Seat:</strong> <span th:text="${paymentLink.seatList}"></span></p>
-    <p><strong>TotalPrice:</strong> <span th:text="${paymentLink.totalPrice}"></span></p>
     <p>
       <strong>Snacks:</strong>
       <span th:text="${#strings.isEmpty(paymentLink.listPopcornDrinkName) ? 'No snacks' : paymentLink.listPopcornDrinkName}"></span>
     </p>
+    <p th:if="${session.totalPriceFood != null}">
+      <strong>TotalPriceSnacks</strong>
+      <span th:text="${#numbers.formatDecimal(session.totalPriceFood, 0, 'COMMA', 0, 'POINT')}"></span>
+
+    </p>
+    <p><strong>TotalPrice:</strong> <span th:text="${paymentLink.totalPrice}"></span></p>
   </div>
-  <button class="btn btn-print mt-4">Print Ticket</button>
+  <button class="btn btn-print mt-4" onclick="window.print()">Print Ticket</button>
+  <button class="btn btn-print mt-4"><a th:href="@{/employee/page}" style="color: white; text-decoration:none" >Back to Home</a></button>
 </div>
 </body>
 </html>

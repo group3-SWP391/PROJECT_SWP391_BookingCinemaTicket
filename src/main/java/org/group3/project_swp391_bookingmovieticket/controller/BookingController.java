@@ -50,8 +50,14 @@ public class BookingController {
             }
             model.addAttribute("seatList", seatDTOList);
             model.addAttribute("schedule", schedule.get());
+            return "employee/seat_selection";
+
+        }else{
+            model.addAttribute("messageerror", "Không tồn tại lịch chiếu bạn tìm kiếm");
+            return "employee/error";
+
         }
-        return "employee/seat_selection";
+
 
 
 

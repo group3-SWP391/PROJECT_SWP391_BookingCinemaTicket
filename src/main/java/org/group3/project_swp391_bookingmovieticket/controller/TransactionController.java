@@ -112,13 +112,13 @@ public class TransactionController {
                 return "redirect:/successpayment";
 
             }else{
-                //say goodbyte
-                model.addAttribute("messageerror", "Giao dịch không hợp lệ hoặc đã bị hủy. Vui lòng thực hiện lại thanh toán nếu bạn muốn tiếp tục.");
+
+                model.addAttribute("messageerror", "Giao dịch này không hợp lệ hoặc đã bị hủy. Để tiếp tục, vui lòng thực hiện thanh toán lại.");
                 return "employee/error";
             }
-         //Không tồn tại orderCode đó cũng say goodbyte
+
         }else{
-            model.addAttribute("messageerror", "Không tồn tại orderCode để xử lý thanh toán");
+            model.addAttribute("messageerror", "Không tìm thấy mã đặt vé để xử lý thanh toán.");
         }
         return "employee/error";
 

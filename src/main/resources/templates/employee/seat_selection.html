@@ -46,59 +46,50 @@
     }
 
     .notification {
-            position: fixed;
-            top: 20px;
-            right: -300px; /* Bắt đầu từ ngoài màn hình */
-            background-color: #ff4d4f; /* Màu nền đỏ để nổi bật */
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            z-index: 1000;
-            animation: slideInOut 3s ease-in-out forwards; /* Hiệu ứng chạy 3 giây */
-        }
+      position: fixed;
+      top: 20px;
+      right: -300px;
+      background-color: #ff4d4f;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      z-index: 1000;
+      animation: slideInOut 3s ease-in-out forwards;
+    }
 
-        /* Hiệu ứng slide in và slide out */
-        @keyframes slideInOut {
-            0% {
-                right: -300px; /* Ở ngoài màn hình */
-            }
-            20% {
-                right: 20px; /* Di chuyển vào trong */
-            }
-            80% {
-                right: 20px; /* Giữ nguyên vị trí */
-            }
-            100% {
-                right: -300px; /* Thụt ra ngoài */
-            }
-        }
+    @keyframes slideInOut {
+      0% { right: -300px; }
+      20% { right: 20px; }
+      80% { right: 20px; }
+      100% { right: -300px; }
+    }
   </style>
 </head>
 <body class="bg-gray-100 font-sans">
 <div class="container mx-auto p-6 space-y-6">
   <!-- Schedule Details -->
   <div class="bg-white p-6 rounded-lg shadow-lg w-full">
-    <h3 class="text-xl font-semibold text-gray-700">Schedule Details</h3>
-    <p class="text-gray-600">Schedule ID: <span th:text="${schedule.id}"></span></p>
-    <p class="text-gray-600">Room: <span th:text="${schedule.room.name}"></span> (<span th:text="${schedule.room.roomType}"></span>)</p>
-    <p class="text-gray-600">Capacity: <span th:text="${schedule.room.capacity}"></span> seats</p>
+    <h3 class="text-xl font-semibold text-gray-700">Chi tiết lịch chiếu</h3>
+    <p class="text-gray-600">ID lịch chiếu: <span th:text="${schedule.id}"></span></p>
+    <p class="text-gray-600">Phòng: <span th:text="${schedule.room.name}"></span> (<span th:text="${schedule.room.roomType}"></span>)</p>
+    <p class="text-gray-600">Sức chứa: <span th:text="${schedule.room.capacity}"></span> seats</p>
   </div>
 
   <!-- Legend -->
   <div class="flex justify-center space-x-4">
-    <div class="flex items-center"><div class="w-5 h-5 bg-green-500 rounded mr-2"></div><span>Available</span></div>
+    <div class="flex items-center"><div class="w-5 h-5 bg-green-500 rounded mr-2"></div><span>Ghế còn trống</span></div>
     <div class="flex items-center"><div class="w-5 h-5 bg-yellow-500 rounded mr-2"></div><span>VIP</span></div>
-    <div class="flex items-center"><div class="w-5 h-5 bg-red-500 rounded mr-2"></div><span>Occupied</span></div>
-    <div class="flex items-center"><div class="w-5 h-5 bg-blue-500 rounded mr-2"></div><span>Selected</span></div>
+    <div class="flex items-center"><div class="w-5 h-5 bg-red-500 rounded mr-2"></div><span>Đã được đặt</span></div>
+    <div class="flex items-center"><div class="w-5 h-5 bg-blue-500 rounded mr-2"></div><span>Đang chọn</span></div>
   </div>
 
-  <!-- SCREEN full width -->
-  <div class="screen w-full">SCREEN</div>
+  <!-- SCREEN -->
+  <div class="screen w-full">Màn hình</div>
 
-  <!-- Ghế + Summary canh giữa -->
+  <!-- Seat Grid + Summary -->
   <div class="flex justify-center">
     <div class="flex flex-col lg:flex-row items-start gap-6">
       <!-- Seat Grid -->
@@ -119,7 +110,7 @@
 
         <!-- Total Price -->
         <div class="text-center mt-6 text-lg font-semibold">
-          Total Price: <span id="totalPrice">0</span> VND
+          Tổng tiền: <span id="totalPrice">0</span> VND
         </div>
 
         <!-- Checkout Form -->
@@ -127,7 +118,7 @@
           <input type="hidden" name="scheduleId" th:value="${schedule.id}" />
           <input type="hidden" name="selectedSeats" id="selectedSeatsInput" />
           <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-            Proceed to Payment
+            Tiếp tục
           </button>
         </form>
       </div>
@@ -135,13 +126,15 @@
       <!-- Summary -->
       <div>
         <div class="summary-box">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">Summary</h3>
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">Tóm tắt</h3>
           <div id="seatSummaryText" class="text-gray-700 space-y-2">
-            <p>No seats selected.</p>
+            <p>Chưa có ghế nào được chọn</p>
           </div>
-          <p class="text-gray-800 font-bold mt-4">Total price: <span id="totalPriceSummary">0</span> VND</p>
+          <p class="text-gray-800 font-bold mt-4">Thành tiền: <span id="totalPriceSummary">0</span> VND</p>
         </div>
       </div>
+
+      <!-- Server-side error -->
       <div class="notification" th:if="${error != null}" th:text="${error}"></div>
     </div>
   </div>
@@ -151,6 +144,8 @@
   const totalPriceElement = document.getElementById('totalPrice');
   const totalPriceSummary = document.getElementById('totalPriceSummary');
   const seatSummaryText = document.getElementById('seatSummaryText');
+  const selectedSeatsInput = document.getElementById('selectedSeatsInput');
+  const checkoutForm = document.getElementById('checkoutForm');
 
   function toggleSeatSelection(element) {
     if (!element.classList.contains('occupied')) {
@@ -192,14 +187,25 @@
     totalPriceSummary.textContent = total.toLocaleString();
   }
 
-  const checkoutForm = document.getElementById('checkoutForm');
-  const selectedSeatsInput = document.getElementById('selectedSeatsInput');
-
-  checkoutForm.addEventListener('submit', function () {
+  checkoutForm.addEventListener('submit', function (event) {
     const selectedSeats = document.querySelectorAll('.seat.selected');
+    if (selectedSeats.length === 0) {
+      event.preventDefault();
+      showNotification("Please select at least one seat before proceeding!");
+      return;
+    }
+
     const seatIds = Array.from(selectedSeats).map(seat => seat.getAttribute('data-seat-id'));
     selectedSeatsInput.value = seatIds.join(',');
   });
+
+  function showNotification(message) {
+    let notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+  }
 
   updateSummary();
 </script>
