@@ -2,203 +2,370 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Manager Staff</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
-    <script th:src="@{/js/jquery.min.js}"></script>
-    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
-<div th:fragment="content" class="dashboard-content">
-    <!-- Nút thêm nhân viên -->
-    <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#employeeModal" onclick="openCreateEmployeeModal()">
-        <i class="fa fa-plus-circle"></i> Add Employee
-    </button>
+<div th:fragment="content" class="employee-stage">
+        <!-- Employee-themed User Icon -->
+        <div class="movie-reel">
+            👥
+        </div>
+        
+        <!-- Dashboard Content Wrapper -->
+        <div class="dashboard-content">
+            <!-- Add Employee Button -->
+            <button type="button" class="btn-add-movie" id="addEmployeeBtn">
+                <i class="fa fa-plus-circle"></i> Add New Employee
+            </button>
 
-    <!-- Tiêu đề -->
-    <h2 class="text-center">Manager Staff</h2>
-
-    <!-- Bảng danh sách nhân viên -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped movie-table">
-            <thead class="thead-dark">
-            <tr>
-                <th>ID</th>
-                <th>Họ tên</th>
-                <th>Tài khoản</th>
-                <th>SĐT</th>
-                <th>Email</th>
-                <th>Vai trò</th>
-                <th>Thao tác</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="e : ${employees}">
-                <td th:text="${e.id}">1</td>
-                <td th:text="${e.fullname}">Tên</td>
-                <td th:text="${e.username}">Tài khoản</td>
-                <td th:text="${e.phone}">SĐT</td>
-                <td th:text="${e.email}">Email</td>
-                <td th:text="${e.role.name}">manager</td>
-                <td>
-                    <button class="btn btn-sm btn-primary"
-                            th:attr="onclick=|showEditModal(${e.id})|">
-                        <i class="fa fa-edit"></i> Edit
-                    </button>
-                    <button class="btn btn-sm btn-danger"
-                            th:attr="onclick=|deleteEmployee(${e.id})|">
-                        <i class="fa fa-trash"></i> Fired
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Modal tạo/sửa nhân viên -->
-<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="employeeModalLabel"><i class="fa fa-user-plus"></i> Nhân viên</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:white">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <!-- Employee Management Header -->
+            <div class="movie-management-header">
+                <h1>
+                    <i class="fa fa-users"></i>
+                    Employee Management System
+                </h1>
             </div>
-            <div class="modal-body">
-                <form id="employeeForm">
-                    <input type="hidden" id="employeeId">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="fullname">Họ tên</label>
-                            <input type="text" class="form-control" id="fullname" name="fullname" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="username">Tài khoản</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="phone">SĐT</label>
-                            <input type="text" class="form-control" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6" id="passwordField">
-                            <label for="password">Mật khẩu</label>
-                            <input type="password" class="form-control" id="password" name="password">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="roleId">Vai trò</label>
-                            <select class="form-control" id="roleId" name="roleId" required>
-                                <option value="">-- Chọn vai trò --</option>
-                                <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}">role</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
-                <button type="button" class="btn btn-primary" onclick="saveEmployee()">Lưu</button>
+
+            <!-- Employee Table Container -->
+            <div class="movie-table-container">
+                <table class="table movie-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Contact</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="e : ${employees}">
+                            <td>
+                                <strong th:text="${e.id}">1</strong>
+                            </td>
+                            <td>
+                                <strong th:text="${e.fullname}">Full Name</strong>
+                                <br>
+                                <small class="text-muted" th:text="${e.username}">username</small>
+                            </td>
+                            <td>
+                                <span th:text="${e.username}">username</span>
+                            </td>
+                            <td>
+                                <span th:text="${e.phone}">Phone</span>
+                                <br>
+                                <small class="text-muted" th:text="${e.email}" th:if="${e.email != null}">email@example.com</small>
+                            </td>
+                            <td>
+                                <span class="room-badge" th:text="${e.role.name}">Role</span>
+                            </td>
+                            <td>
+                                <span th:if="${e.active}" class="badge badge-success">Active</span>
+                                <span th:unless="${e.active}" class="badge badge-danger">Inactive</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button type="button" class="btn-action btn-edit" 
+                                            th:data-employee-id="${e.id}"
+                                            onclick="editEmployee(this.dataset.employeeId)">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </button>
+                                    <button type="button" th:if="${e.active}" class="btn-action btn-delete" 
+                                            th:data-employee-id="${e.id}"
+                                            th:data-employee-name="${e.fullname}"
+                                            onclick="fireEmployee(this.dataset.employeeId, this.dataset.employeeName)">
+                                        <i class="fa fa-user-times"></i> Fire
+                                    </button>
+                                    <button type="button" th:unless="${e.active}" class="btn-action btn-success" 
+                                            th:data-employee-id="${e.id}"
+                                            th:data-employee-name="${e.fullname}"
+                                            onclick="activateEmployee(this.dataset.employeeId, this.dataset.employeeName)">
+                                        <i class="fa fa-user-plus"></i> Activate
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- JavaScript xử lý -->
+        <!-- Employee Modal -->
+        <div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="employeeModalLabel">
+                            <i class="fa fa-user-plus"></i> Add New Employee
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;" onclick="closeEmployeeModal()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="employeeForm" onsubmit="return false;">
+                            <input type="hidden" id="employeeId" name="employeeId">
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeeFullname">Full Name *</label>
+                                        <input type="text" class="form-control" id="employeeFullname" name="fullname" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeeUsername">Username *</label>
+                                        <input type="text" class="form-control" id="employeeUsername" name="username" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeePhone">Phone *</label>
+                                        <input type="text" class="form-control" id="employeePhone" name="phone" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeeEmail">Email</label>
+                                        <input type="email" class="form-control" id="employeeEmail" name="email">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6" id="passwordField">
+                                    <div class="form-group">
+                                        <label for="employeePassword">Password <span id="passwordRequired">*</span></label>
+                                        <input type="password" class="form-control" id="employeePassword" name="password">
+                                        <small class="form-text text-muted" id="passwordHelp" style="display: none;">Leave empty to keep current password</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeeRole">Role *</label>
+                                        <select class="form-control" id="employeeRole" name="roleId" required>
+                                            <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}">Role Name</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEmployeeModal()">Cancel</button>
+                        <button type="button" class="btn-save-movie" onclick="saveEmployee()">Save Employee</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fire Confirmation Modal -->
+        <div class="modal fade" id="confirmFireModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Confirm Fire Employee</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to fire this employee?</p>
+                        <p><strong id="employeeNameToFire"></strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button id="confirmFireBtn" class="btn btn-danger">Fire Employee</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activate Confirmation Modal -->
+        <div class="modal fade" id="confirmActivateModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title">Confirm Activate Employee</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to activate this employee?</p>
+                        <p><strong id="employeeNameToActivate"></strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button id="confirmActivateBtn" class="btn btn-success">Activate Employee</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <script>
-        let deleteId = null;
+        let employeeIdToFire = null;
+
+        // Add Employee Button Click
+        document.getElementById('addEmployeeBtn').addEventListener('click', function() {
+            openCreateEmployeeModal();
+        });
 
         function openCreateEmployeeModal() {
-        $('#employeeForm')[0].reset();
-        $('#employeeId').val('');
-        $('#passwordField').show();
-        $('#employeeModal').modal('show');
-    }
+            document.getElementById('employeeForm').reset();
+            document.getElementById('employeeId').value = '';
+            document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-user-plus"></i> Add New Employee';
+            document.getElementById('passwordField').style.display = 'block';
+            document.getElementById('passwordRequired').style.display = 'inline';
+            document.getElementById('passwordHelp').style.display = 'none';
+            document.getElementById('employeePassword').required = true;
+            $('#employeeModal').modal('show');
+        }
 
-        function showEditModal(id) {
-        fetch(`/api/users/${id}`)
-            .then(res => res.json())
-            .then(data => {
-                $('#employeeId').val(data.id);
-                $('#fullname').val(data.fullname);
-                $('#username').val(data.username);
-                $('#phone').val(data.phone);
-                $('#email').val(data.email);
-                $('#roleId').val(data.role.id);
-                $('#passwordField').hide(); // ẩn mật khẩu khi edit
-                $('#employeeModal').modal('show');
-            });
-    }
+        function editEmployee(id) {
+            fetch(`/manager/employees/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('employeeId').value = data.id;
+                    document.getElementById('employeeFullname').value = data.fullname;
+                    document.getElementById('employeeUsername').value = data.username;
+                    document.getElementById('employeePhone').value = data.phone;
+                    document.getElementById('employeeEmail').value = data.email;
+                    document.getElementById('employeeRole').value = data.role.id;
+                    document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-edit"></i> Edit Employee';
+                    document.getElementById('passwordField').style.display = 'block';
+                    document.getElementById('passwordRequired').style.display = 'none';
+                    document.getElementById('passwordHelp').style.display = 'block';
+                    document.getElementById('employeePassword').required = false;
+                    document.getElementById('employeePassword').value = '';
+                    $('#employeeModal').modal('show');
+                })
+                .catch(error => {
+                    console.error('Error fetching employee:', error);
+                    alert('Error loading employee data');
+                });
+        }
 
         function saveEmployee() {
-        const id = $('#employeeId').val();
-        const employee = {
-        fullname: $('#fullname').val(),
-        username: $('#username').val(),
-        phone: $('#phone').val(),
-        email: $('#email').val(),
-        roleId: $('#roleId').val()
-    };
+            const id = document.getElementById('employeeId').value;
+            const employee = {
+                fullname: document.getElementById('employeeFullname').value,
+                username: document.getElementById('employeeUsername').value,
+                phone: document.getElementById('employeePhone').value,
+                email: document.getElementById('employeeEmail').value,
+                roleId: parseInt(document.getElementById('employeeRole').value)
+            };
 
-        if (id) {
-        fetch(`/manager/employees/${id}`, {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(employee)
-    }).then(() => location.reload());
-    } else {
-        employee.password = $('#password').val();
-        fetch('/manager/employees', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(employee)
-    }).then(() => location.reload());
-    }
-    }
+            if (id) {
+                // Update existing employee
+                const password = document.getElementById('employeePassword').value;
+                if (password && password.trim() !== '') {
+                    employee.password = password;
+                }
+                
+                fetch(`/manager/employees/${id}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(employee)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#employeeModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Error updating employee');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error updating employee');
+                });
+            } else {
+                // Create new employee
+                employee.password = document.getElementById('employeePassword').value;
+                fetch('/manager/employees', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(employee)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#employeeModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Error creating employee');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error creating employee');
+                });
+            }
+        }
 
-        function deleteEmployee(id) {
-        deleteId = id;
-        $('#confirmDeleteModal').modal('show');
-    }
+        function fireEmployee(id, name) {
+            employeeIdToFire = id;
+            document.getElementById('employeeNameToFire').textContent = name;
+            $('#confirmFireModal').modal('show');
+        }
 
-        $('#confirmDeleteBtn').click(function () {
-        if (deleteId) {
-        fetch(`/manager/employees/${deleteId}`, {
-        method: 'DELETE'
-    }).then(() => {
-        $('#confirmDeleteModal').modal('hide');
-        location.reload();
-    });
-    }
-    });
-</script>
+        function activateEmployee(id, name) {
+            employeeIdToFire = id;
+            document.getElementById('employeeNameToActivate').textContent = name;
+            $('#confirmActivateModal').modal('show');
+        }
 
-<!-- Modal xác nhận xoá -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Xác nhận xoá</h5>
-                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xoá nhân viên này?
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
-                <button id="confirmDeleteBtn" class="btn btn-danger">Xoá</button>
-            </div>
-        </div>
-    </div>
+        function closeEmployeeModal() {
+            $('#employeeModal').modal('hide');
+        }
+
+        // Fire confirmation
+        document.getElementById('confirmFireBtn').addEventListener('click', function() {
+            if (employeeIdToFire) {
+                fetch(`/manager/employees/${employeeIdToFire}/fire`, {
+                    method: 'PUT'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#confirmFireModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Error firing employee');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error firing employee');
+                });
+            }
+        });
+
+        // Activate confirmation
+        document.getElementById('confirmActivateBtn').addEventListener('click', function() {
+            if (employeeIdToFire) {
+                fetch(`/manager/employees/${employeeIdToFire}/activate`, {
+                    method: 'PUT'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#confirmActivateModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Error activating employee');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error activating employee');
+                });
+            }
+        });
+    </script>
 </div>
-
 </body>
 </html>

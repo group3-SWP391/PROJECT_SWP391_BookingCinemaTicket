@@ -29,9 +29,9 @@ public class ManagerEmployeeController {
         User manager = (User) session.getAttribute("userLogin");
         if (manager == null) return "redirect:/login";
 
-        List<User> employees = userRepository.findAll();
+        List<User> employees = userRepository.findAllByRole_Name("staff");
         List<Role> roles = roleRepository.findAll();
-
+        roles.removeIf(role -> "manager".equals(role.getName()));
         model.addAttribute("employees", employees);
         model.addAttribute("roles", roles);
         model.addAttribute("content", "manager/employees"); // render vào layout.html
@@ -51,14 +51,22 @@ public class ManagerEmployeeController {
             String email = (String) employeeData.get("email");
             Integer roleId = (Integer) employeeData.get("roleId");
 
-            if (userRepository.findByPhone(phone) != null) {
+            if (userRepository.findByPhone(phone).isPresent()) {
                 response.put("success", false);
                 response.put("message", "Số điện thoại đã tồn tại.");
                 return ResponseEntity.ok(response);
             }
-
+            if (!userRepository.findByUsername(username).isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Tên đăng nhập đã tồn tại.");
+                return ResponseEntity.ok(response);
+            } if (!userRepository.findByEmail(email).isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Email đã tồn tại.");
+                return ResponseEntity.ok(response);
+            }
             Optional<Role> roleOpt = roleRepository.findById(roleId);
-            if (!roleOpt.isPresent()) {
+            if (roleOpt.isEmpty()) {
                 response.put("success", false);
                 response.put("message", "Vai trò không hợp lệ.");
                 return ResponseEntity.ok(response);
@@ -71,6 +79,7 @@ public class ManagerEmployeeController {
             user.setUsername(username);
             user.setEmail(email);
             user.setRole(roleOpt.get());
+            user.setActive(true);
 
             userRepository.save(user);
 
@@ -107,14 +116,58 @@ public class ManagerEmployeeController {
             }
 
             User user = userOpt.get();
-            user.setFullname((String) employeeData.get("fullname"));
-            user.setPhone((String) employeeData.get("phone"));
-            user.setUsername((String) employeeData.get("username"));
-            user.setEmail((String) employeeData.get("email"));
-
+            
+            // Get the new values from request
+            String phone = (String) employeeData.get("phone");
+            String username = (String) employeeData.get("username");
+            String email = (String) employeeData.get("email");
+            String fullname = (String) employeeData.get("fullname");
+            String password = (String) employeeData.get("password");
             Integer roleId = (Integer) employeeData.get("roleId");
+
+            // Check if phone exists and is not the current user's phone
+            Optional<User> existingPhoneUser = userRepository.findByPhone(phone);
+            if (existingPhoneUser.isPresent() && existingPhoneUser.get().getId() != id) {
+                response.put("success", false);
+                response.put("message", "Số điện thoại đã tồn tại.");
+                return ResponseEntity.ok(response);
+            }
+
+            // Check if username exists and is not the current user's username
+            List<User> existingUsernameUsers = userRepository.findByUsername(username);
+            if (!existingUsernameUsers.isEmpty() && existingUsernameUsers.stream().anyMatch(u -> u.getId() != id)) {
+                response.put("success", false);
+                response.put("message", "Tên đăng nhập đã tồn tại.");
+                return ResponseEntity.ok(response);
+            }
+
+            // Check if email exists and is not the current user's email
+            List<User> existingEmailUsers = userRepository.findByEmail(email);
+            if (!existingEmailUsers.isEmpty() && existingEmailUsers.stream().anyMatch(u -> u.getId() != id)) {
+                response.put("success", false);
+                response.put("message", "Email đã tồn tại.");
+                return ResponseEntity.ok(response);
+            }
+
+            // Check if role exists
             Optional<Role> roleOpt = roleRepository.findById(roleId);
-            roleOpt.ifPresent(user::setRole);
+            if (!roleOpt.isPresent()) {
+                response.put("success", false);
+                response.put("message", "Vai trò không hợp lệ.");
+                return ResponseEntity.ok(response);
+            }
+
+            // Update user fields
+            user.setFullname(fullname);
+            user.setPhone(phone);
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setRole(roleOpt.get());
+            
+            // Update password if provided
+            if (password != null && !password.trim().isEmpty()) {
+                user.setPassword(password);
+            }
 
             userRepository.save(user);
 
@@ -128,25 +181,56 @@ public class ManagerEmployeeController {
         }
     }
 
-    // Xoá nhân viên
-    @DeleteMapping("/employees/{id}")
+    // Fire (Deactivate) Employee
+    @PutMapping("/employees/{id}/fire")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> deleteEmployee(@PathVariable int id) {
+    public ResponseEntity<Map<String, Object>> fireEmployee(@PathVariable int id) {
         Map<String, Object> response = new HashMap<>();
         try {
-            if (!userRepository.existsById(id)) {
+            Optional<User> userOpt = userRepository.findById(id);
+            if (!userOpt.isPresent()) {
                 response.put("success", false);
                 response.put("message", "Không tìm thấy nhân viên.");
                 return ResponseEntity.ok(response);
             }
 
-            userRepository.deleteById(id);
+            User user = userOpt.get();
+            user.setActive(false);
+            userRepository.save(user);
+
             response.put("success", true);
-            response.put("message", "Xoá nhân viên thành công.");
+            response.put("message", "Đã sa thải nhân viên thành công.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Lỗi khi xoá: " + e.getMessage());
+            response.put("message", "Lỗi khi sa thải: " + e.getMessage());
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    // Activate Employee
+    @PutMapping("/employees/{id}/activate")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> activateEmployee(@PathVariable int id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<User> userOpt = userRepository.findById(id);
+            if (!userOpt.isPresent()) {
+                response.put("success", false);
+                response.put("message", "Không tìm thấy nhân viên.");
+                return ResponseEntity.ok(response);
+            }
+
+            User user = userOpt.get();
+            user.setActive(true);
+            userRepository.save(user);
+
+            response.put("success", true);
+            response.put("message", "Đã kích hoạt nhân viên thành công.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Lỗi khi kích hoạt: " + e.getMessage());
             return ResponseEntity.ok(response);
         }
     }

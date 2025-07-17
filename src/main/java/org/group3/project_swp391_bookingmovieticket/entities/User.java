@@ -30,4 +30,7 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
 }
