@@ -14,28 +14,28 @@
                             </div>
                             <div class="clearfix"></div>
                             <ul class="dl-menu">
-                                <li class="parent"><a th:href="@{/home}">Home</a></li>
-                                <li class="parent"><a th:href="@{/}" onclick="return false">Movie</a>
+                                <li class="parent"><a th:href="@{/home}">Trang chủ</a></li>
+                                <li class="parent"><a th:href="@{/}" onclick="return false">Phim</a>
                                     <ul class="lg-submenu">
-                                        <li><a th:href="@{/movie/showing(status='now-showing')}">Now-showing</a></li>
-                                        <li><a th:href="@{/movie/showing(status='coming-soon')}">Coming-soon</a></li>
+                                        <li><a th:href="@{/movie/showing(status='now-showing')}">Đang chiếu</a></li>
+                                        <li><a th:href="@{/movie/showing(status='coming-soon')}">Sắp chiếu</a></li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{/}" onclick="return false;">theater</a>
+                                <li class="parent"><a th:href="@{/}" onclick="return false;">Rạp</a>
                                     <ul class="lg-submenu">
                                         <li th:each="location : ${session.allLocationBranch}">
-                                            <a th:href="@{/branch/branch-by-location(locationName=${location})}" th:text="${location}">location</a>
+                                            <a th:href="@{/branch/branch-by-location(locationName=${location})}" th:text="${location}">Địa điểm</a>
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{/}" onclick="return false;">category</a>
+                                <li class="parent"><a th:href="@{/}" onclick="return false;">Thể loại</a>
                                     <ul class="lg-submenu">
                                         <li th:each="category: ${session.categoryAll}">
                                             <a th:href="@{/movie/category/return-view(categoryName=${category})}" th:text="${category}">movie category name</a>
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{/contact}">contact</a></li>
+                                <li class="parent"><a th:href="@{/contact}">Liên hệ</a></li>
                             </ul>
                         </div>
                         <!--dl-menuwrapper -->
@@ -48,15 +48,15 @@
                         <ul>
                             <li>
                                 <div th:if="${session.userLogin == null}">
-                                    <a class="button button--tamaya" data-text="log in" data-toggle="modal"
-                                       data-target="#loginModal" href="#"><span>log in</span></a>
+                                    <a class="button button--tamaya" data-text="Đăng nhập" data-toggle="modal"
+                                       data-target="#loginModal" href="#"><span>Đăng nhập</span></a>
                                 </div>
                                 <div th:if="${session.userLogin != null}">
                                     <a style="background: #1b1b1b" class="btn" th:href="@{none}">
                                         <span style="color: white" th:text="${session.userLogin.username}">User</span>
                                     </a>
                                     <a style="background: #1b1b1b;" class="btn" th:href="@{/log-out}">
-                                        <span style="color: white">Log out</span>
+                                        <span style="color: white">Đăng xuất</span>
                                     </a>
                                 </div>
                             </li>
@@ -67,7 +67,7 @@
                     <div class="con">
                         <form th:action="@{/movie/search}" method="get" class="search-form"
                               style="display: inline-block">
-                            <input type="text" name="movieNameSearch" placeholder="Search movie name....."
+                            <input type="text" name="movieNameSearch" placeholder="Nhập tên phim..."
                                    class="search-input"/>
                             <button type="submit" class="search-btn">
                                 <i class="flaticon-tool"></i>

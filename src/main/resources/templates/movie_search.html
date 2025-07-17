@@ -50,8 +50,8 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="prs_title_heading_wrapper">
                     <ul>
-                        <li><a th:href="@{/home}">Home</a></li>
-                        <li> > Search</li>
+                        <li><a th:href="@{/home}">Trang chủ</a></li>
+                        <li> > Tìm kiếm</li>
                     </ul>
                 </div>
             </div>
@@ -70,25 +70,25 @@
             <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 hidden-sm hidden-xs">
                 <div class="prs_mcc_left_side_wrapper">
                     <div class="prs_mcc_left_searchbar_wrapper">
-                        <input id="movieSearchInput" type="text" placeholder="Search Movie">
+                        <input id="movieSearchInput" type="text" placeholder="Nhập tên phim...">
                         <button onclick="searchMovies()"><i class="flaticon-tool"></i>
                         </button>
                     </div>
                     <div class="prs_mcc_bro_title_wrapper">
-                        <h2>Showing</h2>
+                        <h2>Tình trạng phim</h2>
                         <ul>
                             <li>
                                 <i class="fa fa-play"></i>
-                                <a href="#" onclick="loadNowShowingMovies(); return false;">Now-showing</a>
+                                <a href="#" onclick="loadNowShowingMovies(); return false;">Đang chiếu</a>
                             </li>
                             <li>
                                 <i class="fa fa-play"></i>
-                                <a href="#" onclick="loadNoComingShowingMovies(); return false;">Coming-soon</a>
+                                <a href="#" onclick="loadNoComingShowingMovies(); return false;">Sắp chiếu</a>
                             </li>
                         </ul>
                     </div>
                     <div class="prs_mcc_bro_title_wrapper">
-                        <h2>Category</h2>
+                        <h2>Thể loại</h2>
                         <ul>
                             <li th:each="category : ${session.categoryAll}">
                                 <i class="fa fa-play"></i>
@@ -107,7 +107,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="prs_mcc_right_side_heading_wrapper">
-                                <h2>result</h2>
+                                <h2>Kết quả</h2>
                             </div>
                         </div>
                         <!-- Web Series Slider Start -->
@@ -132,11 +132,9 @@
                                                                     <ul>
                                                                         <li><a title='title' rel='external'
                                                                                class="test-popup-link"
-                                                                               th:href="${movie.trailerURLWatchLink}">View
-                                                                            Trailer</a></li>
+                                                                               th:href="${movie.trailerURLWatchLink}">Xem trailer</a></li>
                                                                         <li>
-                                                                            <a th:href="@{/movie/detail(movieId=${movie.id})}">View
-                                                                                Details</a></li>
+                                                                            <a th:href="@{/movie/detail(movieId=${movie.id})}">Xem chi tiết</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -144,16 +142,16 @@
                                                                  style="flex-grow: 1; margin-top: 10px;">
                                                                 <div class="prs_upcom_movie_content_box_inner">
                                                                     <h3 style="font-size: 1.1rem; font-weight: bold; height: 40px">
-                                                                        <strong>Movie name:</strong> <span
+                                                                        <strong></strong> <span
                                                                             th:text="${movie.name}"></span></h3>
                                                                     <div style="font-size: 0.9rem; color: #333;">
-                                                                        <p><strong>Category:</strong> <span
+                                                                        <p><strong>Thể loại:</strong> <span
                                                                                 th:text="${movie.categories}">Movie category</span>
                                                                         </p>
-                                                                        <p><strong>Duration:</strong> <span
-                                                                                th:text="${movie.duration + ' minutes'}">Movie duration</span>
+                                                                        <p><strong>Thời luọng:</strong> <span
+                                                                                th:text="${movie.duration + ' phút'}">Movie duration</span>
                                                                         </p>
-                                                                        <p><strong>Date:</strong> <span
+                                                                        <p><strong>Ngày khởi chiếu:</strong> <span
                                                                                 th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
                                                                         </p>
                                                                     </div>

@@ -64,6 +64,11 @@
 <header lang="vi" th:include="fragments/navigation :: navigation"></header>
 
 <div id="root">
+    <div th:if="${errorMessageDuplicate != null}">
+        <script type="text/javascript">
+            alert('Bạn hãy hoàn thành thanh toán vừa tạo trước!');
+        </script>
+    </div>
     <div class="container-fluid bg-light" style="padding-top: 20px;">
         <div class="bookTicket__content row mt-5">
             <div class="checkOut__left col-md-9 col-sm-12 p-0">
@@ -74,23 +79,23 @@
                                 <img th:src="${schedule.branch.imgURL}" style="width: 150px; height: 100px">
                                 <div class="theater__name">
                                         	<span class="name">
-                                        		<span class="subname" th:text="'Room '+ ${schedule.room.name}"></span>
+                                        		<span class="subname" th:text="'Phòng '+ ${schedule.room.name}"></span>
                                         	</span>
-                                    <p class="showtime" th:text="'Start date: '+${schedule.startDate}"
+                                    <p class="showtime" th:text="'Ngày bắt đầu: '+${schedule.startDate}"
                                        style="font-size: 15px"></p>
-                                    <p class="showtime" th:text="'Start time: '+${schedule.startTime}"
+                                    <p class="showtime" th:text="'Thời gian bắt đầu: '+${schedule.startTime}"
                                        style="font-size: 15px"></p>
-                                    <p class="showtime" th:text="'Room type: ' + ${schedule.room.roomType}"
+                                    <p class="showtime" th:text="'Định dạng: ' + ${schedule.room.roomType}"
                                        style="font-size: 15px"></p>
                                 </div>
                             </div>
                             <div class="timeKeepSlot">
                                 <p class="title__text mt-2" style="font-size: 20px; font-weight: bold">
-                                    Available seat:
+                                    Còn:
                                     <span th:text="${availableSeats} + ' / ' + ${totalSeats}"></span>
                                 </p>
-                                <p class="title__text" style="font-size: 20px; font-weight: bold">Count down end
-                                    movie</p><span
+                                <p class="title__text" style="font-size: 20px; font-weight: bold">Đếm ngược thời gian
+                                    kết thúc</p><span
                                     class="time" style="font-size: 20px;"></span>
                             </div>
                         </div>
@@ -123,19 +128,20 @@
                             </div>
                             <div class="slot__detail row">
                                 <div class="col-md-3 col-sm-6 col-xs-6"><i
-                                        class="fa fa-couch item--picking"></i><span class="slot__text">The chair is currently being selected.</span>
+                                        class="fa fa-couch item--picking"></i><span
+                                        class="slot__text">Ghế bạn đang chọn</span>
                                 </div>
                                 <div class="col-md-2 col-sm-6 col-xs-6"><i
-                                        class="fa fa-couch item--picked"></i><span class="slot__text">The seat has already been taken.</span>
+                                        class="fa fa-couch item--picked"></i><span class="slot__text">Ghế đã được mua bởi người khác</span>
                                 </div>
                                 <div class="col-md-2 col-sm-6 col-xs-6"><i
                                         class="fa fa-couch item--regular"></i><span
-                                        class="slot__text">Regular chair</span>
+                                        class="slot__text">Ghế thường</span>
                                 </div>
                                 <div class="col-md-2 col-sm-6 col-xs-6"><i class="fa fa-couch item--vip"></i><span
-                                        class="slot__text">Vip chair</span></div>
+                                        class="slot__text">Ghế vip</span></div>
                                 <div class="col-md-3 col-sm-6 col-xs-6"><i class="fa fa-couch item--checked"></i><span
-                                        class="slot__text">Your chair</span></div>
+                                        class="slot__text">Ghế của bạn</span></div>
                             </div>
                         </div>
                     </div>
@@ -145,7 +151,7 @@
                 <div class="checkout__form">
                     <div class="total__price"><span class="price" data-price="0">0₫</span></div>
                     <div class="film__info">
-                        <span class="film__age--C" th:text="'Room ' + ${schedule.room.name}"></span>
+                        <span class="film__age--C" th:text="'Phòng ' + ${schedule.room.name}"></span>
                         <span class="film__name" th:text="${schedule.movie.name}"></span>
                         <p class="film__detail" th:text="${schedule.startDate}+' - '+${schedule.startTime}"></p>
                         <p class="film__detail" th:text="${schedule.room.getRoomType()}"></p>
@@ -154,27 +160,27 @@
                         <p class="film__address" th:text="${schedule.branch.locationDetail}"></p>
                     </div>
                     <div class="count__slot">
-                        <div style="font-weight: bold">The chair is being selected:</div>
+                        <div style="font-weight: bold">Ghế bạn đang chọn:</div>
                         <div class="slot"></div>
                     </div>
                     <div class="discountForm d-flex justify-content-between">
-                        <div class="discountForm__content"><label class="label__name">Discount code</label><input
+                        <div class="discountForm__content"><label class="label__name">Mã giảm giá</label><input
                                 type="text" name="code" id="txtDiscountCode" class="form-control d-inline"
-                                placeholder="Enter here..."></div>
-                        <button id="btnCheckCode" class="btn mb-2">Apply</button>
+                                placeholder="Nhập tại đây...."></div>
+                        <button id="btnCheckCode" class="btn mb-2">Áp dụng</button>
                     </div>
                     <div class="payForm">
                         <a class="pay__link" href="/#">
-                            <p class="text__notification">Please select a seat to display the appropriate payment
-                                method.</p></a>
+                            <p class="text__notification">Vui lòng chọn một chỗ ngồi để hiển thị phương thức thanh toán
+                                phù hợp.</p></a>
                     </div>
                 </div>
                 <div class="textNotification text-center"><i class="fa fa-info-circle text-danger mr-1"></i><span
-                        class="noti__text">The purchased ticket cannot be exchanged or refunded. The ticket code will be sent via message
-                                <span class="noti__link">SMS</span> (Zalo message) and <span
+                        class="noti__text">Vé đã mua không thể đổi hoặc hoàn tiền. Mã vé sẽ được gửi qua tin nhắn
+                                <span class="noti__link">SMS</span> and <span
                             class="noti__link">Email</span>
                                 đã nhập. </span></div>
-                <div id="btn-booking" class="btnBook" type="button">Choose popcorn and drink</div>
+                <div id="btn-booking" class="btnBook" type="button">Chọn bỏng và nước</div>
             </div>
         </div>
     </div>

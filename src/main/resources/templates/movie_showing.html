@@ -50,8 +50,8 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="prs_title_heading_wrapper">
                     <ul>
-                        <li><a th:href="@{/home}">Home</a></li>
-                        <li> > Movie > <span th:text="${status}"></span></li>
+                        <li><a th:href="@{/home}">Trang chủ</a></li>
+                        <li> > Phim > <span th:text="${status}"></span></li>
                     </ul>
                 </div>
             </div>
@@ -69,12 +69,12 @@
             <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 hidden-sm hidden-xs">
                 <div class="prs_mcc_left_side_wrapper">
                     <div class="prs_mcc_left_searchbar_wrapper">
-                        <input id="movieSearchInput" type="text" placeholder="Search Movie">
+                        <input id="movieSearchInput" type="text" placeholder="Nhập tên phim....">
                         <button onclick="searchMovies()"><i class="flaticon-tool"></i>
                         </button>
                     </div>
                     <div class="prs_mcc_bro_title_wrapper">
-                        <h2>Category</h2>
+                        <h2>Thể loại</h2>
                         <ul>
                             <li th:each="category : ${session.categoryAll}">
                                 <i class="fa fa-play"></i>
@@ -118,11 +118,11 @@
                                                                     <ul>
                                                                         <li><a title='title' rel='external'
                                                                                class="test-popup-link"
-                                                                               th:href="${movie.trailerURLWatchLink}">View
+                                                                               th:href="${movie.trailerURLWatchLink}">Xem
                                                                             Trailer</a></li>
                                                                         <li>
-                                                                            <a th:href="@{/movie/detail(movieId=${movie.id})}">View
-                                                                                Details</a></li>
+                                                                            <a th:href="@{/movie/detail(movieId=${movie.id})}">Xem
+                                                                                chi tiết</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -131,15 +131,15 @@
                                                                 <div class="prs_upcom_movie_content_box_inner">
                                                                     <h2
                                                                             style="font-size: 1.1rem; font-weight: bold; height: 40px">
-                                                                        Movie name: <a
-                                                                            th:href="@{/movie/detail(movieId=${movie.id})}"
-                                                                            th:text="${movie.name}"></a></h2>
+                                                                        <a
+                                                                                th:href="@{/movie/detail(movieId=${movie.id})}"
+                                                                                th:text="${movie.name}"></a></h2>
                                                                     <div style="font-size: 0.9rem; color: #333;">
                                                                         <p><strong>Thể loại:</strong> <span
                                                                                 th:text="${movie.categories}">Movie category</span>
                                                                         </p>
                                                                         <p><strong>Thời lượng:</strong> <span
-                                                                                th:text="${movie.duration + ' minutes'}">Movie duration</span>
+                                                                                th:text="${movie.duration + ' phút'}">Movie duration</span>
                                                                         </p>
                                                                         <p><strong>Khởi chiếu:</strong> <span
                                                                                 th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
@@ -153,7 +153,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                         style="display: flex; justify-content: center;">
                                         <div class="pager_wrapper gc_blog_pagination">
                                             <ul class="pagination">
                                                 <!-- Nút Previous -->
@@ -166,7 +167,8 @@
                                                 <!-- Các số trang -->
                                                 <li th:each="i : ${#numbers.sequence(0, movieShowing.totalPages - 1)}"
                                                     th:classappend="${i == movieShowing.number} ? 'active'">
-                                                    <a th:href="@{/movie/showing(status=${status}, page=${i})}" th:text="${i + 1}"></a>
+                                                    <a th:href="@{/movie/showing(status=${status}, page=${i})}"
+                                                       th:text="${i + 1}"></a>
                                                 </li>
 
                                                 <!-- Nút Next -->

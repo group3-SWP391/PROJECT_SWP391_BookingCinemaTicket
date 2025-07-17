@@ -67,11 +67,11 @@ Author: Webstrot
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="prs_title_heading_wrapper">
-                    <h2>Movie Booking</h2>
+                    <h2>Chọn thời gian</h2>
                     <ul>
-                        <li><a th:href="@{/home}">Home</a>
+                        <li><a th:href="@{/home}">Trang chủ</a>
                         </li>
-                        <li>&nbsp;&nbsp; >&nbsp;&nbsp; Movie detail > <span th:text="${movieDetail.name}"></span></li>
+                        <li>&nbsp;&nbsp; >&nbsp;&nbsp; Chi tiết phim > <span th:text="${movieDetail.name}"></span></li>
                     </ul>
                 </div>
             </div>
@@ -128,7 +128,7 @@ Author: Webstrot
                                         data-animation="animated fadeInUp" class=""><i
                                             class="far fa-calendar-alt"></i> 14 Dec, 2025
                                     </li>
-                                    <li th:text="${movieDetail.duration + ' minutes'}"
+                                    <li th:text="${movieDetail.duration + ' phút'}"
                                         data-animation="animated fadeInUp" class=""><i class="far fa-clock"></i> 2
                                         hrs 23 mins
                                     </li>
@@ -150,11 +150,11 @@ Author: Webstrot
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                     <div class="prs_mcc_left_side_wrapper" style="padding-top: 2px">
                         <div class="prs_mcc_bro_title_wrapper">
-                            <h2 style="padding-top: -20px; margin-top: -20px">Location</h2>
+                            <h2 style="padding-top: -20px; margin-top: -20px">Địa điểm</h2>
                             <ul id="locationList">
                                 <li>
                                     <i class="fa fa-play" style="padding-right: 5px"></i>
-                                    <a href="#" data-location="all" onclick="showAllBranches(); return false;">All</a>
+                                    <a href="#" data-location="all" onclick="showAllBranches(); return false;">Tất cả</a>
                                 </li>
                                 <li th:each="location : ${session.allLocationBranch}">
                                     <i class="fa fa-play" style="padding-right: 5px"></i>
@@ -184,7 +184,7 @@ Author: Webstrot
                                                                th:value="${movieDetail.id}"/>
                                                         <select name="startDate" id="select-date"
                                                                 onchange="document.getElementById('select-date-form').submit();">
-                                                            <option th:value="allDate" th:selected="${selectedDate == 'allDate'}">All</option>
+                                                            <option th:value="allDate" th:selected="${selectedDate == 'allDate'}">Tất cả ngày</option>
                                                             <option th:each="startDate : ${allStartDateByMovie}"
                                                                     th:value="${startDate}"
                                                                     th:text="${startDate}"
@@ -278,7 +278,6 @@ Author: Webstrot
 
 <script th:inline="javascript">
     let allBranches = /*[[${branchByMovie}]]*/ [];
-    //const allStartDates = /*[[${allStartDateByMovie}]]*/ [];
 </script>
 <script>
     function showAllBranches() {

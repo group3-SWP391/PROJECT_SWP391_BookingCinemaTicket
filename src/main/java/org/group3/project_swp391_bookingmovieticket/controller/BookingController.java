@@ -40,7 +40,8 @@ public class BookingController {
 
     @GetMapping("/{scheduleId}")
     public String displayRoomAndSeat(@PathVariable("scheduleId") Integer scheduleId,
-                                     Model model, HttpServletRequest request) {
+                                     Model model,
+                                     HttpServletRequest request) {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("userLogin");
 

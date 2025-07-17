@@ -85,7 +85,7 @@ Author: Webstrot
                                              style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: -60px 0;">
                                             <hr style="flex-grow: 1; border: none; border-top: 3px solid black; margin: 0;">
                                             <h2 style="margin: 0; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; font-size: 40px">
-                                                hot movie in month</h2>
+                                                Phim hot trong tháng</h2>
                                             <hr style="flex-grow: 1; border: none; border-top: 3px solid black; margin: 0;">
                                         </div>
 
@@ -104,7 +104,7 @@ Author: Webstrot
                                                                 <ul>
                                                                     <li><a title='title' rel='external'
                                                                            class="test-popup-link"
-                                                                           th:href="${movie.trailerURLWatchLink}">View
+                                                                           th:href="${movie.trailerURLWatchLink}">Xem
                                                                         Trailer</a>
                                                                     </li>
                                                                 </ul>
@@ -125,12 +125,12 @@ Author: Webstrot
                                                                 </a>
                                                             </h4>
                                                             <div style="padding-bottom: 5px;">
-                                                                <span><strong>Language: </strong></span>
+                                                                <span><strong>Ngôn ngữ: </strong></span>
                                                                 <p th:text="${movie.language}"
                                                                    style="height: 40px"></p>
                                                             </div>
                                                             <ul style="padding-top: 15px">
-                                                                <li th:text="${movie.duration + ' minutes'}"></li>
+                                                                <li th:text="${movie.duration + ' phút'}"></li>
                                                                 <li th:text="${movie.releaseDate.toString()}"></li>
                                                             </ul>
                                                         </div>
@@ -201,7 +201,7 @@ Author: Webstrot
                                              padding-left: 70px">
                                             <hr style="flex-grow: 1; border: none; border-top: 3px solid black; margin: 0;">
                                             <h2 style="margin: 0; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; font-size: 40px">
-                                                events</h2>
+                                                Sự kiện</h2>
                                             <hr style="flex-grow: 1; border: none; border-top: 3px solid black; margin: 0;">
                                         </div>
                                     </div>

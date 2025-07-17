@@ -69,7 +69,6 @@ public class MovieController {
             model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
             return "home";
         }
-
         Pageable pageable = PageRequest.of(page, size);
         MovieDTO movieDetail = movieService.findMovieById(movieId);
         model.addAttribute("movieSameCategory", movieService.findByCategory(movieDetail.getCategories(), pageable));
@@ -110,10 +109,10 @@ public class MovieController {
             Pageable pageable = PageRequest.of(page, size);
             if (status.equalsIgnoreCase("now-showing")) {
                 model.addAttribute("movieShowing", movieService.findMovieNowShowing(pageable));
-                model.addAttribute("status", "Now-showing");
+                model.addAttribute("status", "Đang chiếu");
             } else if (status.equalsIgnoreCase("coming-soon")) {
                 model.addAttribute("movieShowing", movieService.findMovieComingSoon(pageable));
-                model.addAttribute("status", "Coming-soon");
+                model.addAttribute("status", "Sắp chiếu");
             }
         }
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());

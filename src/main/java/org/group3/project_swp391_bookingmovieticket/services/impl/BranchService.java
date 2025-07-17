@@ -8,6 +8,10 @@ import org.group3.project_swp391_bookingmovieticket.repositories.IBranchReposito
 import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,7 +39,7 @@ public class BranchService implements IBranchService {
         return branchRepository.findByLocation(locationName)
                 .stream()
                 .map(branch -> modelMapper.map(branch, BranchDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -74,6 +78,7 @@ public class BranchService implements IBranchService {
         }
         return branchDTOList;
     }
+
 
     @Override
     public List<BranchDTO> getBranchByStartDate(Integer movieId, String startDate) {
