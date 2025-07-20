@@ -2,10 +2,10 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.Comment;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.repositories.CommentRepository;
-import org.group3.project_swp391_bookingmovieticket.services.ICommentReactionService;
+import org.group3.project_swp391_bookingmovieticket.entity.Comment;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.repository.CommentRepository;
+import org.group3.project_swp391_bookingmovieticket.service.ICommentReactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +47,6 @@ public class CommentReactionController {
             Comment comment = optionalComment.get();
             reactionService.toggleReaction(comment, user, isLike);
         } else {
-            // Tùy chọn: xử lý khi commentId không hợp lệ
             throw new IllegalArgumentException("Comment không tồn tại với ID: " + commentId);
         }
         return "redirect:/movie-details?id=" + movieId;

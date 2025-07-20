@@ -2,13 +2,13 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.dtos.NotificationDTO;
-import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.*;
-import org.group3.project_swp391_bookingmovieticket.repositories.*;
-import org.group3.project_swp391_bookingmovieticket.services.ICommentReactionService;
-import org.group3.project_swp391_bookingmovieticket.services.ICommentService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.*;
+import org.group3.project_swp391_bookingmovieticket.dto.NotificationDTO;
+import org.group3.project_swp391_bookingmovieticket.dto.UserDTO;
+import org.group3.project_swp391_bookingmovieticket.entity.*;
+import org.group3.project_swp391_bookingmovieticket.repository.*;
+import org.group3.project_swp391_bookingmovieticket.service.ICommentReactionService;
+import org.group3.project_swp391_bookingmovieticket.service.ICommentService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +51,7 @@ public class HomeController {
     private AdvertisingContactRequestRepository advertisingContactRequestRepository;
 
     @Autowired
-    private OrderService orderService;
+    private PaymentLinkService orderService;
 
     @Autowired
     private VoucherService voucherService;
@@ -60,7 +60,7 @@ public class HomeController {
     private VoucherRepository voucherRepository;
 
     @Autowired
-    private OrderRepository orderRepository;
+    private PaymentLinkRepository paymentLinkRepository;
 
     @Autowired
     private IMovieRepository movieRepository;
@@ -143,11 +143,6 @@ public class HomeController {
                                HttpSession session) {
 
         Optional<Movie> optionalMovie = movieRepository.findById(movieId);
-        if (optionalMovie.isEmpty()) {
-            model.addAttribute("error", "Không tìm thấy phim với ID: " + movieId);
-            return "error"; // hoặc redirect về trang chính
-        }
-
         Movie movie = optionalMovie.get();
 
         // Phân trang
@@ -183,7 +178,7 @@ public class HomeController {
         boolean isFavorite = false;
 
         if (user != null) {
-            hasOrdered = orderRepository.existsByUser_IdAndMovieName(user.getId(), movie.getName());
+            hasOrdered = paymentLinkRepository.existsByUser_IdAndMovieName(user.getId(), movie.getName());
             isFavorite = favoriteService.isFavorite(user, movie);
         }
 
@@ -220,35 +215,34 @@ public class HomeController {
             model.addAttribute("notifications", notifications);
 
             // take list order cua user
-            List<Order> orders = orderService.getOrdersByUserId(user.getId());
+            List<PaymentLink> paymentLinks = orderService.getOrdersByUserId(user.getId());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            for (Order order : orders) {
-                if (order.getTransactionDate() != null) {
-                    order.setTransactionDateFormatted(order.getTransactionDate().format(formatter));
+            for (PaymentLink paymentLink : paymentLinks) {
+                if (paymentLink.getTransactionDate() != null) {
+                    paymentLink.setTransactionDateFormatted(paymentLink.getTransactionDate().format(formatter));
                 }
             }
 
-            // Đơn hàng chờ thanh toán
-            List<Order> pendingOrders = orders.stream()
-                    .filter(o -> "PENDING".equalsIgnoreCase(o.getStatus()))
-                    .toList();
+// Đơn hàng chờ thanh toán
+            List<PaymentLink> pendingPaymentLinks = orderService.getPendingOrdersByUserId(user.getId());
+
 
             // Đơn hàng đã thanh toán
-            List<Order> paidOrders = orderService.getPaidOrdersByUserId(user.getId());
+            List<PaymentLink> paidPaymentLinks = orderService.getPaidOrdersByUserId(user.getId());
 
-            // Tổng chi tiêu trong 12 tháng gần nhất
+            // tong tien trong 12 thanh
             BigDecimal totalSpent = orderService.getTotalSpentInLast12Months(user.getId());
             String memberLevel = getMemberLevel(totalSpent);
 
-            // Lấy danh sách voucher và phim yêu thích
+            // List voucher voi yeu thich
             List<Voucher> vouchers = voucherRepository.findAll();
             List<Favorite> favoriteList = favoriteService.getFavorites(user);
 
             // Đẩy dữ liệu ra view
             model.addAttribute("user", user);
-            model.addAttribute("orders", orders);
-            model.addAttribute("pendingOrders", pendingOrders);
-            model.addAttribute("paidOrders", paidOrders);
+            model.addAttribute("paymentLinks", paymentLinks);
+            model.addAttribute("pendingPaymentLinks", pendingPaymentLinks);
+            model.addAttribute("paidPaymentLink", paidPaymentLinks);
             model.addAttribute("vouchers", vouchers);
             model.addAttribute("favoriteList", favoriteList);
             model.addAttribute("userDTO", new UserDTO());
@@ -274,7 +268,6 @@ public class HomeController {
                                     HttpServletRequest request,
                                     HttpSession session) {
         try {
-            // Kiểm tra đăng nhập
             User user = (User) session.getAttribute(SESSION_USER_LOGIN);
             if (user == null) {
                 model.addAttribute("errorMessage", "Vui lòng đăng nhập để gửi khiếu nại hoặc góp ý.");
@@ -282,8 +275,8 @@ public class HomeController {
                 return "contact";
             }
 
-            // Kiểm tra đã từng đặt vé
-            boolean hasOrder = orderRepository.existsByUser_Id(user.getId());
+            // Kiểm tra xem da dat ve bao h chua
+            boolean hasOrder = paymentLinkRepository.existsByUser_Id(user.getId());
             if (!hasOrder) {
                 model.addAttribute("errorMessage", "Bạn cần từng đặt vé trước khi gửi khiếu nại hoặc góp ý.");
                 model.addAttribute("userDTO", new UserDTO());

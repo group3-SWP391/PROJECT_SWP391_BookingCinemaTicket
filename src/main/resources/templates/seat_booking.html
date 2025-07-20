@@ -152,27 +152,27 @@
                         <p class="film__address" th:text="${schedule.branch.locationDetail}"></p>
                     </div>
                     <div class="count__slot">
-                        <div>The chair is being selected:</div>
+                        <div>Ghế đang được lựa chọn:</div>
                         <div class="slot"></div>
                     </div>
                     <div class="discountForm d-flex flex-column">
-                        <label class="label__name">Discount code</label>
-                        <input type="text" id="voucherInput" class="form-control mb-2" placeholder="Enter voucher code">
-                        <button id="btnCheckCode" class="btn btn-primary">Apply</button>
+                        <label class="label__name">Mã giảm giá</label>
+                        <input type="text" id="voucherInput" class="form-control mb-2" placeholder="Nhập mã giảm giá">
+                        <button id="btnCheckCode" class="btn btn-primary">Áp dụng</button>
                     </div>
 
                     <div id="voucherConditions" class="voucher-message"></div>
                     <div id="voucherMessage" class="voucher-message"></div>
                     <div class="payForm">
                         <a class="pay__link" href="/#">
-                            <p class="text__notification">Please select a seat to display the appropriate payment method.</p>
+                            <p class="text__notification">Vui lòng chọn chỗ ngồi để hiển thị phương thức thanh toán phù hợp.</p>
                         </a>
                     </div>
                 </div>
                 <div class="textNotification text-center"><i class="fa fa-info-circle text-danger mr-1"></i><span
-                        class="noti__text">The purchased ticket cannot be exchanged or refunded. The ticket code will be sent via message
-                        <span class="noti__link">SMS</span> (Zalo message) and <span class="noti__link">Email</span> đã nhập.</span></div>
-                <div id="btn-booking" class="btnBook" type="button">Payment</div>
+                        class="noti__text">Vé đã mua không thể đổi hoặc hoàn tiền. Mã vé sẽ được gửi qua tin nhắn.
+                        <span class="noti__link">SMS</span> (Zalo message) và <span class="noti__link">Email</span> đã nhập.</span></div>
+                <div id="btn-booking" class="btnBook" type="button">Thanh toán</div>
             </div>
         </div>
     </div>
@@ -320,7 +320,7 @@
                     const voucherSelect = $("#voucherSelect");
                     voucherSelect.empty().append('<option value="">Select a voucher</option>');
                     if (vouchers.length === 0) {
-                        showVoucherMessage("No valid vouchers available.", "error");
+                        showVoucherMessage("Không có phiếu giảm giá hợp lệ nào.", "error");
                     } else {
                         vouchers.forEach(voucher => {
                             voucherSelect.append(
@@ -373,15 +373,14 @@
             const totalPrice = Number(price.data("price")) / (appliedVoucher ? (1 - appliedVoucher.discountPercentage / 100) : 1);
 
             if (!voucherCode) {
-                showVoucherMessage("Please enter a voucher code.", "error");
+                showVoucherMessage("Vui lòng nhập mã phiếu giảm giá.", "error");
                 return;
             }
             if (!userId) {
-                showVoucherMessage("Please log in to apply a voucher.", "error");
+                showVoucherMessage("Vui lòng đăng nhập để áp dụng phiếu giảm giá.", "error");
                 return;
             }
 
-            // 🔧 Thêm giả định các giá trị khác:
             const event = "Summer2025";      // Có thể lấy từ schedule nếu có
             const ticketType = "VIP";        // Có thể đọc từ ghế người dùng chọn
             const userType = "MEMBER";       // Có thể lấy từ user role/session
@@ -404,7 +403,7 @@
                 },
                 error: function (e) {
                     console.error("Error applying voucher:", e);
-                    showVoucherMessage(e.responseJSON?.message || "Failed to apply voucher.", "error");
+                    showVoucherMessage(e.responseJSON?.message || "Không áp dụng được phiếu giảm giá.", "error");
                 }
             });
         });

@@ -1,13 +1,13 @@
     package org.group3.project_swp391_bookingmovieticket.controller;
 
-    import org.group3.project_swp391_bookingmovieticket.dtos.BranchDTO;
-    import org.group3.project_swp391_bookingmovieticket.entities.Branch;
-    import org.group3.project_swp391_bookingmovieticket.entities.Room;
-    import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
-    import org.group3.project_swp391_bookingmovieticket.repositories.IBranchRepository;
-    import org.group3.project_swp391_bookingmovieticket.repositories.IScheduleRepository;
-    import org.group3.project_swp391_bookingmovieticket.repositories.RoomRepository;
-    import org.group3.project_swp391_bookingmovieticket.services.impl.SeatService;
+    import org.group3.project_swp391_bookingmovieticket.dto.BranchDTO;
+    import org.group3.project_swp391_bookingmovieticket.entity.Branch;
+    import org.group3.project_swp391_bookingmovieticket.entity.Room;
+    import org.group3.project_swp391_bookingmovieticket.entity.Schedule;
+    import org.group3.project_swp391_bookingmovieticket.repository.IBranchRepository;
+    import org.group3.project_swp391_bookingmovieticket.repository.IScheduleRepository;
+    import org.group3.project_swp391_bookingmovieticket.repository.RoomRepository;
+    import org.group3.project_swp391_bookingmovieticket.service.impl.SeatService;
     import org.slf4j.Logger;
     import org.slf4j.LoggerFactory;
     import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +94,6 @@
             }
             logger.info("📌 Filter roomId: {}", roomId);
 
-            // Ngày được chọn (mặc định là hôm nay nếu không chọn)
             if (selectedDate == null) {
                 selectedDate = LocalDate.now();
             }
@@ -118,8 +117,8 @@
                             LocalDateTime showTime = LocalDateTime.of(finalDate, s.getStartTime());
                             return showTime.isAfter(now); // chưa chiếu
                         })
-                        .filter(s -> finalRoomId == null || s.getRoom().getId().equals(finalRoomId)) // lọc theo phòng
-                        .filter(s -> startHour == null || s.getStartTime().getHour() == startHour) // lọc theo giờ
+                        .filter(s -> finalRoomId == null || s.getRoom().getId().equals(finalRoomId)) // loc phong
+                        .filter(s -> startHour == null || s.getStartTime().getHour() == startHour) // loc gio
                         .collect(Collectors.toList());
 
                 Map<Integer, Map<Integer, Integer>> availableSeatsMap = new HashMap<>();
@@ -162,7 +161,7 @@
                 logger.info("ℹ️ No schedules available for filtering.");
             }
 
-            // Thêm danh sách phòng để hiển thị dropdown lọc
+            // Thêm dlist phong de hien thi dropdow
             List<Room> availableRooms = roomRepository.findByBranchId(branchId);
             model.addAttribute("availableRooms", availableRooms);
 

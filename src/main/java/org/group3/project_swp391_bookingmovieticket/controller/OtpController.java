@@ -1,10 +1,10 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.entities.Voucher;
-import org.group3.project_swp391_bookingmovieticket.services.impl.UserService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.VoucherService;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.entity.Voucher;
+import org.group3.project_swp391_bookingmovieticket.service.impl.UserService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.VoucherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class OtpController {
                 return "myAccount";
             }
 
-            // Chuẩn bị user mới để xác nhận OTP
+            // CB tạo usermoi
             User pendingUser = new User(currentUser);
             pendingUser.setFullname(user.getFullname());
             pendingUser.setEmail(user.getEmail());
@@ -53,7 +53,7 @@ public class OtpController {
             session.setAttribute("otp", otp);
             session.setAttribute("pendingUser", pendingUser);
 
-            userService.initiateUpdateProfile(currentUser); // Gửi email
+            userService.initiateUpdateProfile(currentUser);
 
             model.addAttribute("userId", currentUser.getId());
             model.addAttribute("action", "UPDATE_PROFILE_EMAIL");

@@ -1,7 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
-import org.group3.project_swp391_bookingmovieticket.entities.Voucher;
-import org.group3.project_swp391_bookingmovieticket.services.impl.VoucherService;
+import org.group3.project_swp391_bookingmovieticket.entity.Voucher;
+import org.group3.project_swp391_bookingmovieticket.service.impl.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

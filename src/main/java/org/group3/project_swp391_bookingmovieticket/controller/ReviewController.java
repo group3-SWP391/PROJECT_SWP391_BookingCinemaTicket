@@ -1,11 +1,11 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.Movie;
-import org.group3.project_swp391_bookingmovieticket.entities.Review;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.ReviewService;
+import org.group3.project_swp391_bookingmovieticket.entity.Movie;
+import org.group3.project_swp391_bookingmovieticket.entity.Review;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.service.impl.MovieService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -448,13 +448,13 @@
                 <th>Ngày</th>
                 <th>Trạng thái</th>
             </tr>
-            <tr th:each="order : ${orders}">
-                <td th:text="${order.id}"></td>
-                <td th:text="${order.movieName}"></td>
-                <td th:text="${order.seat.name}"></td>
-                <td th:text="${order.price}"></td>
-                <td th:text="${#temporals.format(order.transactionDate, 'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${order.status}"></td>
+            <tr th:each="paymentLink : ${paymentLinks}">
+                <td th:text="${paymentLink.id}"></td>
+                <td th:text="${paymentLink.movieName}"></td>
+                <td th:text="${paymentLink.seat.name}"></td>
+                <td th:text="${paymentLink.price}"></td>
+                <td th:text="${#temporals.format(paymentLink.transactionDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${paymentLink.status}"></td>
             </tr>
         </table>
 
@@ -514,29 +514,29 @@
 
     <div id="pendingPayment" class="form-section">
         <h3>Wait to Payment</h3>
-        <div th:if="${pendingOrders == null or pendingOrders.isEmpty()}">
+        <div th:if="${pendingPaymentLinks == null or pendingPaymentLinks.isEmpty()}">
             <p>Không có đơn nào đang chờ thanh toán.</p>
         </div>
-        <div class="payment-cards" th:if="${pendingOrders != null and !pendingOrders.isEmpty()}">
-            <div class="payment-card" th:each="order : ${pendingOrders}">
+        <div class="payment-cards" th:if="${pendingPaymentLinks != null and !pendingPaymentLinks.isEmpty()}">
+            <div class="payment-card" th:each="paymentLink : ${pendingPaymentLinks}">
                 <div class="card-item">
                     <strong>Seat List:</strong>
-                    <span th:text="${order.seatList} ?: 'N/A'">Ghế</span>
+                    <span th:text="${paymentLink.seatList} ?: 'N/A'">Ghế</span>
                 </div>
                 <div class="card-item">
                     <strong>Popcorn/Drink:</strong>
-                    <span th:text="${order.popcornDrinkList} ?: 'N/A'">Đồ ăn</span>
+                    <span th:text="${paymentLink.popcornDrinkList} ?: 'N/A'">Đồ ăn</span>
                 </div>
                 <div class="card-item">
                     <strong>Total Price:</strong>
-                    <span th:text="${order.totalPrice != null ? order.totalPrice + ' VND' : 'N/A'}">100000 VND</span>
+                    <span th:text="${paymentLink.totalPrice != null ? paymentLink.totalPrice + ' VND' : 'N/A'}">100000 VND</span>
                 </div>
                 <div class="card-item">
                     <strong>Status:</strong>
-                    <span th:text="${order.status} ?: 'N/A'">PENDING</span>
+                    <span th:text="${paymentLink.status} ?: 'N/A'">PENDING</span>
                 </div>
                 <div class="card-item action">
-                    <a th:href="${order.checkOutUrl != null ? order.checkOutUrl : '#'}"
+                    <a th:href="${paymentLink.checkOutUrl != null ? paymentLink.checkOutUrl : '#'}"
                        class="btn btn-success"
                        target="_blank">Thanh toán ngay</a>
                 </div>
