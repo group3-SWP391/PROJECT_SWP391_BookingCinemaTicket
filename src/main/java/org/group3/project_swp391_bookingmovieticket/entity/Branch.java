@@ -19,8 +19,8 @@ public class Branch {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "diaChi")
-    private String diaChi;
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "imgurl")
     private String imgurl;

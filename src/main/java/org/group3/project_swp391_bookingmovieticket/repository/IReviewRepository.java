@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
+public interface IReviewRepository extends JpaRepository<Review, Integer> {
     List<Review> findByMovieId(Integer movieId);
     Optional<Review> findByMovieIdAndUserId(Integer movieId, Integer userId);
     List<Review> findByMovieIdOrderByCreatedAtDesc(Integer movieId);

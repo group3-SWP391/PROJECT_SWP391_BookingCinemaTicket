@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface NotificationRepository extends JpaRepository<Notification, Integer> {
+public interface INotificationRepository extends JpaRepository<Notification, Integer> {
     List<Notification> findByUserIdAndIsReadFalseOrderByCreatedAtDesc(int userId);
     Notification findFirstByUserIdAndMovieIdAndIsReadFalseOrderByCreatedAtDesc(int userId, int movieId);
     List<Notification> findAllByUserIdAndMovieIdAndIsReadFalse(int userId, int movieId);

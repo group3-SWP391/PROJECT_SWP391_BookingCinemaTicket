@@ -39,7 +39,7 @@ public class BranchService implements IBranchService {
 
     @Override
     public void remove(Integer id) {
-
+        // Hiện tại chưa implement
     }
 
     @Override
@@ -48,14 +48,14 @@ public class BranchService implements IBranchService {
     }
 
     @Override
-    public List<Branch> findByDiaChi(String diaChi) {
-        return branchRepository.findByDiaChi(diaChi);
+    public List<Branch> findByLocation(String location) {
+        return branchRepository.findByLocation(location);
     }
 
     @Override
     public List<BranchDTO> findAllBranchesDTO() {
         return branchRepository.findAll().stream()
-                .map(branch -> new BranchDTO(branch.getId(), branch.getName(), branch.getDiaChi()))
+                .map(branch -> new BranchDTO(branch.getId(), branch.getName(), branch.getLocation()))
                 .collect(Collectors.toList());
     }
 

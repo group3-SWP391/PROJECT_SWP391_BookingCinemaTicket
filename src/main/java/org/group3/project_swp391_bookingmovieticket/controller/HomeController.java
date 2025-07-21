@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     @Autowired
-    private NotificationRepository notificationRepository;
+    private INotificationRepository INotificationRepository;
 
     @Autowired
     private EmailService emailService;
@@ -45,10 +45,10 @@ public class HomeController {
     private NotificationService notificationService;
 
     @Autowired
-    private ContactRequestRepository contactRequestRepository;
+    private IContactRequestRepository IContactRequestRepository;
 
     @Autowired
-    private AdvertisingContactRequestRepository advertisingContactRequestRepository;
+    private IAdvertisingContactRequestRepository IAdvertisingContactRequestRepository;
 
     @Autowired
     private PaymentLinkService orderService;
@@ -57,10 +57,10 @@ public class HomeController {
     private VoucherService voucherService;
 
     @Autowired
-    private VoucherRepository voucherRepository;
+    private IVoucherRepository IVoucherRepository;
 
     @Autowired
-    private PaymentLinkRepository paymentLinkRepository;
+    private IPaymentLinkRepository IPaymentLinkRepository;
 
     @Autowired
     private IMovieRepository movieRepository;
@@ -79,11 +79,10 @@ public class HomeController {
         User user = (User) session.getAttribute("userLogin");
 
         if (user == null) {
-            // Nếu chưa đăng nhập, không hiển thị thông báo
             model.addAttribute("notifications", Collections.emptyList());
         } else {
-            // Lấy thông báo chưa đọc từ DB
-            List<Notification> notifications = notificationRepository
+            // Lay tb o database
+            List<Notification> notifications = INotificationRepository
                     .findByUserIdAndIsReadFalseOrderByCreatedAtDesc(user.getId());
 
             // Chuyển sang DTO để hiển thị gọn trong giao diện
@@ -178,7 +177,7 @@ public class HomeController {
         boolean isFavorite = false;
 
         if (user != null) {
-            hasOrdered = paymentLinkRepository.existsByUser_IdAndMovieName(user.getId(), movie.getName());
+            hasOrdered = IPaymentLinkRepository.existsByUser_IdAndMovieName(user.getId(), movie.getName());
             isFavorite = favoriteService.isFavorite(user, movie);
         }
 
@@ -235,10 +234,9 @@ public class HomeController {
             String memberLevel = getMemberLevel(totalSpent);
 
             // List voucher voi yeu thich
-            List<Voucher> vouchers = voucherRepository.findAll();
+            List<Voucher> vouchers = IVoucherRepository.findAll();
             List<Favorite> favoriteList = favoriteService.getFavorites(user);
 
-            // Đẩy dữ liệu ra view
             model.addAttribute("user", user);
             model.addAttribute("paymentLinks", paymentLinks);
             model.addAttribute("pendingPaymentLinks", pendingPaymentLinks);
@@ -276,7 +274,7 @@ public class HomeController {
             }
 
             // Kiểm tra xem da dat ve bao h chua
-            boolean hasOrder = paymentLinkRepository.existsByUser_Id(user.getId());
+            boolean hasOrder = IPaymentLinkRepository.existsByUser_Id(user.getId());
             if (!hasOrder) {
                 model.addAttribute("errorMessage", "Bạn cần từng đặt vé trước khi gửi khiếu nại hoặc góp ý.");
                 model.addAttribute("userDTO", new UserDTO());
@@ -293,7 +291,7 @@ public class HomeController {
             contactRequest.setCreatedAt(LocalDateTime.now());
             contactRequest.setUser(user);
 
-            contactRequestRepository.save(contactRequest);
+            IContactRequestRepository.save(contactRequest);
             System.out.println("Contact request saved successfully. CreatedAt: " + contactRequest.getCreatedAt());
 
             // gui lại ndung theo ycau
@@ -397,7 +395,7 @@ public class HomeController {
             advertisingContactRequest.setCreatedAt(LocalDateTime.now());
 
             System.out.println("Saving AdvertisingContactRequest to database...");
-            advertisingContactRequestRepository.save(advertisingContactRequest);
+            IAdvertisingContactRequestRepository.save(advertisingContactRequest);
             System.out.println("Successfully saved to database. ID: " + advertisingContactRequest.getId());
 
             String emailSubject = "Xác Nhận Yêu Cầu Liên Hệ Quảng Cáo";

@@ -61,7 +61,7 @@
             <input type="text" id="addressSearch" placeholder="Nhập tên địa chỉ..." style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 10px;" autocomplete="off">
             <ul id="addressResults" style="list-style: none; padding: 0;"></ul>
             <div class="address-list" th:each="address : ${addresses}">
-                <a th:href="@{/theater-detail(branchId=${address.id})}" th:text="${address.name + ' - ' + address.diaChi}"></a>
+                <a th:href="@{/theater-detail(branchId=${address.id})}" th:text="${address.name + ' - ' + address.location}"></a>
             </div>
         </div>
     </div>
@@ -111,11 +111,11 @@
         addressList.innerHTML = '';
         if (!keyword) return;
 
-        const results = addresses.filter(addr => (addr.name + ' - ' + addr.diaChi).toLowerCase().includes(keyword));
+        const results = addresses.filter(addr => (addr.name + ' - ' + addr.location).toLowerCase().includes(keyword));
         results.forEach(addr => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.textContent = `${addr.name} - ${addr.diaChi}`;
+            a.textContent = `${addr.name} - ${addr.location}`;
             a.href = `/theater-detail?branchId=${addr.id}`;
             styleLink(a);
             li.appendChild(a);
@@ -126,7 +126,7 @@
     addressInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             const keyword = this.value.trim().toLowerCase();
-            const match = addresses.find(addr => (addr.name + ' - ' + addr.diaChi).toLowerCase() === keyword);
+            const match = addresses.find(addr => (addr.name + ' - ' + addr.location).toLowerCase() === keyword);
             if (match) window.location.href = `/theater-detail?branchId=${match.id}`;
             else alert('Không tìm thấy địa chỉ.');
         }

@@ -3,10 +3,10 @@ package org.group3.project_swp391_bookingmovieticket.service.impl;
 import org.group3.project_swp391_bookingmovieticket.entity.Comment;
 import org.group3.project_swp391_bookingmovieticket.entity.Movie;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
-import org.group3.project_swp391_bookingmovieticket.repository.CommentReactionRepository;
-import org.group3.project_swp391_bookingmovieticket.repository.CommentRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.ICommentReactionRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.ICommentRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.IMovieRepository;
-import org.group3.project_swp391_bookingmovieticket.repository.PaymentLinkRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.IPaymentLinkRepository;
 import org.group3.project_swp391_bookingmovieticket.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,13 +21,13 @@ import java.util.Optional;
 public class CommentService implements ICommentService {
 
     @Autowired
-    private CommentReactionRepository reactionRepository;
+    private ICommentReactionRepository reactionRepository;
 
     @Autowired
-    private CommentRepository commentRepository;
+    private ICommentRepository ICommentRepository;
 
     @Autowired
-    private PaymentLinkRepository paymentLinkRepository;
+    private IPaymentLinkRepository IPaymentLinkRepository;
 
     @Autowired
     private IMovieRepository movieRepository;
@@ -48,18 +48,18 @@ public class CommentService implements ICommentService {
         comment.setCreatedAt(LocalDateTime.now());
         comment.setParent(null);
 
-        commentRepository.save(comment);
+        ICommentRepository.save(comment);
     }
 
     @Override
     public boolean canUserComment(Integer userId, String movieName) {
-        return paymentLinkRepository.existsByUserIdAndMovieTitleAndTransactionDateBefore(
+        return IPaymentLinkRepository.existsByUserIdAndMovieTitleAndTransactionDateBefore(
                 userId, movieName, LocalDateTime.now());
 
     }
     @Override
     public Page<Comment> getCommentsByMovieId(Integer movieId, Pageable pageable) {
-        return commentRepository.findByMovieId(movieId, pageable);
+        return ICommentRepository.findByMovieId(movieId, pageable);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CommentService implements ICommentService {
             throw new IllegalStateException("Bạn cần mua vé và xem phim để trả lời bình luận.");
         }
 
-        Comment parent = commentRepository.findById(parentCommentId)
+        Comment parent = ICommentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new IllegalArgumentException("Bình luận cha không tồn tại."));
 
         Comment reply = new Comment();
@@ -81,11 +81,11 @@ public class CommentService implements ICommentService {
         reply.setCreatedAt(LocalDateTime.now());
         reply.setParent(parent);
 
-        commentRepository.save(reply);
+        ICommentRepository.save(reply);
     }
 
     public void deleteCommentById(Integer commentId) {
-        Optional<Comment> commentOpt = commentRepository.findById(commentId);
+        Optional<Comment> commentOpt = ICommentRepository.findById(commentId);
         if (commentOpt.isPresent()) {
             Comment comment = commentOpt.get();
 
@@ -97,12 +97,12 @@ public class CommentService implements ICommentService {
             // Xóa replies (nếu có)
             if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
                 for (Comment reply : comment.getReplies()) {
-                    commentRepository.delete(reply);
+                    ICommentRepository.delete(reply);
                 }
             }
 
             // Xóa comment chính
-            commentRepository.delete(comment);
+            ICommentRepository.delete(comment);
         }
     }
 

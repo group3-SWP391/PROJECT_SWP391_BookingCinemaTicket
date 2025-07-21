@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface IBranchRepository extends JpaRepository<Branch, Integer> {
-    List<Branch> findByDiaChi(String diaChi);
+    List<Branch> findByLocation(String location);
     List<Branch> findByName(String name);
 }

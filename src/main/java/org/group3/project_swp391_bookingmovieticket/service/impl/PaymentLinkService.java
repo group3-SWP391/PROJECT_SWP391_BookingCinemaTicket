@@ -21,13 +21,13 @@ public class PaymentLinkService implements IPaymentLinkService {
     private static final Logger logger = LoggerFactory.getLogger(PaymentLinkService.class);
 
     @Autowired
-    private PaymentLinkRepository paymentLinkRepository;
+    private IPaymentLinkRepository IPaymentLinkRepository;
     @Autowired
     private VoucherService voucherService;
     @Autowired
     private IUserRepository userRepository;
     @Autowired
-    private BillRepository billRepository;
+    private IBillRepository IBillRepository;
     @Autowired
     private SeatRepository seatRepository;
     @Autowired
@@ -37,17 +37,17 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Override
     public List<PaymentLink> getAllOrders() {
-        return paymentLinkRepository.findAll();
+        return IPaymentLinkRepository.findAll();
     }
 
     @Override
     public Optional<PaymentLink> getOrderById(Integer id) {
-        return paymentLinkRepository.findById(id);
+        return IPaymentLinkRepository.findById(id);
     }
 
     @Override
     public List<PaymentLink> getPaidOrdersByUserId(Integer userId) {
-        return paymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
+        return IPaymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PaymentLinkService implements IPaymentLinkService {
 
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Bill bill = billRepository.findById(dto.getBillId())
+        Bill bill = IBillRepository.findById(dto.getBillId())
                 .orElseThrow(() -> new IllegalArgumentException("Bill not found"));
         Seat seat = seatRepository.findById(dto.getSeatId())
                 .orElseThrow(() -> new IllegalArgumentException("Seat not found"));
@@ -72,7 +72,7 @@ public class PaymentLinkService implements IPaymentLinkService {
                 dto.getStatus()
         );
 
-        PaymentLink savedPaymentLink = paymentLinkRepository.save(paymentLink);
+        PaymentLink savedPaymentLink = IPaymentLinkRepository.save(paymentLink);
 
         try {
             voucherService.generateVoucherForUser(user.getId());
@@ -86,12 +86,12 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Override
     public PaymentLink updateOrder(Integer id, PaymentLinkDTO dto) {
-        Optional<PaymentLink> optional = paymentLinkRepository.findById(id);
+        Optional<PaymentLink> optional = IPaymentLinkRepository.findById(id);
         if (optional.isPresent()) {
             PaymentLink paymentLink = optional.get();
 
             paymentLink.setUser(userRepository.findById(dto.getUserId()).orElseThrow());
-            paymentLink.setBill(billRepository.findById(dto.getBillId()).orElseThrow());
+            paymentLink.setBill(IBillRepository.findById(dto.getBillId()).orElseThrow());
             paymentLink.setMovieName(dto.getMovieName());
             paymentLink.setSeat(seatRepository.findById(dto.getSeatId()).orElseThrow());
 
@@ -99,15 +99,15 @@ public class PaymentLinkService implements IPaymentLinkService {
             paymentLink.setTransactionDate(dto.getTransactionDate() != null ? dto.getTransactionDate() : paymentLink.getTransactionDate());
             paymentLink.setStatus(dto.getStatus());
 
-            return paymentLinkRepository.save(paymentLink);
+            return IPaymentLinkRepository.save(paymentLink);
         }
         throw new RuntimeException("Order not found with id: " + id);
     }
 
     @Override
     public void deleteOrder(Integer id) {
-        if (paymentLinkRepository.existsById(id)) {
-            paymentLinkRepository.deleteById(id);
+        if (IPaymentLinkRepository.existsById(id)) {
+            IPaymentLinkRepository.deleteById(id);
         } else {
             throw new RuntimeException("Order not found with id: " + id);
         }
@@ -115,17 +115,17 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Override
     public List<PaymentLink> getOrdersByUserId(Integer userId) {
-        return paymentLinkRepository.findByUserId(userId);
+        return IPaymentLinkRepository.findByUserId(userId);
     }
 
     public PaymentLink saveOrder(PaymentLink paymentLink) {
-        PaymentLink savedPaymentLink = paymentLinkRepository.save(paymentLink);
+        PaymentLink savedPaymentLink = IPaymentLinkRepository.save(paymentLink);
         voucherService.generateVoucherForUser(paymentLink.getUser().getId());
         return savedPaymentLink;
     }
 
     public void checkAndNotifyWatchedMoviesForUser(Integer userId) {
-        List<PaymentLink> paidPaymentLinks = paymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
+        List<PaymentLink> paidPaymentLinks = IPaymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
 
         for (PaymentLink paymentLink : paidPaymentLinks) {
 
@@ -147,7 +147,7 @@ public class PaymentLinkService implements IPaymentLinkService {
     }
 
     public BigDecimal getTotalSpentInLast12Months(Integer userId) {
-        List<PaymentLink> paidPaymentLinks = paymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
+        List<PaymentLink> paidPaymentLinks = IPaymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
         LocalDateTime twelveMonthsAgo = LocalDateTime.now().minusMonths(12);
 
         return paidPaymentLinks.stream()
@@ -159,7 +159,7 @@ public class PaymentLinkService implements IPaymentLinkService {
     }
     @Override
     public List<PaymentLink> getPendingOrdersByUserId(Integer userId) {
-        return paymentLinkRepository.findByUserIdAndStatus(userId, "PENDING");
+        return IPaymentLinkRepository.findByUserIdAndStatus(userId, "PENDING");
     }
 
 }

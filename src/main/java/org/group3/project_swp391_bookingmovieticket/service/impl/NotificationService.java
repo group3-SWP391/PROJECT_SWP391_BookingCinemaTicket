@@ -4,7 +4,7 @@ import org.group3.project_swp391_bookingmovieticket.dto.NotificationDTO;
 import org.group3.project_swp391_bookingmovieticket.entity.Movie;
 import org.group3.project_swp391_bookingmovieticket.entity.Notification;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
-import org.group3.project_swp391_bookingmovieticket.repository.NotificationRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.INotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class NotificationService {
 
     @Autowired
-    private NotificationRepository notificationRepository;
+    private INotificationRepository INotificationRepository;
 
     public void addNotification(User user, Movie movie) {
         Notification notify = new Notification();
@@ -25,17 +25,17 @@ public class NotificationService {
         notify.setMessage("Bạn vừa xem \"" + movie.getName() + "\". Hãy để lại đánh giá!");
         notify.setRead(false);
         notify.setCreatedAt(new Date());
-        notificationRepository.save(notify);
+        INotificationRepository.save(notify);
     }
-
+//add timer add notification neu dat ve nhung ko xem
     public List<NotificationDTO> getUnreadNotifications(int userId) {
-        List<Notification> notifications = notificationRepository.findByUserIdAndIsReadFalseOrderByCreatedAtDesc(userId);
+        List<Notification> notifications = INotificationRepository.findByUserIdAndIsReadFalseOrderByCreatedAtDesc(userId);
         return notifications.stream()
                 .map(n -> new NotificationDTO(n.getMessage(), n.getMovie().getId()))
                 .collect(Collectors.toList());
     }
 
     public Notification getUnreadNotificationByUserAndMovie(int userId, int movieId) {
-        return notificationRepository.findFirstByUserIdAndMovieIdAndIsReadFalseOrderByCreatedAtDesc(userId, movieId);
+        return INotificationRepository.findFirstByUserIdAndMovieIdAndIsReadFalseOrderByCreatedAtDesc(userId, movieId);
     }
 }

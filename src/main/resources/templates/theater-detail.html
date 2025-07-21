@@ -338,7 +338,7 @@
 
 <div class="container">
     <h1>THEATER</h1>
-    <h2 th:text="${branch.name} + ' - ' + ${branch.diaChi}"></h2>
+    <h2 th:text="${branch.name} + ' - ' + ${branch.location}"></h2>
     <div class="theater-info">
         <img th:src="${branch.imgurl}" alt="Theater Image" th:if="${!#strings.isEmpty(branch.imgurl)}"/>
     </div>

@@ -15,7 +15,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class BranchDTO {
     private int id;
-    private String diaChi;
+    private String location;
     private String imgURL;
     private String name;
     private String phoneNo;
@@ -31,10 +31,10 @@ public class BranchDTO {
     @ToString.Exclude
     private Map<String, List<ScheduleDTO>> groupedScheduleByRoomName;
 
-    public BranchDTO(int id, String name, String diaChi) {
+    public BranchDTO(int id, String name, String location) {
         this.id = id;
         this.name = name;
-        this.diaChi = diaChi;
+        this.location = location;
     }
 
 }

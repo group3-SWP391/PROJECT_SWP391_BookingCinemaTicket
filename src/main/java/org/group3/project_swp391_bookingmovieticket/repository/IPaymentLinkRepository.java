@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface PaymentLinkRepository extends JpaRepository<PaymentLink, Integer> {
+public interface IPaymentLinkRepository extends JpaRepository<PaymentLink, Integer> {
 
     // Tìm đơn hàng theo user id
     @Query("SELECT o FROM PaymentLink o WHERE o.user.id = :userId")

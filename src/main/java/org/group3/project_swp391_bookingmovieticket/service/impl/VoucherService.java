@@ -1,8 +1,8 @@
 package org.group3.project_swp391_bookingmovieticket.service.impl;
 
 import org.group3.project_swp391_bookingmovieticket.entity.Voucher;
-import org.group3.project_swp391_bookingmovieticket.repository.PaymentLinkRepository;
-import org.group3.project_swp391_bookingmovieticket.repository.VoucherRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.IPaymentLinkRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.IVoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -18,15 +18,15 @@ public class VoucherService {
     private static final Logger logger = LoggerFactory.getLogger(VoucherService.class);
 
     @Autowired
-    private VoucherRepository voucherRepository;
+    private IVoucherRepository IVoucherRepository;
 
     @Autowired
-    private PaymentLinkRepository paymentLinkRepository;
+    private IPaymentLinkRepository IPaymentLinkRepository;
 
     public void generateVoucherForUser(Integer userId) {
         logger.debug("Generating voucher for userId: {}", userId);
-        long orderCount = paymentLinkRepository.countByUserId(userId);
-        long voucherCount = voucherRepository.countByUserId(userId);
+        long orderCount = IPaymentLinkRepository.countByUserId(userId);
+        long voucherCount = IVoucherRepository.countByUserId(userId);
         logger.debug("Order count: {}, Voucher count: {}", orderCount, voucherCount);
 
         if (orderCount == 1 && voucherCount == 0) {
@@ -48,7 +48,7 @@ public class VoucherService {
             voucher.setMaxUsageCount(100);
             voucher.setCurrentUsageCount(0);
             try {
-                voucherRepository.save(voucher);
+                IVoucherRepository.save(voucher);
                 logger.info("Voucher created successfully: {}", code);
             } catch (Exception e) {
                 logger.error("Failed to save voucher for userId: {}. Error: {}", userId, e.getMessage());
@@ -64,12 +64,12 @@ public class VoucherService {
             logger.warn("Invalid userId: 0. Returning empty voucher list.");
             return List.of();
         }
-        return voucherRepository.findValidVouchersByUserId(userId, LocalDateTime.now());
+        return IVoucherRepository.findValidVouchersByUserId(userId, LocalDateTime.now());
     }
 
     public Voucher applyVoucher(Integer userId, String voucherCode, double totalAmount) {
         logger.debug("Applying voucher {} for userId: {}", voucherCode, userId);
-        List<Voucher> validVouchers = voucherRepository.findValidVouchersByUserId(userId, LocalDateTime.now());
+        List<Voucher> validVouchers = IVoucherRepository.findValidVouchersByUserId(userId, LocalDateTime.now());
         Voucher voucher = validVouchers.stream()
                 .filter(v -> v.getCode().equals(voucherCode))
                 .findFirst()
@@ -87,7 +87,7 @@ public class VoucherService {
         logger.debug("Applying voucher {} for userId: {}", voucherCode, userId);
 
         // Kiểm tra theo các điều kiện voucher
-        Voucher voucher = voucherRepository.findByCode(voucherCode)
+        Voucher voucher = IVoucherRepository.findByCode(voucherCode)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid voucher code"));
 
         if (voucher.isUsed() || voucher.getCurrentUsageCount() >= voucher.getMaxUsageCount()) {
@@ -140,7 +140,7 @@ public class VoucherService {
         }
 
         try {
-            voucherRepository.save(voucher);
+            IVoucherRepository.save(voucher);
             logger.info("Voucher {} applied successfully for userId: {}", voucherCode, userId);
         } catch (Exception e) {
             logger.error("Failed to save voucher update for code: {}. Error: {}", voucherCode, e.getMessage());
@@ -153,14 +153,14 @@ public class VoucherService {
 
     public Voucher getVoucherByCode(String code) {
         logger.debug("Fetching voucher by code: {}", code);
-        return voucherRepository.findByCode(code).orElse(null);
+        return IVoucherRepository.findByCode(code).orElse(null);
     }
 
     public List<Voucher> getAllVouchers() {
-        return voucherRepository.findAll();
+        return IVoucherRepository.findAll();
     }
     public Voucher getVoucherById(Integer id) {
-        return voucherRepository.findById(id)
+        return IVoucherRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Voucher not found with ID: " + id));
     }
 

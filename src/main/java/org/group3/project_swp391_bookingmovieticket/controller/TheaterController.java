@@ -6,7 +6,7 @@
     import org.group3.project_swp391_bookingmovieticket.entity.Schedule;
     import org.group3.project_swp391_bookingmovieticket.repository.IBranchRepository;
     import org.group3.project_swp391_bookingmovieticket.repository.IScheduleRepository;
-    import org.group3.project_swp391_bookingmovieticket.repository.RoomRepository;
+    import org.group3.project_swp391_bookingmovieticket.repository.IRoomRepository;
     import org.group3.project_swp391_bookingmovieticket.service.impl.SeatService;
     import org.slf4j.Logger;
     import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@
         private IBranchRepository branchRepository;
 
         @Autowired
-        private RoomRepository roomRepository;
+        private IRoomRepository IRoomRepository;
 
         @Autowired
         private IScheduleRepository scheduleRepository;
@@ -52,7 +52,7 @@
             if (selectedName != null && !selectedName.isEmpty()) {
                 List<BranchDTO> addresses = branchRepository.findByName(selectedName)
                         .stream()
-                        .map(branch -> new BranchDTO(branch.getId(), branch.getName(), branch.getDiaChi()))
+                        .map(branch -> new BranchDTO(branch.getId(), branch.getName(), branch.getLocation()))
                         .collect(Collectors.toList());
                 model.addAttribute("addresses", addresses);
             }
@@ -162,7 +162,7 @@
             }
 
             // Thêm dlist phong de hien thi dropdow
-            List<Room> availableRooms = roomRepository.findByBranchId(branchId);
+            List<Room> availableRooms = IRoomRepository.findByBranchId(branchId);
             model.addAttribute("availableRooms", availableRooms);
 
             model.addAttribute("selectedRoomId", roomId);

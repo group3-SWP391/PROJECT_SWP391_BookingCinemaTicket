@@ -1,7 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.service.impl;
 
 import org.group3.project_swp391_bookingmovieticket.entity.Review;
-import org.group3.project_swp391_bookingmovieticket.repository.ReviewRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.IReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class ReviewService {
     @Autowired
-    private ReviewRepository reviewRepo;
+    private IReviewRepository reviewRepo;
 
     public boolean hasUserReviewed(Integer userId, Integer movieId) {
         return reviewRepo.findByMovieIdAndUserId(movieId, userId).isPresent();

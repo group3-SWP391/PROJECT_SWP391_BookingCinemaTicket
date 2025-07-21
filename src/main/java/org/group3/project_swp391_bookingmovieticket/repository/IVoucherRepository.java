@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VoucherRepository extends JpaRepository<Voucher, Integer> {
+public interface IVoucherRepository extends JpaRepository<Voucher, Integer> {
 
     @Query("SELECT v FROM Voucher v WHERE v.userId = :userId AND v.endDate > :currentDateTime AND v.startDate <= :currentDateTime")
     List<Voucher> findValidVouchersByUserId(@Param("userId") Integer userId, @Param("currentDateTime") LocalDateTime currentDateTime);

@@ -3,7 +3,7 @@ package org.group3.project_swp391_bookingmovieticket.service.impl;
 import org.group3.project_swp391_bookingmovieticket.entity.Favorite;
 import org.group3.project_swp391_bookingmovieticket.entity.Movie;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
-import org.group3.project_swp391_bookingmovieticket.repository.FavoriteRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.IFavoriteRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.IMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class FavoriteService {
 
     @Autowired
-    private FavoriteRepository favoriteRepository;
+    private IFavoriteRepository IFavoriteRepository;
 
     @Autowired
     private IMovieRepository movieRepository;
@@ -25,24 +25,24 @@ public class FavoriteService {
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy phim"));
 
-        Optional<Favorite> existing = favoriteRepository.findByUserAndMovie(user, movie);
+        Optional<Favorite> existing = IFavoriteRepository.findByUserAndMovie(user, movie);
         if (existing.isPresent()) {
-            favoriteRepository.delete(existing.get());
+            IFavoriteRepository.delete(existing.get());
         } else {
             Favorite favorite = new Favorite();
             favorite.setUser(user);
             favorite.setMovie(movie);
             favorite.setCreatedAt(LocalDateTime.now());
-            favoriteRepository.save(favorite);
+            IFavoriteRepository.save(favorite);
         }
     }
 
     public boolean isFavorite(User user, Movie movie) {
-        return favoriteRepository.existsByUserAndMovie(user, movie);
+        return IFavoriteRepository.existsByUserAndMovie(user, movie);
     }
 
     public List<Favorite> getFavorites(User user) {
-        return favoriteRepository.findAllByUser(user);
+        return IFavoriteRepository.findAllByUser(user);
     }
 }
 

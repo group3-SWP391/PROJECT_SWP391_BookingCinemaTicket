@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.entity.Comment;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
-import org.group3.project_swp391_bookingmovieticket.repository.CommentRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.ICommentRepository;
 import org.group3.project_swp391_bookingmovieticket.service.ICommentReactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ public class CommentReactionController {
     private ICommentReactionService reactionService;
 
     @Autowired
-    private CommentRepository commentRepository;
+    private ICommentRepository ICommentRepository;
 
     @PostMapping("/like")
     public String likeComment(@RequestParam("commentId") Integer commentId,
@@ -42,7 +42,7 @@ public class CommentReactionController {
         User user = (User) session.getAttribute("userLogin");
         if (user == null) return "redirect:/login";
 
-        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        Optional<Comment> optionalComment = ICommentRepository.findById(commentId);
         if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();
             reactionService.toggleReaction(comment, user, isLike);

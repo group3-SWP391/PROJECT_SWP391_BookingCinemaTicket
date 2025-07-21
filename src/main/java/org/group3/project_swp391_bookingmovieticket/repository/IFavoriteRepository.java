@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
+public interface IFavoriteRepository extends JpaRepository<Favorite, Long> {
     Optional<Favorite> findByUserAndMovie(User user, Movie movie);
     List<Favorite> findAllByUser(User user);
     boolean existsByUserAndMovie(User user, Movie movie);
