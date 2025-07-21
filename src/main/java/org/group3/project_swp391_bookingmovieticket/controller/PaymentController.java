@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.payos.PayOS;
 import vn.payos.type.CheckoutResponseData;
 import vn.payos.type.PaymentData;
@@ -41,7 +42,7 @@ public class PaymentController {
     private IPaymentLinkService iPaymentLinkService;
 
     @PostMapping("/checkout")
-    public String handleCheckout(HttpServletRequest request, Model model, @RequestParam Map<String, String> items)
+    public String handleCheckout(HttpServletRequest request, Model model, @RequestParam Map<String, String> items, RedirectAttributes redirectAttributes)
                                   {
         HttpSession session = request.getSession();
         String selectedSeats = (String)session.getAttribute("listseat");
@@ -88,8 +89,8 @@ public class PaymentController {
 
         // Nếu có bất kỳ ghế nào trùng thì báo lỗi
         if (seatIds.stream().map(Integer::intValue).anyMatch(bookedSeatIds::contains)) {
-            session.setAttribute("error", "");
-            return "employee/seat_selection";
+            model.addAttribute("messageerror", "Rất tiếc! Ghế bạn chọn đã được đặt bởi người khác. Vui lòng chọn ghế khác.");
+            return "employee/error";
         }
 
 
@@ -130,7 +131,7 @@ public class PaymentController {
         long orderCode = Long.parseLong(combined);
 
         String baseUrl = getBaseUrl(request);
-        String returnUrl = baseUrl + "/bill/create_bill";
+        String returnUrl = baseUrl + "/bill/create_bill"; // localhost:8080/bill/create_bill
         String cancelUrl = baseUrl + "/bill/cancel_screen";
 
         PaymentData paymentData = PaymentData.builder()
@@ -174,5 +175,6 @@ public class PaymentController {
         }
         url += contextPath;
         return url;
+
     }
 }

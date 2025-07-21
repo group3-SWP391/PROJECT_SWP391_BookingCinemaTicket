@@ -65,7 +65,7 @@ public class StaffHomePageController {
                 String  idMovie = optionalMovie.get().getName();
                 //Lấy lịch trình của ngày hiện tại cùng với 3 ngày sau đó
                 LocalDate today = LocalDate.now();
-                LocalDate threeDay = today.plusDays(6);
+                LocalDate threeDay = today.plusDays(10);
                 List<Schedule> scheduleList = iScheduleService.findSchedulesByBranchMovieAndDateRange(idBranch, idMovie, today, threeDay);
                 HashMap<Schedule, Integer> ticketIntegerHashMap = iScheduleService.getTicketCountBySchedule(scheduleList);
                 model.addAttribute("moviesearch", movie);
