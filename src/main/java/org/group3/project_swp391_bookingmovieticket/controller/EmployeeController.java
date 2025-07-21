@@ -1,14 +1,13 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
-import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.Branch;
-import org.group3.project_swp391_bookingmovieticket.entities.Role;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.repositories.IBranchRepository;
-import org.group3.project_swp391_bookingmovieticket.services.IBillService;
-import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
-import org.group3.project_swp391_bookingmovieticket.services.IRoleService;
-import org.group3.project_swp391_bookingmovieticket.services.IUserService;
+import org.group3.project_swp391_bookingmovieticket.dto.UserDTO;
+import org.group3.project_swp391_bookingmovieticket.entity.Branch;
+import org.group3.project_swp391_bookingmovieticket.entity.Role;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.service.IBillService;
+import org.group3.project_swp391_bookingmovieticket.service.IBranchService;
+import org.group3.project_swp391_bookingmovieticket.service.IRoleService;
+import org.group3.project_swp391_bookingmovieticket.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

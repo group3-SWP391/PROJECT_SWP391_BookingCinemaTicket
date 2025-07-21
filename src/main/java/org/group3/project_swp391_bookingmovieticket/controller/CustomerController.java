@@ -1,11 +1,11 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 
-import org.group3.project_swp391_bookingmovieticket.entities.Ticket;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
+import org.group3.project_swp391_bookingmovieticket.entity.Ticket;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
 
-import org.group3.project_swp391_bookingmovieticket.services.ITicketService;
-import org.group3.project_swp391_bookingmovieticket.services.IUserService;
+import org.group3.project_swp391_bookingmovieticket.service.ITicketService;
+import org.group3.project_swp391_bookingmovieticket.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
