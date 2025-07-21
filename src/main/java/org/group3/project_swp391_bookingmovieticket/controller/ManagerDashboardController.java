@@ -1,9 +1,9 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.repositories.*;
-import org.group3.project_swp391_bookingmovieticket.dtos.MovieRevenueDTO;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.repository.*;
+import org.group3.project_swp391_bookingmovieticket.dto.MovieRevenueDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,8 +50,8 @@ public class ManagerDashboardController {
 
         // Calculate total revenue by summing individual movie revenues
         double totalRevenue = 0.0;
-        List<org.group3.project_swp391_bookingmovieticket.entities.Movie> allMovies = movieRepository.findAll();
-        for (org.group3.project_swp391_bookingmovieticket.entities.Movie movie : allMovies) {
+        List<org.group3.project_swp391_bookingmovieticket.entity.Movie> allMovies = movieRepository.findAll();
+        for (org.group3.project_swp391_bookingmovieticket.entity.Movie movie : allMovies) {
             Double movieRevenue = billRepository.getRevenueByMovie(movie.getId());
             if (movieRevenue != null) {
                 totalRevenue += movieRevenue;

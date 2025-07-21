@@ -1,10 +1,10 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.Role;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.repositories.IRoleRepository;
-import org.group3.project_swp391_bookingmovieticket.repositories.IUserRepository;
+import org.group3.project_swp391_bookingmovieticket.entity.Role;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.repository.IRoleRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,7 +34,7 @@ public class ManagerEmployeeController {
         roles.removeIf(role -> "manager".equals(role.getName()));
         model.addAttribute("employees", employees);
         model.addAttribute("roles", roles);
-        model.addAttribute("content", "manager/employees"); // render vào layout.html
+        model.addAttribute("content", "manager/employees");
         return "manager/layout";
     }
 
@@ -74,7 +74,7 @@ public class ManagerEmployeeController {
 
             User user = new User();
             user.setPhone(phone);
-            user.setPassword(password); // bạn nên hash mật khẩu trong ứng dụng thật
+            user.setPassword(password);
             user.setFullname(fullname);
             user.setUsername(username);
             user.setEmail(email);
@@ -122,6 +122,7 @@ public class ManagerEmployeeController {
             String username = (String) employeeData.get("username");
             String email = (String) employeeData.get("email");
             String fullname = (String) employeeData.get("fullname");
+
             String password = (String) employeeData.get("password");
             Integer roleId = (Integer) employeeData.get("roleId");
 

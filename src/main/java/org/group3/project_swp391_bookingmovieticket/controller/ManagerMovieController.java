@@ -1,9 +1,9 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.dtos.MovieDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.*;
-import org.group3.project_swp391_bookingmovieticket.repositories.*;
+import org.group3.project_swp391_bookingmovieticket.dto.MovieDTO;
+import org.group3.project_swp391_bookingmovieticket.entity.*;
+import org.group3.project_swp391_bookingmovieticket.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

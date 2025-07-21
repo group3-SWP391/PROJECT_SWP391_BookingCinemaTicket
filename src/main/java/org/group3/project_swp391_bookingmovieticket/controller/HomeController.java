@@ -1,6 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
-import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
+import org.group3.project_swp391_bookingmovieticket.dto.UserDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

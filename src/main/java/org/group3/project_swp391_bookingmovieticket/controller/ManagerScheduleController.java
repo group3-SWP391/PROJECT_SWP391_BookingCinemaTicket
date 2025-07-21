@@ -1,8 +1,8 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.*;
-import org.group3.project_swp391_bookingmovieticket.repositories.*;
+import org.group3.project_swp391_bookingmovieticket.entity.*;
+import org.group3.project_swp391_bookingmovieticket.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -75,7 +75,7 @@ public class ManagerScheduleController {
             schedule.setStartTime(LocalTime.parse(scheduleData.get("startTime").toString()));
             schedule.setEndTime(LocalTime.parse(scheduleData.get("endTime").toString()));
 
-            // Set related entities
+            // Set related entity
             Integer branchId = Integer.parseInt(scheduleData.get("branchId").toString());
             Integer movieId = Integer.parseInt(scheduleData.get("movieId").toString());
             Integer roomId = Integer.parseInt(scheduleData.get("roomId").toString());
@@ -147,7 +147,7 @@ public class ManagerScheduleController {
                 scheduleData.put("startTime", schedule.getStartTime().toString());
                 scheduleData.put("endTime", schedule.getEndTime().toString());
                 
-                // Manually serialize related entities to avoid lazy loading issues
+                // Manually serialize related entity to avoid lazy loading issues
                 Map<String, Object> branchData = new HashMap<>();
                 branchData.put("id", schedule.getBranch().getId());
                 branchData.put("name", schedule.getBranch().getName());
@@ -200,7 +200,7 @@ public class ManagerScheduleController {
                 schedule.setStartTime(LocalTime.parse(scheduleData.get("startTime").toString()));
                 schedule.setEndTime(LocalTime.parse(scheduleData.get("endTime").toString()));
 
-                // Set related entities
+                // Set related entity
                 Integer branchId = Integer.parseInt(scheduleData.get("branchId").toString());
                 Integer movieId = Integer.parseInt(scheduleData.get("movieId").toString());
                 Integer roomId = Integer.parseInt(scheduleData.get("roomId").toString());

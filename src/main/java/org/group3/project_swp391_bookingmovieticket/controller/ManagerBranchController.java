@@ -1,11 +1,11 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.Branch;
-import org.group3.project_swp391_bookingmovieticket.entities.Room;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
-import org.group3.project_swp391_bookingmovieticket.services.IRoomService;
+import org.group3.project_swp391_bookingmovieticket.entity.Branch;
+import org.group3.project_swp391_bookingmovieticket.entity.Room;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.service.IBranchService;
+import org.group3.project_swp391_bookingmovieticket.service.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
