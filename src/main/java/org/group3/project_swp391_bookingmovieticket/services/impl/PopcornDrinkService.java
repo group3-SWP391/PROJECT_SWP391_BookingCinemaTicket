@@ -6,6 +6,7 @@ import org.group3.project_swp391_bookingmovieticket.services.IPopcornDrinkServic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -14,7 +15,14 @@ public class PopcornDrinkService implements IPopcornDrinkService {
     private IPopcornDrinkRepository iPopcornDrinkRepository;
     @Override
     public List<PopcornDrink> findAll() {
-        return iPopcornDrinkRepository.findAll();
+        List<PopcornDrink> popcornDrink = new ArrayList<>();
+       List<PopcornDrink> popcornDrinkList = iPopcornDrinkRepository.findAll();
+       for(PopcornDrink popcorn: popcornDrinkList){
+           if(popcorn.getQuantity() > 0){
+               popcornDrink.add(popcorn);
+           }
+       }
+       return popcornDrink;
     }
 
     @Override

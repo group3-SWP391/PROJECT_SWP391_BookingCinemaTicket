@@ -33,6 +33,8 @@ public class Ticket {
 
     @Column(name = "popcorn_drink_list")
     private String listPopcornDrinkName;
+    @Column(name = "status")
+    private Boolean status;
 
 
 }

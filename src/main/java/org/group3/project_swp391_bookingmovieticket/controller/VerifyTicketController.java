@@ -1,7 +1,9 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import org.group3.project_swp391_bookingmovieticket.entities.Bill;
 import org.group3.project_swp391_bookingmovieticket.entities.PaymentLink;
 import org.group3.project_swp391_bookingmovieticket.services.IPaymentLinkService;
+import org.group3.project_swp391_bookingmovieticket.services.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/employee")
 public class VerifyTicketController {
+    @Autowired
+    private ITicketService iTicketService;
     @Autowired
     private IPaymentLinkService iPaymentLinkService;
     @GetMapping("/verifyticket")
@@ -28,9 +32,24 @@ public class VerifyTicketController {
         }
         PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Integer.parseInt(orderCode));
         if(paymentLink != null){
-            model.addAttribute("paymentlink", paymentLink);
-            model.addAttribute("key", orderCode);
-            return "employee/verifyticket";
+            Integer id = paymentLink.getBill().getId();
+            boolean check = iTicketService.verifyEffectiveOrderCode(id);
+            //Vé đó đã được sử dụng rồi
+            if(check){
+                model.addAttribute("error", "Mã code này đã được sử dụng, xác nhận trước đó rồi!!!");
+                model.addAttribute("key", orderCode);
+                return "employee/verifyticket";
+
+
+            //Vé đó chưa được sử dụng
+            }else{
+                model.addAttribute("paymentlink", paymentLink);
+                model.addAttribute("key", orderCode);
+                return "employee/verifyticket";
+
+            }
+
+
 
         }else{
             model.addAttribute("error", "Mã code bạn đang tìm kiếm không tồn tại");
@@ -41,5 +60,19 @@ public class VerifyTicketController {
 
 
 
+    }
+    @PostMapping("/confirmation")
+    public String showMessage(@RequestParam("idordercode") String id,   RedirectAttributes redirectAttributes){
+        PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Integer.parseInt(id));
+        if(paymentLink != null){
+            Integer idBill = paymentLink.getBill().getId();
+            iTicketService.confirmTicket(idBill);
+
+
+
+
+        }
+        redirectAttributes.addFlashAttribute("ordercode", id);
+        return "redirect:/successpayment";
     }
 }

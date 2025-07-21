@@ -14,4 +14,6 @@ public interface ITicketService extends IGeneralService<Ticket> {
     HashSet<Integer> findBookedSeatIdsBySchedule(int id);
     List<Ticket> findByScheduleId(int id);
     void save(Ticket ticket);
+    void confirmTicket(Integer id);
+    boolean verifyEffectiveOrderCode(Integer id);
 }

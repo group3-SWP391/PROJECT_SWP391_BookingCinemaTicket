@@ -106,6 +106,7 @@ public class TransactionController {
                     ticket.setSchedule(paymentLink.getSchedule());
                     ticket.setSeat(seat);
                     ticket.setListPopcornDrinkName(popcorn_drink);
+                    ticket.setStatus(true);
                     iTicketService.save(ticket);
                 }
                 redirectAttributes.addFlashAttribute("ordercode", orderCode);

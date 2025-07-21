@@ -135,32 +135,38 @@
           <span th:text="${paymentlink.orderCode}"></span>
         </p>
         <p>
-          <strong>Movie: </strong>
+          <strong>Phim: </strong>
           <span th:text="${paymentlink.schedule.movie.name}"></span>
         </p>
         <p>
-          <strong>Date: </strong>
+          <strong>Ngày: </strong>
           <span th:text="${paymentlink.schedule.startDate}"></span>
         </p>
         <p>
-          <strong>Time: </strong>
+          <strong>Giờ: </strong>
           <span th:text="${paymentlink.schedule.startTime}"></span>
         </p>
         <p>
-          <strong>Branch: </strong>
+          <strong>Chi nhánh: </strong>
           <span th:text="${paymentlink.schedule.branch.name}"></span>
         </p>
         <p>
-          <strong>Seats: </strong>
+          <strong>Ghế ngồi: </strong>
           <span th:text="${paymentlink.seatList}"></span>
         </p>
         <p>
-          <strong>Snacks: </strong>
+          <strong>Đồ ăn nhẹ: </strong>
           <span th:text="${paymentlink.listPopcornDrinkName}"></span>
         </p>
-        <button class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300 font-semibold" onclick="window.print()">
-          🖨️ Print Ticket
-        </button>
+
+        <form th:action="@{/employee/confirmation}" method="POST">
+          <input type="hidden" th:name="idordercode" th:value="${paymentlink.orderCode}">
+          <button class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300 font-semibold" >
+            Xác nhận
+          </button>
+
+        </form>
+
 
 
       </div>

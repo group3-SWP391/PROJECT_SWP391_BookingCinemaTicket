@@ -27,6 +27,7 @@ public class TicketService implements ITicketService {
 
     @Override
     public void update(Ticket ticket) {
+        ticketRepository.save(ticket);
 
     }
 
@@ -52,6 +53,30 @@ public class TicketService implements ITicketService {
     public void save(Ticket ticket) {
 
         ticketRepository.save(ticket);
+    }
+
+    @Override
+    public void confirmTicket(Integer id) {
+        List<Ticket> ticketList = ticketRepository.findByBillId(id);
+        for(Ticket ticket: ticketList){
+            ticket.setStatus(false);
+            update(ticket);
+
+        }
+
+
+    }
+
+    @Override
+    public boolean verifyEffectiveOrderCode(Integer id) {
+        List<Ticket> ticketList = ticketRepository.findByBillId(id);
+        for (Ticket ticket: ticketList){
+            if(!ticket.getStatus()){
+                return true;
+            }
+        }
+        return false;
+
     }
 
 

@@ -15,4 +15,5 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     int countTicketsByScheduleId(@Param("scheduleId") Integer scheduleId);
     List<Ticket> findByScheduleId(int id);
     List<Ticket> findByScheduleIdIn(List<Integer> scheduleId);
+    List<Ticket> findByBillId(Integer id);
 }
