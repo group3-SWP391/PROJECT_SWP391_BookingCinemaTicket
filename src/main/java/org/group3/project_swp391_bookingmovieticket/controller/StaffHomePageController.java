@@ -3,11 +3,11 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.*;
-import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
-import org.group3.project_swp391_bookingmovieticket.services.IMovieService;
-import org.group3.project_swp391_bookingmovieticket.services.IScheduleService;
-import org.group3.project_swp391_bookingmovieticket.services.ITicketService;
+import org.group3.project_swp391_bookingmovieticket.entity.*;
+import org.group3.project_swp391_bookingmovieticket.service.IBranchService;
+import org.group3.project_swp391_bookingmovieticket.service.IMovieService;
+import org.group3.project_swp391_bookingmovieticket.service.IScheduleService;
+import org.group3.project_swp391_bookingmovieticket.service.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;

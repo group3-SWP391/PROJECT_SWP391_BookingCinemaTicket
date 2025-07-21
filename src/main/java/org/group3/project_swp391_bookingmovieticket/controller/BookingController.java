@@ -1,15 +1,11 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
-import org.group3.project_swp391_bookingmovieticket.dtos.RoomDTO;
-import org.group3.project_swp391_bookingmovieticket.dtos.SeatDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.Room;
-import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
-import org.group3.project_swp391_bookingmovieticket.entities.Seat;
-import org.group3.project_swp391_bookingmovieticket.repositories.ITicketRepository;
-import org.group3.project_swp391_bookingmovieticket.services.IRoomService;
-import org.group3.project_swp391_bookingmovieticket.services.IScheduleService;
-import org.group3.project_swp391_bookingmovieticket.services.ISeatService;
-import org.group3.project_swp391_bookingmovieticket.services.ITicketService;
+import org.group3.project_swp391_bookingmovieticket.dto.SeatDTO;
+import org.group3.project_swp391_bookingmovieticket.entity.Schedule;
+import org.group3.project_swp391_bookingmovieticket.entity.Seat;
+import org.group3.project_swp391_bookingmovieticket.service.IScheduleService;
+import org.group3.project_swp391_bookingmovieticket.service.ISeatService;
+import org.group3.project_swp391_bookingmovieticket.service.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

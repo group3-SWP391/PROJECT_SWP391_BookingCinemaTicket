@@ -1,9 +1,8 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
-import org.group3.project_swp391_bookingmovieticket.entities.Bill;
-import org.group3.project_swp391_bookingmovieticket.entities.PaymentLink;
-import org.group3.project_swp391_bookingmovieticket.services.IPaymentLinkService;
-import org.group3.project_swp391_bookingmovieticket.services.ITicketService;
+import org.group3.project_swp391_bookingmovieticket.entity.PaymentLink;
+import org.group3.project_swp391_bookingmovieticket.service.IPaymentLinkService;
+import org.group3.project_swp391_bookingmovieticket.service.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

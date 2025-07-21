@@ -2,8 +2,8 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.entities.PopcornDrink;
-import org.group3.project_swp391_bookingmovieticket.services.IPopcornDrinkService;
+import org.group3.project_swp391_bookingmovieticket.entity.PopcornDrink;
+import org.group3.project_swp391_bookingmovieticket.service.IPopcornDrinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
