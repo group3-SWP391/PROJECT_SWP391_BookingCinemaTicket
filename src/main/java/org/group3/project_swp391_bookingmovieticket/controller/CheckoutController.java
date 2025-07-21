@@ -1,15 +1,15 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.group3.project_swp391_bookingmovieticket.dtos.BookingRequestDTO;
-import org.group3.project_swp391_bookingmovieticket.dtos.PopcornDrinkDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.PaymentLink;
-import org.group3.project_swp391_bookingmovieticket.entities.Schedule;
-import org.group3.project_swp391_bookingmovieticket.entities.Seat;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.services.impl.PaymentLinkService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.ScheduleService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.SeatService;
+import org.group3.project_swp391_bookingmovieticket.dto.BookingRequestDTO;
+import org.group3.project_swp391_bookingmovieticket.dto.PopcornDrinkDTO;
+import org.group3.project_swp391_bookingmovieticket.entity.PaymentLink;
+import org.group3.project_swp391_bookingmovieticket.entity.Schedule;
+import org.group3.project_swp391_bookingmovieticket.entity.Seat;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.service.impl.PaymentLinkService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.ScheduleService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

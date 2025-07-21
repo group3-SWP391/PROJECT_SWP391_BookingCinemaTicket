@@ -1,11 +1,11 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
-import org.group3.project_swp391_bookingmovieticket.dtos.UserRegisterDTO;
-import org.group3.project_swp391_bookingmovieticket.entities.User;
-import org.group3.project_swp391_bookingmovieticket.services.impl.PaymentLinkService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.TicketService;
+import org.group3.project_swp391_bookingmovieticket.dto.UserLoginDTO;
+import org.group3.project_swp391_bookingmovieticket.dto.UserRegisterDTO;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.service.impl.PaymentLinkService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

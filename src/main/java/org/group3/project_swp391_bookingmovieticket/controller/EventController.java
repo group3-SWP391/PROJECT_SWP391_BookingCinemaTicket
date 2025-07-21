@@ -1,10 +1,9 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
-import org.group3.project_swp391_bookingmovieticket.dtos.UserDTO;
-import org.group3.project_swp391_bookingmovieticket.dtos.UserLoginDTO;
-import org.group3.project_swp391_bookingmovieticket.dtos.UserRegisterDTO;
-import org.group3.project_swp391_bookingmovieticket.services.impl.EventService;
-import org.group3.project_swp391_bookingmovieticket.services.impl.MovieService;
+import org.group3.project_swp391_bookingmovieticket.dto.UserLoginDTO;
+import org.group3.project_swp391_bookingmovieticket.dto.UserRegisterDTO;
+import org.group3.project_swp391_bookingmovieticket.service.impl.EventService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
