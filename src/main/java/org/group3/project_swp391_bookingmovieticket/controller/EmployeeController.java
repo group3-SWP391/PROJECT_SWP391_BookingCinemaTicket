@@ -5,6 +5,7 @@ import org.group3.project_swp391_bookingmovieticket.entities.Branch;
 import org.group3.project_swp391_bookingmovieticket.entities.Role;
 import org.group3.project_swp391_bookingmovieticket.entities.User;
 import org.group3.project_swp391_bookingmovieticket.repositories.IBranchRepository;
+import org.group3.project_swp391_bookingmovieticket.services.IBillService;
 import org.group3.project_swp391_bookingmovieticket.services.IBranchService;
 import org.group3.project_swp391_bookingmovieticket.services.IRoleService;
 import org.group3.project_swp391_bookingmovieticket.services.IUserService;
@@ -21,6 +22,8 @@ import java.util.Optional;
 
 @Controller
 public class EmployeeController {
+    @Autowired
+    private IBillService iBillService;
     @Autowired
     private IBranchService iBranchService;
     @Autowired
@@ -72,15 +75,12 @@ public class EmployeeController {
     public String delete(@PathVariable int id, Model model){
         Optional<User> user = iUserService.getUserByID(id);
         if(user.isPresent()){
-            if(!user.get().getStatus()){
+            if(!user.get().getStatus() && !iBillService.existsBillByUserId(user.get().getId())){
                 iUserService.delete(id);
                 return "redirect:/admin/employee";
 
-
-
-
             }else{
-                model.addAttribute("error", "No delete customer because status is true");
+                model.addAttribute("error", "No delete customer because existing transaction system");
                 return "admin/error1";
             }
         }else{
