@@ -1,6 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.group3.project_swp391_bookingmovieticket.dto.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserRegisterDTO;
 import org.group3.project_swp391_bookingmovieticket.service.impl.BranchService;
@@ -43,6 +44,7 @@ public class HomeController {
         request.getSession().setAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
         model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+        model.addAttribute("userDTO", new UserDTO());
         return "home";
     }
 

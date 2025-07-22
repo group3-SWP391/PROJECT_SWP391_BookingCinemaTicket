@@ -15,10 +15,9 @@ import java.util.List;
 @Table(name = "bill")
 @NoArgsConstructor
 public class Bill {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @CreatedDate
     @Column(name = "created_time")

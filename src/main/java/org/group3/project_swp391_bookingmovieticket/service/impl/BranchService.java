@@ -15,6 +15,8 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.util.List;
+import java.util.Optional;
 @Service
 public class BranchService implements IBranchService {
 
@@ -27,6 +29,16 @@ public class BranchService implements IBranchService {
     @Override
     public List<String> findAllLocationBranch() {
         return branchRepository.findAllLocationBranch();
+    }
+
+    @Override
+    public List<Branch> findAll() {
+        return branchRepository.findAll();
+    }
+
+    @Override
+    public Optional<Branch> findById(Integer id) {
+        return branchRepository.findById(id);
     }
 
     @Override
@@ -117,6 +129,7 @@ public class BranchService implements IBranchService {
 
     @Override
     public void update(BranchDTO branchDTO) {
+    public void update(Branch branch) {
 
     }
 

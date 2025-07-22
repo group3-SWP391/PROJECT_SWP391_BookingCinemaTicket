@@ -10,4 +10,5 @@ public interface IBillService extends IGeneralService<Bill>{
     Bill createNewBill(BookingRequestDTO bookingRequestDTO);
 
     Optional<Bill> findById(Integer id);
+    boolean existsBillByUserId(Integer userId);
 }

@@ -8,6 +8,7 @@ import org.group3.project_swp391_bookingmovieticket.entity.Schedule;
 import org.group3.project_swp391_bookingmovieticket.entity.Ticket;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
 import org.group3.project_swp391_bookingmovieticket.repository.*;
+import org.group3.project_swp391_bookingmovieticket.repository.IBillRepository;
 import org.group3.project_swp391_bookingmovieticket.service.IBillService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class BillService implements IBillService {
 
@@ -40,6 +40,12 @@ public class BillService implements IBillService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Override
+    public boolean existsBillByUserId(Integer userId) {
+        return billRepository.existsByUserId(userId);
+
+    }
 
     @Override
     public List<Bill> findAll() {

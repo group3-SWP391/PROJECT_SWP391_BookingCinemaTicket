@@ -50,4 +50,13 @@ public class User {
         this.email = email;
         this.phone = phone;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "branch_id", referencedColumnName = "id")
+    private Branch branch;
+
+    private Boolean status;
+
+
+
 }

@@ -12,10 +12,9 @@ import java.util.List;
 @Table(name = "branch")
 @NoArgsConstructor
 public class Branch {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "location")
     private String location;

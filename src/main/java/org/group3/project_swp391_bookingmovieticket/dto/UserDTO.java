@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.group3.project_swp391_bookingmovieticket.entity.Role;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -33,5 +34,7 @@ public class UserDTO {
     private String email;
 
     private Role role;
+    private Boolean status;
+    private Integer branchId;
     
 }

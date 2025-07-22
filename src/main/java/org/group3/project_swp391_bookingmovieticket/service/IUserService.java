@@ -9,6 +9,25 @@ public interface IUserService extends IGeneralService<User> {
     Optional<User> findByEmailAndPassword(String email);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
-    void save(User user);
     Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findByUsernameAndPassword(String username, String password);
+
+    Optional<User> findByPhoneAndPassword(String username, String password);
+
+    void save (User user);
+
+    void delete(int id);
+
+    Optional<User> getUserByID(int id);
+
+    Optional<List<User>> findByUserNameIgnoreCase(String keyword);
+
+    Page<User> getListUserPaging(int index);
+
+
+
+
+
 }
