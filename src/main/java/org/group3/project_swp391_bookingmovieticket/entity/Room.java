@@ -46,4 +46,9 @@ public class Room {
     @JoinColumn(nullable = false,name = "branch_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Branch branch;
+
+    @Override
+    public String toString() {
+        return "hi";
+    }
 }

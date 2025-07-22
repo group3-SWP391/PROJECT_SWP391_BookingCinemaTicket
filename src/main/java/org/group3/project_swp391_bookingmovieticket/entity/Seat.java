@@ -28,4 +28,9 @@ public class Seat {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
+
+    @Override
+    public String toString() {
+        return "hi";
+    }
 }

@@ -34,4 +34,9 @@ public class Ticket {
 
     @Column(name = "popcorn_drink_list")
     private String listPopcornDrinkName;
+
+    @Override
+    public String toString() {
+        return "hi";
+    }
 }

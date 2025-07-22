@@ -13,4 +13,5 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByPhoneAndPassword(String phone, String password);
     Optional<List<User>> findByFullnameContainingIgnoreCase(String keyword);
 
+    Optional<User> findByUsername(String username);
 }

@@ -18,17 +18,18 @@ public class AdminPage {
     private IUserService iUserService;
 
     @GetMapping
-    public String adminHomePage(){
+    public String adminHomePage() {
         return "admin/home-page-admin";
 
     }
-    @GetMapping("/user")
-    public String getAllUser(Model model){
-        List<User> listUser = new ArrayList<>();
-        List<User> list =  iUserService.findAll();
 
-        for (User user: list){
-            if("Customer".equalsIgnoreCase(user.getRole().getName())){
+    @GetMapping("/user")
+    public String getAllUser(Model model) {
+        List<User> listUser = new ArrayList<>();
+        List<User> list = iUserService.findAll();
+
+        for (User user : list) {
+            if ("Customer".equalsIgnoreCase(user.getRole().getName())) {
                 listUser.add(user);
             }
         }
@@ -36,23 +37,20 @@ public class AdminPage {
         return "admin/list-page-customer";
 
     }
+
     @GetMapping("/employee")
-    public String getAllEmployee(Model model){
+    public String getAllEmployee(Model model) {
         List<User> listUser = new ArrayList<>();
-        for (User user: iUserService.findAll() ){
-            if(user.getRole().getName().equalsIgnoreCase("STAFF")){
+        for (User user : iUserService.findAll()) {
+            if (user.getRole().getName().equalsIgnoreCase("STAFF")) {
                 listUser.add(user);
             }
         }
         model.addAttribute("list", listUser);
+        System.out.println(listUser + "staff");
         return "admin/list-page-employee";
 
     }
-
-
-
-
-
 
 
 }

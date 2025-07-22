@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
 
@@ -30,4 +31,6 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
             "JOIN PaymentLink p ON p.bill.id = b.id " +
             "WHERE p.orderCode = :orderCode")
     List<Ticket> findTicketsByOrderCode(@Param("orderCode") long orderCode);
+
+    List<Ticket> findByBill_Id(Integer billId);
 }

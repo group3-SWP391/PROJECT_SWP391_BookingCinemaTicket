@@ -6,9 +6,10 @@ import org.group3.project_swp391_bookingmovieticket.entity.Bill;
 import java.util.Optional;
 
 
-public interface IBillService extends IGeneralService<Bill>{
+public interface IBillService extends IGeneralService<Bill> {
     Bill createNewBill(BookingRequestDTO bookingRequestDTO);
 
     Optional<Bill> findById(Integer id);
+
     boolean existsBillByUserId(Integer userId);
 }

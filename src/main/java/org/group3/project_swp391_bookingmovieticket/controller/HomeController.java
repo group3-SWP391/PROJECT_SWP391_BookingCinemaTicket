@@ -1,6 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dto.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserRegisterDTO;
@@ -26,6 +27,13 @@ public class HomeController {
 
     @Autowired
     private BranchService branchService;
+
+    @GetMapping("/clear-error-session")
+    public String clearErrorSession(HttpSession session) {
+        // Xóa thuộc tính lỗi khỏi session
+        session.removeAttribute("errorNotAdmin");
+        return "redirect:/home";
+    }
 
     @GetMapping("/home")
     public String displayHomePage(@RequestParam(value = "redirectUrl", required = false) String redirectUrl,

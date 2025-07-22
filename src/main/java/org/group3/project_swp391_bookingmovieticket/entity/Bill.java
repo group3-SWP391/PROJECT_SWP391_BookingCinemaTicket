@@ -38,4 +38,11 @@ public class Bill {
 
     @OneToOne(mappedBy = "bill")
     private PaymentLink paymentLink;
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "id=" + id +
+                '}';
+    }
 }

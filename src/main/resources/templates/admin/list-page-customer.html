@@ -1,188 +1,209 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title>Management</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <meta charset="UTF-8"/>
+    <title>Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      padding-bottom: 50px;
-    }
-    .header {
-     position: sticky;
-      top: 0;
-      background: linear-gradient(90deg, #dc3545, #951957);
-      color: white;
-      padding: 30px;
-      border-radius: 12px;
-      margin-bottom: 40px;
-      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 999;
-    }
-    .header h2 {
-      font-weight: 700;
-      font-size: 2rem;
-      margin: 0;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    }
-    .btn-add {
-      background-color: #d8eddd;
-      border: none;
-      border-radius: 50px;
-      padding: 12px 25px;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
-    }
-    .btn-add:hover {
-      background-color: #218838;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
-      color: white;
-      text-decoration: none;
-    }
-    .card {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-      overflow: hidden;
-      background-color: white;
-    }
-    .table {
-      margin-bottom: 0;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    thead.thead-dark {
-      background: linear-gradient(90deg, #343a40, #495057);
-      color: white;
-      font-size: 1.1rem;
-    }
-    th, td {
-      padding: 8px !important;
-      vertical-align: middle;
-    }
-    tbody tr {
-      transition: background-color 0.3s ease;
-    }
-    tbody tr:hover {
-      background-color: #e9f5ff;
-      cursor: pointer;
-    }
-    .btn-sm {
-      min-width: 80px;
-      font-size: 0.9rem;
-      border-radius: 25px;
-      padding: 8px 15px;
-      transition: all 0.3s ease;
-    }
-    .btn-warning {
-      background-color: #ffc107;
-      border: none;
-      box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3);
-    }
-    .btn-warning:hover {
-      background-color: #e0a800;
-      transform: translateY(-2px);
-    }
-    .btn-danger {
-      box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
-    }
-    .btn-danger:hover {
-      background-color: #c82333;
-      transform: translateY(-2px);
-    }
-    .icon {
-      margin-right: 6px;
-    }
-    .table-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .footer {
-      margin-top: 40px;
-      text-align: center;
-      color: #6c757d;
-      font-size: 0.9rem;
-    }
-    @media (max-width: 768px) {
-      .header {
-        flex-direction: column;
-        text-align: center;
-      }
-      .header h2 {
-        margin-bottom: 20px;
-      }
-      .btn-add {
-        width: 100%;
-        max-width: 200px;
-      }
-      th, td {
-        font-size: 0.9rem;
-        padding: 10px;
-      }
-      .btn-sm {
-        min-width: 60px;
-        font-size: 0.8rem;
-        padding: 6px 10px;
-      }
-    }
-  </style>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(90deg, #dc3545, #951957);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .header h2 {
+            font-weight: 700;
+            font-size: 2rem;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-add {
+            background-color: #d8eddd;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-add:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .table {
+            margin-bottom: 0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        thead.thead-dark {
+            background: linear-gradient(90deg, #343a40, #495057);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        th, td {
+            padding: 8px !important;
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #e9f5ff;
+            cursor: pointer;
+        }
+
+        .btn-sm {
+            min-width: 80px;
+            font-size: 0.9rem;
+            border-radius: 25px;
+            padding: 8px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3);
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            margin-right: 6px;
+        }
+
+        .table-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header h2 {
+                margin-bottom: 20px;
+            }
+
+            .btn-add {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            th, td {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .btn-sm {
+                min-width: 60px;
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="container table-container mt-5">
-  <div class="header">
-    <h2><i class="fas fa-users mr-2"></i> Management</h2>
+    <div class="header">
+        <h2><i class="fas fa-users mr-2"></i> Management</h2>
 
-  </div>
-  <a href="/admin" class="btn btn-secondary mb-3 ms-3">
-    ← Back
-  </a>
-  <form action="/user/search" method="get" style="display: flex; align-items: center; margin: 10px 0;">
-    <input type="text" name="keyword" placeholder="Search..." th:value="${keyword}"
-           style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; width: 200px; outline: none;">
-    <button type="submit" style="margin-left: -30px; background: none; border: none; cursor: pointer; color: #666;">
-      🔍
-    </button>
-  </form>
-
-
-  <div class="card">
-    <table class="table table-bordered table-striped">
-      <thead class="thead-dark">
-      <tr>
-        <th>Username</th>
-        <th>Full Name</th>
-        <th>Phone</th>
-        <th style="width: 200px;">Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="user : ${list}">
-        <td th:text="${user.username}">username</td>
-        <td th:text="${user.fullname}">fullname</td>
-        <td th:text="${user.phone}">phone</td>
-        <td width="210px" height="90px" >
-          <a th:href="@{'/user/booking-history/' + ${user.id}}" class="btn btn-warning btn-sm" title="Edit">
-            <i class="fas fa-edit icon"></i> Booking History
-          </a>
+    </div>
+    <a href="/admin" class="btn btn-secondary mb-3 ms-3">
+        ← Back
+    </a>
+    <form action="/user/search" method="get" style="display: flex; align-items: center; margin: 10px 0;">
+        <input type="text" name="keyword" placeholder="Search..." th:value="${keyword}"
+               style="padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; width: 200px; outline: none;">
+        <button type="submit" style="margin-left: -30px; background: none; border: none; cursor: pointer; color: #666;">
+            🔍
+        </button>
+    </form>
 
 
-        </td>
-      </tr>
-      </tbody>
+    <div class="card">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Phone</th>
+                <th style="width: 200px;">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${list}">
+                <td th:text="${user.username}">username</td>
+                <td th:text="${user.fullname}">fullname</td>
+                <td th:text="${user.phone}">phone</td>
+                <td width="210px" height="90px">
+                    <a th:href="@{'/user/booking-history/' + ${user.id}}" class="btn btn-warning btn-sm" title="Edit">
+                        <i class="fas fa-edit icon"></i> Booking History
+                    </a>
+                </td>
+            </tr>
+            </tbody>
 
-    </table>
-  </div>
+        </table>
+    </div>
 
 
 </div>

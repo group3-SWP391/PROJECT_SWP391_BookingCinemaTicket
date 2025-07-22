@@ -276,6 +276,7 @@ public class LoginRegisterController {
             if (userService.existsByEmail(googleUser.getEmail())) {
                 // Nếu đã tồn tại, lấy user từ DB
                 user = userService.findByEmail(googleUser.getEmail()).get(); // nhớ xử lý Optional an toàn
+                System.out.println(user + "role");
             } else {
                 // Nếu chưa có, tạo user mới
                 user = new User();

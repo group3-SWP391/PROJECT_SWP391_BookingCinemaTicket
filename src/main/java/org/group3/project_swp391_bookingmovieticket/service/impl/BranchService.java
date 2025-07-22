@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class BranchService implements IBranchService {
 
@@ -32,13 +33,27 @@ public class BranchService implements IBranchService {
     }
 
     @Override
-    public List<Branch> findAll() {
-        return branchRepository.findAll();
+    public List<BranchDTO> findAll() {
+        return branchRepository.findAll()
+                .stream()
+                .map(branch -> modelMapper.map(branch, BranchDTO.class))
+                .toList();
     }
 
     @Override
-    public Optional<Branch> findById(Integer id) {
-        return branchRepository.findById(id);
+    public Optional<BranchDTO> findById(Integer id) {
+        Branch branch = branchRepository.findById(id).orElse(null);
+        return Optional.ofNullable(modelMapper.map(branch, BranchDTO.class));
+    }
+
+    @Override
+    public void update(BranchDTO branchDTO) {
+
+    }
+
+    @Override
+    public void remove(Integer id) {
+
     }
 
     @Override
@@ -115,26 +130,5 @@ public class BranchService implements IBranchService {
             }
             return branchDTOList;
         }
-    }
-
-    @Override
-    public List<BranchDTO> findAll() {
-        return List.of();
-    }
-
-    @Override
-    public Optional<BranchDTO> findById(Integer id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public void update(BranchDTO branchDTO) {
-    public void update(Branch branch) {
-
-    }
-
-    @Override
-    public void remove(Integer id) {
-
     }
 }

@@ -2,7 +2,9 @@ package org.group3.project_swp391_bookingmovieticket.service;
 
 
 import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUserService extends IGeneralService<User> {

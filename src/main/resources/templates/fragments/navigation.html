@@ -52,6 +52,12 @@
                                        data-target="#loginModal" href="#"><span>Đăng nhập</span></a>
                                 </div>
                                 <div th:if="${session.userLogin != null}">
+                                    <a style="background: #1b1b1b" class="btn" th:if="${session.userLogin.role.name == 'ADMIN'}" th:href="@{/admin}">
+                                        <span style="color: white">Quản trị</span>
+                                    </a>
+                                    <a style="background: #1b1b1b" class="btn" th:if="${session.userLogin.role.name == 'STAFF'}" th:href="@{/staff}">
+                                        <span style="color: white">Quản trị</span>
+                                    </a>
                                     <a style="background: #1b1b1b" class="btn" th:href="@{none}">
                                         <span style="color: white" th:text="${session.userLogin.username}">User</span>
                                     </a>

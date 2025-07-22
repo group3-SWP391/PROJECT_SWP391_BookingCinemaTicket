@@ -21,27 +21,17 @@ public class UserService implements IUserService {
     @Transactional
     public void save(User user) {
         userRepository.save(user);
-
     }
 
     @Override
     @Transactional
     public void delete(int id) {
         userRepository.deleteById(id);
-
-
-
-
-
     }
 
     @Override
     public Optional<User> getUserByID(int id) {
         return userRepository.findById(id);
-
-
-
-
     }
 
     @Override
@@ -50,9 +40,6 @@ public class UserService implements IUserService {
             throw new IllegalArgumentException("Keyword must not be empty.");
         }
         return userRepository.findByFullnameContainingIgnoreCase(keyword);
-
-
-
     }
 
     @Override
@@ -60,8 +47,6 @@ public class UserService implements IUserService {
         int size = 6;
         Pageable pageable = PageRequest.of(index - 1, size);
         return userRepository.findAll(pageable);
-
-
     }
 
 
@@ -106,6 +91,16 @@ public class UserService implements IUserService {
     @Override
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public Optional<User> findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByPhoneAndPassword(username, password);
     }
 
     @Override
