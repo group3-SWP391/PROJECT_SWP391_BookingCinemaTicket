@@ -62,7 +62,7 @@ public class Movie {
 
     @ManyToOne
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
-    private Rating ratingId;
+    private Rating rating;
 
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;

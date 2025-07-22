@@ -28,6 +28,13 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="parent"><a th:href="@{/}" onclick="return false;">Mác phim</a>
+                                    <ul class="lg-submenu">
+                                        <li th:each="rate: ${session.rates}">
+                                            <a th:href="@{/movie/rating(ratingId=${rate.id})}" th:text="${rate.name}"></a>
+                                        </li>
+                                    </ul>
+                                </li>
                                 <li class="parent"><a th:href="@{/}" onclick="return false;">Thể loại</a>
                                     <ul class="lg-submenu">
                                         <li th:each="category: ${session.categoryAll}">

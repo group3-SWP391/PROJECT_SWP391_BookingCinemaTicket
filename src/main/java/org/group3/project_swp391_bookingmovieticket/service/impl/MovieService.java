@@ -92,6 +92,12 @@ public class MovieService implements IMovieService {
     }
 
     @Override
+    public Page<MovieDTO> findMovieByRatingId(Integer id, Pageable pageable) {
+        Page<Movie> moviePage = movieRepository.findByRating_Id(id, pageable);
+        return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));
+    }
+
+    @Override
     public Page<MovieDTO> findByCategory(String categoryName, Pageable pageable) {
         Page<Movie> moviePage = movieRepository.findByCategories(categoryName, pageable);
         return moviePage.map(movie -> modelMapper.map(movie, MovieDTO.class));

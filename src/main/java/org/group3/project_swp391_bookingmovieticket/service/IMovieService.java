@@ -25,6 +25,8 @@ public interface IMovieService extends IGeneralService<MovieDTO> {
 
     List<MovieDTO> findMovieByViewDesc();
 
+    Page<MovieDTO> findMovieByRatingId(Integer id, Pageable pageable);
+
     Page<MovieDTO> findByCategory(String category, Pageable pageable);
 
     Page<MovieDTO> findMovieByDirector(int directorId, Pageable pageable);

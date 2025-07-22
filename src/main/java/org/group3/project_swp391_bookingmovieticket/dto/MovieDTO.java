@@ -22,7 +22,6 @@ public class MovieDTO  {
     private int duration;
     private String trailerURLWatchLink;
     private String language;
-    private String rated;
     private Integer statusShowing;
     private List<ScheduleDTO> schedules;
     private Long total;

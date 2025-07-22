@@ -1,6 +1,7 @@
 package org.group3.project_swp391_bookingmovieticket.repository;
 
 
+import org.group3.project_swp391_bookingmovieticket.dto.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.entity.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,4 +39,6 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query("SELECT m FROM Movie m WHERE m.director.id = :directorId")
     Page<Movie> findByDirectorId(@Param("directorId") int directorId, Pageable pageable);
+
+    Page<Movie> findByRating_Id(int ratingId, Pageable pageable);
 }

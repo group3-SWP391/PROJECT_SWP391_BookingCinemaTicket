@@ -5,9 +5,8 @@ import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dto.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserRegisterDTO;
-import org.group3.project_swp391_bookingmovieticket.service.impl.BranchService;
-import org.group3.project_swp391_bookingmovieticket.service.impl.EventService;
-import org.group3.project_swp391_bookingmovieticket.service.impl.MovieService;
+import org.group3.project_swp391_bookingmovieticket.service.IRatingService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,12 +27,8 @@ public class HomeController {
     @Autowired
     private BranchService branchService;
 
-    @GetMapping("/clear-error-session")
-    public String clearErrorSession(HttpSession session) {
-        // Xóa thuộc tính lỗi khỏi session
-        session.removeAttribute("errorNotAdmin");
-        return "redirect:/home";
-    }
+    @Autowired
+    private RatingService ratingService;
 
     @GetMapping("/home")
     public String displayHomePage(@RequestParam(value = "redirectUrl", required = false) String redirectUrl,
@@ -49,6 +44,7 @@ public class HomeController {
         request.getSession().setAttribute("categoryAll", movieService.getMovieCategories());
         request.getSession().setAttribute("allLocationBranch", branchService.findAllLocationBranch());
         request.getSession().setAttribute("event", eventService.findEventValid());
+        request.getSession().setAttribute("rates", ratingService.findAll());
         request.getSession().setAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
         model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());

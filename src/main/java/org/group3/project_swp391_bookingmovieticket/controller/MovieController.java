@@ -79,6 +79,25 @@ public class MovieController {
         return "movie_detail";
     }
 
+    @GetMapping(value = "/rating")
+    public String rating(@RequestParam(value = "ratingId", required = false) Integer ratingId,
+                         @RequestParam(value = "page", defaultValue = "0") int page,
+                         @RequestParam(value = "size", defaultValue = "6") int size,
+                         Model model) {
+        if (ratingId == null) {
+            model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
+            model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+            return "home";
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        model.addAttribute("movieRates", movieService.findMovieByRatingId(ratingId, pageable));
+        model.addAttribute("ratingId", ratingId);
+        model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+        return "movie_rating";
+    }
+
     @GetMapping(value = "/category/return-view")
     public String getMoviesByCategoryReturnView(@RequestParam(value = "categoryName", required = false) String categoryName,
                                                 @RequestParam(value = "page", defaultValue = "0") int page,
