@@ -70,4 +70,5 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;
+
 }

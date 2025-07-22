@@ -129,6 +129,9 @@
 
         <!-- COMMENT TAB -->
         <div id="comment-tab" class="tab-content active">
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+            <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+
             <div th:if="${comments != null and #lists.isEmpty(comments)}">
                 <p>Chưa có bình luận nào.</p>
             </div>
@@ -248,6 +251,9 @@
 
         <!-- REVIEW TAB -->
         <div id="review-tab" class="tab-content">
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
             <div th:if="${session.userLogin != null and hasOrdered}">
                 <form th:action="@{/submitReview}" method="post">
                     <input type="hidden" name="movieId" th:value="${movie.id}" />

@@ -1,16 +1,17 @@
 package org.group3.project_swp391_bookingmovieticket.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "[payment_link]")
 @Data
-@NoArgsConstructor
 public class PaymentLink {
 
     @Id
@@ -63,8 +64,15 @@ public class PaymentLink {
     @Column(name = "popcorn_drink_list", columnDefinition = "nvarchar(max)")
     private String popcornDrinkList;
 
+    @OneToMany(mappedBy = "paymentLink", fetch = FetchType.LAZY)
+    private List<Ticket> tickets;
 
-    public PaymentLink(User user, Bill bill, String movieName, Seat seat, BigDecimal price, LocalDateTime transactionDate, String status) {
+
+    public PaymentLink() {
+    }
+
+    public PaymentLink(Integer id, User user, Bill bill, String movieName, Seat seat, BigDecimal price, LocalDateTime transactionDate, String status, String transactionDateFormatted, Integer orderCode, String checkOutUrl, Schedule schedule, String seatList, BigDecimal totalPrice, String popcornDrinkList, List<Ticket> tickets) {
+        this.id = id;
         this.user = user;
         this.bill = bill;
         this.movieName = movieName;
@@ -72,9 +80,13 @@ public class PaymentLink {
         this.price = price;
         this.transactionDate = transactionDate;
         this.status = status;
+        this.transactionDateFormatted = transactionDateFormatted;
+        this.orderCode = orderCode;
+        this.checkOutUrl = checkOutUrl;
+        this.schedule = schedule;
+        this.seatList = seatList;
+        this.totalPrice = totalPrice;
+        this.popcornDrinkList = popcornDrinkList;
+        this.tickets = tickets;
     }
-
-
-
-
 }

@@ -29,5 +29,17 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "seat_id")
     private Seat seat;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "status")
+    private Boolean status;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_link_id")
+    private PaymentLink paymentLink;
+
 }
 

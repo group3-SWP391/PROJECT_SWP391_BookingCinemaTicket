@@ -9,7 +9,7 @@ import org.group3.project_swp391_bookingmovieticket.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDateTime;
 
 @Controller
@@ -21,19 +21,30 @@ public class CommentController {
     @Autowired
     private ICommentRepository ICommentRepository;
 
+
+
     @PostMapping("/addComment")
     public String addComment(@RequestParam("movieId") Integer movieId,
                              @RequestParam("content") String content,
-                             HttpServletRequest request) {
+                             HttpServletRequest request,
+                             RedirectAttributes redirectAttributes) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userLogin") == null) {
             return "redirect:/login";
         }
 
         User user = (User) session.getAttribute("userLogin");
-        commentService.addComment(movieId, user, content);
+
+        try {
+            commentService.addComment(movieId, user, content);
+            redirectAttributes.addFlashAttribute("successMessage", "Bình luận đã được gửi.");
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
         return "redirect:/movie-details?id=" + movieId;
     }
+
 
     @PostMapping("/replyComment")
     public String replyComment(@RequestParam("movieId") Integer movieId,

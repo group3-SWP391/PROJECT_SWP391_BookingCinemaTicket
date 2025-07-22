@@ -22,5 +22,9 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
             "ORDER BY t.id DESC")
     List<Ticket> findTicketsOfCurrentUserAndScheduleId(@Param("userId") Integer userId,
                                                        @Param("scheduleId") Integer scheduleId);
+
+    @Query("SELECT t FROM Ticket t WHERE t.user.id = :userId AND t.schedule.movie.name = :movieName")
+    Ticket findByUserIdAndMovieName(@Param("userId") Integer userId, @Param("movieName") String movieName);
+
 }
 

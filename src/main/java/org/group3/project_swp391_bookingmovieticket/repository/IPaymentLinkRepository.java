@@ -20,13 +20,17 @@ public interface IPaymentLinkRepository extends JpaRepository<PaymentLink, Integ
     @Query("SELECT COUNT(o) FROM PaymentLink o WHERE o.user.id = :userId")
     long countByUserId(@Param("userId") Integer userId);
 
+    @Query("SELECT CASE WHEN COUNT(pl) > 0 THEN true ELSE false END " +
+            "FROM PaymentLink pl JOIN pl.tickets t " +
+            "WHERE pl.user.id = :userId " +
+            "AND pl.movieName = :movieTitle " +
+            "AND pl.transactionDate < :before " +
+            "AND t.status = true")
+    boolean existsByUserIdAndMovieTitleAndTransactionDateBefore(
+            @Param("userId") Integer userId,
+            @Param("movieTitle") String movieTitle,
+            @Param("before") LocalDateTime before);
 
-
-    @Query("SELECT CASE WHEN COUNT(o) > 0 THEN true ELSE false END " +
-            "FROM PaymentLink o WHERE o.user.id = :userId AND o.movieName = :movieTitle AND o.transactionDate < :before")
-    boolean existsByUserIdAndMovieTitleAndTransactionDateBefore(@Param("userId") Integer userId,
-                                                                @Param("movieTitle") String movieTitle,
-                                                                @Param("before") LocalDateTime before);
 
 
     boolean existsByUser_IdAndMovieName(Integer userId, String movieName);

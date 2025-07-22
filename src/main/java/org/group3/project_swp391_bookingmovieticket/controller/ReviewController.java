@@ -23,7 +23,7 @@ public class ReviewController {
     private ReviewService reviewService;
     @PostMapping("/submitReview")
     public String submitReview(
-            @RequestParam("movieId") Integer movieId,  // đổi từ movieName
+            @RequestParam("movieId") Integer movieId,
             @RequestParam("rating") int rating,
             @RequestParam("comment") String comment,
             HttpSession session,
@@ -31,21 +31,14 @@ public class ReviewController {
 
         User user = (User) session.getAttribute("userLogin");
         if (user == null) {
-            redirectAttributes.addFlashAttribute("error", "Bạn cần đăng nhập để đánh giá.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Bạn cần đăng nhập để đánh giá.");
             return "redirect:/login";
         }
 
         Movie movie = movieService.findEntityById(movieId);
         if (movie == null) {
-            redirectAttributes.addFlashAttribute("error", "Không tìm thấy phim.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy phim.");
             return "redirect:/";
-        }
-
-        boolean hasOrdered = true;
-
-        if (!hasOrdered) {
-            redirectAttributes.addFlashAttribute("error", "Bạn cần xem phim trước khi đánh giá.");
-            return "redirect:/movie-detail?movieId=" + movieId;
         }
 
         Review review = new Review();
@@ -53,12 +46,17 @@ public class ReviewController {
         review.setComment(comment);
         review.setUser(user);
         review.setMovie(movie);
-        review.setCreatedAt(LocalDateTime.now());
+        // `createdAt` sẽ được set trong `reviewService.saveReview()`
 
-        reviewService.saveReview(review);
+        try {
+            reviewService.saveReview(review);
+            redirectAttributes.addFlashAttribute("successMessage", "Cảm ơn bạn đã đánh giá phim!");
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
 
-        return "redirect:/movie-details?id=" + movieId;
-
+        return "redirect:/movie-details?id=" + movieId + "&tab=review";
     }
+
 
 }

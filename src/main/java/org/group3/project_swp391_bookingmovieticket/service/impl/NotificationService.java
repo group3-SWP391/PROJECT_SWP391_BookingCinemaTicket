@@ -5,6 +5,7 @@ import org.group3.project_swp391_bookingmovieticket.entity.Movie;
 import org.group3.project_swp391_bookingmovieticket.entity.Notification;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
 import org.group3.project_swp391_bookingmovieticket.repository.INotificationRepository;
+import org.group3.project_swp391_bookingmovieticket.service.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class NotificationService {
+public class NotificationService implements INotificationService {
 
     @Autowired
     private INotificationRepository INotificationRepository;
@@ -37,5 +38,15 @@ public class NotificationService {
 
     public Notification getUnreadNotificationByUserAndMovie(int userId, int movieId) {
         return INotificationRepository.findFirstByUserIdAndMovieIdAndIsReadFalseOrderByCreatedAtDesc(userId, movieId);
+    }
+
+    public void sendNotificationIfNotWatched(User user, Movie movie) {
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setMovie(movie);
+        notification.setMessage("Bạn chưa xem phim \"" + movie.getName() + "\" trong thời gian quy định. Nếu bạn gặp vấn đề gì hãy liên hệ với chúng tôi.");
+        notification.setRead(false);
+        notification.setCreatedAt(new Date());
+        INotificationRepository.save(notification);
     }
 }

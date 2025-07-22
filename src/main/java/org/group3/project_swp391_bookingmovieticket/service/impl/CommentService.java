@@ -1,8 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.service.impl;
 
-import org.group3.project_swp391_bookingmovieticket.entity.Comment;
-import org.group3.project_swp391_bookingmovieticket.entity.Movie;
-import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.entity.*;
 import org.group3.project_swp391_bookingmovieticket.repository.ICommentReactionRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.ICommentRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.IMovieRepository;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,13 +49,21 @@ public class CommentService implements ICommentService {
 
         ICommentRepository.save(comment);
     }
-
     @Override
     public boolean canUserComment(Integer userId, String movieName) {
-        return IPaymentLinkRepository.existsByUserIdAndMovieTitleAndTransactionDateBefore(
-                userId, movieName, LocalDateTime.now());
+        List<PaymentLink> paidLinks = IPaymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
+        LocalDateTime now = LocalDateTime.now();
 
+        for (PaymentLink link : paidLinks) {
+            if (link.getTickets() != null && link.getTickets().stream().anyMatch(ticket -> Boolean.TRUE.equals(ticket.getStatus()))) {
+                return true;
+            }
+        }
+
+        return false;
     }
+
+
     @Override
     public Page<Comment> getCommentsByMovieId(Integer movieId, Pageable pageable) {
         return ICommentRepository.findByMovieId(movieId, pageable);

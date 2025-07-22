@@ -22,18 +22,28 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Autowired
     private IPaymentLinkRepository IPaymentLinkRepository;
+
     @Autowired
     private VoucherService voucherService;
+
     @Autowired
     private IUserRepository userRepository;
+
     @Autowired
     private IBillRepository IBillRepository;
+
     @Autowired
     private SeatRepository seatRepository;
+
     @Autowired
     private IScheduleRepository scheduleRepository;
+
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private ITicketRepository ticketRepository;
+
 
     @Override
     public List<PaymentLink> getAllOrders() {
@@ -62,15 +72,14 @@ public class PaymentLinkService implements IPaymentLinkService {
         Seat seat = seatRepository.findById(dto.getSeatId())
                 .orElseThrow(() -> new IllegalArgumentException("Seat not found"));
 
-        PaymentLink paymentLink = new PaymentLink(
-                user,
-                bill,
-                dto.getMovieName(),
-                seat,
-                dto.getPrice() != null ? dto.getPrice() : BigDecimal.ZERO,
-                dto.getTransactionDate() != null ? dto.getTransactionDate() : LocalDateTime.now(),
-                dto.getStatus()
-        );
+        PaymentLink paymentLink = new PaymentLink();
+        paymentLink.setUser(user);
+        paymentLink.setBill(bill);
+        paymentLink.setMovieName(dto.getMovieName());
+        paymentLink.setSeat(seat);
+        paymentLink.setPrice(dto.getPrice() != null ? dto.getPrice() : BigDecimal.ZERO);
+        paymentLink.setTransactionDate(dto.getTransactionDate() != null ? dto.getTransactionDate() : LocalDateTime.now());
+        paymentLink.setStatus(dto.getStatus());
 
         PaymentLink savedPaymentLink = IPaymentLinkRepository.save(paymentLink);
 
@@ -83,6 +92,7 @@ public class PaymentLinkService implements IPaymentLinkService {
 
         return savedPaymentLink;
     }
+
 
     @Override
     public PaymentLink updateOrder(Integer id, PaymentLinkDTO dto) {
