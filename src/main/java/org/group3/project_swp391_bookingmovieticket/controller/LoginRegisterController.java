@@ -74,7 +74,7 @@ public class LoginRegisterController {
         user.setEmail(userLoginDTO.getEmailLogin());
         user.setPassword(userLoginDTO.getPasswordLogin());
         Optional<User> userExist = userService.findByEmailAndPassword(user.getEmail());
-        System.out.println(userExist.get().getPassword()+"sql");
+        System.out.println(userExist.get().getPassword() + "sql");
 
         if (userExist.isPresent()) {
             // So sánh mật khẩu người dùng nhập với mật khẩu đã mã hóa trong CSDL
@@ -195,7 +195,7 @@ public class LoginRegisterController {
             customerRole.setId(2);
             User user =
                     new User(userRegisterDTO.getUserName(), hashedPassword,
-                    userRegisterDTO.getFullName(), userRegisterDTO.getEmail(), userRegisterDTO.getPhone());
+                            userRegisterDTO.getFullName(), userRegisterDTO.getEmail(), userRegisterDTO.getPhone());
             user.setRole(customerRole);
             userService.save(user);
             redirectAttributes.addFlashAttribute("successMessageRegister", "Registration successful! You can now proceed to your account.");
@@ -292,6 +292,12 @@ public class LoginRegisterController {
 
             // 5. Đăng nhập và lưu vào session
             session.setAttribute("userLogin", user);
+            if (user.getRole().getName().equals("ADMIN") && user != null) {
+                return "redirect:/admin";
+            }
+//            else if (user.getRole().getName().equals("STAFF") && user != null) {
+//                return "redirect:/staff";
+//            }
             return "redirect:/home";
 
         } catch (Exception e) {
@@ -333,5 +339,123 @@ public class LoginRegisterController {
             redirectAttributes.addFlashAttribute("showLoginModal", true);
             return "redirect:/home";
         }
+    }
+
+    @PostMapping("/verification-code-forget-password")
+    public String sendVerificationCode(@RequestParam("email") String email,
+                                       RedirectAttributes redirectAttributes,
+                                       HttpSession session,
+                                       Model model) {
+        if (!userService.existsByEmail(email)) {
+            redirectAttributes.addFlashAttribute("errorNotFoundEmail", "Email không tồn tại!");
+            redirectAttributes.addFlashAttribute("showForgetPassModal", true);
+            return "redirect:/home";
+        }
+        String verificationCode = ticketEmailService.generateVerificationCode();
+        ticketEmailService.sendVerificationEmail(email, verificationCode);
+        session.setAttribute("verificationCodeForget", verificationCode);
+        session.setAttribute("verificationCodeTimestampForget", System.currentTimeMillis());
+        session.setAttribute("emailForgetPass", email);
+        model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+        return "confirmation_code_forget_pass";  // Chuyển hướng về trang home hoặc trang thông báo lỗi
+    }
+
+    @PostMapping("/verify-forget-pass")
+    public String verifyForgetPass(@RequestParam String code,
+                                   HttpSession session,
+                                   Model model,
+                                   RedirectAttributes redirectAttributes) {
+
+        // Get stored verification code and timestamp
+        String correctCode = (String) session.getAttribute("verificationCodeForget");
+        Long timestamp = (Long) session.getAttribute("verificationCodeTimestampForget");
+        String email = (String) session.getAttribute("emailForgetPass");
+
+        // Check if the code has expired (2 minutes = 2 * 60 * 1000 milliseconds)
+        long expirationTime = 2 * 60 * 1000;
+        if (System.currentTimeMillis() - timestamp > expirationTime) {
+            model.addAttribute("errorOverTime", "Mã xác nhận đã hết hạn, vui lòng gửi lại!");
+            model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+            return "confirmation_code_forget_pass";
+        }
+
+        // If code matches, redirect to success page
+        if (code.equals(correctCode)) {
+            redirectAttributes.addFlashAttribute("email", email);
+            redirectAttributes.addFlashAttribute("showChangePass", true);
+            return "redirect:/home";
+        } else {
+            model.addAttribute("errorWrongCodeForgetPass", "Sai mã xác nhận, vui thử lại!");
+            model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+            return "confirmation_code_forget_pass";
+        }
+    }
+
+    @PostMapping("/resend-verification-code-forget-pass")
+    public String resendVerificationCodeForgetPass(HttpSession session, Model model) {
+
+        String email = (String) session.getAttribute("emailForgetPass");
+
+        // Lấy thời gian mã xác nhận đã được gửi từ session (tính theo mili giây)
+        Long lastVerificationTime = (Long) session.getAttribute("verificationCodeTimestampForget");
+
+        // Tính thời gian chênh lệch giữa thời gian hiện tại và thời gian mã gửi
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - lastVerificationTime;
+
+        // Nếu chưa đủ 2 phút (2 phút = 2 * 60 * 1000 mili giây), không cho gửi lại mã
+        if (timeDifference < 2 * 60 * 1000) {
+            long remainingTime = (2 * 60 * 1000 - timeDifference) / 1000;  // Thời gian còn lại trong giây
+            model.addAttribute("errorMessage2", "Bạn chỉ có thể gửi lại sau " + remainingTime + " giây!");
+            model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+            model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+            return "confirmation_code_forget_pass";
+        }
+
+        // Nếu đã đủ 5 phút, gửi lại mã xác nhận
+        String newVerificationCode = ticketEmailService.generateVerificationCode();
+
+        // Gửi mã xác nhận qua email
+        ticketEmailService.sendVerificationEmail(email, newVerificationCode);
+
+        // Lưu mã xác nhận mới và thời gian gửi vào session
+        session.setAttribute("verificationCodeForget", newVerificationCode);
+        session.setAttribute("verificationCodeTimestampForget", currentTime);
+
+        // Thêm thông báo thành công
+        model.addAttribute("successMessage2", "Mã mới đã được gửi về email của bạn vui lòng kiểm tra!");
+        model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
+        model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+
+        // Quay lại trang xác nhận
+        return "confirmation_code_forget_pass";
+    }
+
+    @PostMapping("/change-pass-forget")
+    public String changePassForget(@RequestParam String email,
+                                   @RequestParam String newPassword,
+                                   @RequestParam String newPasswordReInput,
+                                   RedirectAttributes redirectAttributes,
+                                   HttpSession session) {
+        if (!newPassword.equals(newPasswordReInput)) {
+            redirectAttributes.addFlashAttribute("errorChangePass", "Vui lòng nhập mật khẩu khớp với nhập lại mật khẩu!");
+            redirectAttributes.addFlashAttribute("showChangePass", true);
+            return "redirect:/home";
+        } else if (newPassword.length() < 6) {
+            redirectAttributes.addFlashAttribute("errorChangePass", "Vui lòng nhập mật khẩu có 6 ký tự trở lên!");
+            redirectAttributes.addFlashAttribute("showChangePass", true);
+            return "redirect:/home";
+        }
+        User user = userService.findByEmail(email).get();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(hashedPassword);
+        userService.save(user);
+        redirectAttributes.addFlashAttribute("successChangePass", "Đổi mật khẩu thành công vui lòng đăng nhập");
+        redirectAttributes.addFlashAttribute("showLoginModal", true);
+        return "redirect:/home";
     }
 }

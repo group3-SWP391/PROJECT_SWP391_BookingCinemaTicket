@@ -291,6 +291,16 @@ Author: Webstrot
         $('#signUpModal').modal('show');
     });
 </script>
+<script th:if="${showForgetPassModal}">
+    $(document).ready(function () {
+        $('#forgotPasswordModal').modal('show');
+    });
+</script>
+<script th:if="${showChangePass}">
+    $(document).ready(function () {
+        $('#enterNewPass').modal('show');
+    });
+</script>
 <script>
     document.getElementById("signUpForm").onsubmit = function (event) {
         var password = document.getElementById("passwordRegister").value.trim(); // Loại bỏ khoảng trắng đầu và cuối
