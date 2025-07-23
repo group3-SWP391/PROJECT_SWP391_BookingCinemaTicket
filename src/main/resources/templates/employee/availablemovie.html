@@ -170,7 +170,9 @@ h1 {
     <!-- Movie 1 -->
     <div  th:each="movie: ${availablemovie}"  class="col">
       <div class="movie-tile border-green">
-        <img th:src="${movie.key.movie.largeImageUrl}" alt="Phim A" class="movie-image">
+        <a th:href="@{/employee/moviedetail/{id}(id=${movie.key.movie.id})}">
+          <img th:src="${movie.key.movie.largeImageUrl}" alt="Phim A" class="movie-image">
+        </a>
         <div class="movie-info">
           <p><strong th:text="${'Thời gian: '+ movie.key.startTime}"></strong></p>
           <p><strong th:text="${'Đã đặt: ' + movie.value + '/' + movie.key.room.capacity}"></strong></p>

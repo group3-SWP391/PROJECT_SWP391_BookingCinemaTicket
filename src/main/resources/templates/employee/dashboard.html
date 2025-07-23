@@ -121,7 +121,7 @@
         <div class="tab-pane fade show active" id="schedule" role="tabpanel">
             <h4 class="text-xl font-semibold text-gray-700 mb-6">Xem lịch chiếu</h4>
             <h5 class="text-xl font-semibold text-gray-700 mb-6" th:text="${'Chi nhánh: ' + branch.name}"></h5>
-            <form th:action="@{/employee/searchmovie}" method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <form th:action="@{/employee/searchmovie}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
 
                 <div>

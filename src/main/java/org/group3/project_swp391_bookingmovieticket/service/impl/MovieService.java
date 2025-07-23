@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class MovieService implements IMovieService {
     @Autowired
-    private IMovieRepository iMovieRepository;
+    private IMovieRepository movieRepository;
 
     @Override
     public List findAll() {
@@ -20,15 +20,14 @@ public class MovieService implements IMovieService {
 
     @Override
     public Optional<Movie> findById(Integer id) {
-        Optional<Movie> movie = iMovieRepository.findById(id);
-        return movie;
+        return movieRepository.findById(id);
     }
 
 
 
     @Override
     public void update(Movie movie) {
-        iMovieRepository.save(movie);
+        movieRepository.save(movie);
 
     }
 
@@ -39,6 +38,7 @@ public class MovieService implements IMovieService {
 
     @Override
     public Optional<Movie> getMovieByName(String movieName) {
-        return iMovieRepository.findByNameIgnoreCase(movieName);
+
+        return movieRepository.findByNameIgnoreCase(movieName);
     }
 }

@@ -12,11 +12,11 @@ import java.util.Optional;
 @Service
 public class PopcornDrinkService implements IPopcornDrinkService {
     @Autowired
-    private IPopcornDrinkRepository iPopcornDrinkRepository;
+    private IPopcornDrinkRepository popcornDrinkRepository;
     @Override
     public List<PopcornDrink> findAll() {
         List<PopcornDrink> popcornDrink = new ArrayList<>();
-       List<PopcornDrink> popcornDrinkList = iPopcornDrinkRepository.findAll();
+       List<PopcornDrink> popcornDrinkList = popcornDrinkRepository.findAll();
        for(PopcornDrink popcorn: popcornDrinkList){
            if(popcorn.getQuantity() > 0){
                popcornDrink.add(popcorn);
@@ -27,12 +27,13 @@ public class PopcornDrinkService implements IPopcornDrinkService {
 
     @Override
     public Optional<PopcornDrink> findById(Integer id) {
-        return iPopcornDrinkRepository.findById(id);
+
+        return popcornDrinkRepository.findById(id);
     }
 
     @Override
     public void update(PopcornDrink popcornDrink) {
-        iPopcornDrinkRepository.save(popcornDrink);
+        popcornDrinkRepository.save(popcornDrink);
 
     }
 

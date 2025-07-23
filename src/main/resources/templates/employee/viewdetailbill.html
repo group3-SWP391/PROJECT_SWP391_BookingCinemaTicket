@@ -115,20 +115,20 @@
                 <thead>
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phim</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lịch Trình</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Seat</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
-
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ghế loại</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá tiền</th>
 
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                 <tr th:each="ticket: ${ticketlist}">
                     <td class="px-6 py-4 text-sm text-gray-900" th:text="${ticket.schedule.movie.name}"></td>
-                    <td class="px-6 py-4 text-sm text-gray-900" th:text="${ticket.schedule.startDate}"></td>
                     <td class="px-6 py-4 text-sm text-gray-900" th:text="${ticket.seat.name}"></td>
                     <td class="px-6 py-4 text-sm text-gray-900" th:text="${ticket.schedule.room.name}"></td>
-
+                    <td class="px-6 py-4 text-sm text-gray-900" th:text="(${ticket.seat.isVip} ? 'VIP' : 'Ghế thường')"></td>
+                    <td class="px-6 py-4 text-sm text-gray-900" th:text="${ticket.seat.isVip} ? ${ticket.schedule.price + 20000} : ${ticket.schedule.price}"></td>
                 </tr>
                 </tbody>
             </table>

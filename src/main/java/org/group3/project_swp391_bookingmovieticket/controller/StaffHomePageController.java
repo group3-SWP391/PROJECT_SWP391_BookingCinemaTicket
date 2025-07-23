@@ -11,10 +11,7 @@ import org.group3.project_swp391_bookingmovieticket.service.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -47,7 +44,7 @@ public class StaffHomePageController {
             }
         }
     }
-    @GetMapping("/searchmovie")
+    @PostMapping("/searchmovie")
     public String showConditionMovie(@RequestParam String movie, @RequestParam("branch") Integer branchId, Model model,HttpServletRequest request) {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("userLogin");

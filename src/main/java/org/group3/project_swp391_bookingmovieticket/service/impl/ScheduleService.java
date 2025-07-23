@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class ScheduleService implements IScheduleService {
     @Autowired
-    private IScheduleRepository iScheduleRepository;
+    private IScheduleRepository scheduleRepository;
     @Autowired
     private ITicketRepository ticketRepository;
     @Override
@@ -24,7 +24,7 @@ public class ScheduleService implements IScheduleService {
 
     @Override
     public Optional findById(Integer id) {
-        Optional<Schedule> schedule = iScheduleRepository.findById(id);
+        Optional<Schedule> schedule = scheduleRepository.findById(id);
         return schedule;
 
 
@@ -43,7 +43,7 @@ public class ScheduleService implements IScheduleService {
 
     @Override
     public List<Schedule> findSchedulesByBranchMovieAndDateRange(Integer branchId, String movieId, LocalDate today, LocalDate threeDay) {
-        return iScheduleRepository.findByBranchMovieANDRange(branchId, movieId, today, threeDay);
+        return scheduleRepository.findByBranchMovieANDRange(branchId, movieId, today, threeDay);
     }
 
     @Override
@@ -60,6 +60,6 @@ public class ScheduleService implements IScheduleService {
 
     @Override
     public List<Schedule> findSchedulesByBranchAndDay(Integer branchId, LocalDate today) {
-        return iScheduleRepository.findByBranchIdAndStartDate(branchId, today);
+        return scheduleRepository.findByBranchIdAndStartDate(branchId, today);
     }
 }

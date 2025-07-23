@@ -41,12 +41,19 @@ public class RevenueController {
             LocalDateTime endOfDay = today.atTime(LocalTime.MAX); // 2025-07-23T23:59:59.999999999
             List<Bill> billList = billService.findAllByUserIdAndCreatedTimeBetween(user.getId(), startOfDay, endOfDay);
             if(billList.isEmpty()){
+                Double totalPrice = 0.0;
+                model.addAttribute("totalprice", totalPrice);
                 model.addAttribute("message", "Chưa có hóa đơn nào được ghi nhận cho nhân viên trong ngày");
                 return "employee/revenueinday";
 
             }else{
                 Map<Bill, Integer> billIntegerMap = billService.countBill(billList);
+                Double totalPrice = 0.0;
+                for (Bill bill :billIntegerMap.keySet()){
+                    totalPrice+=bill.getPrice();
+                }
                 model.addAttribute("billlist", billIntegerMap.entrySet());
+                model.addAttribute("totalprice", totalPrice);
                 return "employee/revenueinday";
 
             }

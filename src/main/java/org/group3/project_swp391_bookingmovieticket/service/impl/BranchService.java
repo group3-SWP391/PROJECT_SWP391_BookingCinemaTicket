@@ -13,15 +13,15 @@ import java.util.Optional;
 @Service
 public class BranchService implements IBranchService {
     @Autowired
-    private IBranchRepository iBranchRepository;
+    private IBranchRepository branchRepository;
     @Override
     public List findAll() {
-        return iBranchRepository.findAll();
+        return branchRepository.findAll();
     }
 
     @Override
     public Optional findById(Integer id) {
-        return iBranchRepository.findById(id);
+        return branchRepository.findById(id);
     }
 
     @Override

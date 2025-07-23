@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class RoomService implements IRoomService {
     @Autowired
-    private IRoomRepository iRoomRepository;
+    private IRoomRepository roomRepository;
     @Override
     public List findAll() {
         return List.of();
@@ -19,7 +19,8 @@ public class RoomService implements IRoomService {
 
     @Override
     public Optional findById(Integer id) {
-        return iRoomRepository.findById(id);
+
+        return roomRepository.findById(id);
     }
 
     @Override

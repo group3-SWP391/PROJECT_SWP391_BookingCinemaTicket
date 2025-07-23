@@ -6,10 +6,7 @@ import org.group3.project_swp391_bookingmovieticket.service.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -21,8 +18,12 @@ public class VerifyTicketController {
     private IPaymentLinkService iPaymentLinkService;
     @GetMapping("/verifyticket")
     public String showPageVerifyTicket(){
+
         return "employee/verifyticket";
     }
+
+
+
     @PostMapping("/verifyticket")
     public String proccessVerifyTicket(@RequestParam("ordercode") String orderCode, Model model){
         if(orderCode == null || orderCode.trim().isEmpty()){
@@ -56,9 +57,6 @@ public class VerifyTicketController {
             return "employee/verifyticket";
 
         }
-
-
-
     }
     @PostMapping("/confirmation")
     public String showMessage(@RequestParam("idordercode") String id,   RedirectAttributes redirectAttributes){
@@ -66,12 +64,17 @@ public class VerifyTicketController {
         if(paymentLink != null){
             Integer idBill = paymentLink.getBill().getId();
             iTicketService.confirmTicket(idBill);
-
-
-
-
         }
         redirectAttributes.addFlashAttribute("ordercode", id);
-        return "redirect:/successpayment";
+        return "redirect:/employee/showinforticket";
+    }
+    @GetMapping("/showinforticket")
+    public String showPrintTicketPage(@ModelAttribute("ordercode") Integer orderCode, Model model){
+        PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(orderCode);
+        if(paymentLink != null){
+            model.addAttribute("paymentLink", paymentLink);
+        }
+        return "employee/informationticket";
+
     }
 }

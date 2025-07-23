@@ -11,15 +11,17 @@ import java.util.Optional;
 @Service
 public class SeatService implements ISeatService {
     @Autowired
-    private ISeatRepository iSeatRepository;
+    private ISeatRepository seatRepository;
     @Override
     public List<Seat> getListSeatById(int roomId) {
-        return iSeatRepository.findByRoomId(roomId);
+
+        return seatRepository.findByRoomId(roomId);
     }
 
     @Override
     public List<Seat> findSeatsByIds(List<Integer> ids) {
-        return iSeatRepository.findByIdIn(ids);
+
+        return seatRepository.findByIdIn(ids);
     }
 
 
@@ -31,7 +33,8 @@ public class SeatService implements ISeatService {
 
     @Override
     public Optional findById(Integer id) {
-        return iSeatRepository.findById(id);
+
+        return seatRepository.findById(id);
     }
 
     @Override

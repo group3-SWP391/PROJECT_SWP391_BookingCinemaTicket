@@ -11,10 +11,10 @@ import java.util.Optional;
 @Service
 public class PaymentLinkService implements IPaymentLinkService {
     @Autowired
-    private IPaymentLinkRepository iPaymentLinkRepository;
+    private IPaymentLinkRepository paymentLinkRepository;
     @Override
     public void save(PaymentLink paymentLink) {
-        iPaymentLinkRepository.save(paymentLink);
+        paymentLinkRepository.save(paymentLink);
 
 
     }
@@ -26,7 +26,8 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Override
     public PaymentLink findByOrderCode(long orderCode) {
-        return iPaymentLinkRepository.findByOrderCode(orderCode);
+
+        return paymentLinkRepository.findByOrderCode(orderCode);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Override
     public void update(PaymentLink paymentLink) {
-        iPaymentLinkRepository.save(paymentLink);
+        paymentLinkRepository.save(paymentLink);
 
     }
 

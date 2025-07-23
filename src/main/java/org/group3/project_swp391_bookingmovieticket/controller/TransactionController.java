@@ -70,10 +70,8 @@ public class TransactionController {
                             PopcornDrink popcornDrink = popcornDrinkOptional.get();
                             popcornDrink.setQuantity(popcornDrink.getQuantity() - Integer.parseInt(quantity));
                             iPopcornDrinkService.update(popcornDrink);
-
                         }
                     }
-
                 }
                 //Lấy ra danh sách food để chèn vào cột popcorn_drink_list in Ticket
                 String popcorn_drink = "";
@@ -85,7 +83,6 @@ public class TransactionController {
                             popcorn_drink = popcorn_drink + popcornDrink.get().getName() + "(x"+quantity+")" + ",";
                         }
                     }
-
                 }
 
                 //Chèn vào trong bảng Ticket
@@ -121,7 +118,6 @@ public class TransactionController {
             model.addAttribute("messageerror", "Không tìm thấy mã đặt vé để xử lý thanh toán.");
         }
         return "employee/error";
-
     }
     @GetMapping("/successpayment")
     public String showPageSuccess(@ModelAttribute("ordercode") String orderCode, Model model){
@@ -130,9 +126,6 @@ public class TransactionController {
             model.addAttribute("paymentLink", paymentLink);
         }
         return "employee/successpayment";
-
-
-
     }
 
     @GetMapping("/bill/cancelbill")
