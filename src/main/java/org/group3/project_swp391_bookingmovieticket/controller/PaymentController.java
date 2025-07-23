@@ -130,8 +130,8 @@ public class PaymentController {
         long orderCode = Long.parseLong(combined);
 
         String baseUrl = getBaseUrl(request);
-        String returnUrl = baseUrl + "/bill/create_bill"; // localhost:8080/bill/create_bill
-        String cancelUrl = baseUrl + "/bill/cancel_screen";
+        String returnUrl = baseUrl + "/bill/createbill"; // localhost:8080/bill/create_bill
+        String cancelUrl = baseUrl + "/bill/cancelbill";
 
         PaymentData paymentData = PaymentData.builder()
                 .orderCode(orderCode)

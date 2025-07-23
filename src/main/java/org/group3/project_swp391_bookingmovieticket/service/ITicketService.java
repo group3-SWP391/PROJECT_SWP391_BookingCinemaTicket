@@ -13,5 +13,6 @@ public interface ITicketService extends IGeneralService<Ticket> {
     void save(Ticket ticket);
     void confirmTicket(Integer id);
     boolean verifyEffectiveOrderCode(Integer id);
+    List<Ticket> getListTicketByBillId(Integer id);
 
 }

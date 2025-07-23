@@ -77,7 +77,10 @@ public class TicketService implements ITicketService {
 
     }
 
-
+    @Override
+    public List<Ticket> getListTicketByBillId(Integer id) {
+        return ticketRepository.findByBillId(id);
+    }
 
 
     @Override

@@ -34,7 +34,7 @@ public class TransactionController {
     private IBillService iBillService;
     @Autowired
     private IPaymentLinkService iPaymentLinkService;
-    @GetMapping("/bill/create_bill")
+    @GetMapping("/bill/createbill")
     public String handlePayment(@RequestParam("orderCode") String orderCode, @RequestParam("status") String status, @RequestParam("cancel") String cancel, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
         HttpSession session = request.getSession();
         //Từ orderCode check xem tình trạng sao để tránh giả mạo sau này.
@@ -135,7 +135,7 @@ public class TransactionController {
 
     }
 
-    @GetMapping("/bill/cancel_screen")
+    @GetMapping("/bill/cancelbill")
     public String cancelPayment(@RequestParam("orderCode") String orderCode){
         PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Long.parseLong(orderCode));
         if(paymentLink != null){

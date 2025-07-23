@@ -58,7 +58,6 @@ public class BillService implements IBillService {
         for(Bill bill: billList){
             List<Ticket> ticketList = ticketRepository.findByBillId(bill.getId());
             billIntegerHashMap.put(bill, ticketList.size());
-
         }
         return billIntegerHashMap;
 

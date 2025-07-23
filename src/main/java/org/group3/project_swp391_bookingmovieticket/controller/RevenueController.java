@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,9 +52,13 @@ public class RevenueController {
             }
 
         }
-
-
-
-
     }
+    @PostMapping("/view/bill")
+    public String viewDetailBill(@RequestParam("billid") Integer id, Model model){
+        List<Ticket> ticketLists = ticketService.getListTicketByBillId(id);
+        model.addAttribute("ticketlist", ticketLists);
+        return "employee/viewdetailbill";
+    }
+
+
 }
