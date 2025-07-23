@@ -33,6 +33,7 @@ public class RevenueController {
         if(user == null){
             return "redirect:/";
         }else{
+
             LocalDate today = LocalDate.now();
             LocalDateTime startOfDay = today.atStartOfDay(); // 2025-07-23T00:00:00
             LocalDateTime endOfDay = today.atTime(LocalTime.MAX); // 2025-07-23T23:59:59.999999999

@@ -113,7 +113,6 @@ public class TransactionController {
                 return "redirect:/successpayment";
 
             }else{
-
                 model.addAttribute("messageerror", "Giao dịch này không hợp lệ hoặc đã bị hủy. Để tiếp tục, vui lòng thực hiện thanh toán lại.");
                 return "employee/error";
             }

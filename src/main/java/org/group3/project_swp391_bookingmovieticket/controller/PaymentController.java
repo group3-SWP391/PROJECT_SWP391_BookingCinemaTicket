@@ -48,7 +48,7 @@ public class PaymentController {
         Integer scheduleId = (Integer)session.getAttribute("schedulemovie");
 
         //Lưu items vào session để xử lý sau khi payos callback lại còn trừ đi
-        session.setAttribute("listitems", items);
+                                      session.setAttribute("listitems", items);
 
         Double totalPriceFood = 0.0;
         String popcorn_drink = "";

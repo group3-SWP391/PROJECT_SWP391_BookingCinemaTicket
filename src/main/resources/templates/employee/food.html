@@ -166,7 +166,7 @@
 <body>
 <div class="container">
 
-    <form th:action="@{/checkout}" method="POST">
+    <form th:action="@{/next}" method="POST">
 
         <div th:each="item : ${listfood}" class="menu-item" th:data-id="${item.id}">
             <img th:src="${item.imageUrl}" th:alt="${item.name}" />

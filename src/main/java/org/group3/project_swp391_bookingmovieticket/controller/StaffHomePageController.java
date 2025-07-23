@@ -86,12 +86,14 @@ public class StaffHomePageController {
     public String showMovieDetail(@PathVariable("id") int idMovie, Model model){
         Optional<Movie> movie = iMovieService.findById(idMovie);
         if(movie.isEmpty()){
-            model.addAttribute("message", "Không tìm thấy bộ phim với ID đã cung cấp. Vui lòng kiểm tra lại!!!");
+            model.addAttribute("messageerror", "Không tìm thấy bộ phim với ID đã cung cấp. Vui lòng kiểm tra lại!!!");
+            return "employee/error";
         }else{
             model.addAttribute("movie", movie.get());
+            return "employee/movieDetail";
 
         }
-        return "employee/movieDetail";
+
 
 
 
