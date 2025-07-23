@@ -292,11 +292,6 @@
             document.getElementById('orderHistory').style.display = 'block';
         }
 
-        function showVoucher() {
-            hideAllForms();
-            document.getElementById('voucherHistory').style.display = 'block';
-        }
-
         function showPendingPayment() {
             hideAllForms();
             document.getElementById('pendingPayment').style.display = 'block';
@@ -385,7 +380,6 @@
     <button class="toggle-button" onclick="showUpdateProfile()">Đổi thông tin</button>
     <button class="toggle-button" onclick="showChangePassword()">Đổi mật khẩu</button>
     <button class="toggle-button" onclick="showOrder()">Lịch sử xem</button>
-    <button class="toggle-button" onclick="showVoucher()">Voucher</button>
     <button class="toggle-button" onclick="showFavoriteList()">Yêu thích</button>
     <button class="toggle-button" onclick="showPendingPayment()">Chờ thanh toán</button>
 
@@ -485,32 +479,6 @@
         </div>
     </div>
 
-
-    <div id="voucherHistory" class="form-section">
-        <h3>My Voucher</h3>
-        <div th:if="${vouchers != null and vouchers.isEmpty()}">
-        <p>No vouchers available.</p>
-        </div>
-        <table th:unless="${vouchers.isEmpty()}">
-            <tr>
-                <th>Voucher Code</th>
-                <th>Giảm giá (%)</th>
-                <th>Bắt đầu</th>
-                <th>Kết thúc</th>
-                <th>Chi tiết</th>
-            </tr>
-            <tr th:each="voucher : ${vouchers}">
-                <td th:text="${voucher.code}"></td>
-                <td th:text="${voucher.discountPercentage}"></td>
-                <td th:text="${#temporals.format(voucher.startDate, 'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${#temporals.format(voucher.endDate, 'yyyy-MM-dd HH:mm')}"></td>
-                <td><a th:href="@{'/voucher/' + ${voucher.id}}">Xem</a></td>
-            </tr>
-        </table>
-        <label>Chú ý: 🎁 Khám phá ưu đãi đặc biệt dành riêng cho bạn!
-            Tại đây, bạn sẽ tìm thấy những voucher hấp dẫn được cá nhân hóa theo sở thích và lịch sử mua sắm của bạn. Đừng bỏ lỡ cơ hội nhận ưu đãi độc quyền và tiết kiệm mỗi ngày. Quà tặng luôn sẵn sàng — chỉ chờ bạn mở ra!
-        </label>
-    </div>
 
     <div id="pendingPayment" class="form-section">
         <h3>Wait to Payment</h3>

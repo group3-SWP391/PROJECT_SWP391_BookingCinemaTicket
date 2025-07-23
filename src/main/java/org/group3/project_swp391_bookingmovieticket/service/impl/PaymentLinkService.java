@@ -82,14 +82,6 @@ public class PaymentLinkService implements IPaymentLinkService {
         paymentLink.setStatus(dto.getStatus());
 
         PaymentLink savedPaymentLink = IPaymentLinkRepository.save(paymentLink);
-
-        try {
-            voucherService.generateVoucherForUser(user.getId());
-            logger.info("Voucher generation attempted for userId: {}", user.getId());
-        } catch (Exception e) {
-            logger.error("Failed to generate voucher for userId: {}. Error: {}", user.getId(), e.getMessage(), e);
-        }
-
         return savedPaymentLink;
     }
 
@@ -129,9 +121,7 @@ public class PaymentLinkService implements IPaymentLinkService {
     }
 
     public PaymentLink saveOrder(PaymentLink paymentLink) {
-        PaymentLink savedPaymentLink = IPaymentLinkRepository.save(paymentLink);
-        voucherService.generateVoucherForUser(paymentLink.getUser().getId());
-        return savedPaymentLink;
+        return IPaymentLinkRepository.save(paymentLink);
     }
 
     public void checkAndNotifyWatchedMoviesForUser(Integer userId) {

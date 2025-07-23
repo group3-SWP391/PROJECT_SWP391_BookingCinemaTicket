@@ -17,8 +17,6 @@ public class Voucher {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean isUsed;
-    @Column(name = "user_id")
-    private Integer userId;
     private String applicableEvents;
     private String applicableTicketTypes;
     private String applicableUserTypes;
@@ -89,14 +87,6 @@ public class Voucher {
 
     public void setUsed(boolean used) {
         this.isUsed = used;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public String getApplicableEvents() {

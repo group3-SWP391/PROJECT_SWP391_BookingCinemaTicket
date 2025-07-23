@@ -16,8 +16,6 @@ public class VoucherDTO {
     private Double discountPercentage;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Boolean isUsed;
-    private Integer orderId;
     private Double fixedDiscount;
     private Double minOrderValue;
     private String applicableEvents;

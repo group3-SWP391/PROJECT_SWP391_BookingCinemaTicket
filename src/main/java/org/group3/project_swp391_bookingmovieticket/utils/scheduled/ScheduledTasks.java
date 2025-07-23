@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.config.scheduled;
+package org.group3.project_swp391_bookingmovieticket.utils.scheduled;
 
 
 import org.group3.project_swp391_bookingmovieticket.service.impl.TicketService;

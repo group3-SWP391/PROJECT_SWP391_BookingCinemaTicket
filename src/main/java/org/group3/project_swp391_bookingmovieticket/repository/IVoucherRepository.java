@@ -3,7 +3,6 @@ package org.group3.project_swp391_bookingmovieticket.repository;
 import org.group3.project_swp391_bookingmovieticket.entity.Voucher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -13,15 +12,11 @@ import java.util.Optional;
 @Repository
 public interface IVoucherRepository extends JpaRepository<Voucher, Integer> {
 
-    @Query("SELECT v FROM Voucher v WHERE v.userId = :userId AND v.endDate > :currentDateTime AND v.startDate <= :currentDateTime")
-    List<Voucher> findValidVouchersByUserId(@Param("userId") Integer userId, @Param("currentDateTime") LocalDateTime currentDateTime);
+    // Lấy các voucher đang hoạt động, chưa hết hạn, đã bắt đầu, chưa vượt giới hạn sử dụng
+    @Query("SELECT v FROM Voucher v WHERE v.endDate > :currentDateTime AND v.startDate <= :currentDateTime AND v.isUsed = false AND v.currentUsageCount < v.maxUsageCount")
+    List<Voucher> findValidVouchers(@org.springframework.data.repository.query.Param("currentDateTime") LocalDateTime currentDateTime);
 
-    @Query("SELECT COUNT(v) FROM Voucher v WHERE v.userId = :userId")
-    long countByUserId(@Param("userId") Integer userId);
-
-    @Query("SELECT v FROM Voucher v WHERE (v.userId = :userId OR v.userId IS NULL) AND v.endDate > :currentDateTime AND v.startDate <= :currentDateTime AND v.isUsed = false AND v.currentUsageCount < v.maxUsageCount")
-    List<Voucher> findValidVouchersByUserIdAndConditions(@Param("userId") Integer userId, @Param("currentDateTime") LocalDateTime currentDateTime);
-
+    // Tìm theo mã code
     @Query("SELECT v FROM Voucher v WHERE v.code = :code")
-    Optional<Voucher> findByCode(@Param("code") String code);
+    Optional<Voucher> findByCode(@org.springframework.data.repository.query.Param("code") String code);
 }

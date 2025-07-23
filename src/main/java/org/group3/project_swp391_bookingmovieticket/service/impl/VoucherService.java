@@ -1,8 +1,10 @@
 package org.group3.project_swp391_bookingmovieticket.service.impl;
 
+import org.group3.project_swp391_bookingmovieticket.entity.User;
 import org.group3.project_swp391_bookingmovieticket.entity.Voucher;
 import org.group3.project_swp391_bookingmovieticket.repository.IPaymentLinkRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.IVoucherRepository;
+import org.group3.project_swp391_bookingmovieticket.service.IVoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -11,108 +13,67 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 @Service
-public class VoucherService {
+public class VoucherService implements IVoucherService {
     private static final Logger logger = LoggerFactory.getLogger(VoucherService.class);
 
     @Autowired
-    private IVoucherRepository IVoucherRepository;
+    private IVoucherRepository voucherRepository;
 
     @Autowired
-    private IPaymentLinkRepository IPaymentLinkRepository;
+    private IPaymentLinkRepository paymentLinkRepository;
 
-    public void generateVoucherForUser(Integer userId) {
-        logger.debug("Generating voucher for userId: {}", userId);
-        long orderCount = IPaymentLinkRepository.countByUserId(userId);
-        long voucherCount = IVoucherRepository.countByUserId(userId);
-        logger.debug("Order count: {}, Voucher count: {}", orderCount, voucherCount);
-
-        if (orderCount == 1 && voucherCount == 0) {
-            logger.info("Creating voucher for userId: {}", userId);
-            String code = generateRandomVoucherCode();
-            LocalDateTime now = LocalDateTime.now();
-
-            Voucher voucher = new Voucher();
-            voucher.setCode(code);
-            voucher.setUserId(userId);
-            voucher.setDiscountPercentage(10.0);
-            voucher.setStartDate(now);
-            voucher.setEndDate(now.plusDays(30));
-            voucher.setApplicableEvents("Summer2025,WELCOME,VIP100K");
-            voucher.setApplicableTicketTypes("VIP,Regular");
-            voucher.setApplicableUserTypes("MEMBER");
-            voucher.setFixedDiscount(0.0);
-            voucher.setMinOrderValue(150000.0);
-            voucher.setMaxUsageCount(100);
-            voucher.setCurrentUsageCount(0);
-            try {
-                IVoucherRepository.save(voucher);
-                logger.info("Voucher created successfully: {}", code);
-            } catch (Exception e) {
-                logger.error("Failed to save voucher for userId: {}. Error: {}", userId, e.getMessage());
-            }
-        } else {
-            logger.debug("Voucher not created. Order count: {}, Voucher count: {}", orderCount, voucherCount);
-        }
-    }
-
+    @Override
     public List<Voucher> getValidVouchers(Integer userId) {
-        logger.debug("Fetching valid vouchers for userId: {}", userId);
-        if (userId == 0) {
-            logger.warn("Invalid userId: 0. Returning empty voucher list.");
-            return List.of();
-        }
-        return IVoucherRepository.findValidVouchersByUserId(userId, LocalDateTime.now());
+        logger.debug("Fetching valid vouchers (shared for all users)");
+        return voucherRepository.findValidVouchers(LocalDateTime.now());
     }
 
+    @Override
     public Voucher applyVoucher(Integer userId, String voucherCode, double totalAmount) {
         logger.debug("Applying voucher {} for userId: {}", voucherCode, userId);
-        List<Voucher> validVouchers = IVoucherRepository.findValidVouchersByUserId(userId, LocalDateTime.now());
+        List<Voucher> validVouchers = voucherRepository.findValidVouchers(LocalDateTime.now());
+
         Voucher voucher = validVouchers.stream()
-                .filter(v -> v.getCode().equals(voucherCode))
+                .filter(v -> v.getCode().equalsIgnoreCase(voucherCode))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid or expired voucher"));
 
-        logger.info("Voucher {} applied successfully for userId: {}", voucherCode, userId);
+        logger.info("Voucher {} applied successfully", voucherCode);
         return voucher;
     }
 
-    private String generateRandomVoucherCode() {
-        return "VOUCHER-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-    }
-
+    @Override
     public Voucher applyVoucher(Integer userId, String voucherCode, double totalAmount, String event, String ticketType, String userType) {
-        logger.debug("Applying voucher {} for userId: {}", voucherCode, userId);
+        logger.debug("Applying voucher {} with event={}, ticketType={}, userType={}", voucherCode, event, ticketType, userType);
 
-        // Kiểm tra theo các điều kiện voucher
-        Voucher voucher = IVoucherRepository.findByCode(voucherCode)
+        Voucher voucher = voucherRepository.findByCode(voucherCode)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid voucher code"));
 
+        LocalDateTime now = LocalDateTime.now();
         if (voucher.isUsed() || voucher.getCurrentUsageCount() >= voucher.getMaxUsageCount()) {
             throw new IllegalArgumentException("Voucher has been used or reached usage limit");
         }
 
-        LocalDateTime now = LocalDateTime.now();
         if (voucher.getEndDate().isBefore(now) || voucher.getStartDate().isAfter(now)) {
             throw new IllegalArgumentException("Voucher is expired or not yet valid");
         }
-        logger.debug("userType={}, applicableUserTypes={}", userType, voucher.getApplicableUserTypes());
+
         if (voucher.getApplicableUserTypes() != null && !voucher.getApplicableUserTypes().isBlank()) {
             List<String> userTypes = List.of(voucher.getApplicableUserTypes().split(","));
             if (userTypes.stream().noneMatch(u -> u.trim().equalsIgnoreCase(userType))) {
                 throw new IllegalArgumentException("Voucher không áp dụng cho loại người dùng này");
             }
         }
-        logger.debug("event={}, applicableEvents={}", event, voucher.getApplicableEvents());
+
         if (voucher.getApplicableEvents() != null && !voucher.getApplicableEvents().isBlank()) {
             List<String> events = List.of(voucher.getApplicableEvents().split(","));
             if (events.stream().noneMatch(e -> e.trim().equalsIgnoreCase(event))) {
                 throw new IllegalArgumentException("Voucher không áp dụng cho sự kiện này");
             }
         }
-        logger.debug("ticketType={}, applicableTicketTypes={}", ticketType, voucher.getApplicableTicketTypes());
+
         if (voucher.getApplicableTicketTypes() != null && !voucher.getApplicableTicketTypes().isBlank()) {
             List<String> ticketTypes = List.of(voucher.getApplicableTicketTypes().split(","));
             if (ticketTypes.stream().noneMatch(t -> t.trim().equalsIgnoreCase(ticketType))) {
@@ -120,18 +81,13 @@ public class VoucherService {
             }
         }
 
-
         if (totalAmount < voucher.getMinOrderValue()) {
-            throw new IllegalArgumentException("Order value does not meet minimum requirement");
-        }
-
-        if (voucher.getUserId() != null && !voucher.getUserId().equals(userId)) {
-            throw new IllegalArgumentException("Voucher is not valid for this user");
+            throw new IllegalArgumentException("Giá trị đơn hàng không đủ điều kiện");
         }
 
         if ((voucher.getDiscountPercentage() == null || voucher.getDiscountPercentage() == 0.0) &&
                 (voucher.getFixedDiscount() == null || voucher.getFixedDiscount() == 0.0)) {
-            throw new IllegalArgumentException("Voucher has no valid discount value");
+            throw new IllegalArgumentException("Voucher không có giá trị giảm hợp lệ");
         }
 
         voucher.setCurrentUsageCount(voucher.getCurrentUsageCount() + 1);
@@ -140,28 +96,34 @@ public class VoucherService {
         }
 
         try {
-            IVoucherRepository.save(voucher);
-            logger.info("Voucher {} applied successfully for userId: {}", voucherCode, userId);
+            voucherRepository.save(voucher);
+            logger.info("Voucher {} saved after applying", voucherCode);
         } catch (Exception e) {
-            logger.error("Failed to save voucher update for code: {}. Error: {}", voucherCode, e.getMessage());
-            throw new RuntimeException("Failed to apply voucher: " + e.getMessage());
+            logger.error("Failed to update voucher {}. Error: {}", voucherCode, e.getMessage());
+            throw new RuntimeException("Lỗi khi áp dụng voucher");
         }
 
         return voucher;
     }
 
-
+    @Override
     public Voucher getVoucherByCode(String code) {
-        logger.debug("Fetching voucher by code: {}", code);
-        return IVoucherRepository.findByCode(code).orElse(null);
+        return voucherRepository.findByCode(code).orElse(null);
     }
 
+    @Override
     public List<Voucher> getAllVouchers() {
-        return IVoucherRepository.findAll();
+        return voucherRepository.findAll();
     }
+
+    @Override
     public Voucher getVoucherById(Integer id) {
-        return IVoucherRepository.findById(id)
+        return voucherRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Voucher not found with ID: " + id));
     }
 
+    @Override
+    public List<Voucher> getVouchersByUser(User user) {
+        return voucherRepository.findValidVouchers(LocalDateTime.now());
+    }
 }
