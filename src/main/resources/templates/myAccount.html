@@ -267,7 +267,6 @@
             document.getElementById('updateProfileSection').style.display = 'none';
             document.getElementById('changePasswordForm').style.display = 'none';
             document.getElementById('orderHistory').style.display = 'none';
-            document.getElementById('voucherHistory').style.display = 'none';
             document.getElementById('showFavoriteList').style.display = 'none';
             document.getElementById('pendingPayment').style.display = 'none';
         }
@@ -305,16 +304,22 @@
 
         function handleSubmit() {
             var phoneInput = document.getElementById("phone").value;
+            var nameInput = document.getElementById("fullname").value;
+            var emailInput = document.getElementById("email").value;
 
             if (!isValidPhoneNumber(phoneInput)) {
                 alert("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng (VD: 0912345678).");
                 return false;
-            }    if (nameInput.trim() === "" || emailInput.trim() === "") {
+            }
+
+            if (nameInput.trim() === "" || emailInput.trim() === "") {
                 alert("Vui lòng kiểm tra lại thông tin. Thay đổi có thể sai hoặc thông tin đã tồn tại trên hệ thống.");
                 return false;
             }
+
             return true;
         }
+
 
         window.onload = function() {
             document.getElementById('accountInfo').style.display = 'block';
