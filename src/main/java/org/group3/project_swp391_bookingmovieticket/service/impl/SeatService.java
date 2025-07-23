@@ -34,12 +34,13 @@ public class SeatService implements ISeatService {
         return iSeatRepository.findById(id);
     }
 
-
-
     @Override
-    public void update(Object o) {
+    public void update(Seat seat) {
 
     }
+
+
+
 
     @Override
     public void remove(Integer id) {

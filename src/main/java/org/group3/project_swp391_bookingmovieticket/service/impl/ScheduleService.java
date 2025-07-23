@@ -31,7 +31,7 @@ public class ScheduleService implements IScheduleService {
     }
 
     @Override
-    public void update(Object o) {
+    public void update(Schedule schedule) {
 
     }
 

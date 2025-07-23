@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.service.impl;
 
+import org.group3.project_swp391_bookingmovieticket.entity.Room;
 import org.group3.project_swp391_bookingmovieticket.repository.IRoomRepository;
 import org.group3.project_swp391_bookingmovieticket.service.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void update(Object o) {
+    public void update(Room room) {
 
     }
 
@@ -30,4 +31,6 @@ public class RoomService implements IRoomService {
     public void remove(Integer id) {
 
     }
+
+
 }

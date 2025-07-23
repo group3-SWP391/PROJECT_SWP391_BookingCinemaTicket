@@ -16,4 +16,5 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     List<Ticket> findByScheduleId(int id);
     List<Ticket> findByScheduleIdIn(List<Integer> scheduleId);
     List<Ticket> findByBillId(Integer id);
+
 }
