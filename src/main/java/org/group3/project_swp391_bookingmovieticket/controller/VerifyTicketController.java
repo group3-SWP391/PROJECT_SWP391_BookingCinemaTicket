@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+
 @Controller
 @RequestMapping("/employee")
 public class VerifyTicketController {
@@ -18,12 +20,8 @@ public class VerifyTicketController {
     private IPaymentLinkService iPaymentLinkService;
     @GetMapping("/verifyticket")
     public String showPageVerifyTicket(){
-
         return "employee/verifyticket";
     }
-
-
-
     @PostMapping("/verifyticket")
     public String proccessVerifyTicket(@RequestParam("ordercode") String orderCode, Model model){
         if(orderCode == null || orderCode.trim().isEmpty()){
@@ -32,6 +30,8 @@ public class VerifyTicketController {
         }
         PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Integer.parseInt(orderCode));
         if(paymentLink != null){
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime endTime = LocalDateTime.of(paymentLink.getSchedule().getStartDate(), paymentLink.getSchedule().getEndTime());
             Integer id = paymentLink.getBill().getId();
             boolean check = iTicketService.verifyEffectiveOrderCode(id);
             //Vé đó đã được sử dụng rồi
@@ -41,13 +41,21 @@ public class VerifyTicketController {
                 return "employee/verifyticket";
 
 
-            //Vé đó chưa được sử dụng
+            //Vé đó đã qua thời gian chiếu của phim đó.
+            }else if(now.isAfter(endTime)){
+                model.addAttribute("error", "Đã qua thời gian sử dụng vé, vé không còn hiệu lực!!!");
+                model.addAttribute("key", orderCode);
+                return "employee/verifyticket";
+
+            //Vé đó chưa được xác nhận lần nào
             }else{
                 model.addAttribute("paymentlink", paymentLink);
                 model.addAttribute("key", orderCode);
                 return "employee/verifyticket";
 
             }
+
+
 
 
 

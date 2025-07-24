@@ -69,11 +69,12 @@ public class TicketService implements ITicketService {
     public boolean verifyEffectiveOrderCode(Integer id) {
         List<Ticket> ticketList = ticketRepository.findByBillId(id);
         for (Ticket ticket: ticketList){
+            //Trường hợp status của vé đó, của bill đó đã về 0 -> tức là xác nhận trước đó rồi
             if(!ticket.getStatus()){
-                return true;
+                return true; //xác nhận trước đó rồi
             }
         }
-        return false;
+        return false; // chưa xác nhận trước đó
 
     }
 

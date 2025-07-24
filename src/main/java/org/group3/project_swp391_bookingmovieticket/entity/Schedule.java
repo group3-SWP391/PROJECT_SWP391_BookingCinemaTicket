@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -20,7 +21,7 @@ public class Schedule {
     private LocalDate startDate;
 
     @Column(name = "start_time")
-    private Time startTime;
+    private LocalTime startTime;
 
     @ManyToOne
     @JoinColumn(name = "branch_id")
@@ -33,4 +34,7 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @Column(name = "end_time")
+    private LocalTime endTime;
 }
