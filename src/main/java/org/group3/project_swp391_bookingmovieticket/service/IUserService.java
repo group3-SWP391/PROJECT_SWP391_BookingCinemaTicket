@@ -18,4 +18,6 @@ public interface IUserService extends IGeneralService<User> {
 
     List<User> findAllByRoleName(String roleName);
 
+    User save(User user);
+
 }

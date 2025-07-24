@@ -56,6 +56,11 @@ public class UserService implements IUserService {
         return userRepository.findAllByRole_Name(roleName);
     }
 
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
     // === Các phương thức bổ sung cho profile ===
 
     public User findByPhone(String phone) {

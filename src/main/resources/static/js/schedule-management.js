@@ -325,9 +325,9 @@ function validateScheduleForm() {
         isValid = false;
         errors.push('Price must be a valid number greater than 0');
         document.getElementById('schedulePrice').classList.add('is-invalid');
-    } else if (price > 1000) {
+    } else if (price > 100000) {
         isValid = false;
-        errors.push('Price cannot exceed $1000');
+        errors.push('Price cannot exceed 100000 VND');
         document.getElementById('schedulePrice').classList.add('is-invalid');
     }
 
@@ -420,4 +420,4 @@ window.loadRoomsByBranch = loadRoomsByBranch;
 window.saveSchedule = saveSchedule;
 window.editSchedule = editSchedule;
 window.deleteSchedule = deleteSchedule;
-window.closeScheduleModal = closeScheduleModal; 
+window.closeScheduleModal = closeScheduleModal;

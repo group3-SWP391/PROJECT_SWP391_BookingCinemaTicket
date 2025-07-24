@@ -67,7 +67,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="price-badge" th:text="${'$' + schedule.price}">$15.00</span>
+                                <span class="price-badge" th:text="${#numbers.formatInteger(schedule.price, 0, 'POINT') + ' VND'}">50.000 VND</span>
                             </td>
                             <td>
                                 <div class="action-buttons">
@@ -156,8 +156,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="schedulePrice">Ticket Price * <small class="text-muted">(USD)</small></label>
-                                <input type="number" class="form-control" id="schedulePrice" name="price" step="0.01" min="0" required placeholder="e.g. 15.00">
+                                <label for="schedulePrice">Ticket Price * <small class="text-muted">(VND)</small></label>
+                                <input type="number" class="form-control" id="schedulePrice" name="price" step="1000" min="10000" required placeholder="e.g. 50000">
                             </div>
                         </form>
                     </div>
