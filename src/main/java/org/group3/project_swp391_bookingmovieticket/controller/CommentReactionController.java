@@ -49,7 +49,7 @@ public class CommentReactionController {
         } else {
             throw new IllegalArgumentException("Comment không tồn tại với ID: " + commentId);
         }
-        return "redirect:/movie-details?id=" + movieId;
+        return "redirect:/movie/detail?movieId=" + movieId;
     }
 
 }

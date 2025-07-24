@@ -55,7 +55,7 @@ public class ReviewController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 
-        return "redirect:/movie-details?id=" + movieId + "&tab=review";
+        return "redirect:/movie/detail?movieId=" + movieId + "&tab=review";
     }
 
 

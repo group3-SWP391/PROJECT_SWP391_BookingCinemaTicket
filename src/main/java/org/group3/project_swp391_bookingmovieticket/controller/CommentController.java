@@ -28,6 +28,7 @@ public class CommentController {
                              @RequestParam("content") String content,
                              HttpServletRequest request,
                              RedirectAttributes redirectAttributes) {
+        System.out.println(content + movieId + "debug comment");
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userLogin") == null) {
             return "redirect:/login";
@@ -36,13 +37,14 @@ public class CommentController {
         User user = (User) session.getAttribute("userLogin");
 
         try {
+            System.out.println("comment");
             commentService.addComment(movieId, user, content);
             redirectAttributes.addFlashAttribute("successMessage", "Bình luận đã được gửi.");
         } catch (IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 
-        return "redirect:/movie-details?id=" + movieId;
+        return "redirect:/movie/detail?movieId=" + movieId;
     }
 
 
@@ -64,7 +66,7 @@ public class CommentController {
             e.printStackTrace();
         }
 
-        return "redirect:/movie-details?id=" + movieId;
+        return "redirect:/movie/detail?movieId=" + movieId;
     }
     @PostMapping("/editComment")
     public String editComment(@RequestParam("commentId") Integer commentId,
@@ -80,7 +82,7 @@ public class CommentController {
                 ICommentRepository.save(comment);
             }
         }
-        return "redirect:/movie-details?id=" + movieId;
+        return "redirect:/movie/detail?movieId=" + movieId;
     }
 
     @PostMapping("/deleteComment")
@@ -102,7 +104,7 @@ public class CommentController {
             }
         }
 
-        return "redirect:/movie-details?id=" + movieId;
+        return "redirect:/movie/detail?moiveId=" + movieId;
     }
 
 

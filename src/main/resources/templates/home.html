@@ -47,7 +47,27 @@ Author: Webstrot
     <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
 
 </head>
+<style>
+    .owl-nav button {
+        background: #000;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        margin: 5px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
 
+    .owl-nav {
+        position: absolute;
+        top: 35%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+</style>
 <body>
 <!-- preloader Start -->
 <div id="preloader">
@@ -316,9 +336,11 @@ Author: Webstrot
 <script>
     $('.owl-carousel').owlCarousel({
         items: 4,
-        loop: true,              // Loop the carousel
-        autoplay: true,          // Enable autoplay
-        autoplayTimeout: 2000
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 2000,
+        nav: true,
+        navText: ['→', '→'] // 👈 Thay nút mặc định bằng ký hiệu đơn giản hơn
     });
 </script>
 <!--main js file end-->

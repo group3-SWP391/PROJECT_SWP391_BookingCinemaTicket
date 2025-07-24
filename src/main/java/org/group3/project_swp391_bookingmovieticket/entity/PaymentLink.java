@@ -54,4 +54,9 @@ public class PaymentLink {
 
     @OneToMany(mappedBy = "paymentLink", fetch = FetchType.LAZY)
     private List<Ticket> tickets;
+
+    @Override
+    public String toString() {
+        return "hieu";
+    }
 }

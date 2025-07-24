@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,8 +75,10 @@ public class BranchService implements IBranchService {
     @Override
     public List<BranchDTO> getBranchByMovie(Integer movieId) {
         // lấy về time hiện tại
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+        LocalTime now = LocalTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+
+        System.out.println("today: " + today + ", now: " + now);
 
         List<BranchDTO> branchDTOList = new ArrayList<>();
         // duyệt qua tất các branch có chiếu movie đó
@@ -111,6 +114,8 @@ public class BranchService implements IBranchService {
 
     @Override
     public List<BranchDTO> getBranchByStartDate(Integer movieId, String startDate) {
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+        LocalTime now = LocalTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
         if (startDate.equals("allDate")) {
             return getBranchByMovie(movieId);
         } else {
@@ -119,11 +124,15 @@ public class BranchService implements IBranchService {
                 BranchDTO branchDTO = modelMapper.map(branch, BranchDTO.class);
                 branchDTO.setScheduleList(new ArrayList<>());
                 for (Schedule schedule : branch.getScheduleList()) {
-                    if (schedule.getMovie().getId() != movieId ||
-                            !schedule.getStartDate().toString().equals(startDate)) {
+                    // Chỉ lấy những schedule của phim có movieId đúng với movie đang tìm vì schedule có thể chứa lịch của phim khác
+                    if (schedule.getMovie().getId() != movieId) {
                         continue;
                     }
-                    branchDTO.getScheduleList().add(modelMapper.map(schedule, ScheduleDTO.class));
+                    // Nếu time khả dụng thì add vào
+                    if (schedule.getStartDate().isAfter(today) ||
+                            (schedule.getStartDate().isEqual(today) && schedule.getStartTime().isAfter(now))) {
+                        branchDTO.getScheduleList().add(modelMapper.map(schedule, ScheduleDTO.class));
+                    }
                 }
                 if (!branchDTO.getScheduleList().isEmpty()) {
                     branchDTO.setGroupedScheduleByRoomName(

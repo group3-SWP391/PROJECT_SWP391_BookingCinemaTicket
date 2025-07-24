@@ -393,7 +393,7 @@
         <div th:each="entry : ${groupedSchedules}">
             <div class="schedule">
                 <div class="poster-column">
-                    <a th:href="@{/movie-details(id=${entry.value[0].movie.id})}">
+                    <a th:href="@{/movie/detail(id=${entry.value[0].movie.id})}">
                         <img th:src="${entry.value[0].movie.getSmallImageURL()}" alt="Poster"/>
                     </a>
                 </div>

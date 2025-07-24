@@ -42,4 +42,8 @@ public class Ticket {
     @JoinColumn(name = "payment_link_id")
     private PaymentLink paymentLink;
 
+    @Override
+    public String toString() {
+        return "hieu";
+    }
 }

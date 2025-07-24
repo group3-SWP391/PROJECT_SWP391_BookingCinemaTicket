@@ -32,7 +32,7 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Override
     public Optional<PaymentLink> findById(Integer id) {
-        return Optional.empty();
+        return paymentLinkRepository.findById(id);
     }
 
     @Override

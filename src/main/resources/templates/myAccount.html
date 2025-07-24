@@ -473,7 +473,7 @@
 
                 <p><strong>Thể loại:</strong> <span th:text="${fav.movie.categories}">Thể loại</span></p>
 
-                <a th:href="@{/movie-detail(id=${fav.movie.id})}">Xem chi tiết</a>
+                <a th:href="@{/movie/detail(id=${fav.movie.id})}">Xem chi tiết</a>
 
                 <form th:action="@{/favorite/toggle}" method="post" style="display:inline-block; margin-top: 10px;">
                     <input type="hidden" name="movieId" th:value="${fav.movie.id}"/>

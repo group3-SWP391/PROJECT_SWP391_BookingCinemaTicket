@@ -7,7 +7,7 @@ import java.util.Optional;
 
 
 public interface IBillService extends IGeneralService<Bill> {
-    Bill createNewBill(BookingRequestDTO bookingRequestDTO);
+    Bill createNewBill(BookingRequestDTO bookingRequestDTO, Integer paymentLinkId);
 
     Optional<Bill> findById(Integer id);
 

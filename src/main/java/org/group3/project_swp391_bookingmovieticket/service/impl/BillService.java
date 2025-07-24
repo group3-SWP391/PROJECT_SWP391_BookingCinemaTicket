@@ -10,6 +10,7 @@ import org.group3.project_swp391_bookingmovieticket.entity.User;
 import org.group3.project_swp391_bookingmovieticket.repository.*;
 import org.group3.project_swp391_bookingmovieticket.repository.IBillRepository;
 import org.group3.project_swp391_bookingmovieticket.service.IBillService;
+import org.group3.project_swp391_bookingmovieticket.service.IPaymentLinkService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,9 @@ public class BillService implements IBillService {
 
     @Autowired
     private IScheduleRepository scheduleRepository;
+
+    @Autowired
+    private IPaymentLinkService paymentLinkService;
 
     @Autowired
     private ITicketRepository ticketRepository;
@@ -69,7 +73,7 @@ public class BillService implements IBillService {
 
     @Transactional
     @Override
-    public Bill createNewBill(BookingRequestDTO bookingRequestDTO) {
+    public Bill createNewBill(BookingRequestDTO bookingRequestDTO, Integer paymentLinkId) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
 
@@ -110,6 +114,7 @@ public class BillService implements IBillService {
 
             Ticket ticket = new Ticket();
             ticket.setSchedule(schedule);
+            ticket.setPaymentLink(paymentLinkService.findById(paymentLinkId).get());
             ticket.setStatus(false);
             ticket.setSeat(seatRepository.getById(seatId));
             ticket.setBill(bill); // gắn ngược lại vào bill

@@ -184,6 +184,10 @@ Author: Webstrot
                         <div style="font-weight: bold; font-size: 20px; padding-top: 5px">Tổng tiền bỏng và nước :
                             <span id="popcorn-price-display">0₫</span>
                         </div>
+                        <div id="discount-line"
+                             style="font-weight: bold; font-size: 20px; padding-top: 5px; color: #dc3545; display: none;">
+                            Tổng tiền giảm giá : <span id="discount-amount">0₫</span>
+                        </div>
                         <div class="slot"></div>
                     </div>
                 </div>
@@ -271,7 +275,7 @@ Author: Webstrot
 
         $("#btnCheckCode").click(function () {
             const voucherCode = $("#voucherInput").val().trim();
-            const userId = [[${session.userLogin?.id ?: 0}]];
+            const userId = [[${session.userLogin?.id ? : 0}]];
             const rawPrice = Number($priceElement.data("price")) || 0;
             const totalPrice = appliedVoucher ? rawPrice / (1 - appliedVoucher.discountPercentage / 100) : rawPrice;
 
@@ -315,7 +319,7 @@ Author: Webstrot
             $.ajax({
                 type: "GET",
                 url: `/api/vouchers/info`,
-                data: { code },
+                data: {code},
                 success: function (voucher) {
                     let message = `Giảm: ${voucher.discountPercentage}%`;
                     if (voucher.fixedDiscount > 0)

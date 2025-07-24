@@ -115,7 +115,7 @@ public class CheckoutController {
             final String description = "Seat " + listSeatNameBank;
             final String returnUrl = baseUrl + "/bill/create_bill";
             final String cancelUrl = baseUrl + "/bill/cancel_bill";
-            final int price = 5000;
+            final int price = bookingRequestDTO.getTotalPrice();
 
             String currentTimeString = String.valueOf(System.currentTimeMillis());
             int randomPart = new Random().nextInt(900) + 100; // random 3 chữ số từ 100–999

@@ -77,8 +77,10 @@ public class BillController {
                 movieService.save(movie);
             }
 
+            PaymentLink p = paymentLinkService.findByOrderCode(orderCode);
+
             // Tạo bill và cập nhật trạng thái thanh toán
-            Bill bill = billService.createNewBill(dto);
+            Bill bill = billService.createNewBill(dto, p.getId());
             paymentLink = paymentLinkService.findByOrderCode(orderCode);
             paymentLink.setBill(bill);
             paymentLink.setStatus(status);

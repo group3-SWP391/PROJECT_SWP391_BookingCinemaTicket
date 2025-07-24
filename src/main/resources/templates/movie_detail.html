@@ -291,7 +291,7 @@ Author: Webstrot
                             </div>
 
                             <!-- COMMENT TAB -->
-                            <div id="comment-tab" class="tab-content active">
+                            <div id="comment-tab" class="tab-content active" style="margin-top: 100px; padding-top: 100px">
                                 <div th:if="${errorMessage}" class="alert alert-danger" role="alert"
                                      th:text="${errorMessage}"></div>
                                 <div th:if="${successMessage}" class="alert alert-success" role="alert"
@@ -302,7 +302,7 @@ Author: Webstrot
                                 </div>
 
                                 <div th:if="${session.userLogin == null}">
-                                    <p>Vui lòng <a th:href="@{/login}">đăng nhập</a> để bình luận.</p>
+                                    <p>Vui lòng đăng nhập để bình luận.</p>
                                 </div>
 
                                 <div th:if="${session.userLogin != null and !hasOrdered}">
@@ -407,20 +407,20 @@ Author: Webstrot
                                     <ul>
                                         <!-- Nút 'Trang trước' -->
                                         <li th:if="${commentPage.hasPrevious()}">
-                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, commentPage=${commentPage.number - 1})}">&laquo;
+                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, commentPage=${commentPage.number - 1})}">&laquo;
                                                 Trước</a>
                                         </li>
 
                                         <!-- Các số trang -->
                                         <li th:each="i : ${#numbers.sequence(0, commentPage.totalPages - 1)}"
                                             th:classappend="${i == commentPage.number} ? 'active'">
-                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, commentPage=${i})}"
+                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, commentPage=${i})}"
                                                th:text="${i + 1}">1</a>
                                         </li>
 
                                         <!-- Nút 'Trang sau' -->
                                         <li th:if="${commentPage.hasNext()}">
-                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, commentPage=${commentPage.number + 1})}">Sau
+                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, commentPage=${commentPage.number + 1})}">Sau
                                                 &raquo;</a>
                                         </li>
                                     </ul>
@@ -474,20 +474,20 @@ Author: Webstrot
                                     <ul>
                                         <!-- Nút 'Trang trước' -->
                                         <li th:if="${reviewPage.hasPrevious()}">
-                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, reviewPage=${reviewPage.number - 1}, tab='review')}">&laquo;
+                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, reviewPage=${reviewPage.number - 1}, tab='review')}">&laquo;
                                                 Trước</a>
                                         </li>
 
                                         <!-- Các số trang -->
                                         <li th:each="i : ${#numbers.sequence(0, reviewPage.totalPages - 1)}"
                                             th:classappend="${i == reviewPage.number} ? 'active'">
-                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, reviewPage=${i}, tab='review')}"
+                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, reviewPage=${i}, tab='review')}"
                                                th:text="${i + 1}">1</a>
                                         </li>
 
                                         <!-- Nút 'Trang sau' -->
                                         <li th:if="${reviewPage.hasNext()}">
-                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, reviewPage=${reviewPage.number + 1}, tab='review')}">Sau
+                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, reviewPage=${reviewPage.number + 1}, tab='review')}">Sau
                                                 &raquo;</a>
                                         </li>
 

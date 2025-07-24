@@ -34,7 +34,7 @@ public class NotificationController {
         INotificationRepository.saveAll(notifications);
 
 
-        return "redirect:/movie-details?id=" + movieId;
+        return "redirect:/movie/detail?movieId=" + movieId;
     }
 }
 

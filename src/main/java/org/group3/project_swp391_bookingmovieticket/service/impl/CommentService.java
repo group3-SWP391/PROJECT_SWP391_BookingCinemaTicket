@@ -49,17 +49,21 @@ public class CommentService implements ICommentService {
 
         ICommentRepository.save(comment);
     }
+
     @Override
     public boolean canUserComment(Integer userId, String movieName) {
         List<PaymentLink> paidLinks = IPaymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
+        System.out.println(paidLinks + "comment service");
         LocalDateTime now = LocalDateTime.now();
-
         for (PaymentLink link : paidLinks) {
-            if (link.getTickets() != null && link.getTickets().stream().anyMatch(ticket -> Boolean.TRUE.equals(ticket.getStatus()))) {
+            if (link.getTickets() != null &&
+                    link.getTickets()
+                            .stream()
+                            .anyMatch(ticket -> Boolean.TRUE.equals(ticket.getStatus()))) {
+                System.out.println(link.getTickets() + "list ticket");
                 return true;
             }
         }
-
         return false;
     }
 
