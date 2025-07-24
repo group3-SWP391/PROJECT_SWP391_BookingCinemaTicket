@@ -19,6 +19,7 @@ public class Movie {
     @Column(name = "long_description")
     private String longDescription;
     private String name;
+    @Column(name = "rating_id")
     private String rated;
     @Column(name = "release_date")
     private Date releaseDate;

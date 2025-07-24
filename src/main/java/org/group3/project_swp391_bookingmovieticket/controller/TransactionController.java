@@ -103,7 +103,7 @@ public class TransactionController {
                     ticket.setSchedule(paymentLink.getSchedule());
                     ticket.setSeat(seat);
                     ticket.setListPopcornDrinkName(popcorn_drink);
-                    ticket.setStatus(true);
+                    ticket.setStatus(false);
                     ticketService.save(ticket);
                 }
                 redirectAttributes.addFlashAttribute("ordercode", orderCode);

@@ -20,6 +20,7 @@ public class VerifyTicketController {
     private IPaymentLinkService paymentLinkService;
     @GetMapping("/verifyticket")
     public String showPageVerifyTicket(){
+
         return "employee/verifyticket";
     }
     @PostMapping("/verifyticket")
