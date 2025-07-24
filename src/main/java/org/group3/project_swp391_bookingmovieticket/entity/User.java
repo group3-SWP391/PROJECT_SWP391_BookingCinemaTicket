@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Table(name = "[user]")
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -57,6 +59,14 @@ public class User {
 
     private Boolean status;
 
-
+    public User(User other) {
+        this.id = other.id;
+        this.username = other.username;
+        this.password = other.password;
+        this.fullname = other.fullname;
+        this.phone = other.phone;
+        this.email = other.email;
+        this.role = other.role;
+    }
 
 }

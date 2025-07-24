@@ -9,18 +9,21 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "comment")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
@@ -28,7 +31,10 @@ public class Comment {
     private List<Comment> replies = new ArrayList<>();
 
 
+    @Column(name = "content")
     private String content;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Transient

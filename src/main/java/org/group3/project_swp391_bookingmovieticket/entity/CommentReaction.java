@@ -1,25 +1,28 @@
 package org.group3.project_swp391_bookingmovieticket.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "comment_reaction")
 public class CommentReaction {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    private Comment comment;
 
-    @ManyToOne
-    private User user;
-
+    @Column(name = "liked")
     private boolean liked;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id", nullable = false)
+    private Comment comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
+
 

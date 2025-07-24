@@ -1,12 +1,20 @@
 package org.group3.project_swp391_bookingmovieticket.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dto.MovieDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserRegisterDTO;
-import org.group3.project_swp391_bookingmovieticket.service.impl.DirectorService;
-import org.group3.project_swp391_bookingmovieticket.service.impl.MovieActorService;
-import org.group3.project_swp391_bookingmovieticket.service.impl.MovieService;
+import org.group3.project_swp391_bookingmovieticket.entity.Comment;
+import org.group3.project_swp391_bookingmovieticket.entity.Movie;
+import org.group3.project_swp391_bookingmovieticket.entity.Review;
+import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.repository.IPaymentLinkRepository;
+import org.group3.project_swp391_bookingmovieticket.service.ICommentReactionService;
+import org.group3.project_swp391_bookingmovieticket.service.ICommentService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -14,6 +22,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.*;
 
@@ -29,6 +41,21 @@ public class MovieController {
 
     @Autowired
     private DirectorService directorService;
+    @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
+    private ICommentReactionService reactionService;
+
+    @Autowired
+    private ICommentService commentService;
+    @Autowired
+    private IPaymentLinkRepository IPaymentLinkRepository;
+
+    @Autowired
+    private FavoriteService favoriteService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public String displayMovieAll() {
@@ -60,6 +87,7 @@ public class MovieController {
     public String displayMovieDetail(@RequestParam(value = "movieId", required = false) Integer movieId,
                                      @RequestParam(value = "page", defaultValue = "0") int page,
                                      @RequestParam(value = "size", defaultValue = "6") int size,
+                                     HttpSession session,
                                      Model model) {
         if (movieId == null) {
             model.addAttribute(MOVIE_HIGH_VIEW, movieService.findMovieByViewDesc());
@@ -68,6 +96,38 @@ public class MovieController {
             return "home";
         }
         Pageable pageable = PageRequest.of(page, size);
+
+        Page<Comment> commentPageResult = commentService.getCommentsByMovieId(movieId, pageable);
+        Page<Review> reviewPageResult = reviewService.getReviewsForMovie(movieId, pageable);
+
+        List<Comment> comments = commentPageResult.getContent();
+        List<Review> reviews = reviewPageResult.getContent();
+
+        // Like/Dislike
+        Map<Integer, Long> likesMap = comments.stream()
+                .collect(Collectors.toMap(Comment::getId, c -> reactionService.countLikes(c)));
+
+        Map<Integer, Long> dislikesMap = comments.stream()
+                .collect(Collectors.toMap(Comment::getId, c -> reactionService.countDislikes(c)));
+        model.addAttribute("comments", comments);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("commentPage", commentPageResult);
+        model.addAttribute("reviewPage", reviewPageResult);
+        model.addAttribute("likesMap", likesMap);
+        model.addAttribute("dislikesMap", dislikesMap);
+        User user = (User) session.getAttribute("userLogin");
+        boolean hasOrdered = false;
+        boolean isFavorite = false;
+
+        if (user != null) {
+            hasOrdered = IPaymentLinkRepository.existsByUser_IdAndSchedule_Movie_Name(user.getId(), movieService.findMovieById(movieId).getName());
+            isFavorite = favoriteService.isFavorite(user, modelMapper.map(movieService.findMovieById(movieId), Movie.class));
+        }
+        model.addAttribute("hasOrdered", hasOrdered);
+        model.addAttribute("isFavorite", isFavorite);
+
+
+
         MovieDTO movieDetail = movieService.findMovieById(movieId);
         model.addAttribute("movieSameCategory", movieService.findByCategory(movieDetail.getCategories(), pageable));
         model.addAttribute("actorByMovie", movieActorService.findAllActorByMovieId(movieId));

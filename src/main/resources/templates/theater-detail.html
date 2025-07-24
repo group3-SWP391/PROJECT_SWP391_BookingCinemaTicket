@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi Tiết Rạp</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}" />
-    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
     <style>
         .filter-bar {
             display: flex;
@@ -38,7 +38,6 @@
             gap: 10px;
             align-items: center;
         }
-
 
 
         .filter-bar select,
@@ -59,6 +58,7 @@
         .filter-bar button:hover {
             background-color: #74b9ff;
         }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -263,6 +263,7 @@
             background: #009874;
             transform: translateY(-2px);
         }
+
         .buttons {
             display: flex;
             gap: 15px;
@@ -340,16 +341,18 @@
     <h1>THEATER</h1>
     <h2 th:text="${branch.name} + ' - ' + ${branch.location}"></h2>
     <div class="theater-info">
-        <img th:src="${branch.imgurl}" alt="Theater Image" th:if="${!#strings.isEmpty(branch.imgurl)}"/>
+        <img th:if="${branch.getImgURL() != null and !branch.getImgURL().isEmpty()}"
+             th:src="@{${branch.getImgURL()}}"
+             alt="Theater Image"/>
     </div>
 
     <!-- Dropdown chọn ngày -->
     <div class="date-picker">
         <form method="get" action="/theater-detail">
-            <input type="hidden" name="branchId" th:value="${branch.id}" />
+            <input type="hidden" name="branchId" th:value="${branch.id}"/>
             <label for="date">Các phim đang có</label>
             <select name="date" id="date" onchange="this.form.submit()">
-                <option th:each="i : ${#numbers.sequence(0,6)}"
+                <option th:each="i : ${#numbers.sequence(0,15)}"
                         th:value="${#temporals.format(T(java.time.LocalDate).now().plusDays(i), 'yyyy-MM-dd')}"
                         th:text="${#temporals.format(T(java.time.LocalDate).now().plusDays(i), 'dd/MM/yyyy')}"
                         th:selected="${selectedDate == T(java.time.LocalDate).now().plusDays(i)}">
@@ -361,8 +364,8 @@
     <!--lọc theo phòng và giờ chiếu -->
     <div class="filter-bar" style="margin-bottom: 20px;">
         <form method="get" action="/theater-detail">
-            <input type="hidden" name="branchId" th:value="${branch.id}" />
-            <input type="hidden" name="date" th:value="${selectedDate}" />
+            <input type="hidden" name="branchId" th:value="${branch.id}"/>
+            <input type="hidden" name="date" th:value="${selectedDate}"/>
 
             <label for="roomFilter">Phòng:</label>
             <select name="roomId" id="roomFilter">
@@ -391,7 +394,7 @@
             <div class="schedule">
                 <div class="poster-column">
                     <a th:href="@{/movie-details(id=${entry.value[0].movie.id})}">
-                        <img th:src="${entry.value[0].movie.smallImageUrl}" alt="Poster" />
+                        <img th:src="${entry.value[0].movie.getSmallImageURL()}" alt="Poster"/>
                     </a>
                 </div>
 
@@ -415,13 +418,12 @@
     </div>
 
     <div class="buttons">
-        <a th:if="${!schedules.isEmpty()}"
-           th:href="${schedules[0].map}"
+        <a th:if="${schedules != null and #lists.size(schedules) > 0}"
+           th:href="${branch.getMap()}"
            target="_blank"
            class="button-map">
             XEM BẢN ĐỒ
         </a>
-        <span th:if="${schedules.isEmpty()}" class="button-map disabled">XEM BẢN ĐỒ</span>
 
         <a th:href="@{/contact}" class="button-contact">LIÊN HỆ CINEMA</a>
 
@@ -430,6 +432,9 @@
         </div>
     </div>
 </div>
+
+
+<header lang="vi" th:include="fragments/footer"></header>
 
 <script th:src="@{/js/jquery_min.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>

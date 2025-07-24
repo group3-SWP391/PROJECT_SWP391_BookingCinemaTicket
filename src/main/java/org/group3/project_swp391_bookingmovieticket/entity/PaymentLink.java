@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "payment_link")
@@ -50,4 +51,7 @@ public class PaymentLink {
 
     @Column(name = "popcorn_drink_list")
     private String listPopcornDrinkName;
+
+    @OneToMany(mappedBy = "paymentLink", fetch = FetchType.LAZY)
+    private List<Ticket> tickets;
 }

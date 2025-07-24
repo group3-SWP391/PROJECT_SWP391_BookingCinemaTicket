@@ -74,7 +74,7 @@ public class CommentController {
         User user = (User) session.getAttribute("userLogin");
         if (user != null) {
             Comment comment = ICommentRepository.findById(commentId).orElse(null);
-            if (comment != null && comment.getUser().getId().equals(user.getId())) {
+            if (comment != null && comment.getUser().getId() == user.getId()) {
                 comment.setContent(content);
                 comment.setUpdatedAt(LocalDateTime.now());
                 ICommentRepository.save(comment);
@@ -92,7 +92,7 @@ public class CommentController {
         if (user != null) {
             Comment comment = ICommentRepository.findById(commentId).orElse(null);
             if (comment != null) {
-                boolean isOwner = comment.getUser().getId().equals(user.getId());
+                boolean isOwner = comment.getUser().getId() == user.getId();
                 boolean isAdmin = "ADMIN".equalsIgnoreCase(user.getRole().getName());
 
                 if (isOwner || isAdmin) {

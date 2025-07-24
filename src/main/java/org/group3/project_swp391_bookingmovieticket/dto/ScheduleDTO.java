@@ -12,7 +12,7 @@ public class ScheduleDTO  {
     private MovieDTO movie;
     private double price;
     private String imgurl;
-    private LocalDate endTime;
+    private LocalTime endTime;
     private BranchDTO branch;
     private RoomDTO room;
 }

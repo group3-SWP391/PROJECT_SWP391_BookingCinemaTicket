@@ -34,6 +34,9 @@ public class Branch {
     @Column(name = "location_detail")
     private String locationDetail;
 
+    @Column(name = "map")
+    private String map;
+
     @ToString.Exclude
     @OneToMany(mappedBy = "branch",fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;

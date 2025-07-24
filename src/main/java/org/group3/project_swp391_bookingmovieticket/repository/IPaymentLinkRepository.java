@@ -39,7 +39,8 @@ public interface IPaymentLinkRepository extends JpaRepository<PaymentLink, Integ
             "AND p.seatList LIKE CONCAT('%', :seatId, '%') " +
             "AND (p.status = 'PENDING' OR p.status = 'PAID')")
     boolean existsBySchedule_IdAndSeatListAndStatus(@Param("scheduleId") int scheduleId, @Param("seatId") String seatId);
-    boolean existsByUser_IdAndMovieName(Integer userId, String movieName);
+
+    boolean existsByUser_IdAndSchedule_Movie_Name(Integer userId, String movieName);
 
     List<PaymentLink> findByUserIdAndStatus(Integer userId, String status);
 

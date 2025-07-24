@@ -198,8 +198,8 @@ public class UserService implements IUserService {
         }
     }
 
-    public void initiateUpdateProfile(User user) {
-        otpService.generateOtp(user.getId(), user.getEmail(), "UPDATE_PROFILE");
+    public void initiateUpdateProfile(User user, String otp) {
+        otpService.generateOtp(user.getId(), user.getEmail(), "UPDATE_PROFILE", otp);
     }
 
 

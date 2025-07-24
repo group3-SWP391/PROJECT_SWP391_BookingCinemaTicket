@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.group3.project_swp391_bookingmovieticket.dto.SeatDTO;
 import org.group3.project_swp391_bookingmovieticket.entity.PaymentLink;
 import org.group3.project_swp391_bookingmovieticket.entity.Room;
@@ -127,6 +128,14 @@ public class SeatService implements ISeatService {
     @Override
     public String findSeatNameById(Integer id) {
         return seatRepository.findSeatNameById(id);
+    }
+
+    @Override
+    public SeatDTO getSeatById(Integer id) {
+        Seat seat = seatRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Seat not found with id: " + id));
+
+        return modelMapper.map(seat, SeatDTO.class); // giả sử bạn có SeatMapper để chuyển đổi
     }
 
 

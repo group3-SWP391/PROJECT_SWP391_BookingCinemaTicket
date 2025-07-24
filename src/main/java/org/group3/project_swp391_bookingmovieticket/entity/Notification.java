@@ -1,11 +1,17 @@
 package org.group3.project_swp391_bookingmovieticket.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "notification")
+@Data
+@Getter
+@Setter
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,48 +45,24 @@ public class Notification {
         this.createdAt = createdAt;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public void setId(int id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
 
-    public Movie getMovie() {
-        return movie;
-    }
-
     public void setMovie(Movie movie) {
         this.movie = movie;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
     }
 
-    public boolean isRead() {
-        return isRead;
-    }
-
     public void setRead(boolean read) {
         isRead = read;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
     }
 
     public void setCreatedAt(Date createdAt) {

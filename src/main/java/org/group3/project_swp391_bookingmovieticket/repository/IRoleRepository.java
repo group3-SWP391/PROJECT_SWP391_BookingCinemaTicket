@@ -1,6 +1,6 @@
-package org.group3.project_swp391_bookingmovieticket.repositories;
+package org.group3.project_swp391_bookingmovieticket.repository;
 
-import org.group3.project_swp391_bookingmovieticket.entities.Role;
+import org.group3.project_swp391_bookingmovieticket.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

@@ -1,10 +1,10 @@
 package org.group3.project_swp391_bookingmovieticket.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+
+import jakarta.validation.constraints.*;
 import lombok.Data;
+
+
 
 
 @Data

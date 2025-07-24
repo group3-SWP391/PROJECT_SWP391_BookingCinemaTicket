@@ -169,12 +169,12 @@ Author: Webstrot
                     <div class="count__slot">
                         <div class="slot"></div>
                     </div>
-                    <div class="discountForm d-flex justify-content-between">
-                        <div class="discountForm__content"><label class="label__name">Discount code</label><input
-                                type="text" name="code" id="txtDiscountCode" class="form-control d-inline"
-                                placeholder="Enter here..."></div>
-                        <button id="btnCheckCode" class="btn mb-2">Apply</button>
+                    <div class="discountForm d-flex flex-column">
+                        <input type="text" id="voucherInput" class="form-control mb-2" placeholder="Nhập mã giảm giá">
+                        <button id="btnCheckCode" class="btn btn-primary">Áp dụng</button>
                     </div>
+                    <div id="voucherConditions" class="voucher-message"></div>
+                    <div id="voucherMessage" class="voucher-message"></div>
                     <div class="payForm">
                         <div style="font-weight: bold; font-size: 20px">Tổng tiền ghế
                             <span id="seat-display"
@@ -248,24 +248,97 @@ Author: Webstrot
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
 <!--main js file end-->
-<script>
+<script th:inline="javascript">
     let selectedItems = [];
     let popcornTotalPrice = 0;
+    let appliedVoucher = null; // ✅ Bổ sung để tránh lỗi ReferenceError
 
     $(document).ready(function () {
-        // ===== Định dạng giá vé ghế ngồi =====
+        const $priceElement = $(".price");
+
+        function showVoucherMessage(message, type) {
+            const voucherMessage = $("#voucherMessage");
+            voucherMessage.text(message).removeClass("success error").addClass(type);
+        }
+
+        function updateTotalPrice(newPrice) {
+            let finalPrice = newPrice;
+            if (appliedVoucher) {
+                finalPrice = newPrice * (1 - appliedVoucher.discountPercentage / 100);
+            }
+            $priceElement.text(finalPrice.toLocaleString('vi-VN') + "₫").data("price", finalPrice);
+        }
+
+        $("#btnCheckCode").click(function () {
+            const voucherCode = $("#voucherInput").val().trim();
+            const userId = [[${session.userLogin?.id ?: 0}]];
+            const rawPrice = Number($priceElement.data("price")) || 0;
+            const totalPrice = appliedVoucher ? rawPrice / (1 - appliedVoucher.discountPercentage / 100) : rawPrice;
+
+            if (!voucherCode) {
+                showVoucherMessage("Vui lòng nhập mã phiếu giảm giá.", "error");
+                return;
+            }
+            if (!userId) {
+                showVoucherMessage("Vui lòng đăng nhập để áp dụng phiếu giảm giá.", "error");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/vouchers/apply",
+                data: {
+                    userId: userId,
+                    voucherCode: voucherCode,
+                    totalAmount: totalPrice,
+                    event: "Summer2025",
+                    ticketType: "VIP",
+                    userType: "MEMBER"
+                },
+                success: function (response) {
+                    appliedVoucher = response.voucher;
+                    updateTotalPrice(totalPrice);
+                    showVoucherMessage(`Voucher ${voucherCode} applied! ${appliedVoucher.discountPercentage}% off.`, "success");
+                },
+                error: function (e) {
+                    console.error("Error applying voucher:", e);
+                    showVoucherMessage(e.responseJSON?.message || "Không áp dụng được phiếu giảm giá.", "error");
+                }
+            });
+        });
+
+        $("#voucherSelect").change(function () {
+            const selectedOption = $(this).find(":selected");
+            const code = selectedOption.val();
+            if (!code) return;
+
+            $.ajax({
+                type: "GET",
+                url: `/api/vouchers/info`,
+                data: { code },
+                success: function (voucher) {
+                    let message = `Giảm: ${voucher.discountPercentage}%`;
+                    if (voucher.fixedDiscount > 0)
+                        message += ` hoặc ${voucher.fixedDiscount.toLocaleString('vi-VN')}₫`;
+
+                    message += `<br>Áp dụng cho: ${voucher.applicableTicketTypes || 'tất cả loại vé'}, `;
+                    message += `Sự kiện: ${voucher.applicableEvents || 'mọi sự kiện'}, `;
+                    message += `Đối tượng: ${voucher.applicableUserTypes || 'mọi người dùng'}, `;
+                    message += `Đơn hàng tối thiểu: ${voucher.minOrderValue.toLocaleString('vi-VN')}₫`;
+
+                    $("#voucherConditions").html(message).addClass("success");
+                }
+            });
+        });
+
+        // Hiển thị giá ghế
         const seatSpan = $("#seat-display");
         const seatText = seatSpan.text().trim();
         const seatPrice = parseInt(seatSpan.data("price")) || 0;
         seatSpan.text(`${seatText} ${seatPrice.toLocaleString('vi-VN')}₫`);
-
-        // ===== Hiển thị giá tổng ban đầu =====
-        const $priceElement = $(".price");
-        const formattedTotal = (seatPrice).toLocaleString('vi-VN') + "₫";
-        $priceElement.text(formattedTotal);
+        $priceElement.text(seatPrice.toLocaleString('vi-VN') + "₫");
         $priceElement.data("price", seatPrice);
 
-        // ===== Format giá từng món bỏng nước =====
         $(".popcorn-price").each(function () {
             const price = parseFloat($(this).data("price"));
             if (!isNaN(price)) {
@@ -273,7 +346,6 @@ Author: Webstrot
             }
         });
 
-        // ===== Bắt sự kiện thay đổi số lượng =====
         $("input[name='quantity']").on("change", function () {
             const quantity = parseInt($(this).val());
             const $wrapper = $(this).closest(".prs_upcom_movie_box_wrapper");
@@ -296,26 +368,22 @@ Author: Webstrot
                 selectedItems = selectedItems.filter(item => item.name !== name);
             }
 
-            // 👉 Cập nhật tổng giá popcorn
             $("#popcorn-price-display").text(popcornTotalPrice.toLocaleString('vi-VN') + "₫");
 
-            // 👉 Tổng toàn bộ
             const total = seatPrice + popcornTotalPrice;
             $priceElement.text(total.toLocaleString('vi-VN') + "₫");
             $priceElement.data("price", total);
 
-            // 👉 Cập nhật danh sách đã chọn
             const selectedItemsText = selectedItems.map(i => `${i.name} x${i.quantity}`).join(", ");
             $(".count__slot .slot").text("Đang chọn: " + selectedItemsText);
         });
 
-        // ===== Gửi khi nhấn Payment =====
         $("#btn-booking").click(function () {
             const payload = {
                 scheduleId: [[${schedule.get().id}]],
                 userId: [[${session.userLogin.id}]],
                 listSeatId: [[${bookingRequest.listSeatId}]],
-                totalPrice: parseInt($(".price").data("price")),
+                totalPrice: parseInt($priceElement.data("price")),
                 movieId: [[${bookingRequest.movieId}]],
                 listPopcornDrink: selectedItems.map(item => ({
                     id: item.id,
@@ -345,6 +413,7 @@ Author: Webstrot
         });
     });
 </script>
+
 
 </body>
 

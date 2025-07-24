@@ -62,7 +62,8 @@ Author: Webstrot
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="st_video_slider_inner_wrapper float_left"  th:style="'background-image: url(' + ${movieDetail.largeImageURL} + '); background-position: center 0; background-size: cover; background-repeat: no-repeat;'">
+                <div class="st_video_slider_inner_wrapper float_left"
+                     th:style="'background-image: url(' + ${movieDetail.largeImageURL} + '); background-position: center 0; background-size: cover; background-repeat: no-repeat;'">
                     <div class="st_video_slider_overlay"></div>
                     <div class="st_video_slide_sec float_left">
                         <a rel='external' th:href="${movieDetail.trailerURLWatchLink}" title='title'
@@ -196,9 +197,9 @@ Author: Webstrot
                 <ul>
                     <li data-animation="animated fadeInUp">
                         <a th:href="@{/schedule/movieId(movieId=${movieDetail.id})}"
-                                                              class="button button--tamaya prs_upcom_main_btn"
-                                                              data-text="Mua vé">
-                        <span>Mua vé</span>
+                           class="button button--tamaya prs_upcom_main_btn"
+                           data-text="Mua vé">
+                            <span>Mua vé</span>
                         </a>
                     </li>
                 </ul>
@@ -227,9 +228,18 @@ Author: Webstrot
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="st_md_summ_pera float_left">
-                                                        <h2 style="padding-bottom: -20px; color: #ff4444; font-weight: bold">Tóm tắt</h2>
+                                                        <h2 style="padding-bottom: -20px; color: #ff4444; font-weight: bold">
+                                                            Tóm tắt</h2>
                                                         <p th:text="${movieDetail.longDescription}"> longDescription</p>
                                                     </div>
+                                                    <form th:action="@{/favorite/toggle}" method="post"
+                                                          style="display: inline;">
+                                                        <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                                        <button type="submit" style="background: none; border: none;">
+                                                            <i class="fa"
+                                                               th:classappend="${isFavorite} ? ' fa-heart text-danger' : ' fa-heart-o'"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="st_md_summ_pera float_left">
@@ -244,13 +254,18 @@ Author: Webstrot
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="st_md_summ_client_slider float_left">
-                                                        <h4 style="padding-bottom: 20px; font-weight: bold; color: #ff4444">Diễn viên</h4>
+                                                        <h4 style="padding-bottom: 20px; font-weight: bold; color: #ff4444">
+                                                            Diễn viên</h4>
                                                         <div class="owl-carousel owl-theme">
                                                             <div class="item" th:each="movieActor : ${actorByMovie}">
                                                                 <div class="st_summ_slider_cont float_left">
                                                                     <img th:src="@{/images/content/c1.jpg}" alt="img">
-                                                                    <h4><a th:href="@{none}" th:text="${movieActor.actor.name}" style="color: black"></a></h4>
-                                                                    <h6>vào vai <span th:text="${movieActor.nameInMovie}"></span></h6>
+                                                                    <h4><a th:href="@{none}"
+                                                                           th:text="${movieActor.actor.name}"
+                                                                           style="color: black"></a></h4>
+                                                                    <h6>vào vai <span
+                                                                            th:text="${movieActor.nameInMovie}"></span>
+                                                                    </h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -262,140 +277,364 @@ Author: Webstrot
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12" style="margin-top: 50px;">
-                            <div class="ne_busness_main_slider_wrapper float_left">
-                                <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
-                                    <h2 style="font-size: 27px; color: #ff4444; padding-bottom: 15px;">Các phim liên quan</h2>
+                        <div class="tab-section">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <h3>Bình luận (<span th:text="${comments.size()}">0</span>)</h3>
+                                <h3>Đánh giá (<span th:text="${reviews.size()}">0</span>)</h3>
+                                <div style="margin-left: auto;">
+                                    <button onclick="showTab('comment')" id="btn-comment" class="tab-button active">Bình
+                                        luận
+                                    </button>
+                                    <button onclick="showTab('review')" id="btn-review" class="tab-button">Đánh giá
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- COMMENT TAB -->
+                            <div id="comment-tab" class="tab-content active">
+                                <div th:if="${errorMessage}" class="alert alert-danger" role="alert"
+                                     th:text="${errorMessage}"></div>
+                                <div th:if="${successMessage}" class="alert alert-success" role="alert"
+                                     th:text="${successMessage}"></div>
+
+                                <div th:if="${comments != null and #lists.isEmpty(comments)}">
+                                    <p>Chưa có bình luận nào.</p>
+                                </div>
+
+                                <div th:if="${session.userLogin == null}">
+                                    <p>Vui lòng <a th:href="@{/login}">đăng nhập</a> để bình luận.</p>
+                                </div>
+
+                                <div th:if="${session.userLogin != null and !hasOrdered}">
+                                    <p style="color: red;">Bạn cần xem phim trước khi đánh giá bộ phim nhé.</p>
+                                </div>
+
+                                <div th:if="${session.userLogin != null and hasOrdered}">
+                                    <form th:action="@{/addComment}" method="post">
+                                        <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                        <label for="content">Viết bình luận:</label><br/>
+                                        <textarea name="content" id="content" rows="4" cols="50"
+                                                  required></textarea><br/>
+                                        <button type="submit">Gửi bình luận</button>
+                                    </form>
+                                </div>
+
+                                <div id="comment-list">
+                                    <div th:each="comment, iterStat : ${comments}"
+                                         th:class="${iterStat.index < 10} ? 'comment-item' : 'comment-item hidden'"
+                                         style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
+
+                                        <p><strong th:text="${comment.user.fullname}">Người dùng</strong> đã bình luận:
+                                        </p>
+                                        <p th:text="${comment.content}">Nội dung</p>
+                                        <p><i>Thời gian:</i>
+                                            <span th:text="${#temporals.format(comment.createdAt, 'dd/MM/yyyy HH:mm')}">---</span>
+                                        </p>
+
+                                        <!-- Like / Dislike -->
+                                        <form th:action="@{/like}" method="post" style="display:inline;">
+                                            <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                                            <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                            <button type="submit">👍 <span th:text="${likesMap[comment.id]}">0</span>
+                                            </button>
+                                        </form>
+                                        <form th:action="@{/dislike}" method="post" style="display:inline;">
+                                            <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                                            <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                            <button type="submit">👎 <span th:text="${dislikesMap[comment.id]}">0</span>
+                                            </button>
+                                        </form>
+
+                                        <!-- Nếu là chủ bình luận thì hiện nút chỉnh sửa/xóa -->
+                                        <div th:if="${session.userLogin != null and session.userLogin.id == comment.user.id}"
+                                             style="margin-top: 10px;">
+                                            <button type="button" th:attr="onclick=|toggleEditForm(${comment.id})|">
+                                                Chỉnh sửa
+                                            </button>
+
+                                            <form th:action="@{/deleteComment}" method="post" style="display: inline;"
+                                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này không?');">
+                                                <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                                                <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                                <button type="submit">Xóa</button>
+                                            </form>
+
+                                            <!-- Form chỉnh sửa bình luận -->
+                                            <form th:action="@{/editComment}" method="post"
+                                                  th:attr="id=|edit-form-${comment.id}|"
+                                                  style="display: none; margin-top: 10px;">
+                                                <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                                                <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                                <textarea name="content" rows="3" cols="50" th:text="${comment.content}"
+                                                          required></textarea><br/>
+                                                <button type="submit">Lưu chỉnh sửa</button>
+                                            </form>
+                                        </div>
+
+                                        <!-- Reply -->
+                                        <div th:if="${session.userLogin != null}" style="margin-top: 10px;">
+                                            <button type="button" th:attr="onclick=|toggleReplyForm(${comment.id})|">Trả
+                                                lời
+                                            </button>
+                                            <form th:action="@{/replyComment}" method="post"
+                                                  th:attr="id=|reply-form-${comment.id}|"
+                                                  style="display: none; margin-top: 10px;">
+                                                <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                                <input type="hidden" name="parentCommentId" th:value="${comment.id}"/>
+                                                <textarea name="content" rows="2" cols="50" required
+                                                          placeholder="Trả lời bình luận..."></textarea><br/>
+                                                <button type="submit">Gửi trả lời</button>
+                                            </form>
+                                        </div>
+                                        <div th:if="${session.userLogin == null}">
+                                            <p><i>Đăng nhập để trả lời bình luận.</i></p>
+                                        </div>
+
+                                        <!-- Replies -->
+                                        <div style="margin-left: 20px; margin-top: 10px;"
+                                             th:each="reply : ${comment.replies}">
+                                            <p>
+                                                <strong th:text="${reply.user.fullname}">Người trả lời</strong>:
+                                                <span th:text="${reply.content}">Nội dung trả lời</span>
+                                            </p>
+                                            <p><i>Thời gian:</i>
+                                                <span th:text="${#temporals.format(reply.createdAt, 'dd/MM/yyyy HH:mm')}">---</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pagination">
+                                    <ul>
+                                        <!-- Nút 'Trang trước' -->
+                                        <li th:if="${commentPage.hasPrevious()}">
+                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, commentPage=${commentPage.number - 1})}">&laquo;
+                                                Trước</a>
+                                        </li>
+
+                                        <!-- Các số trang -->
+                                        <li th:each="i : ${#numbers.sequence(0, commentPage.totalPages - 1)}"
+                                            th:classappend="${i == commentPage.number} ? 'active'">
+                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, commentPage=${i})}"
+                                               th:text="${i + 1}">1</a>
+                                        </li>
+
+                                        <!-- Nút 'Trang sau' -->
+                                        <li th:if="${commentPage.hasNext()}">
+                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, commentPage=${commentPage.number + 1})}">Sau
+                                                &raquo;</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                            <!-- REVIEW TAB -->
+                            <div id="review-tab" class="tab-content">
+                                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                                <div th:if="${successMessage}" class="alert alert-success"
+                                     th:text="${successMessage}"></div>
+
+                                <div th:if="${session.userLogin != null and hasOrdered}">
+                                    <form th:action="@{/submitReview}" method="post">
+                                        <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                        <label for="rating">Chọn số sao:</label>
+                                        <select name="rating" id="rating" required>
+                                            <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+                                            <option value="4">⭐️⭐️⭐️⭐️</option>
+                                            <option value="3">⭐️⭐️⭐️</option>
+                                            <option value="2">⭐️⭐️</option>
+                                            <option value="1">⭐️</option>
+                                        </select><br/><br/>
+                                        <label for="comment">Nhận xét:</label><br/>
+                                        <textarea id="comment" name="comment" rows="3" cols="50"
+                                                  required></textarea><br/>
+                                        <button type="submit">Gửi đánh giá</button>
+                                    </form>
+                                </div>
+
+                                <h3>Đánh giá của người xem</h3>
+                                <div th:if="${#lists.isEmpty(reviews)}">
+                                    <p>Chưa có đánh giá nào.</p>
+                                </div>
+
+                                <div id="review-list">
+                                    <div th:each="review, iterStat : ${reviews}"
+                                         th:class="${iterStat.index < 10} ? 'review-item' : 'review-item hidden'"
+                                         style="border: 1px solid #ddd; padding: 10px; margin-bottom: 15px;">
+                                        <p><strong th:text="${review.user.fullname}">Người dùng</strong> đã đánh giá:
+                                            <span th:text="${review.rating}">5</span> ⭐️</p>
+                                        <p><strong>Nhận xét:</strong> <span th:text="${review.comment}">Nội dung đánh giá</span>
+                                        </p>
+                                        <p><i>Thời gian:</i> <span
+                                                th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm')}">---</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="pagination">
+                                    <ul>
+                                        <!-- Nút 'Trang trước' -->
+                                        <li th:if="${reviewPage.hasPrevious()}">
+                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, reviewPage=${reviewPage.number - 1}, tab='review')}">&laquo;
+                                                Trước</a>
+                                        </li>
+
+                                        <!-- Các số trang -->
+                                        <li th:each="i : ${#numbers.sequence(0, reviewPage.totalPages - 1)}"
+                                            th:classappend="${i == reviewPage.number} ? 'active'">
+                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, reviewPage=${i}, tab='review')}"
+                                               th:text="${i + 1}">1</a>
+                                        </li>
+
+                                        <!-- Nút 'Trang sau' -->
+                                        <li th:if="${reviewPage.hasNext()}">
+                                            <a th:href="@{/movie-detail(id=${movieDetail.id}, reviewPage=${reviewPage.number + 1}, tab='review')}">Sau
+                                                &raquo;</a>
+                                        </li>
+
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 tab-content">
-                            <div role="tabpanel" class="tab-pane active">
-                                <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
-                                <div class="row">
-                                    <div th:each="movie : ${movieSameCategory}" class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
-                                        <div class="prs_upcom_movie_box_wrapper"
-                                             style="height: 100%; display: flex; flex-direction: column;">
-                                            <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
-                                                <img th:src="${movie.smallImageURL}" alt="movie_img"
-                                                     style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
-                                                <div class="prs_upcom_movie_img_overlay"></div>
-                                                <div class="prs_upcom_movie_img_btn_wrapper">
-                                                    <ul>
-                                                        <li><a title='title' rel='external'
-                                                               class="test-popup-link"
-                                                               th:href="${movie.trailerURLWatchLink}">Xem
-                                                            Trailer</a></li>
-                                                        <li>
-                                                            <a th:href="@{/movie/detail(movieId=${movie.id})}">Xem
-                                                                chi tiết</a></li>
-                                                    </ul>
-                                                </div>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 50px;">
+                        <div class="ne_busness_main_slider_wrapper float_left">
+                            <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
+                                <h2 style="font-size: 27px; color: #ff4444; padding-bottom: 15px;">Các phim liên
+                                    quan</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 tab-content">
+                        <div role="tabpanel" class="tab-pane active">
+                            <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
+                            <div class="row">
+                                <div th:each="movie : ${movieSameCategory}"
+                                     class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                    <div class="prs_upcom_movie_box_wrapper"
+                                         style="height: 100%; display: flex; flex-direction: column;">
+                                        <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
+                                            <img th:src="${movie.smallImageURL}" alt="movie_img"
+                                                 style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+                                            <div class="prs_upcom_movie_img_overlay"></div>
+                                            <div class="prs_upcom_movie_img_btn_wrapper">
+                                                <ul>
+                                                    <li><a title='title' rel='external'
+                                                           class="test-popup-link"
+                                                           th:href="${movie.trailerURLWatchLink}">Xem
+                                                        Trailer</a></li>
+                                                    <li>
+                                                        <a th:href="@{/movie/detail(movieId=${movie.id})}">Xem
+                                                            chi tiết</a></li>
+                                                </ul>
                                             </div>
-                                            <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
-                                                <div class="prs_upcom_movie_content_box_inner">
-                                                    <h2 th:text="${movie.name}"
-                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px">
-                                                        Movie name
-                                                    </h2>
-                                                    <div style="font-size: 0.9rem; color: #333;">
-                                                        <p>
-                                                            <strong>Thể loại:</strong> <span th:text="${movie.categories}">Movie category</span>
-                                                        </p>
-                                                        <p>
-                                                            <strong>Thời lượng:</strong>
-                                                            <span th:text="${movie.duration + ' phút'}">Movie duration</span>
-                                                        </p>
-                                                        <p>
-                                                            <strong>Khởi chiếu:</strong>
-                                                            <span th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
-                                                        </p>
-                                                    </div>
+                                        </div>
+                                        <div class="prs_upcom_movie_content_box"
+                                             style="flex-grow: 1; margin-top: 10px;">
+                                            <div class="prs_upcom_movie_content_box_inner">
+                                                <h2 th:text="${movie.name}"
+                                                    style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px">
+                                                    Movie name
+                                                </h2>
+                                                <div style="font-size: 0.9rem; color: #333;">
+                                                    <p>
+                                                        <strong>Thể loại:</strong> <span th:text="${movie.categories}">Movie category</span>
+                                                    </p>
+                                                    <p>
+                                                        <strong>Thời lượng:</strong>
+                                                        <span th:text="${movie.duration + ' phút'}">Movie duration</span>
+                                                    </p>
+                                                    <p>
+                                                        <strong>Khởi chiếu:</strong>
+                                                        <span th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> <!-- hết mỗi phim -->
-                                </div> <!-- hết row -->
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
-                                    <div class="pager_wrapper gc_blog_pagination">
-                                        <ul class="pagination">
-                                            <!-- Nút Previous -->
-                                            <li th:if="${movieSameCategory.hasPrevious()}">
-                                                <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number - 1})}">
-                                                    <i class="flaticon-left-arrow"></i>
-                                                </a>
-                                            </li>
-
-                                            <!-- Các số trang -->
-                                            <li th:each="i : ${#numbers.sequence(0, movieSameCategory.totalPages - 1)}"
-                                                th:classappend="${i == movieSameCategory.number} ? 'active'">
-                                                <a th:href="@{/movie/detail(movieId=${movieDetail.getId()}, page=${i})}" th:text="${i + 1}"></a>
-                                            </li>
-
-                                            <!-- Nút Next -->
-                                            <li th:if="${movieSameCategory.hasNext()}">
-                                                <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number + 1})}">
-                                                    <i class="flaticon-right-arrow"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
                                     </div>
+                                </div> <!-- hết mỗi phim -->
+                            </div> <!-- hết row -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                 style="display: flex; justify-content: center;">
+                                <div class="pager_wrapper gc_blog_pagination">
+                                    <ul class="pagination">
+                                        <!-- Nút Previous -->
+                                        <li th:if="${movieSameCategory.hasPrevious()}">
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number - 1})}">
+                                                <i class="flaticon-left-arrow"></i>
+                                            </a>
+                                        </li>
+
+                                        <!-- Các số trang -->
+                                        <li th:each="i : ${#numbers.sequence(0, movieSameCategory.totalPages - 1)}"
+                                            th:classappend="${i == movieSameCategory.number} ? 'active'">
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.getId()}, page=${i})}"
+                                               th:text="${i + 1}"></a>
+                                        </li>
+
+                                        <!-- Nút Next -->
+                                        <li th:if="${movieSameCategory.hasNext()}">
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number + 1})}">
+                                                <i class="flaticon-right-arrow"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
-                            </div> <!-- hết tab-panel -->
-                        </div>
+                            </div>
+                        </div> <!-- hết tab-panel -->
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                <div class="st_ind_sidebar_right_wrapper float_left">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="st_ind_sidebar_md_textbox float_left">
-                                <p>Highest grossing movie in Mumbai in last 24 hours</p> <a th:href="@{none}">Know Box
-                                Office
-                                Report</a>
-                            </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <div class="st_ind_sidebar_right_wrapper float_left">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="st_ind_sidebar_md_textbox float_left">
+                            <p>Highest grossing movie in Mumbai in last 24 hours</p> <a th:href="@{none}">Know Box
+                            Office
+                            Report</a>
                         </div>
-                        <div class="col-md-12">
-                            <div class="st_ind_sidebar_md_textbox_btn float_left">
-                                <ul>
-                                    <li><a th:href="@{none}">Corporate booking &nbsp; <i
-                                            class="fas fa-long-arrow-alt-right"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="st_ind_sidebar_md_textbox_btn float_left">
+                            <ul>
+                                <li><a th:href="@{none}">Corporate booking &nbsp; <i
+                                        class="fas fa-long-arrow-alt-right"></i></a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="col-md-12">
-                            <div class="st_ind_sidebar_advertiz st_ind_sidebar_advertiz_md float_left">
-                                <a th:href="@{none}">
-                                    <img th:src="@{/images/index_III/add.png}" alt="img">
-                                </a>
-                            </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="st_ind_sidebar_advertiz st_ind_sidebar_advertiz_md float_left">
+                            <a th:href="@{none}">
+                                <img th:src="@{/images/index_III/add.png}" alt="img">
+                            </a>
                         </div>
-                        <div class="col-md-12">
-                            <div class="st_ind_sidebar_advertiz_social st_video_slide_social_left  float_left">
-                                <h3>Profiles</h3>
-                                <ul>
-                                    <li><a th:href="@{none}"><i class="fa fa-facebook-f"></i></a>
-                                    </li>
-                                    <li>
-                                        <a th:href="@{none}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                <path
-                                                        d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
-                                            </svg>
-                                        </a>
-                                    </li>
-                                    <li><a th:href="@{none}"><i class="fa fa-linkedin"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="st_ind_sidebar_advertiz_social st_video_slide_social_left  float_left">
+                            <h3>Profiles</h3>
+                            <ul>
+                                <li><a th:href="@{none}"><i class="fa fa-facebook-f"></i></a>
+                                </li>
+                                <li>
+                                    <a th:href="@{none}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                            <path
+                                                    d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                                <li><a th:href="@{none}"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <!-- st slider sidebar wrapper End -->
 
@@ -422,6 +661,49 @@ Author: Webstrot
 <script th:src="@{/js/smothscroll_part2.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
 <!--main js file end-->
+
+<script>
+    function showTab(tab) {
+        const commentTab = document.getElementById('comment-tab');
+        const reviewTab = document.getElementById('review-tab');
+        const btnComment = document.getElementById('btn-comment');
+        const btnReview = document.getElementById('btn-review');
+
+        if (tab === 'comment') {
+            commentTab.classList.add('active');
+            reviewTab.classList.remove('active');
+            btnComment.classList.add('active');
+            btnReview.classList.remove('active');
+        } else {
+            commentTab.classList.remove('active');
+            reviewTab.classList.add('active');
+            btnComment.classList.remove('active');
+            btnReview.classList.add('active');
+        }
+    }
+
+    function toggleReplyForm(commentId) {
+        const form = document.getElementById('reply-form-' + commentId);
+        form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+</script>
+<script>
+    function toggleEditForm(commentId) {
+        const form = document.getElementById('edit-form-' + commentId);
+        form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+</script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tab = urlParams.get('tab');
+        if (tab === 'review') {
+            showTab('review');
+        } else {
+            showTab('comment'); // mặc định
+        }
+    });
+</script>
 </body>
 
 <!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_single_second.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:14:51 GMT -->

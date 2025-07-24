@@ -36,11 +36,13 @@
             background-color: #f4f4f9;
             line-height: 1.6;
         }
+
         h1 {
             color: #333;
             text-align: center;
             margin-bottom: 20px;
         }
+
         .account-info, .form-section {
             background: #fff;
             padding: 20px;
@@ -49,16 +51,19 @@
             margin-bottom: 20px;
             display: none;
         }
+
         .account-info p {
             margin: 10px 0;
             font-size: 16px;
         }
+
         .form-section label {
             display: block;
             margin: 10px 0 5px;
             font-weight: bold;
             color: #444;
         }
+
         .form-section input {
             width: 100%;
             padding: 8px;
@@ -67,6 +72,7 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         .form-section button {
             background-color: #4CAF50;
             color: white;
@@ -76,9 +82,11 @@
             cursor: pointer;
             font-size: 16px;
         }
+
         .form-section button:hover {
             background-color: #45a049;
         }
+
         .error {
             color: red;
             margin-top: 10px;
@@ -87,6 +95,7 @@
             border-radius: 4px;
             display: block;
         }
+
         .success {
             color: green;
             margin-top: 10px;
@@ -95,19 +104,23 @@
             border-radius: 4px;
             display: block;
         }
+
         .links {
             margin-top: 20px;
             text-align: center;
         }
+
         .links a {
             text-decoration: none;
             color: #2196F3;
             margin: 0 10px;
             font-size: 16px;
         }
+
         .links a:hover {
             text-decoration: underline;
         }
+
         .toggle-button {
             background-color: #2196F3;
             color: white;
@@ -118,20 +131,25 @@
             margin: 5px;
             font-size: 16px;
         }
+
         .toggle-button:hover {
             background-color: #1976D2;
         }
+
         #orderHistory table, #voucherHistory table {
             width: 100%;
             border-collapse: collapse;
         }
+
         #orderHistory th, #orderHistory td, #voucherHistory th, #voucherHistory td {
             padding: 10px;
             border: 1px solid #ddd;
         }
+
         #orderHistory th, #voucherHistory th {
             background-color: #f2f2f2;
         }
+
         .favorite-list-container {
             display: flex;
             flex-wrap: wrap;
@@ -142,7 +160,7 @@
         .favorite-card {
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             width: 280px;
             padding: 15px;
             box-sizing: border-box;
@@ -192,6 +210,7 @@
             border-radius: 6px;
             margin-bottom: 10px;
         }
+
         .btn-success {
             background-color: #28a745;
             color: white;
@@ -204,6 +223,7 @@
         .btn-success:hover {
             background-color: #218838;
         }
+
         .payment-cards {
             display: flex;
             flex-direction: column;
@@ -321,7 +341,7 @@
         }
 
 
-        window.onload = function() {
+        window.onload = function () {
             document.getElementById('accountInfo').style.display = 'block';
         };
     </script>
@@ -360,57 +380,32 @@
         <p><strong>Email:</strong> <span th:text="${user.email} ?: 'Not provided'"></span></p>
     </div>
 
-    <p><strong>Cấp độ thành viên:</strong>
-        <span th:text="${memberLevel}"></span>
-    </p>
-    <div th:switch="${memberLevel}">
-        <ul th:case="'Đồng'">
-            <li>Không có ưu đãi đặc biệt, mua và tích điểm ngay để nhận thêm ưu đãi và nâng cấp hạng</li>
-        </ul>
-        <ul th:case="'Bạc'">
-            <li>🎁 1 voucher 10k/tháng</li>
-            <li>⏰ Bao cả rạp</li>
-        </ul>
-        <ul th:case="'Vàng'">
-            <li>🎁 2 voucher 20k/tháng</li>
-            <li>🍿 1 combo bắp nước miễn phí/tháng</li>
-        </ul>
-        <ul th:case="'Kim cương'">
-            <li>🎁 3 voucher 30k/tháng</li>
-            <li>🛋️ Nâng cấp ghế VIP miễn phí</li>
-            <li>🎉 Ưu đãi sinh nhật đặc biệt</li>
-        </ul>
-    </div>
-
     <button class="toggle-button" onclick="showUpdateProfile()">Đổi thông tin</button>
     <button class="toggle-button" onclick="showChangePassword()">Đổi mật khẩu</button>
-    <button class="toggle-button" onclick="showOrder()">Lịch sử xem</button>
+    <button class="toggle-button" onclick="showOrder()">Lịch sử giao dịch</button>
     <button class="toggle-button" onclick="showFavoriteList()">Yêu thích</button>
     <button class="toggle-button" onclick="showPendingPayment()">Chờ thanh toán</button>
 
     <div id="updateProfileSection" class="form-section">
         <h3>Sửa thông tin</h3>
-        <form id="updateProfileForm"
-              th:action="@{/initiate-update-profile}"
-        method="post"
-        onsubmit="return handleSubmit()">
-
-
-        <input type="hidden" name="id" th:value="${user.id} ?: ${session.userLogin?.id}" />
+        <form id="updateProfileForm" th:action="@{/initiate-update-profile}" method="post" onsubmit="return handleSubmit()">
+            <input type="hidden" name="id" th:value="${user.id} ?: ${session.userLogin?.id}"/>
             <label for="fullname">Tên:</label>
-            <input type="text" id="fullname" name="fullname" th:value="${user.fullname} ?: ${session.userLogin?.fullname}" required />
+            <input type="text" id="fullname" name="fullname"
+                   th:value="${user.fullname} ?: ${session.userLogin?.fullname}" required/>
             <label for="phone">Điện thoại:</label>
             <input type="text" id="phone" name="phone"
                    pattern="^0\d{9}$"
                    title="Số điện thoại phải bắt đầu bằng 0 và gồm 10 chữ số (VD: 0912345678)"
-                   th:value="${user.phone} ?: ${session.userLogin?.phone}" required />
+                   th:value="${user.phone} ?: ${session.userLogin?.phone}" required/>
 
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" th:value="${user.email} ?: ${session.userLogin?.email}" required />
+            <input type="email" id="email" name="email" th:value="${user.email} ?: ${session.userLogin?.email}"
+                   required/>
             <div>
-                <label>Chọn phương thức xác nhận:</label><br />
-                <input type="radio" name="verifyMethod" value="email" checked /> Qua Email
-                <input type="radio" id="smsRadio" name="verifyMethod" value="sms" /> Qua Số điện thoại (OTP)
+                <label>Chọn phương thức xác nhận:</label><br/>
+                <input type="radio" name="verifyMethod" value="email" checked/> Qua Email
+                <input type="radio" id="smsRadio" name="verifyMethod" value="sms"/> Qua Số điện thoại (OTP)
             </div>
             <button type="submit">Lưu thay đổi</button>
             <label>Lưu ý: Kiểm tra kỹ lại thông tin trước khi đổi thông tin</label>
@@ -443,16 +438,18 @@
                 <th>Order ID</th>
                 <th>Phim</th>
                 <th>Ghế</th>
-                <th>Giá(VND)</th>
+                <th>Bỏng và nước</th>
+                <th>Tổng tiền(VND)</th>
                 <th>Ngày</th>
                 <th>Trạng thái</th>
             </tr>
             <tr th:each="paymentLink : ${paymentLinks}">
                 <td th:text="${paymentLink.id}"></td>
-                <td th:text="${paymentLink.movieName}"></td>
-                <td th:text="${paymentLink.seat.name}"></td>
-                <td th:text="${paymentLink.price}"></td>
-                <td th:text="${#temporals.format(paymentLink.transactionDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${paymentLink.schedule.movie.name}"></td>
+                <td th:text="${paymentLink.getSeatList()}"></td>
+                <td th:text="${paymentLink.getListPopcornDrinkName()}"></td>
+                <td th:text="${paymentLink.totalPrice}"></td>
+                <td th:text="${#temporals.format(paymentLink.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                 <td th:text="${paymentLink.status}"></td>
             </tr>
         </table>
@@ -462,26 +459,29 @@
     <div id="showFavoriteList" class="form-section">
         <h3>Danh sách phim yêu thích</h3>
 
+        <!-- Nếu danh sách rỗng -->
         <div th:if="${favoriteList != null and favoriteList.isEmpty()}" style="text-align: center;">
             Chưa có phim nào yêu thích
         </div>
 
-        <div class="favorite-list-container" th:unless="${favoriteList.isEmpty()}">
+        <!-- Nếu có yêu thích -->
+        <div class="favorite-list-container" th:if="${favoriteList != null and !favoriteList.isEmpty()}">
             <div class="favorite-card" th:each="fav : ${favoriteList}">
                 <h4 th:text="${fav.movie.name}">Tên phim</h4>
 
-                <img th:src="${fav.movie.smallImageUrl}" alt="Poster" />
+                <img th:src="${fav.movie.smallImageURL}" alt="Poster"/>
 
                 <p><strong>Thể loại:</strong> <span th:text="${fav.movie.categories}">Thể loại</span></p>
 
-                <a th:href="@{/movie-details(id=${fav.movie.id})}">Xem chi tiết</a>
+                <a th:href="@{/movie-detail(id=${fav.movie.id})}">Xem chi tiết</a>
 
                 <form th:action="@{/favorite/toggle}" method="post" style="display:inline-block; margin-top: 10px;">
-                    <input type="hidden" name="movieId" th:value="${fav.movie.id}" />
+                    <input type="hidden" name="movieId" th:value="${fav.movie.id}"/>
                     <button type="submit" class="btn btn-danger btn-sm">Bỏ thích</button>
                 </form>
             </div>
         </div>
+
     </div>
 
 
@@ -498,7 +498,7 @@
                 </div>
                 <div class="card-item">
                     <strong>Popcorn/Drink:</strong>
-                    <span th:text="${paymentLink.popcornDrinkList} ?: 'N/A'">Đồ ăn</span>
+                    <span th:text="${paymentLink.listPopcornDrinkName} ?: 'N/A'">Đồ ăn</span>
                 </div>
                 <div class="card-item">
                     <strong>Total Price:</strong>
@@ -509,7 +509,7 @@
                     <span th:text="${paymentLink.status} ?: 'N/A'">PENDING</span>
                 </div>
                 <div class="card-item action">
-                    <a th:href="${paymentLink.checkOutUrl != null ? paymentLink.checkOutUrl : '#'}"
+                    <a th:href="${paymentLink.checkoutUrl != null ? paymentLink.checkoutUrl : '#'}"
                        class="btn btn-success"
                        target="_blank">Thanh toán ngay</a>
                 </div>
@@ -521,11 +521,7 @@
     <div th:if="${error}" class="error" th:text="${error}"></div>
     <div th:if="${success}" class="success" th:text="${success}"></div>
 </div>
-<div th:unless="${session.userLogin}" th:text="'Please log in to view your account.'"></div>
-<div class="links">
-    <a th:href="@{/}">Trang chủ</a>
-    <a th:href="@{/log-out}" th:unless="${session.userLogin == null}">Đăng xuất</a>
-</div>
+<header lang="vi" th:include="fragments/footer"></header>
 <!-- Main JS Files -->
 <script th:src="@{/js/jquery_min.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>

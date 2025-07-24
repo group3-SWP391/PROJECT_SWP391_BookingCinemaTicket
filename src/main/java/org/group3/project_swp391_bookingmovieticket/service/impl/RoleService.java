@@ -30,14 +30,9 @@ public class RoleService implements IRoleService {
 
     @Override
     public void remove(Integer id) {
-
     }
-
-
     @Override
     public Optional<Role> findByName(String name) {
         return iRoleRepository.findByNameIgnoreCase(name);
-
-
     }
 }

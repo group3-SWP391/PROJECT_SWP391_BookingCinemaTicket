@@ -24,6 +24,29 @@ public class OtpService {
     private static final int OTP_LENGTH = 6;
     private static final int OTP_VALIDITY_MINUTES = 5;
 
+    public String generateOtp(Integer userId, String email, String actionType, String otpCheck) {
+        String otpCode = generateRandomOtp();
+
+        long otpCount = otpRepository.count();
+        if (otpCount >= 20) {
+            Optional<Otp> oldestOtp = otpRepository.findTopByOrderByCreatedAtAsc();
+            oldestOtp.ifPresent(otpRepository::delete);
+        }
+
+        Otp otp = new Otp();
+        otp.setUserId(userId);
+        otp.setOtpCode(otpCode);
+        otp.setCreatedAt(LocalDateTime.now());
+        otp.setExpiresAt(LocalDateTime.now().plusMinutes(5));
+        otp.setIsUsed(false);
+        otp.setActionType(actionType);
+
+        otpRepository.save(otp);
+
+        emailService.sendEmail(email, "Your OTP Code", "Your OTP: " + otpCheck);
+        return otpCode;
+    }
+
     public String generateOtp(Integer userId, String email, String actionType) {
         String otpCode = generateRandomOtp();
 

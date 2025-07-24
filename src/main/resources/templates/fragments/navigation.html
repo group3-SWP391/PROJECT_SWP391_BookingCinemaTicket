@@ -27,14 +27,16 @@
                                 <li class="parent"><a th:href="@{/}" onclick="return false;">Mác phim</a>
                                     <ul class="lg-submenu">
                                         <li th:each="rate: ${session.rates}">
-                                            <a th:href="@{/movie/rating(ratingId=${rate.id})}" th:text="${rate.name}"></a>
+                                            <a th:href="@{/movie/rating(ratingId=${rate.id})}"
+                                               th:text="${rate.name}"></a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li class="parent"><a th:href="@{/}" onclick="return false;">Thể loại</a>
                                     <ul class="lg-submenu">
                                         <li th:each="category: ${session.categoryAll}">
-                                            <a th:href="@{/movie/category/return-view(categoryName=${category})}" th:text="${category}">movie category name</a>
+                                            <a th:href="@{/movie/category/return-view(categoryName=${category})}"
+                                               th:text="${category}">movie category name</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -61,10 +63,12 @@
                                        data-target="#loginModal" href="#"><span>Đăng nhập</span></a>
                                 </div>
                                 <div th:if="${session.userLogin != null}">
-                                    <a style="background: #1b1b1b" class="btn" th:if="${session.userLogin.role.name == 'ADMIN'}" th:href="@{/admin}">
+                                    <a style="background: #1b1b1b" class="btn"
+                                       th:if="${session.userLogin.role.name == 'ADMIN'}" th:href="@{/admin}">
                                         <span style="color: white">Quản trị</span>
                                     </a>
-                                    <a style="background: #1b1b1b" class="btn" th:if="${session.userLogin.role.name == 'STAFF'}" th:href="@{/staff}">
+                                    <a style="background: #1b1b1b" class="btn"
+                                       th:if="${session.userLogin.role.name == 'STAFF'}" th:href="@{/staff}">
                                         <span style="color: white">Quản trị</span>
                                     </a>
                                     <a style="background: #1b1b1b" class="btn" th:href="@{/my-account}">

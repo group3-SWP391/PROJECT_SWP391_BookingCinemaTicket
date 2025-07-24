@@ -29,8 +29,6 @@ public class Seat {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id", nullable = false)
-    private Ticket ticket;
+//    @ManyToOne
+//    private Ticket ticket;
 }

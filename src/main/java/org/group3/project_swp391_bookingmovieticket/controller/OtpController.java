@@ -8,16 +8,20 @@ import org.group3.project_swp391_bookingmovieticket.service.impl.VoucherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class OtpController {
 
     private static final Logger logger = LoggerFactory.getLogger(OtpController.class);
+
 
     @Autowired
     private UserService userService;
@@ -28,6 +32,7 @@ public class OtpController {
     @PostMapping("/initiate-update-profile")
     public String initiateUpdateProfile(@ModelAttribute User user,
                                         HttpSession session, Model model) {
+        System.out.println(user + " initiated update profile");
         try {
             User currentUser = getSessionUser(session);
 
@@ -53,7 +58,7 @@ public class OtpController {
             session.setAttribute("otp", otp);
             session.setAttribute("pendingUser", pendingUser);
 
-            userService.initiateUpdateProfile(currentUser);
+            userService.initiateUpdateProfile(currentUser, otp);
 
             model.addAttribute("userId", currentUser.getId());
             model.addAttribute("action", "UPDATE_PROFILE_EMAIL");
@@ -66,14 +71,22 @@ public class OtpController {
         }
     }
 
+
     @PostMapping("/initiate-change-password")
     public String initiateChangePassword(@RequestParam("currentPassword") String currentPassword,
                                          @RequestParam("newPassword") String newPassword,
                                          HttpSession session, Model model) {
         try {
             User user = getSessionUser(session);
-            if (userService.findByUsernameAndPassword(user.getEmail(), currentPassword).isPresent()) {
-                session.setAttribute("newPassword", newPassword);
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+            Optional<User> userOpt = userService.findByEmail(user.getEmail());
+            if (userOpt.isPresent() && passwordEncoder.matches(currentPassword, userOpt.get().getPassword())) {
+
+                // Lưu mật khẩu mới (chưa xác thực OTP)
+                session.setAttribute("newPassword", passwordEncoder.encode(newPassword));
+
+                // Gửi OTP qua email
                 userService.initiateChangePassword(user.getId(), user.getEmail());
 
                 model.addAttribute("userId", user.getId());
@@ -97,14 +110,19 @@ public class OtpController {
                             @RequestParam("userId") Integer userId,
                             @RequestParam("action") String action,
                             HttpSession session, Model model) {
+
+        System.out.println(otpCode + userId + action + "verifyOtp");
         try {
             logger.info("Verifying OTP: {} for userId: {}, action: {}", otpCode, userId, action);
             boolean isValid = false;
 
             if (action.equals("UPDATE_PROFILE_EMAIL")) {
                 User user = (User) session.getAttribute("pendingUser");
+                System.out.println(user + "pending user");
                 String realOtp = (String) session.getAttribute("otp");
+                System.out.println(realOtp + "realOtp" + otpCode + "otpCode");
                 isValid = otpCode.equals(realOtp);
+                System.out.println(isValid + "isValid");
                 if (isValid && user != null) {
                     userService.save(user);
                     session.setAttribute("userLogin", user);
@@ -148,7 +166,7 @@ public class OtpController {
     }
 
     private String generateOtp() {
-        return String.valueOf((int)(Math.random() * 900000) + 100000);
+        return String.valueOf((int) (Math.random() * 900000) + 100000);
     }
 
     @ModelAttribute("vouchers")

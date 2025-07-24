@@ -110,6 +110,7 @@ public class BillService implements IBillService {
 
             Ticket ticket = new Ticket();
             ticket.setSchedule(schedule);
+            ticket.setStatus(false);
             ticket.setSeat(seatRepository.getById(seatId));
             ticket.setBill(bill); // gắn ngược lại vào bill
             // thêm list bỏng nước vào

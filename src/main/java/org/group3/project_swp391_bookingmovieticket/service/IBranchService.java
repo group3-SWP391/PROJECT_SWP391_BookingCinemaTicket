@@ -11,6 +11,5 @@ public interface IBranchService  extends IGeneralService<BranchDTO> {
     List<BranchDTO> findBranchByLocation(String location);
     List<BranchDTO> getBranchByMovie(Integer movieId);
     List<BranchDTO> getBranchByStartDate(Integer movieId, String startDate);
-    List<Branch> findByLocation(String location);
     List<BranchDTO> findAllBranchesDTO();
 }

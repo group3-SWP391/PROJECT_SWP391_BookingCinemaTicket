@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/favorite")
@@ -21,21 +22,14 @@ public class FavoriteController {
 
     @PostMapping("/toggle")
     public String toggleFavorite(@RequestParam("movieId") Integer movieId,
-                                 HttpSession session) {
+                                 HttpSession session, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("userLogin");
-        if (user == null) return "redirect:/login";
-
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("showLoginModal", true);
+            return "redirect:/home";
+        }
         favoriteService.toggleFavorite(user, movieId);
-        return "redirect:/movie-details?id=" + movieId;
-    }
-
-    @GetMapping("/my-list")
-    public String favoriteList(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("userLogin");
-        if (user == null) return "redirect:/login";
-
-        model.addAttribute("favoriteList", favoriteService.getFavorites(user));
-        return "favorite-list";
+        return "redirect:/movie/detail?movieId=" + movieId;
     }
 }
 
