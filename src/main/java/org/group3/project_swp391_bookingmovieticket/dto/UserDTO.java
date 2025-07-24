@@ -30,12 +30,9 @@ public class UserDTO {
     @Size(min = 9, max = 11, message = "Phone not valid!")
     private String phone;
 
-    @Email(message = "Eamil not valid!")
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
     private Role role;
-    private Boolean status;
-    private Integer branchId;
 
 }

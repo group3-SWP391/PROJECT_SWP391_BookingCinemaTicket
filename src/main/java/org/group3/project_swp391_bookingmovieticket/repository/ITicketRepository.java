@@ -36,5 +36,8 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     Ticket findByUserIdAndMovieName(@Param("userId") Integer userId, @Param("movieName") String movieName);
 
     List<Ticket> findByBill_Id(Integer billId);
-}
 
+    // Thêm method custom nếu cần, ví dụ:
+    List<Ticket> findByBillId(Integer billId);
+    List<Ticket> findByScheduleId(Integer scheduleId
+}

@@ -147,12 +147,12 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return Optional.empty();
     }
 
     @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) {
-        return userRepository.findByPhoneAndPassword(username, password);
+        return Optional.empty();
     }
 
     @Override
@@ -202,5 +202,8 @@ public class UserService implements IUserService {
         otpService.generateOtp(user.getId(), user.getEmail(), "UPDATE_PROFILE", otp);
     }
 
-
+    @Override
+    public List<User> findAllByRoleName(String roleName) {
+        return userRepository.findAllByRole_Name(roleName);
+    }
 }

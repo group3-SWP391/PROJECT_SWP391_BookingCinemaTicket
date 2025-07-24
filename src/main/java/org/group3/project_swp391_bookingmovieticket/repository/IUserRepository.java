@@ -14,4 +14,7 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
     Optional<List<User>> findByFullnameContainingIgnoreCase(String keyword);
     Optional<User> findByPhone(String phone);
     Optional<User> findByUsername(String username);
+    List<User> findAllByRole_Name(String roleName);
+    List<User> findByStatusTrue();
+
 }

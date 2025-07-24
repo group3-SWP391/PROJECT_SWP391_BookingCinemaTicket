@@ -35,4 +35,9 @@ public interface IUserService extends IGeneralService<User> {
     void updateUserInfo(User user);
 
     void changePassword(Integer userId, String newPassword);
+
+    Optional<User> findById(Integer id); // Dùng cho chức năng Edit nhân viên
+
+    List<User> findAllByRoleName(String roleName);
+    
 }

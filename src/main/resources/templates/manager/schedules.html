@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div th:fragment="content" class="schedule-stage">
+        <!-- Schedule-themed Calendar Icon -->
+        <div class="movie-reel">
+            📅
+        </div>
+        
+        <!-- Dashboard Content Wrapper -->
+        <div class="dashboard-content">
+            <!-- Add Schedule Button -->
+            <button type="button" class="btn-add-movie" id="addScheduleBtn">
+                <i class="fa fa-plus-circle"></i> Add New Schedule
+            </button>
+
+            <!-- Schedule Management Header -->
+            <div class="movie-management-header">
+                <h1>
+                    <i class="fa fa-calendar"></i>
+                    Schedule Management System
+                </h1>
+            </div>
+
+            <!-- Schedule Table Container -->
+            <div class="movie-table-container">
+                <table class="table movie-table">
+                    <thead>
+                        <tr>
+                            <th>Movie</th>
+                            <th>Branch</th>
+                            <th>Room</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="schedule : ${schedules}">
+                            <td>
+                                <strong th:text="${schedule.movie.name}">Movie Name</strong>
+                                <br>
+                                <small class="text-muted" th:text="${schedule.movie.duration + ' min'}">120 min</small>
+                            </td>
+                            <td>
+                                <span th:text="${schedule.branch.name}">Branch Name</span>
+                                <br>
+                                <small class="text-muted" th:text="${schedule.branch.location}" th:if="${schedule.branch.location != null}">Location</small>
+                            </td>
+                            <td>
+                                <span class="room-badge" th:text="${schedule.room.name}">Room A</span>
+                                <br>
+                                <small class="text-muted" th:text="${schedule.room.capacity + ' seats'}">150 seats</small>
+                            </td>
+                            <td>
+                                <span class="date-badge" th:text="${#temporals.format(schedule.startDate, 'yyyy-MM-dd')}">2024-01-15</span>
+                            </td>
+                            <td>
+                                <div class="time-range">
+                                    <span th:text="${#temporals.format(schedule.startTime, 'HH:mm')}">14:00</span>
+                                    <span class="text-muted">-</span>
+                                    <span th:text="${#temporals.format(schedule.endTime, 'HH:mm')}">16:00</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="price-badge" th:text="${#numbers.formatInteger(schedule.price, 0, 'POINT') + ' VND'}">50.000 VND</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button type="button" class="btn-action btn-edit" 
+                                            th:data-schedule-id="${schedule.id}"
+                                            onclick="editSchedule(this.dataset.scheduleId)">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </button>
+                                    <button type="button" class="btn-action btn-delete" 
+                                            th:data-schedule-id="${schedule.id}"
+                                            th:data-schedule-name="${schedule.movie.name + ' - ' + #temporals.format(schedule.startDate, 'yyyy-MM-dd') + ' ' + #temporals.format(schedule.startTime, 'HH:mm')}"
+                                            onclick="deleteSchedule(this.dataset.scheduleId, this.dataset.scheduleName)">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Schedule Modal -->
+        <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="scheduleModalLabel">
+                            <i class="fa fa-calendar"></i> Add New Schedule
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;" onclick="closeScheduleModal()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="scheduleForm" onsubmit="return false;">
+                            <input type="hidden" id="scheduleId" name="scheduleId">
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="scheduleBranch">Branch *</label>
+                                        <select class="form-control" id="scheduleBranch" name="branchId" required onchange="loadRoomsByBranch()">
+                                            <option value="">Select Branch</option>
+                                            <option th:each="branch : ${branches}" th:value="${branch.id}" th:text="${branch.name}">Branch Name</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="scheduleMovie">Movie *</label>
+                                        <select class="form-control" id="scheduleMovie" name="movieId" required>
+                                            <option value="">Select Movie</option>
+                                            <option th:each="movie : ${movies}" th:value="${movie.id}" th:text="${movie.name}">Movie Name</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="scheduleRoom">Room *</label>
+                                <select class="form-control" id="scheduleRoom" name="roomId" required>
+                                    <option value="">Select Room (Choose branch first)</option>
+                                </select>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="scheduleDate">Date *</label>
+                                        <input type="date" class="form-control" id="scheduleDate" name="startDate" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="scheduleStartTime">Start Time *</label>
+                                        <input type="time" class="form-control" id="scheduleStartTime" name="startTime" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="scheduleEndTime">End Time *</label>
+                                        <input type="time" class="form-control" id="scheduleEndTime" name="endTime" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="schedulePrice">Ticket Price * <small class="text-muted">(VND)</small></label>
+                                <input type="number" class="form-control" id="schedulePrice" name="price" step="1000" min="10000" required placeholder="e.g. 50000">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeScheduleModal()">Cancel</button>
+                        <button type="button" class="btn-save-movie" onclick="saveSchedule()">Save Schedule</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

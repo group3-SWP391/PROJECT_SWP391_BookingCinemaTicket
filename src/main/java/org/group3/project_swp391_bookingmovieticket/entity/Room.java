@@ -41,6 +41,12 @@ public class Room {
     @Column(name = "row_count")
     private int rowCount;
 
+    @Column(name = "seats_per_row")
+    private Integer seatsPerRow;
+
+    @Column(name = "vip_seats", columnDefinition = "TEXT")
+    private String vipSeats;
+
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(nullable = false,name = "branch_id")

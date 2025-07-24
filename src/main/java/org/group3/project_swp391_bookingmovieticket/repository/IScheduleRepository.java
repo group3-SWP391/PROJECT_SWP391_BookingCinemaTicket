@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +22,23 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT s FROM Schedule s JOIN FETCH s.movie WHERE s.id = :id")
     Optional<Schedule> findByIdWithMovie(@Param("id") Integer id);
 
+
+    List<Schedule> findByMovieId(Integer movieId);
+
+    List<Schedule> findByRoomId(Integer roomId);
+
+    List<Schedule> findByStartDate(LocalDate startDate);
+
+    @Query("SELECT s FROM Schedule s WHERE s.branch.id = :branchId AND s.startDate = :startDate")
+    List<Schedule> findByBranchIdAndStartDate(@Param("branchId") Integer branchId, @Param("startDate") LocalDate startDate);
+
+    @Query("SELECT s FROM Schedule s WHERE s.room.id = :roomId AND s.startDate = :startDate")
+    List<Schedule> findSchedulesByRoomAndDate(@Param("roomId") Integer roomId,
+                                            @Param("startDate") LocalDate startDate);
+
+    @Query("SELECT s FROM Schedule s JOIN FETCH s.branch JOIN FETCH s.movie JOIN FETCH s.room WHERE s.id = :id")
+    Optional<Schedule> findByIdWithDetails(@Param("id") Integer id);
+
+    @Query("SELECT MAX(s.startDate) FROM Schedule s WHERE s.movie.id = :movieId")
+    Date getLastShowDateByMovie(@Param("movieId") Integer movieId);
 }

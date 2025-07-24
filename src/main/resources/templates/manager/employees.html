@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="content" class="employee-stage">
+        <!-- Employee-themed User Icon -->
+        <div class="movie-reel">
+            👥
+        </div>
+        
+        <!-- Dashboard Content Wrapper -->
+        <div class="dashboard-content">
+            <!-- Add Employee Button -->
+            <button type="button" class="btn-add-movie" id="addEmployeeBtn">
+                <i class="fa fa-plus-circle"></i> Add New Employee
+            </button>
+
+            <!-- Employee Management Header -->
+            <div class="movie-management-header">
+                <h1>
+                    <i class="fa fa-users"></i>
+                    Employee Management System
+                </h1>
+            </div>
+
+            <!-- Employee Table Container -->
+            <div class="movie-table-container">
+                <table class="table movie-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="e : ${employees}">
+                            <td>
+                                <strong th:text="${e.id}">1</strong>
+                            </td>
+                            <td>
+                                <strong th:text="${e.fullname}">Full Name</strong>
+                                <br>
+                                <small class="text-muted" th:text="${e.username}">username</small>
+                            </td>
+                            <td>
+                                <span th:text="${e.username}">username</span>
+                            </td>
+                            <td>
+                                <span th:text="${e.phone}">Phone</span>
+                                <br>
+                                <small class="text-muted" th:text="${e.email}" th:if="${e.email != null}">email@example.com</small>
+                            </td>
+                            <td>
+                                <span th:if="${e.status}" class="badge badge-success">Active</span>
+                                <span th:unless="${e.status}" class="badge badge-danger">Inactive</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button type="button" class="btn-action btn-edit" 
+                                            th:data-employee-id="${e.id}"
+                                            onclick="editEmployee(this.dataset.employeeId)">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </button>
+                                    <button type="button" th:if="${e.status}" class="btn-action btn-delete" 
+                                            th:data-employee-id="${e.id}"
+                                            th:data-employee-name="${e.fullname}"
+                                            onclick="fireEmployee(this.dataset.employeeId, this.dataset.employeeName)">
+                                        <i class="fa fa-user-times"></i> Fire
+                                    </button>
+                                    <button type="button" th:unless="${e.status}" class="btn-action btn-success" 
+                                            th:data-employee-id="${e.id}"
+                                            th:data-employee-name="${e.fullname}"
+                                            onclick="activateEmployee(this.dataset.employeeId, this.dataset.employeeName)">
+                                        <i class="fa fa-user-plus"></i> Activate
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Employee Modal -->
+        <div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="employeeModalLabel">
+                            <i class="fa fa-user-plus"></i> Add New Employee
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;" onclick="closeEmployeeModal()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="employeeForm" onsubmit="return false;">
+                            <input type="hidden" id="employeeId" name="employeeId">
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeeFullname">Full Name *</label>
+                                        <input type="text" class="form-control" id="employeeFullname" name="fullname" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeeUsername">Username *</label>
+                                        <input type="text" class="form-control" id="employeeUsername" name="username" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeePhone">Phone *</label>
+                                        <input type="text" class="form-control" id="employeePhone" name="phone" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="employeeEmail">Email</label>
+                                        <input type="email" class="form-control" id="employeeEmail" name="email">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6" id="passwordField">
+                                    <div class="form-group">
+                                        <label for="employeePassword">Password <span id="passwordRequired">*</span></label>
+                                        <input type="password" class="form-control" id="employeePassword" name="password">
+                                        <small class="form-text text-muted" id="passwordHelp" style="display: none;">Leave empty to keep current password</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="confirmPasswordField">
+                                    <div class="form-group">
+                                        <label for="employeeConfirmPassword">Confirm Password <span id="confirmPasswordRequired">*</span></label>
+                                        <input type="password" class="form-control" id="employeeConfirmPassword" name="confirmPassword">
+                                        <small class="form-text text-danger" id="passwordMismatch" style="display: none;">Passwords do not match</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEmployeeModal()">Cancel</button>
+                        <button type="button" class="btn-save-movie" onclick="saveEmployee()">Save Employee</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fire Confirmation Modal -->
+        <div class="modal fade" id="confirmFireModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Confirm Fire Employee</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to fire this employee?</p>
+                        <p><strong id="employeeNameToFire"></strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button id="confirmFireBtn" class="btn btn-danger">Fire Employee</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activate Confirmation Modal -->
+        <div class="modal fade" id="confirmActivateModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title">Confirm Activate Employee</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to activate this employee?</p>
+                        <p><strong id="employeeNameToActivate"></strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button id="confirmActivateBtn" class="btn btn-success">Activate Employee</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        let employeeIdToFire = null;
+
+        // Add Employee Button Click
+        document.getElementById('addEmployeeBtn').addEventListener('click', function() {
+            openCreateEmployeeModal();
+        });
+
+        function openCreateEmployeeModal() {
+            document.getElementById('employeeForm').reset();
+            document.getElementById('employeeId').value = '';
+            document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-user-plus"></i> Add New Employee';
+            document.getElementById('passwordField').style.display = 'block';
+            document.getElementById('confirmPasswordField').style.display = 'block';
+            document.getElementById('passwordRequired').style.display = 'inline';
+            document.getElementById('confirmPasswordRequired').style.display = 'inline';
+            document.getElementById('passwordHelp').style.display = 'none';
+            document.getElementById('passwordMismatch').style.display = 'none';
+            document.getElementById('employeePassword').required = true;
+            document.getElementById('employeeConfirmPassword').required = true;
+            $('#employeeModal').modal('show');
+        }
+
+        function editEmployee(id) {
+            fetch(`/manager/employees/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('employeeId').value = data.id;
+                    document.getElementById('employeeFullname').value = data.fullname;
+                    document.getElementById('employeeUsername').value = data.username;
+                    document.getElementById('employeePhone').value = data.phone;
+                    document.getElementById('employeeEmail').value = data.email;
+                    document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-edit"></i> Edit Employee';
+                    document.getElementById('passwordField').style.display = 'block';
+                    document.getElementById('confirmPasswordField').style.display = 'none';
+                    document.getElementById('passwordRequired').style.display = 'none';
+                    document.getElementById('passwordHelp').style.display = 'block';
+                    document.getElementById('passwordMismatch').style.display = 'none';
+                    document.getElementById('employeePassword').required = false;
+                    document.getElementById('employeePassword').value = '';
+                    document.getElementById('employeeConfirmPassword').value = '';
+                    $('#employeeModal').modal('show');
+                })
+                .catch(error => {
+                    console.error('Error fetching employee:', error);
+                    alert('Error loading employee data');
+                });
+        }
+
+        function saveEmployee() {
+            const id = document.getElementById('employeeId').value;
+            const password = document.getElementById('employeePassword').value;
+            const confirmPassword = document.getElementById('employeeConfirmPassword').value;
+            
+            // Password validation for new employees
+            if (!id && password !== confirmPassword) {
+                document.getElementById('passwordMismatch').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('passwordMismatch').style.display = 'none';
+            }
+
+            const employee = {
+                fullname: document.getElementById('employeeFullname').value,
+                username: document.getElementById('employeeUsername').value,
+                phone: document.getElementById('employeePhone').value,
+                email: document.getElementById('employeeEmail').value
+            };
+
+            if (id) {
+                // Update existing employee
+                if (password && password.trim() !== '') {
+                    employee.password = password;
+                }
+                
+                fetch(`/manager/employees/${id}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(employee)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#employeeModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Error updating employee');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error updating employee');
+                });
+            } else {
+                // Create new employee
+                employee.password = password;
+                fetch('/manager/employees', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(employee)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#employeeModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Error creating employee');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error creating employee');
+                });
+            }
+        }
+
+        function fireEmployee(id, name) {
+            employeeIdToFire = id;
+            document.getElementById('employeeNameToFire').textContent = name;
+            $('#confirmFireModal').modal('show');
+        }
+
+        function activateEmployee(id, name) {
+            employeeIdToFire = id;
+            document.getElementById('employeeNameToActivate').textContent = name;
+            $('#confirmActivateModal').modal('show');
+        }
+
+        function closeEmployeeModal() {
+            $('#employeeModal').modal('hide');
+        }
+
+        // Fire confirmation
+        document.getElementById('confirmFireBtn').addEventListener('click', function() {
+            if (employeeIdToFire) {
+                fetch(`/manager/employees/${employeeIdToFire}/fire`, {
+                    method: 'PUT'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#confirmFireModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Error firing employee');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error firing employee');
+                });
+            }
+        });
+
+        // Activate confirmation
+        document.getElementById('confirmActivateBtn').addEventListener('click', function() {
+            if (employeeIdToFire) {
+                fetch(`/manager/employees/${employeeIdToFire}/activate`, {
+                    method: 'PUT'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        $('#confirmActivateModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Error activating employee');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error activating employee');
+                });
+            }
+        });
+    </script>
+</div>
+</body>
+</html>
