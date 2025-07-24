@@ -22,4 +22,5 @@ public interface IBranchRepository extends JpaRepository<Branch, Integer> {
             "WHERE s.movie_id = :movieId AND CONVERT(varchar, s.start_date, 23) = :startDate", nativeQuery = true)
     List<Branch> getBranchByStartDate(@Param("movieId") Integer movieId, @Param("startDate") String startDate);
 
+    List<Branch> findByName(String name);
 }

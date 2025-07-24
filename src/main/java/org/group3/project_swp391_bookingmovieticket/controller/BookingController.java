@@ -6,17 +6,19 @@ import org.group3.project_swp391_bookingmovieticket.dto.SeatDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserRegisterDTO;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
+import org.group3.project_swp391_bookingmovieticket.entity.Voucher;
 import org.group3.project_swp391_bookingmovieticket.service.impl.RoomService;
 import org.group3.project_swp391_bookingmovieticket.service.impl.ScheduleService;
 import org.group3.project_swp391_bookingmovieticket.service.impl.SeatService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.USER_LOGIN_DTO;
@@ -35,6 +37,9 @@ public class BookingController {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private VoucherService voucherService;
 
     @GetMapping("/{scheduleId}")
     public String displayRoomAndSeat(@PathVariable("scheduleId") Integer scheduleId,
@@ -66,7 +71,25 @@ public class BookingController {
         model.addAttribute("seatsPerRow", seatsPerRow);
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
         model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+        model.addAttribute("eventId", "movie_event_1");
+        model.addAttribute("ticketType", "regular");
         return "seat_booking";
     }
 
+    @PostMapping("/api/vouchers/apply")
+    public ResponseEntity<?> applyVoucher(
+            @RequestParam Integer userId,
+            @RequestParam String voucherCode,
+            @RequestParam double totalAmount,
+            @RequestParam String event,
+            @RequestParam String ticketType,
+            @RequestParam String userType
+    ) {
+        try {
+            Voucher voucher = voucherService.applyVoucher(userId, voucherCode, totalAmount, event, ticketType, userType);
+            return ResponseEntity.ok(Map.of("voucher", voucher));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
 }

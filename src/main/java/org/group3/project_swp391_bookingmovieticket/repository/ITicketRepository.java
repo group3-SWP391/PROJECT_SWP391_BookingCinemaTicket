@@ -12,6 +12,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
 
     List<Ticket> findTicketsBySchedule_IdAndSeat_Id(Integer scheduleId, Integer seatId);
 
+    List<Ticket> findTicketsBySchedule_Id(Integer scheduleId);
     @Query("SELECT t FROM Ticket t " +
             "JOIN t.bill b " +
             "WHERE t.schedule.id = :scheduleId AND b.user.id <> :userId " +
@@ -24,13 +25,16 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
             "WHERE b.user.id = :userId AND t.schedule.id = :scheduleId " +
             "ORDER BY t.id DESC")
     List<Ticket> findTicketsOfCurrentUserAndScheduleId(@Param("userId") Integer userId,
-                                                  @Param("scheduleId") Integer scheduleId);
+                                                       @Param("scheduleId") Integer scheduleId);
 
     @Query("SELECT t FROM Ticket t " +
             "JOIN t.bill b " +
             "JOIN PaymentLink p ON p.bill.id = b.id " +
             "WHERE p.orderCode = :orderCode")
     List<Ticket> findTicketsByOrderCode(@Param("orderCode") long orderCode);
+    @Query("SELECT t FROM Ticket t WHERE t.bill.user.id = :userId AND t.schedule.movie.name = :movieName")
+    Ticket findByUserIdAndMovieName(@Param("userId") Integer userId, @Param("movieName") String movieName);
 
     List<Ticket> findByBill_Id(Integer billId);
 }
+

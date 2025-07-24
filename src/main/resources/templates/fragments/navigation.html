@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="prs_navi_left_main_wrapper">
                 <div class="prs_logo_main_wrapper">
-                    <a th:href="@{/home}">
+                    <a th:href="@{home.html}">
                         <img th:src="@{/images/header/logo.png}" alt="logo"/>
                     </a>
                 </div>
@@ -21,12 +21,8 @@
                                         <li><a th:href="@{/movie/showing(status='coming-soon')}">Sắp chiếu</a></li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{/}" onclick="return false;">Rạp</a>
-                                    <ul class="lg-submenu">
-                                        <li th:each="location : ${session.allLocationBranch}">
-                                            <a th:href="@{/branch/branch-by-location(locationName=${location})}" th:text="${location}">Địa điểm</a>
-                                        </li>
-                                    </ul>
+                                <li class="parent">
+                                    <a th:href="@{/select-theater}">Chi nhánh</a>
                                 </li>
                                 <li class="parent"><a th:href="@{/}" onclick="return false;">Mác phim</a>
                                     <ul class="lg-submenu">
@@ -42,7 +38,13 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="parent"><a th:href="@{/contact}">Liên hệ</a></li>
+                                <li class="parent"><a th:href="@{/contact}">Hỗ trợ</a>
+                                    <ul class="lg-submenu">
+                                        <li><a th:href="@{/contact}">Dịch vụ khách hàng</a></li>
+                                        <li><a th:href="@{/advertising-contact}">Liên hệ quảng cáo</a></li>
+                                    </ul>
+                                </li>
+                                <li class="parent"><a th:href="@{/promotion}">Ưu đãi</a></li>
                             </ul>
                         </div>
                         <!--dl-menuwrapper -->
@@ -65,7 +67,7 @@
                                     <a style="background: #1b1b1b" class="btn" th:if="${session.userLogin.role.name == 'STAFF'}" th:href="@{/staff}">
                                         <span style="color: white">Quản trị</span>
                                     </a>
-                                    <a style="background: #1b1b1b" class="btn" th:href="@{none}">
+                                    <a style="background: #1b1b1b" class="btn" th:href="@{/my-account}">
                                         <span style="color: white" th:text="${session.userLogin.username}">User</span>
                                     </a>
                                     <a style="background: #1b1b1b;" class="btn" th:href="@{/log-out}">
@@ -86,6 +88,7 @@
                                 <i class="flaticon-tool"></i>
                             </button>
                         </form>
+                        </button>
                     </div>
                 </div>
             </div>

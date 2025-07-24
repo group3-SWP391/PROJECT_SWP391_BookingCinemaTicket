@@ -1,11 +1,18 @@
 package org.group3.project_swp391_bookingmovieticket.service.impl;
 
-import org.group3.project_swp391_bookingmovieticket.entity.PaymentLink;
+import org.group3.project_swp391_bookingmovieticket.entity.*;
 import org.group3.project_swp391_bookingmovieticket.repository.IPaymentLinkRepository;
 import org.group3.project_swp391_bookingmovieticket.service.IPaymentLinkService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +21,9 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Autowired
     private IPaymentLinkRepository paymentLinkRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public List<PaymentLink> findAll() {
@@ -62,6 +72,39 @@ public class PaymentLinkService implements IPaymentLinkService {
     @Override
     public boolean existsBySchedule_IdAndSeatListAndStatus(int scheduleId, String id) {
         return paymentLinkRepository.existsBySchedule_IdAndSeatListAndStatus(scheduleId, id);
+    }
+
+    @Override
+    public List<PaymentLink> getPaidOrdersByUserId(Integer userId) {
+        return paymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
+    }
+
+    @Override
+    public List<PaymentLink> getOrdersByUserId(Integer userId) {
+        return paymentLinkRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<PaymentLink> getPendingOrdersByUserId(Integer userId) {
+        return paymentLinkRepository.findByUserIdAndStatus(userId, "PENDING");
+    }
+
+    public void checkAndNotifyWatchedMoviesForUser(Integer userId) {
+        List<PaymentLink> paidPaymentLinks = paymentLinkRepository.findByUserIdAndStatus(userId, "PAID");
+
+        for (PaymentLink paymentLink : paidPaymentLinks) {
+
+            Schedule schedule = paymentLink.getSchedule();
+            if (schedule.getEndTime() == null || schedule.getEndTime() == null || schedule.getMovie() == null) continue;
+
+            if (schedule.getEndTime().isBefore(LocalTime.now())) {
+                Movie movie = schedule.getMovie();
+                Notification existing = notificationService.getUnreadNotificationByUserAndMovie(userId, movie.getId());
+                if (existing == null) {
+                    notificationService.addNotification(paymentLink.getUser(), movie);
+                }
+            }
+        }
     }
 
 }

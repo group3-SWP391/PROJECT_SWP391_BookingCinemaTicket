@@ -11,6 +11,7 @@ public class ScheduleDTO  {
     private LocalTime startTime;
     private MovieDTO movie;
     private double price;
+    private String imgurl;
     private LocalDate endTime;
     private BranchDTO branch;
     private RoomDTO room;

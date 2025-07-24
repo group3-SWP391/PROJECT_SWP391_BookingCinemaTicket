@@ -163,12 +163,15 @@
                         <div style="font-weight: bold">Ghế bạn đang chọn:</div>
                         <div class="slot"></div>
                     </div>
-                    <div class="discountForm d-flex justify-content-between">
-                        <div class="discountForm__content"><label class="label__name">Mã giảm giá</label><input
-                                type="text" name="code" id="txtDiscountCode" class="form-control d-inline"
-                                placeholder="Nhập tại đây...."></div>
-                        <button id="btnCheckCode" class="btn mb-2">Áp dụng</button>
-                    </div>
+					<div class="discountForm d-flex flex-column">
+						<label class="label__name">Mã giảm giá</label>
+						<input type="text" id="voucherInput" class="form-control mb-2" placeholder="Nhập mã giảm giá">
+						<button id="btnCheckCode" class="btn btn-primary">Áp dụng</button>
+					</div>
+
+					<div id="voucherConditions" class="voucher-message"></div>
+					<div id="voucherMessage" class="voucher-message"></div>
+
                     <div class="payForm">
                         <a class="pay__link" href="/#">
                             <p class="text__notification">Vui lòng chọn một chỗ ngồi để hiển thị phương thức thanh toán
@@ -230,7 +233,61 @@
 
     $(document).ready(function () {
         dataParameter = []
+		let appliedVoucher = null;
         const price = $(".price");
+
+		// Show voucher message
+		function showVoucherMessage(message, type) {
+			const voucherMessage = $("#voucherMessage");
+			voucherMessage.text(message).removeClass("success error").addClass(type);
+		}
+
+		// Update total price with voucher discount if applicable
+		function updateTotalPrice(newPrice) {
+			let finalPrice = newPrice;
+			if (appliedVoucher) {
+				finalPrice = newPrice * (1 - appliedVoucher.discountPercentage / 100);
+			}
+			price.text(finalPrice.toLocaleString('vi-VN') + "₫").data("price", finalPrice);
+		}
+
+		// Fetch vouchers
+		function fetchVouchers() {
+			const userId = [[${session.userLogin?.id ?: 0}]];
+			if (!userId) {
+				showVoucherMessage("Please log in to view vouchers.", "error");
+				$("#voucherSelect").prop("disabled", true);
+				$("#btnCheckCode").prop("disabled", true);
+				return;
+			}
+			$.ajax({
+				type: "GET",
+				url: "/api/vouchers",
+				data: { userId: userId },
+				success: function (vouchers) {
+					const voucherSelect = $("#voucherSelect");
+					voucherSelect.empty().append('<option value="">Select a voucher</option>');
+					if (vouchers.length === 0) {
+						showVoucherMessage("Không có phiếu giảm giá hợp lệ nào.", "error");
+					} else {
+						vouchers.forEach(voucher => {
+							voucherSelect.append(
+									`<option value="${voucher.code}" data-discount="${voucher.discountPercentage}">
+                                    ${voucher.code} (${voucher.discountPercentage}% off)
+                                </option>`
+							);
+						});
+						showVoucherMessage("Vouchers loaded successfully.", "success");
+					}
+				},
+				error: function (e) {
+					console.error("Error fetching vouchers:", e);
+					showVoucherMessage("Failed to load vouchers.", "error");
+				}
+			});
+		}
+
+
         // hiện ghế đang chọn
         $(".slot__item").click(function () {
             const priceSeat = Number($(this).data("price"))
@@ -263,6 +320,77 @@
 
                 }
         });
+
+		// kiểm tra voucher
+		// Handle voucher application
+		$("#btnCheckCode").click(function () {
+			const voucherCode = $("#voucherInput").val().trim();
+			const userId = [[${session.userLogin?.id ?: 0}]];
+			const totalPrice = Number(price.data("price")) / (appliedVoucher ? (1 - appliedVoucher.discountPercentage / 100) : 1);
+
+			if (!voucherCode) {
+				showVoucherMessage("Vui lòng nhập mã phiếu giảm giá.", "error");
+				return;
+			}
+			if (!userId) {
+				showVoucherMessage("Vui lòng đăng nhập để áp dụng phiếu giảm giá.", "error");
+				return;
+			}
+
+			const event = "Summer2025";      // Có thể lấy từ schedule nếu có
+			const ticketType = "VIP";        // Có thể đọc từ ghế người dùng chọn
+			const userType = "MEMBER";       // Có thể lấy từ user role/session
+
+			$.ajax({
+				type: "POST",
+				url: "/api/vouchers/apply",
+				data: {
+					userId: userId,
+					voucherCode: voucherCode,
+					totalAmount: totalPrice,
+					event: event,
+					ticketType: ticketType,
+					userType: userType
+				},
+				success: function (response) {
+					appliedVoucher = response.voucher;
+					updateTotalPrice(totalPrice);
+					showVoucherMessage(`Voucher ${voucherCode} applied! ${appliedVoucher.discountPercentage}% off.`, "success");
+				},
+				error: function (e) {
+					console.error("Error applying voucher:", e);
+					showVoucherMessage(e.responseJSON?.message || "Không áp dụng được phiếu giảm giá.", "error");
+				}
+			});
+		});
+
+
+		$("#voucherSelect").change(function () {
+			const selectedOption = $(this).find(":selected");
+			const code = selectedOption.val();
+
+			if (!code) return;
+
+			$.ajax({
+				type: "GET",
+				url: `/api/vouchers/info`,
+				data: { code },
+				success: function (voucher) {
+					let message = `Giảm: ${voucher.discountPercentage}%`;
+					if (voucher.fixedDiscount > 0)
+						message += ` hoặc ${voucher.fixedDiscount.toLocaleString('vi-VN')}₫`;
+
+					message += `<br>Áp dụng cho: ${voucher.applicableTicketTypes || 'tất cả loại vé'}, `;
+					message += `Sự kiện: ${voucher.applicableEvents || 'mọi sự kiện'}, `;
+					message += `Đối tượng: ${voucher.applicableUserTypes || 'mọi người dùng'}, `;
+					message += `Đơn hàng tối thiểu: ${voucher.minOrderValue.toLocaleString('vi-VN')}₫`;
+
+					$("#voucherConditions").html(message).addClass("success");
+				}
+			});
+		});
+
+
         //clock time
         var clock = setInterval(function () {
             $('.time').text(remainingTime());
@@ -402,4 +530,7 @@
 </script>
 
 </body>
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/seat_booking.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:12 GMT -->
 </html>

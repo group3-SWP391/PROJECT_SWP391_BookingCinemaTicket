@@ -10,4 +10,5 @@ public interface ISeatService extends IGeneralService<Seat> {
     List<SeatDTO> getSeatsByScheduleIdAndUserId(Integer scheduleId, Integer userId);
     List<String> findSeatNamesByIdList(List<Integer> ids);
     String findSeatNameById(Integer id);
+    SeatDTO getSeatById(Integer id);
 }

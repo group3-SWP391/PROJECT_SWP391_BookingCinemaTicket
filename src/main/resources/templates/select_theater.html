@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn Rạp</title>
+    <meta name="description" content="Movie Pro" />
+    <meta name="keywords" content="Movie Pro" />
+    <meta name="author" content="" />
+    <meta name="MobileOptimized" content="320" />
+    <!-- Template style -->
+    <link rel="stylesheet" type="text/css" href="css/animate.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="css/flaticon.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl.theme.default.css" />
+    <link rel="stylesheet" type="text/css" href="css/dl-menu.css" />
+    <link rel="stylesheet" type="text/css" href="css/nice-select.css" />
+    <link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
+    <link rel="stylesheet" type="text/css" href="css/venobox.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/layers.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/navigation.css" />
+    <link rel="stylesheet" type="text/css" href="js/plugin/rs_slider/settings.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/responsive.css" />
+    <link rel="shortcut icon" type="image/png" href="images/header/favicon.ico" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; color: #333; }
+        .container { max-width: 1200px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; gap: 30px; flex-wrap: wrap; }
+        .left-panel { flex: 1 1 250px; }
+        .right-panel { flex: 2 1 600px; }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 20px; font-size: 2em; }
+        h2 { color: #34495e; margin-top: 20px; border-bottom: 2px solid #ecf0f1; padding-bottom: 5px; }
+        .branch-list a, .address-list a { display: block; padding: 10px 15px; background: #ecf0f1; border-radius: 5px; text-decoration: none; color: #2980b9; margin-bottom: 10px; transition: 0.3s; text-align: center; }
+        .branch-list a:hover, .address-list a:hover { background: #3498db; color: #fff; }
+        .branch-list a.selected { background: #2ecc71; color: #fff; }
+        .branch-image { max-width: 100%; border-radius: 5px; margin: 10px 0; }
+        .schedule { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #f5f6fa; border-radius: 5px; margin: 10px 0; }
+        .schedule span { flex-grow: 1; color: #7f8c8d; }
+        .schedule img { max-width: 80px; height: auto; margin-left: 10px; }
+        .no-schedule { color: #e74c3c; text-align: center; padding: 10px; }
+    </style>
+</head>
+<body>
+<header lang="vi" th:replace="fragments/navigation :: navigation"></header>
+<div class="container">
+    <div class="left-panel">
+        <h2>Danh Sách Rạp</h2>
+        <input type="text" id="branchSearch" placeholder="Nhập tên chi nhánh..." style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 10px;" autocomplete="off">
+        <ul id="branchResults" style="list-style: none; padding: 0;"></ul>
+        <div class="branch-list" th:each="name : ${branchNames}">
+            <a th:href="@{/select-theater(name=${name})}" th:text="${name}" th:class="${name == param.name} ? 'selected' : ''"></a>
+        </div>
+    </div>
+    <div class="right-panel">
+        <div th:if="${addresses != null and not #lists.isEmpty(addresses)}">
+            <h2>Danh sách địa chỉ</h2>
+            <input type="text" id="addressSearch" placeholder="Nhập tên địa chỉ..." style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 10px;" autocomplete="off">
+            <ul id="addressResults" style="list-style: none; padding: 0;"></ul>
+            <div class="address-list" th:each="address : ${addresses}">
+                <a th:href="@{/theater-detail(branchId=${address.id})}" th:text="${address.name + ' - ' + address.location}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+
+        const branches = /*[[${branchNames}]]*/ [];
+        const addresses = /*[[${addresses}]]*/ [];
+
+
+
+    const branchInput = document.getElementById('branchSearch');
+    const branchList = document.getElementById('branchResults');
+
+    const addressInput = document.getElementById('addressSearch');
+    const addressList = document.getElementById('addressResults');
+
+    branchInput.addEventListener('input', function () {
+        const keyword = this.value.toLowerCase();
+        branchList.innerHTML = '';
+        if (!keyword) return;
+
+        const results = branches.filter(name => name.toLowerCase().includes(keyword));
+        results.forEach(name => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = name;
+            a.href = `/select-theater?name=${encodeURIComponent(name)}`;
+            styleLink(a);
+            li.appendChild(a);
+            branchList.appendChild(li);
+        });
+    });
+
+    branchInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const keyword = this.value.trim().toLowerCase();
+            const match = branches.find(name => name.toLowerCase() === keyword);
+            if (match) window.location.href = `/select-theater?name=${encodeURIComponent(match)}`;
+            else alert('Không tìm thấy chi nhánh.');
+        }
+    });
+
+    addressInput.addEventListener('input', function () {
+        const keyword = this.value.toLowerCase();
+        addressList.innerHTML = '';
+        if (!keyword) return;
+
+        const results = addresses.filter(addr => (addr.name + ' - ' + addr.location).toLowerCase().includes(keyword));
+        results.forEach(addr => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = `${addr.name} - ${addr.location}`;
+            a.href = `/theater-detail?branchId=${addr.id}`;
+            styleLink(a);
+            li.appendChild(a);
+            addressList.appendChild(li);
+        });
+    });
+
+    addressInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const keyword = this.value.trim().toLowerCase();
+            const match = addresses.find(addr => (addr.name + ' - ' + addr.location).toLowerCase() === keyword);
+            if (match) window.location.href = `/theater-detail?branchId=${match.id}`;
+            else alert('Không tìm thấy địa chỉ.');
+        }
+    });
+
+    function styleLink(a) {
+        a.style.display = 'block';
+        a.style.padding = '8px';
+        a.style.borderRadius = '5px';
+        a.style.background = '#ecf0f1';
+        a.style.marginBottom = '5px';
+        a.style.color = '#2980b9';
+        a.style.textDecoration = 'none';
+        a.addEventListener('mouseover', () => a.style.background = '#3498db');
+        a.addEventListener('mouseout', () => a.style.background = '#ecf0f1');
+    }
+</script>
+</body>
+</html>

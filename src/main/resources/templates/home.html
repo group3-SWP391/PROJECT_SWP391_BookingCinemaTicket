@@ -13,13 +13,16 @@ Author: Webstrot
 <html lang="zxx">
 <!--[endif]-->
 
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:09:08 GMT -->
+<!-- Added by HTTrack -->
 <meta http-equiv="content-type" content="text/html;charset=utf-8"/><!--Added by HTTrack -->
 <head>
     <meta charset="utf-8"/>
-    <title>Home page</title>
+    <title>Movie Pro Responsive HTML Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta name="description" content="Home page"/>
-    <meta name="keywords" content="Home page"/>
+    <meta name="description" content="Movie Pro"/>
+    <meta name="keywords" content="Movie Pro"/>
     <meta name="author" content=""/>
     <meta name="MobileOptimized" content="320"/>
     <!--Template style -->
@@ -56,6 +59,43 @@ Author: Webstrot
 <!-- prs navigation Start -->
 <header lang="vi" th:include="fragments/navigation :: navigation"></header>
 <!-- prs navigation End -->
+
+<!--Cái chuông thông báo start -->
+<div class="notification-wrapper"
+     style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+
+    <div id="notificationBell" style="cursor: pointer; position: relative;">
+        <i class="fa fa-bell" style="font-size: 28px; color: #f39c12;"></i>
+        <span th:if="${notifications != null and notifications.size() > 0}"
+              th:text="${notifications.size()}"
+              style="position: absolute; top: -8px; right: -8px;
+                     background: red; color: white; border-radius: 50%;
+                     padding: 2px 6px; font-size: 12px;">
+        </span>
+    </div>
+
+    <div id="notificationDropdown"
+         style="display: none; position: absolute; bottom: 40px; right: 0;
+                background: white; border: 1px solid #ccc;
+                width: 300px; max-height: 400px; overflow-y: auto;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 9999;">
+        <ul style="list-style: none; margin: 0; padding: 10px;">
+            <li th:if="${notifications == null or notifications.size() == 0}">
+                <span style="display: block; padding: 8px 10px; color: #999; text-align: center;">
+                    Không có thông báo.
+                </span>
+            </li>
+            <li th:each="notify : ${notifications}">
+                <a th:href="@{'/notification/read/' + ${notify.movieId}}"
+                   th:text="${notify.message}"
+                   style="display: block; padding: 8px 10px; color: #333;
+                          border-bottom: 1px solid #eee; text-decoration: none;">
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--Cái chuông thông báo end -->
 
 <!-- prs Slider Start -->
 <header lang="vi" th:include="fragments/slider :: slider"></header>
@@ -149,6 +189,7 @@ Author: Webstrot
         </div> <!-- hết row chính -->
     </div> <!-- hết container -->
 </div>
+
 <!-- prs upcomung Slider End -->
 
 <!-- prs video section Start -->
@@ -331,6 +372,29 @@ Author: Webstrot
             document.getElementById("login-form").submit();
         }
     }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const bell = document.getElementById("notificationBell");
+        const dropdown = document.getElementById("notificationDropdown");
+
+        if (bell && dropdown) {
+            bell.addEventListener("click", function () {
+                if (dropdown.style.display === "none" || dropdown.style.display === "") {
+                    dropdown.style.display = "block";
+                } else {
+                    dropdown.style.display = "none";
+                }
+            });
+
+            // Đóng dropdown khi click ra ngoài
+            document.addEventListener("click", function (event) {
+                if (!bell.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.style.display = "none";
+                }
+            });
+        }
+    });
 </script>
 </body>
 

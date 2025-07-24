@@ -32,11 +32,14 @@ public class Ticket {
     @JoinColumn(name = "bill_id", nullable = false)
     private Bill bill;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @Column(name = "popcorn_drink_list")
     private String listPopcornDrinkName;
 
-    @Override
-    public String toString() {
-        return "hi";
-    }
+    @ManyToOne
+    @JoinColumn(name = "payment_link_id")
+    private PaymentLink paymentLink;
+
 }

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Rạp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}" />
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}" />
+    <style>
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+
+
+        .filter-bar select,
+        .filter-bar button {
+            padding: 6px 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .filter-bar button {
+            background-color: #0984e3;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-bar button:hover {
+            background-color: #74b9ff;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #2d3436;
+            line-height: 1.6;
+            padding: 0px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .theater-info {
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .theater-info img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: opacity 0.3s ease;
+        }
+
+        .theater-info img:hover {
+            opacity: 0.95;
+        }
+
+        .theater-info p {
+            font-size: 1.1rem;
+            color: #636e72;
+            margin: 5px 0;
+        }
+
+        .theater-info strong {
+            color: #2d3436;
+        }
+
+        .date-picker {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .date-picker label {
+            font-size: 1.2rem;
+            color: #2d3436;
+            margin-right: 10px;
+        }
+
+        .date-picker select {
+            padding: 8px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #636e72;
+            background: #f1f3f5;
+            cursor: pointer;
+        }
+
+        .schedule-container {
+            margin: 30px 0;
+            min-height: 0;
+        }
+
+        .schedule {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            background: #f1f3f5;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .schedule:hover {
+            background: #dfe6e9;
+        }
+
+        .schedule .poster-column {
+            flex: 0 0 auto;
+            margin-right: 40px;
+        }
+
+        .schedule .poster-column img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .schedule .info-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .schedule .info-column span {
+            font-size: 1rem;
+            color: #2d3436;
+            margin-bottom: 5px;
+        }
+
+        .schedule .info-column .showtimes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .schedule .info-column .showtimes a {
+            padding: 8px 16px;
+            background: #e74c3c;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .schedule .info-column .showtimes a:hover {
+            background: #c0392b;
+        }
+
+        .no-schedule {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #636e72;
+            padding: 20px;
+            background: #f1f3f5;
+            border-radius: 8px;
+        }
+
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .buttons a {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .buttons a:first-child {
+            background: #6c5ce7;
+            color: #fff;
+        }
+
+        .buttons a:first-child:hover {
+            background: #5a4bc6;
+            transform: translateY(-2px);
+        }
+
+        .buttons a:last-child {
+            background: #00b894;
+            color: #fff;
+        }
+
+        .buttons a:last-child:hover {
+            background: #009874;
+            transform: translateY(-2px);
+        }
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .button-map,
+        .button-contact {
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        .button-map.disabled {
+            background-color: #ccc;
+            color: #666;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .phone-info {
+            font-size: 14px;
+        }
+
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .schedule {
+                flex-direction: column;
+            }
+
+            .schedule .poster-column {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .schedule .info-column {
+                width: 100%;
+            }
+
+            .schedule span {
+                margin-bottom: 8px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .buttons a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header lang="vi" th:replace="fragments/navigation :: navigation"></header>
+
+<div class="container">
+    <h1>THEATER</h1>
+    <h2 th:text="${branch.name} + ' - ' + ${branch.location}"></h2>
+    <div class="theater-info">
+        <img th:src="${branch.imgurl}" alt="Theater Image" th:if="${!#strings.isEmpty(branch.imgurl)}"/>
+    </div>
+
+    <!-- Dropdown chọn ngày -->
+    <div class="date-picker">
+        <form method="get" action="/theater-detail">
+            <input type="hidden" name="branchId" th:value="${branch.id}" />
+            <label for="date">Các phim đang có</label>
+            <select name="date" id="date" onchange="this.form.submit()">
+                <option th:each="i : ${#numbers.sequence(0,6)}"
+                        th:value="${#temporals.format(T(java.time.LocalDate).now().plusDays(i), 'yyyy-MM-dd')}"
+                        th:text="${#temporals.format(T(java.time.LocalDate).now().plusDays(i), 'dd/MM/yyyy')}"
+                        th:selected="${selectedDate == T(java.time.LocalDate).now().plusDays(i)}">
+                </option>
+            </select>
+        </form>
+    </div>
+
+    <!--lọc theo phòng và giờ chiếu -->
+    <div class="filter-bar" style="margin-bottom: 20px;">
+        <form method="get" action="/theater-detail">
+            <input type="hidden" name="branchId" th:value="${branch.id}" />
+            <input type="hidden" name="date" th:value="${selectedDate}" />
+
+            <label for="roomFilter">Phòng:</label>
+            <select name="roomId" id="roomFilter">
+                <option value="">Tất cả</option>
+                <option th:each="room : ${availableRooms}" th:value="${room.id}" th:text="${room.name}"
+                        th:selected="${room.id == selectedRoomId}"></option>
+            </select>
+
+            <label for="timeFilter">Giờ chiếu:</label>
+            <select name="startHour" id="timeFilter">
+                <option value="">Tất cả</option>
+                <option th:each="i : ${#numbers.sequence(8, 23)}"
+                        th:value="${i}"
+                        th:text="${i + ':00'}"
+                        th:selected="${i == selectedStartHour}">
+                </option>
+            </select>
+
+            <button type="submit">Lọc</button>
+        </form>
+    </div>
+
+
+    <div class="schedule-container" id="schedule-container">
+        <div th:each="entry : ${groupedSchedules}">
+            <div class="schedule">
+                <div class="poster-column">
+                    <a th:href="@{/movie-details(id=${entry.value[0].movie.id})}">
+                        <img th:src="${entry.value[0].movie.smallImageUrl}" alt="Poster" />
+                    </a>
+                </div>
+
+                <div class="info-column">
+                    <span th:text="${entry.key}"></span>
+                    <div th:each="schedule : ${entry.value}">
+                        <span th:text="'📽️Phòng: ' + ${schedule.room.name}"></span>
+                        <span th:text="'-💺Ghế còn trống: ' + ${availableSeatsMap[schedule.room.id][schedule.id]} + '/' + ${capacityMap[schedule.room.id]}"></span>
+                        <div class="showtimes">
+                            <a th:href="@{'/booking/' + ${schedule.id}}"
+                               th:text="${#temporals.format(schedule.startTime, 'HH:mm')}"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(schedules)}" class="no-schedule">
+            <p>Không có lịch chiếu tại rạp này.</p>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <a th:if="${!schedules.isEmpty()}"
+           th:href="${schedules[0].map}"
+           target="_blank"
+           class="button-map">
+            XEM BẢN ĐỒ
+        </a>
+        <span th:if="${schedules.isEmpty()}" class="button-map disabled">XEM BẢN ĐỒ</span>
+
+        <a th:href="@{/contact}" class="button-contact">LIÊN HỆ CINEMA</a>
+
+        <div class="phone-info">
+            <strong>Điện thoại:</strong> <span th:text="${branch.phoneNo}">0123 456 789</span>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+
+<!-- Main JS Files -->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/jquery.countTo.js}"></script>
+<script th:src="@{/js/jquery.inview.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+</body>
+</html>

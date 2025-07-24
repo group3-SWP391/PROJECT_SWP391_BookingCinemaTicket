@@ -16,4 +16,5 @@ public class PaymentLinkDTO {
     private LocalDateTime createdAt;
     private User user;
     private Schedule schedule;
+    private Integer billId;
 }

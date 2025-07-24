@@ -65,6 +65,13 @@ public class BranchService implements IBranchService {
     }
 
     @Override
+    public List<BranchDTO> findAllBranchesDTO() {
+        return branchRepository.findAll().stream()
+                .map(branch -> new BranchDTO(branch.getId(), branch.getName(), branch.getLocation()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<BranchDTO> getBranchByMovie(Integer movieId) {
         // lấy về time hiện tại
         LocalDate today = LocalDate.now();

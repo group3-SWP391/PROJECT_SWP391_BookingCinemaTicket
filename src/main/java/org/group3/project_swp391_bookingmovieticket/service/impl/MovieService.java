@@ -39,12 +39,10 @@ public class MovieService implements IMovieService {
 
     @Override
     public void update(MovieDTO movieDTO) {
-
     }
 
     @Override
     public void remove(Integer id) {
-
     }
 
     @Override
@@ -117,5 +115,9 @@ public class MovieService implements IMovieService {
     @Override
     public void save(Movie movie) {
         movieRepository.save(movie);
+    }
+
+    public Movie findEntityById(Integer id) {
+        return movieRepository.findById(id).orElse(null);
     }
 }
