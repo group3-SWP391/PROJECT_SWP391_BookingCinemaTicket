@@ -25,7 +25,7 @@ public class FoodOrderController {
         session.setAttribute("schedulemovie", scheduleId);
         session.setAttribute("listseat",selectedSeats);
 
-        List<PopcornDrink> popcornDrinkList = popcornDrinkService.findAll();
+        List<PopcornDrink> popcornDrinkList = popcornDrinkService.getPopcornDrink(0);
         model.addAttribute("listfood", popcornDrinkList);
         return "employee/food";
 

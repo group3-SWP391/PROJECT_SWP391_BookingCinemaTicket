@@ -15,14 +15,8 @@ public class PopcornDrinkService implements IPopcornDrinkService {
     private IPopcornDrinkRepository popcornDrinkRepository;
     @Override
     public List<PopcornDrink> findAll() {
-        List<PopcornDrink> popcornDrink = new ArrayList<>();
-       List<PopcornDrink> popcornDrinkList = popcornDrinkRepository.findAll();
-       for(PopcornDrink popcorn: popcornDrinkList){
-           if(popcorn.getQuantity() > 0){
-               popcornDrink.add(popcorn);
-           }
-       }
-       return popcornDrink;
+        return popcornDrinkRepository.findAll();
+
     }
 
     @Override
@@ -40,5 +34,10 @@ public class PopcornDrinkService implements IPopcornDrinkService {
     @Override
     public void remove(Integer id) {
 
+    }
+
+    @Override
+    public List<PopcornDrink> getPopcornDrink(Integer quantity) {
+        return popcornDrinkRepository.findByQuantityGreaterThan(quantity);
     }
 }
