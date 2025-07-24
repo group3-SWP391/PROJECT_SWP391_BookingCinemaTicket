@@ -27,6 +27,20 @@
                 </h1>
             </div>
 
+            <!-- Filter Section -->
+            <div class="filter-section" style="margin-bottom: 20px;">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="statusFilter" style="color: #000000; margin-bottom: 5px;">Filter by Status:</label>
+                        <select class="form-control" id="statusFilter" onchange="filterMoviesByStatus()">
+                            <option value="all">All Movies</option>
+                            <option value="showing">Currently Showing</option>
+                            <option value="not-showing">Not Showing</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <!-- Movie Table Container -->
             <div class="movie-table-container">
                 <table class="table movie-table">
@@ -408,5 +422,9 @@
         </div>
     </div>
     </div>
+
+    <script>
+
+    </script>
 </body>
 </html> 

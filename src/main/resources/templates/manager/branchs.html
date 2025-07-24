@@ -32,6 +32,7 @@
                         <tr>
                             <th>Branch Name</th>
                             <th>Location</th>
+                            <th>Address</th>
                             <th>Phone No</th>
                             <th>Rooms</th>
                             <th>Total Capacity</th>
@@ -48,6 +49,10 @@
                             <td>
                                 <span th:text="${branch.location}" th:if="${branch.location != null}">Branch Location</span>
                                 <span class="text-muted" th:if="${branch.location == null}">No Location</span>
+                            </td>
+                            <td>
+                                <span th:text="${branch.locationDetail}" th:if="${branch.locationDetail != null}">Branch Address</span>
+                                <span class="text-muted" th:if="${branch.locationDetail == null}">No Address</span>
                             </td>
                             <td>
                                 <div th:if="${branch.phoneNo != null}">
@@ -116,9 +121,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="branchLocation">Location <small class="text-muted">(max 255 chars)</small></label>
-                                        <textarea class="form-control" id="branchLocation" name="location" rows="3" maxlength="500"
-                                                  placeholder="Enter full branch location"></textarea>
+                                        <label for="branchLocation">Location (City/Province) <small class="text-muted">(max 255 chars)</small></label>
+                                        <input type="text" class="form-control" id="branchLocation" name="location" maxlength="255"
+                                               placeholder="e.g. Hà Nội, Đà Nẵng, TP.HCM">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -128,6 +133,12 @@
                                                placeholder="e.g. 028-3822-3456">
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="branchLocationDetail">Address Detail <small class="text-muted">(max 500 chars)</small></label>
+                                <textarea class="form-control" id="branchLocationDetail" name="locationDetail" rows="3" maxlength="500"
+                                          placeholder="e.g. Số 123, Tòa nhà ABC, Phường XYZ, Quận DEF"></textarea>
                             </div>
 
                             <div class="form-group">
@@ -259,7 +270,7 @@
                                         <div class="row" id="calculatedValues" style="display: none;">
                                             <div class="col-md-12">
                                                 <div class="alert alert-info">
-                                                    <strong>Auto-calculated:</strong> 
+                                                    <strong>Total:</strong>
                                                     <span id="seatsPerRowDisplay">0</span> seats per row
                                                     <span id="extraSeatsDisplay" style="display: none;"> (with <span id="extraSeatsCount">0</span> extra seats in first rows)</span>
                                                 </div>
@@ -273,33 +284,22 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="roomVipSeats">VIP Seats <small class="text-muted">(comma-separated, e.g., A1,A2,B1,B2)</small></label>
+                                            <input type="text" class="form-control" id="roomVipSeats" name="vipSeats" 
+                                                   placeholder="Enter VIP seat names separated by commas (e.g., A1,A2,A3,B1,B2)"
+                                                   maxlength="1000">
+                                            <small class="form-text text-muted">
+                                                <i class="fa fa-info-circle"></i> 
+                                                Specify which seats should be marked as VIP. Leave empty if no VIP seats.
+                                            </small>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="roomStatus">Status</label>
                                             <select class="form-control" id="roomStatus" name="isActive">
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
-                                        </div>
-
-                                        <!-- Seat Layout Preview -->
-                                        <div id="seatLayoutPreview" style="display: none;">
-                                            <hr>
-                                            <h6><i class="fa fa-eye"></i> Seat Layout Preview</h6>
-                                            <div class="seat-layout-container">
-                                                <div class="screen-indicator">
-                                                    <div class="screen">🎬 SCREEN</div>
-                                                </div>
-                                                <div id="seatLayoutGrid" class="seat-grid">
-                                                    <!-- Dynamic seat layout will be generated here -->
-                                                </div>
-                                                <div class="seat-legend">
-                                                    <span class="seat-legend-item">
-                                                        <span class="seat-sample regular"></span> Regular
-                                                    </span>
-                                                    <span class="seat-legend-item">
-                                                        <span class="seat-sample vip"></span> VIP
-                                                    </span>
-                                                </div>
-                                            </div>
                                         </div>
 
                                         <div class="form-group">

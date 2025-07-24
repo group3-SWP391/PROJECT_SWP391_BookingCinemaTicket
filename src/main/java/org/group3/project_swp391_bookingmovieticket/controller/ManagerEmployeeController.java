@@ -49,7 +49,7 @@ public class ManagerEmployeeController {
             String fullname = (String) employeeData.get("fullname");
             String username = (String) employeeData.get("username");
             String email = (String) employeeData.get("email");
-            Integer roleId = (Integer) employeeData.get("roleId");
+            //Integer roleId = (Integer) employeeData.get("roleId");
 
             if (userRepository.findByPhone(phone).isPresent()) {
                 response.put("success", false);
@@ -65,7 +65,7 @@ public class ManagerEmployeeController {
                 response.put("message", "Email đã tồn tại.");
                 return ResponseEntity.ok(response);
             }
-            Optional<Role> roleOpt = roleRepository.findById(roleId);
+            Optional<Role> roleOpt = roleRepository.findByName("staff");
             if (roleOpt.isEmpty()) {
                 response.put("success", false);
                 response.put("message", "Vai trò không hợp lệ.");
@@ -79,7 +79,7 @@ public class ManagerEmployeeController {
             user.setUsername(username);
             user.setEmail(email);
             user.setRole(roleOpt.get());
-            user.setActive(true);
+            user.setStatus(true);
 
             userRepository.save(user);
 
@@ -124,7 +124,7 @@ public class ManagerEmployeeController {
             String fullname = (String) employeeData.get("fullname");
 
             String password = (String) employeeData.get("password");
-            Integer roleId = (Integer) employeeData.get("roleId");
+            //Integer roleId = (Integer) employeeData.get("roleId");
 
             // Check if phone exists and is not the current user's phone
             Optional<User> existingPhoneUser = userRepository.findByPhone(phone);
@@ -151,19 +151,19 @@ public class ManagerEmployeeController {
             }
 
             // Check if role exists
-            Optional<Role> roleOpt = roleRepository.findById(roleId);
-            if (!roleOpt.isPresent()) {
-                response.put("success", false);
-                response.put("message", "Vai trò không hợp lệ.");
-                return ResponseEntity.ok(response);
-            }
+//            Optional<Role> roleOpt = roleRepository.findById(roleId);
+//            if (!roleOpt.isPresent()) {
+//                response.put("success", false);
+//                response.put("message", "Vai trò không hợp lệ.");
+//                return ResponseEntity.ok(response);
+//            }
 
             // Update user fields
             user.setFullname(fullname);
             user.setPhone(phone);
             user.setUsername(username);
             user.setEmail(email);
-            user.setRole(roleOpt.get());
+            //user.setRole(roleOpt.get());
             
             // Update password if provided
             if (password != null && !password.trim().isEmpty()) {
@@ -196,7 +196,7 @@ public class ManagerEmployeeController {
             }
 
             User user = userOpt.get();
-            user.setActive(false);
+            user.setStatus(false);
             userRepository.save(user);
 
             response.put("success", true);
@@ -223,7 +223,7 @@ public class ManagerEmployeeController {
             }
 
             User user = userOpt.get();
-            user.setActive(true);
+            user.setStatus(true);
             userRepository.save(user);
 
             response.put("success", true);

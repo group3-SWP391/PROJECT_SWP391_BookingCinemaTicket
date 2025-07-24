@@ -26,6 +26,7 @@ function editBranch(branchId) {
                 document.getElementById('branchId').value = branch.id;
                 document.getElementById('branchName').value = branch.name || '';
                 document.getElementById('branchLocation').value = branch.location || '';
+                document.getElementById('branchLocationDetail').value = branch.locationDetail || '';
                 document.getElementById('branchPhone').value = branch.phoneNo || '';
                 document.getElementById('branchDescription').value = branch.description || '';
                 
@@ -184,18 +185,7 @@ function editRoom(roomId) {
                 document.getElementById('roomRowCount').value = room.rowCount || '';
                 document.getElementById('roomDescription').value = room.description || '';
                 document.getElementById('roomStatus').value = room.isActive;
-                
-                // Store VIP seats data for applying after layout generation
-                window.currentVipSeats = room.vipSeats || '';
-                
-                // Generate seat layout if capacity and row count are available
-                if (room.capacity && room.rowCount) {
-                    setTimeout(() => {
-                        generateSeatLayout();
-                        // Apply VIP seats after a short delay to ensure layout is rendered
-                        setTimeout(() => applyVipSeats(window.currentVipSeats), 200);
-                    }, 100);
-                }
+                document.getElementById('roomVipSeats').value = room.vipSeats || '';
                 
                 document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-edit"></i> Edit Room';
                 document.getElementById('roomFormContainer').style.display = 'block';
@@ -219,8 +209,7 @@ function saveRoom() {
         data[key] = value;
     });
 
-    // Collect VIP seats data from the layout preview
-    data.vipSeats = getVipSeatsString();
+
 
     fetch(url, {
         method: method,
