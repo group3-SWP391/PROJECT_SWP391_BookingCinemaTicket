@@ -1,22 +1,22 @@
-// Branch Management JavaScript
+// Quản lý Chi nhánh (Branch Management)
 let currentBranchId = null;
 let currentRoomId = null;
 
 function initializeBranchManagement() {
-    // Check if we're on the branches page by looking for the branch modal
+    // Kiểm tra xem có đang ở trang quản lý chi nhánh hay không bằng cách tìm modal chi nhánh
     const branchModal = document.getElementById('branchModal');
     if (!branchModal) {
-        // Not on the branches page, skip initialization
+        // Không phải trang chi nhánh, bỏ qua khởi tạo
         return;
     }
-    
-    // Branch management specific initialization can go here if needed
+
+    // Các khởi tạo riêng cho quản lý chi nhánh có thể được thêm tại đây nếu cần
 }
 
-// Initialize when DOM is loaded
+// Khởi tạo khi DOM đã tải xong
 document.addEventListener('DOMContentLoaded', initializeBranchManagement);
 
-// Branch Management Functions
+// Các hàm quản lý chi nhánh
 function editBranch(branchId) {
     fetch(`/manager/branchs/${branchId}`)
         .then(response => response.json())
@@ -29,28 +29,25 @@ function editBranch(branchId) {
                 document.getElementById('branchLocationDetail').value = branch.locationDetail || '';
                 document.getElementById('branchPhone').value = branch.phoneNo || '';
                 document.getElementById('branchDescription').value = branch.description || '';
-                
-                // Set hidden input value for existing image
+
                 const imageUrlInput = document.querySelector('input[name="imgUrl"]');
-                
                 if (imageUrlInput) {
                     imageUrlInput.value = branch.imgUrl || '';
                 }
-                
-                // Show current image if it exists
+
                 if (branch.imgUrl) {
                     showBranchCurrentFileInfo(branch.imgUrl, 'image');
                 }
-                
-                document.getElementById('branchModalLabel').innerHTML = '<i class="fa fa-edit"></i> Edit Branch';
+
+                document.getElementById('branchModalLabel').innerHTML = '<i class="fa fa-edit"></i> Sửa chi nhánh';
                 $('#branchModal').modal('show');
             } else {
-                alert('Error loading branch: ' + data.message);
+                alert('Lỗi tải chi nhánh: ' + data.message);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error loading branch');
+            console.error('Lỗi:', error);
+            alert('Lỗi khi tải chi nhánh');
         });
 }
 
@@ -58,48 +55,197 @@ function saveBranch() {
     const form = document.getElementById('branchForm');
     const formData = new FormData(form);
     const branchId = document.getElementById('branchId').value;
-    
+
     const url = branchId ? `/manager/branchs/${branchId}` : '/manager/branchs';
     const method = branchId ? 'PUT' : 'POST';
 
     fetch(url, {
         method: method,
-        body: formData  // Send FormData directly for file uploads
+        body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            $('#branchModal').modal('hide');
-            location.reload();
-        } else {
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving branch');
-    });
-}
-
-function deleteBranch(branchId, branchName) {
-    if (confirm(`Are you sure you want to delete branch "${branchName}"? This will also delete all associated rooms.`)) {
-        fetch(`/manager/branchs/${branchId}`, {
-            method: 'DELETE'
-        })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 alert(data.message);
+                $('#branchModal').modal('hide');
                 location.reload();
             } else {
-                alert('Error: ' + data.message);
+                alert('Lỗi: ' + data.message);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting branch');
+            console.error('Lỗi:', error);
+            alert('Lỗi khi lưu chi nhánh');
         });
+}
+
+function deleteBranch(branchId, branchName) {
+    if (confirm(`Bạn có chắc chắn muốn xóa chi nhánh "${branchName}" không? Hành động này cũng sẽ xóa tất cả các phòng liên quan.`)) {
+        fetch(`/manager/branchs/${branchId}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                alert('Lỗi khi xóa chi nhánh');
+            });
+    }
+}
+
+// Các hàm quản lý phòng chiếu
+function manageRooms(branchId) {
+    currentBranchId = branchId;
+
+    // Lấy tên chi nhánh để hiển thị trong tiêu đề modal
+    fetch(`/manager/branchs/${branchId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('roomModalBranchName').textContent = data.Branch?.name;
+                document.getElementById('roomBranchId').value = branchId;
+                loadRooms(branchId);
+                $('#roomModal').modal('show');
+            }
+        });
+}
+
+function viewRooms(branchId) {
+    manageRooms(branchId);
+}
+
+function loadRooms(branchId) {
+    fetch(`/manager/branchs/${branchId}/rooms`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const tbody = document.getElementById('roomsTableBody');
+                tbody.innerHTML = '';
+
+                data.rooms.forEach(room => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${room.name}</strong></td>
+                        <td><span class="badge badge-info">${room.roomType || 'Không có'}</span></td>
+                        <td>${room.capacity} ghế</td>
+                        <td>${room.rowCount && room.seatsPerRow ? `${room.rowCount}x${room.seatsPerRow}` : 'Không có'}</td>
+                        <td>
+                            <span class="status-badge ${room.isActive == 1 ? 'status-showing' : 'status-not-showing'}">
+                                ${room.isActive == 1 ? 'Đang hoạt động' : 'Không hoạt động'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editRoom(${room.id})">
+                                <i class="fa fa-edit"></i> Sửa
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteRoom(${room.id}, '${room.name}')">
+                                <i class="fa fa-trash"></i> Xóa
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        });
+}
+
+function showAddRoomForm() {
+    document.getElementById('roomForm').reset();
+    document.getElementById('roomId').value = '';
+    document.getElementById('roomBranchId').value = currentBranchId;
+    document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-plus"></i> Thêm phòng mới';
+    document.getElementById('roomFormContainer').style.display = 'block';
+
+    window.currentVipSeats = '';
+    hideLayoutPreview();
+    currentRoomId = null;
+}
+
+function editRoom(roomId) {
+    fetch(`/manager/rooms/${roomId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const room = data.room;
+                document.getElementById('roomId').value = room.id;
+                document.getElementById('roomName').value = room.name || '';
+                document.getElementById('roomType').value = room.roomType || '';
+                document.getElementById('roomCapacity').value = room.capacity || '';
+                document.getElementById('roomRowCount').value = room.rowCount || '';
+                document.getElementById('roomDescription').value = room.description || '';
+                document.getElementById('roomStatus').value = room.isActive;
+                document.getElementById('roomVipSeats').value = room.vipSeats || '';
+
+                document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-edit"></i> Sửa phòng';
+                document.getElementById('roomFormContainer').style.display = 'block';
+                currentRoomId = roomId;
+            } else {
+                alert('Lỗi khi tải phòng: ' + data.message);
+            }
+        });
+}
+
+function saveRoom() {
+    const form = document.getElementById('roomForm');
+    const formData = new FormData(form);
+    const roomId = document.getElementById('roomId').value;
+
+    const url = roomId ? `/manager/rooms/${roomId}` : `/manager/branchs/${currentBranchId}/rooms`;
+    const method = roomId ? 'PUT' : 'POST';
+
+    const data = {};
+    formData.forEach((value, key) => {
+        data[key] = value;
+    });
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                cancelRoomForm();
+                loadRooms(currentBranchId);
+            } else {
+                alert('Lỗi: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi:', error);
+            alert('Lỗi khi lưu phòng');
+        });
+}
+
+function deleteRoom(roomId, roomName) {
+    if (confirm(`Bạn có chắc chắn muốn xóa phòng "${roomName}" không?`)) {
+        fetch(`/manager/rooms/${roomId}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    loadRooms(currentBranchId);
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                alert('Lỗi khi xóa phòng');
+            });
     }
 }
 
@@ -140,16 +286,16 @@ function loadRooms(branchId) {
                         <td>${room.capacity} seats</td>
                         <td>${room.rowCount && room.seatsPerRow ? `${room.rowCount}x${room.seatsPerRow}` : 'N/A'}</td>
                         <td>
-                            <span class="status-badge ${room.isActive == 1 ? 'status-showing' : 'status-not-showing'}">
-                                ${room.isActive == 1 ? 'Active' : 'Inactive'}
+                            <span class="status-badge ${room.isActive == 1 ? 'trạng thái- Đang chiếu' : 'trạng thái- Không chiếu'}">
+                                ${room.isActive == 1 ? 'Hoạt động' : 'Không hoạt động'}
                             </span>
                         </td>
                         <td>
                             <button class="btn btn-sm btn-primary" onclick="editRoom(${room.id})">
-                                <i class="fa fa-edit"></i> Edit
+                                <i class="fa fa-edit"></i> Sửa
                             </button>
                             <button class="btn btn-sm btn-danger" onclick="deleteRoom(${room.id}, '${room.name}')">
-                                <i class="fa fa-trash"></i> Delete
+                                <i class="fa fa-trash"></i> Xóa
                             </button>
                         </td>
                     `;
@@ -163,7 +309,7 @@ function showAddRoomForm() {
     document.getElementById('roomForm').reset();
     document.getElementById('roomId').value = '';
     document.getElementById('roomBranchId').value = currentBranchId;
-    document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-plus"></i> Add New Room';
+    document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-plus"></i> Thêm phòng mới';
     document.getElementById('roomFormContainer').style.display = 'block';
     
     // Clear VIP seats data
@@ -187,7 +333,7 @@ function editRoom(roomId) {
                 document.getElementById('roomStatus').value = room.isActive;
                 document.getElementById('roomVipSeats').value = room.vipSeats || '';
                 
-                document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-edit"></i> Edit Room';
+                document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-edit"></i> Sửa phòng';
                 document.getElementById('roomFormContainer').style.display = 'block';
                 currentRoomId = roomId;
             } else {
@@ -225,17 +371,17 @@ function saveRoom() {
             cancelRoomForm();
             loadRooms(currentBranchId);
         } else {
-            alert('Error: ' + data.message);
+            alert('Lỗi: ' + data.message);
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving room');
+        console.error('Lỗi:', error);
+        alert('Lỗi lưu phòng');
     });
 }
 
 function deleteRoom(roomId, roomName) {
-    if (confirm(`Are you sure you want to delete room "${roomName}"?`)) {
+    if (confirm(`Bạn có chắc muốn xóa phòng "${roomName}"?`)) {
         fetch(`/manager/rooms/${roomId}`, {
             method: 'DELETE'
         })
@@ -245,12 +391,12 @@ function deleteRoom(roomId, roomName) {
                 alert(data.message);
                 loadRooms(currentBranchId);
             } else {
-                alert('Error: ' + data.message);
+                alert('Lỗi: ' + data.message);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting room');
+            console.error('Lỗi:', error);
+            alert('Lỗi xóa phòng');
         });
     }
 }
@@ -299,12 +445,12 @@ function generateSeatLayout() {
         if (data.success) {
             displaySeatLayout(data.layout);
         } else {
-            console.error('Error generating layout:', data.message);
+            console.error('Lỗi khi tạo bố cục:', data.message);
             hideLayoutPreview();
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Lỗi:', error);
         hideLayoutPreview();
     });
 }
@@ -474,13 +620,13 @@ function handleBranchFileSelect(file, config) {
     if (!file) return;
     
     if (!file.type.startsWith('image/')) {
-        alert('Please select a valid image file.');
+        alert('Vui lòng chọn một tệp hình ảnh hợp lệ.');
         return;
     }
     
     const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
-        alert('File size must be less than 10MB.');
+        alert('Kích thước tệp phải nhỏ hơn 10MB.');
         return;
     }
     
@@ -581,7 +727,7 @@ $(document).ready(function() {
     $('#branchModal').on('hidden.bs.modal', function () {
         document.getElementById('branchForm').reset();
         document.getElementById('branchId').value = '';
-        document.getElementById('branchModalLabel').innerHTML = '<i class="fa fa-building"></i> Add New Branch';
+        document.getElementById('branchModalLabel').innerHTML = '<i class="fa fa-building"></i> Thêm chi nhánh mới';
         
         // Reset file preview
         removeBranchFilePreview('image');

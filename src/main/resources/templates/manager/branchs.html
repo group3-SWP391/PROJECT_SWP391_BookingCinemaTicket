@@ -14,14 +14,14 @@
         <div class="dashboard-content">
             <!-- Add Branch Button -->
             <button type="button" class="btn-add-movie" data-toggle="modal" data-target="#branchModal" id="addBranchBtn">
-                <i class="fa fa-plus-circle"></i> Add New Branch
+                <i class="fa fa-plus-circle"></i> Thêm chi nhánh mới
             </button>
 
             <!-- Branch Management Header -->
             <div class="movie-management-header">
                 <h1>
                     <i class="fa fa-building"></i>
-                    Branch Management System
+                    Hệ thống quản lý chi nhánh
                 </h1>
             </div>
 
@@ -30,13 +30,13 @@
                 <table class="table movie-table">
                     <thead>
                         <tr>
-                            <th>Branch Name</th>
-                            <th>Location</th>
-                            <th>Address</th>
-                            <th>Phone No</th>
-                            <th>Rooms</th>
-                            <th>Total Capacity</th>
-                            <th>Actions</th>
+                            <th>Chi nhánh</th>
+                            <th>Khu vực</th>
+                            <th>Địa chỉ</th>
+                            <th>SĐT</th>
+                            <th>Phòng chiếu</th>
+                            <th>SL</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,24 +44,24 @@
                             <td>
                                 <strong th:text="${branch.name}">Branch Name</strong>
                                 <br>
-                                <small class="text-muted" th:text="${branch.description}" th:if="${branch.description != null}">Branch Description</small>
+                                <small class="text-muted" th:text="${branch.description}" th:if="${branch.description != null}">Mô tả chi nhánh</small>
                             </td>
                             <td>
-                                <span th:text="${branch.location}" th:if="${branch.location != null}">Branch Location</span>
-                                <span class="text-muted" th:if="${branch.location == null}">No Location</span>
+                                <span th:text="${branch.location}" th:if="${branch.location != null}">Khu vực chi nhánh</span>
+                                <span class="text-muted" th:if="${branch.location == null}">Không khu vực</span>
                             </td>
                             <td>
-                                <span th:text="${branch.locationDetail}" th:if="${branch.locationDetail != null}">Branch Address</span>
-                                <span class="text-muted" th:if="${branch.locationDetail == null}">No Address</span>
+                                <span th:text="${branch.locationDetail}" th:if="${branch.locationDetail != null}">Địa chỉ chi nhánh</span>
+                                <span class="text-muted" th:if="${branch.locationDetail == null}">Không địa chỉ</span>
                             </td>
                             <td>
                                 <div th:if="${branch.phoneNo != null}">
-                                    <i class="fa fa-phoneNo"></i> <span th:text="${branch.phoneNo}">Phone</span>
+                                    <i class="fa fa-phoneNo"></i> <span th:text="${branch.phoneNo}">SĐT</span>
                                 </div>
-                                <span class="text-muted" th:if="${branch.phoneNo == null}">No Contact</span>
+                                <span class="text-muted" th:if="${branch.phoneNo == null}">Không liên lạc</span>
                             </td>
                             <td>
-                                <span class="room-count-badge" th:text="${branch.activeRoomCount} + ' rooms'">5 rooms</span>
+                                <span class="room-count-badge" th:text="${branch.activeRoomCount} + ' rooms'">5 phòng</span>
                                 <br>
                                 <button type="button" class="btn btn-sm btn-info" 
                                         th:data-branch-id="${branch.id}"
@@ -70,14 +70,14 @@
                                 </button>
                             </td>
                             <td>
-                                <span class="capacity-badge" th:text="${branch.totalCapacity} + ' seats'">500 seats</span>
+                                <span class="capacity-badge" th:text="${branch.totalCapacity} + ' seats'">500 ghế</span>
                             </td>
                             <td>
                                 <div class="action-buttons">
                                     <button type="button" class="btn-action btn-edit" 
                                             th:data-branch-id="${branch.id}"
                                             onclick="editBranch(this.dataset.branchId)">
-                                        <i class="fa fa-edit"></i> Edit
+                                        <i class="fa fa-edit"></i> Sửa
                                     </button>
 <!--                                    <button type="button" class="btn-action btn-info" -->
 <!--                                            th:data-branch-id="${branch.id}"-->
@@ -88,7 +88,7 @@
                                             th:data-branch-id="${branch.id}"
                                             th:data-branch-name="${branch.name}"
                                             onclick="deleteBranch(this.dataset.branchId, this.dataset.branchName)">
-                                        <i class="fa fa-trash"></i> Delete
+                                        <i class="fa fa-trash"></i> Xóa
                                     </button>
                                 </div>
                             </td>
@@ -104,7 +104,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="branchModalLabel">
-                            <i class="fa fa-building"></i> Add New Branch
+                            <i class="fa fa-building"></i> Thêm chi nhánh mới
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
                             <span aria-hidden="true">&times;</span>
@@ -115,20 +115,20 @@
                             <input type="hidden" id="branchId" name="branchId">
                             
                             <div class="form-group">
-                                <label for="branchName">Branch Name * <small class="text-muted">(max 255 chars)</small></label>
+                                <label for="branchName">Tên chi nhánh * <small class="text-muted">(max 255 chars)</small></label>
                                 <input type="text" class="form-control" id="branchName" name="name" maxlength="255" required>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="branchLocation">Location (City/Province) <small class="text-muted">(max 255 chars)</small></label>
+                                        <label for="branchLocation">Khu vực (Thành phố/Tỉnh) <small class="text-muted">(max 255 chars)</small></label>
                                         <input type="text" class="form-control" id="branchLocation" name="location" maxlength="255"
                                                placeholder="e.g. Hà Nội, Đà Nẵng, TP.HCM">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="branchPhone">Phone <small class="text-muted">(max 20 chars)</small></label>
+                                        <label for="branchPhone">SĐT <small class="text-muted">(max 20 chars)</small></label>
                                         <input type="text" class="form-control" id="branchPhone" name="phoneNo" maxlength="20"
                                                placeholder="e.g. 028-3822-3456">
                                     </div>
@@ -136,33 +136,33 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="branchLocationDetail">Address Detail <small class="text-muted">(max 500 chars)</small></label>
+                                <label for="branchLocationDetail">Địa chỉ <small class="text-muted">(max 500 chars)</small></label>
                                 <textarea class="form-control" id="branchLocationDetail" name="locationDetail" rows="3" maxlength="500"
                                           placeholder="e.g. Số 123, Tòa nhà ABC, Phường XYZ, Quận DEF"></textarea>
                             </div>
 
                             <div class="form-group">
-                                <label for="branchDescription">Description <small class="text-muted">(max 1000 chars)</small></label>
+                                <label for="branchDescription">Mô tả <small class="text-muted">(max 1000 chars)</small></label>
                                 <textarea class="form-control" id="branchDescription" name="description" rows="4" maxlength="1000" 
-                                          placeholder="Brief description of the branch"></textarea>
+                                          placeholder="Mô tả ngắn gọn về chi nhánh"></textarea>
                             </div>
                             
                             <!-- Branch Image Upload Section -->
                             <div class="media-upload-section">
                                 <h5 class="section-title">
-                                    <i class="fa fa-image"></i> Branch Image
+                                    <i class="fa fa-image"></i> Ảnh chi nhánh
                                 </h5>
                                 
                                 <div class="form-group">
-                                    <label for="branchImage">Image</label>
+                                    <label for="branchImage">Ảnh</label>
                                     <div class="file-upload-container">
                                         <div class="file-upload-area" id="branchImageUploadArea">
                                             <div class="upload-icon">
                                                 <i class="fa fa-image"></i>
                                             </div>
                                             <div class="upload-text">
-                                                <span class="upload-title">Drop image here or click to browse</span>
-                                                <span class="upload-subtitle">PNG, JPG, GIF up to 10MB</span>
+                                                <span class="upload-title">Thả hình ảnh vào đây hoặc nhấp để duyệt</span>
+                                                <span class="upload-subtitle">PNG, JPG, GIF lên tới 10MB</span>
                                             </div>
                                             <input type="file" class="file-input" id="branchImage" 
                                                    name="imageFile" accept="image/*">
@@ -201,7 +201,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="roomModalLabel">
-                            <i class="fa fa-cogs"></i> Manage Rooms - <span id="roomModalBranchName">Branch Name</span>
+                            <i class="fa fa-cogs"></i> Quản lí phòng chiếu - <span id="roomModalBranchName">Tên chi nhánh</span>
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
                             <span aria-hidden="true">&times;</span>
@@ -211,7 +211,7 @@
                         <!-- Add Room Button -->
                         <div class="mb-3">
                             <button type="button" class="btn btn-success" onclick="showAddRoomForm()">
-                                <i class="fa fa-plus"></i> Add New Room
+                                <i class="fa fa-plus"></i> Thêm phòng mới
                             </button>
                         </div>
 
@@ -219,7 +219,7 @@
                         <div id="roomFormContainer" style="display: none;" class="mb-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 id="roomFormTitle"><i class="fa fa-plus"></i> Add New Room</h5>
+                                    <h5 id="roomFormTitle"><i class="fa fa-plus"></i> Thêm phòng mới</h5>
                                 </div>
                                 <div class="card-body">
                                     <form id="roomForm">
@@ -229,16 +229,16 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="roomName">Room Name * <small class="text-muted">(max 100 chars)</small></label>
+                                                    <label for="roomName">Tên phòng * <small class="text-muted">(max 100 chars)</small></label>
                                                     <input type="text" class="form-control" id="roomName" name="name" maxlength="100" required 
-                                                           placeholder="e.g. Screen 1, Hall A">
+                                                           placeholder="e.g. Màn hình 1, Hội trường A">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="roomType">Room Type <small class="text-muted">(max 50 chars)</small></label>
+                                                    <label for="roomType">Loại phòng <small class="text-muted">(max 50 chars)</small></label>
                                                     <select class="form-control" id="roomType" name="roomType">
-                                                        <option value="">Select Type</option>
+                                                        <option value="">Chọn loại</option>
                                                         <option value="STANDARD">Standard</option>
                                                         <option value="VIP">VIP</option>
                                                         <option value="IMAX">IMAX</option>
@@ -252,14 +252,14 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="roomCapacity">Capacity * <small class="text-muted">(total seats)</small></label>
+                                                    <label for="roomCapacity">Sức chứa * <small class="text-muted">(Tổng ghế)</small></label>
                                                     <input type="number" class="form-control" id="roomCapacity" name="capacity" required min="1" 
                                                            placeholder="e.g. 60" onchange="generateSeatLayout()">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="roomRowCount">Row Count * <small class="text-muted">(A, B, C...)</small></label>
+                                                    <label for="roomRowCount">Số lượng hàng * <small class="text-muted">(A, B, C...)</small></label>
                                                     <input type="number" class="form-control" id="roomRowCount" name="rowCount" required min="1" max="26"
                                                            placeholder="e.g. 10" onchange="generateSeatLayout()">
                                                 </div>
@@ -271,43 +271,43 @@
                                             <div class="col-md-12">
                                                 <div class="alert alert-info">
                                                     <strong>Total:</strong>
-                                                    <span id="seatsPerRowDisplay">0</span> seats per row
-                                                    <span id="extraSeatsDisplay" style="display: none;"> (with <span id="extraSeatsCount">0</span> extra seats in first rows)</span>
+                                                    <span id="seatsPerRowDisplay">0</span> số ghế trên mỗi hàng
+                                                    <span id="extraSeatsDisplay" style="display: none;"> (with <span id="extraSeatsCount">0</span> (ghế phụ ở hàng đầu tiên)</span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="roomDescription">Description <small class="text-muted">(max 500 chars)</small></label>
+                                            <label for="roomDescription">Mô tả <small class="text-muted">(max 500 chars)</small></label>
                                             <textarea class="form-control" id="roomDescription" name="description" rows="3" maxlength="500" 
-                                                      placeholder="Brief description of the room"></textarea>
+                                                      placeholder="Mô tả ngắn gọn về phòng"></textarea>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="roomVipSeats">VIP Seats <small class="text-muted">(comma-separated, e.g., A1,A2,B1,B2)</small></label>
+                                            <label for="roomVipSeats">Ghế Vip <small class="text-muted">(Tách bằng dấu (,) e.g., A1,A2,B1,B2)</small></label>
                                             <input type="text" class="form-control" id="roomVipSeats" name="vipSeats" 
                                                    placeholder="Enter VIP seat names separated by commas (e.g., A1,A2,A3,B1,B2)"
                                                    maxlength="1000">
                                             <small class="form-text text-muted">
-                                                <i class="fa fa-info-circle"></i> 
-                                                Specify which seats should be marked as VIP. Leave empty if no VIP seats.
+                                                <i class="fa fa-info-circle"></i>
+                                                Chỉ định ghế nào sẽ được đánh dấu là VIP. Để trống nếu không có ghế VIP.
                                             </small>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="roomStatus">Status</label>
+                                            <label for="roomStatus">Trạng thái</label>
                                             <select class="form-control" id="roomStatus" name="isActive">
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
+                                                <option value="1">Hoạt động</option>
+                                                <option value="0">Không hoạt động</option>
                                             </select>
                                         </div>
 
                                         <div class="form-group">
                                             <button type="button" class="btn btn-primary" onclick="saveRoom()">
-                                                <i class="fa fa-save"></i> Save Room
+                                                <i class="fa fa-save"></i> Lưu phòng
                                             </button>
                                             <button type="button" class="btn btn-secondary" onclick="cancelRoomForm()">
-                                                Cancel
+                                                Hủy bỏ
                                             </button>
                                         </div>
                                     </form>
@@ -321,12 +321,12 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Room Name</th>
-                                            <th>Type</th>
-                                            <th>Capacity</th>
-                                            <th>Layout</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
+                                            <th>Tên phòng</th>
+                                            <th>Loại</th>
+                                            <th>SL</th>
+                                            <th>Bố trí</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody id="roomsTableBody">
@@ -337,7 +337,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                     </div>
                 </div>
             </div>
