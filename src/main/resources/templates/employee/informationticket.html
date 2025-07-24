@@ -55,27 +55,27 @@
     <h2>Booking Successful!</h2>
     <div class="ticket-info">
         <p><strong>OrderCode:</strong> <span th:text="${paymentLink.orderCode}"></span></p>
-        <p><strong>Status:</strong> <span th:text="${paymentLink.status}"></span></p>
+        <p><strong>Trạng thái:</strong> <span th:text="${paymentLink.status}"></span></p>
         <p><strong>Đã xác nhận vé</strong></p>
         <p>
-            <strong>StartDate:</strong> <span th:text="${paymentLink.schedule.startDate}"></span>
-            &nbsp;<strong>StartTime:</strong> <span th:text="${paymentLink.schedule.startTime}"></span>
+            <strong>Ngày bắt đầu:</strong> <span th:text="${paymentLink.schedule.startDate}"></span>
+            &nbsp;<strong>Thời gian:</strong> <span th:text="${paymentLink.schedule.startTime}"></span>
         </p>
-        <p><strong>MovieName:</strong> <span th:text="${paymentLink.schedule.movie.name}"></span></p>
-        <p><strong>Seat:</strong> <span th:text="${paymentLink.seatList}"></span></p>
+        <p><strong>Phim:</strong> <span th:text="${paymentLink.schedule.movie.name}"></span></p>
+        <p><strong>Ghế:</strong> <span th:text="${paymentLink.seatList}"></span></p>
         <p>
-            <strong>Snacks:</strong>
+            <strong>Đồ ăn nhẹ:</strong>
             <span th:text="${#strings.isEmpty(paymentLink.listPopcornDrinkName) ? 'No snacks' : paymentLink.listPopcornDrinkName}"></span>
         </p>
         <p th:if="${session.totalPriceFood != null}">
-            <strong>TotalPriceSnacks</strong>
+            <strong>Tổng tiền đồ ăn</strong>
             <span th:text="${#numbers.formatDecimal(session.totalPriceFood, 0, 'COMMA', 0, 'POINT')}"></span>
 
         </p>
-        <p><strong>TotalPrice:</strong> <span th:text="${paymentLink.totalPrice}"></span></p>
+        <p><strong>Tổng tiền:</strong> <span th:text="${paymentLink.totalPrice}"></span></p>
     </div>
-    <button class="btn btn-print mt-4" onclick="window.print()">Print Ticket</button>
-    <button class="btn btn-print mt-4"><a th:href="@{/employee/page}" style="color: white; text-decoration:none" >Back to Home</a></button>
+    <button class="btn btn-print mt-4" onclick="window.print()">In vé</button>
+    <button class="btn btn-print mt-4"><a th:href="@{/employee/page}" style="color: white; text-decoration:none" >Quay lại</a></button>
 </div>
 </body>
 </html>
