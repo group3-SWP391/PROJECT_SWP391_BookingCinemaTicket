@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface IBillRepository extends JpaRepository<Bill, Integer> {
 
@@ -38,5 +41,22 @@ public interface IBillRepository extends JpaRepository<Bill, Integer> {
     Double getMonthlyRevenueByMovie(@Param("movieId") int movieId, 
                                    @Param("month") int month, 
                                    @Param("year") int year);
+
+    @Query("SELECT new map(" +
+           "branch.name as branchName, " +
+           "room.name as roomName, " +
+           "FORMAT(s.startTime, 'yyyy-MM-dd') as showDate, " +
+           "FORMAT(s.startTime, 'HH:mm') as showTime, " +
+           "COUNT(t.id) as ticketsSold, " +
+           "COALESCE(SUM(b.price), 0) as revenue) " +
+           "FROM Bill b " +
+           "JOIN Ticket t ON b.id = t.bill.id " +
+           "JOIN Schedule s ON t.schedule.id = s.id " +
+           "JOIN Room room ON s.room.id = room.id " +
+           "JOIN Branch branch ON room.branch.id = branch.id " +
+           "WHERE s.movie.id = :movieId " +
+           "GROUP BY branch.name, room.name, FORMAT(s.startTime, 'yyyy-MM-dd'), FORMAT(s.startTime, 'HH:mm') " +
+           "ORDER BY FORMAT(s.startTime, 'yyyy-MM-dd') DESC, FORMAT(s.startTime, 'HH:mm') DESC")
+    List<Map<String, Object>> getMovieRevenueBreakdownByMovieId(@Param("movieId") int movieId);
 
 }

@@ -3,9 +3,11 @@ package org.group3.project_swp391_bookingmovieticket.controller;
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.entity.Branch;
 import org.group3.project_swp391_bookingmovieticket.entity.Room;
+import org.group3.project_swp391_bookingmovieticket.entity.Seat;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
 import org.group3.project_swp391_bookingmovieticket.service.IBranchService;
 import org.group3.project_swp391_bookingmovieticket.service.IRoomService;
+import org.group3.project_swp391_bookingmovieticket.service.ISeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/manager")
@@ -34,6 +37,9 @@ public class ManagerBranchController {
 
     @Autowired
     private IRoomService roomService;
+
+    @Autowired
+    private ISeatService seatService;
 
     private static final String UPLOAD_DIR = "uploads/branchs/";
     
@@ -99,6 +105,7 @@ public class ManagerBranchController {
             @RequestParam("location") String location,
             @RequestParam("phoneNo") String phoneNo,
             @RequestParam("description") String description,
+            @RequestParam(value = "locationDetail", required = false) String locationDetail,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "imgUrl", required = false) String imgUrl) {
         
@@ -111,6 +118,7 @@ public class ManagerBranchController {
             branchData.put("location", location);
             branchData.put("phoneNo", phoneNo);
             branchData.put("description", description);
+            branchData.put("locationDetail", locationDetail);
             
             // Validation
             String validationError = validateBranchData(branchData);
@@ -125,6 +133,7 @@ public class ManagerBranchController {
             branch.setLocation(location);
             branch.setPhoneNo(phoneNo);
             branch.setDescription(description);
+            branch.setLocationDetail(locationDetail);
             
             // Handle image upload
             try {
@@ -189,6 +198,7 @@ public class ManagerBranchController {
             @RequestParam("location") String location,
             @RequestParam("phoneNo") String phoneNo,
             @RequestParam("description") String description,
+            @RequestParam(value = "locationDetail", required = false) String locationDetail,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "imgUrl", required = false) String imgUrl) {
         
@@ -203,6 +213,7 @@ public class ManagerBranchController {
                 branchData.put("location", location);
                 branchData.put("phoneNo", phoneNo);
                 branchData.put("description", description);
+                branchData.put("locationDetail", locationDetail);
                 
                 // Validation
                 String validationError = validateBranchData(branchData);
@@ -217,6 +228,7 @@ public class ManagerBranchController {
                 branch.setLocation(location);
                 branch.setPhoneNo(phoneNo);
                 branch.setDescription(description);
+                branch.setLocationDetail(locationDetail);
 
                 // Handle image upload
                 try {
@@ -330,8 +342,12 @@ public class ManagerBranchController {
 
             Room savedRoom = roomService.saveRoom(room);
 
+            // Generate seats for the room with VIP marking
+            String vipSeatsInput = (String) roomData.get("vipSeats");
+            seatService.generateSeatsForRoom(savedRoom, vipSeatsInput);
+
             response.put("success", true);
-            response.put("message", "Room added successfully!");
+            response.put("message", "Room and seats added successfully!");
             response.put("room", savedRoom);
         } catch (Exception e) {
             response.put("success", false);
@@ -347,10 +363,29 @@ public class ManagerBranchController {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            Optional<Room> room = roomService.getRoomById(id);
-            if (room.isPresent()) {
+            Optional<Room> roomOpt = roomService.getRoomById(id);
+            if (roomOpt.isPresent()) {
+                Room room = roomOpt.get();
+                
+                // Get VIP seats for this room and reconstruct the comma-separated string
+                List<Seat> vipSeats = seatService.getVipSeatsByRoomId(id);
+                String vipSeatsString = vipSeats.stream()
+                        .map(Seat::getName)
+                        .collect(Collectors.joining(","));
+                
+                // Create room data with VIP seats
+                Map<String, Object> roomData = new HashMap<>();
+                roomData.put("id", room.getId());
+                roomData.put("name", room.getName());
+                roomData.put("roomType", room.getRoomType());
+                roomData.put("capacity", room.getCapacity());
+                roomData.put("rowCount", room.getRowCount());
+                roomData.put("description", room.getDescription());
+                roomData.put("isActive", room.getIsActive());
+                roomData.put("vipSeats", vipSeatsString);
+                
                 response.put("success", true);
-                response.put("room", room.get());
+                response.put("room", roomData);
             } else {
                 response.put("success", false);
                 response.put("message", "Room not found");
@@ -412,8 +447,12 @@ public class ManagerBranchController {
 
                 Room savedRoom = roomService.updateRoom(room);
 
+                // Update seats for the room with new VIP marking (preserves existing seats with tickets)
+                String vipSeatsInput = (String) roomData.get("vipSeats");
+                seatService.updateSeatsForRoom(savedRoom, vipSeatsInput);
+
                 response.put("success", true);
-                response.put("message", "Room updated successfully!");
+                response.put("message", "Room and seats updated successfully!");
                 response.put("room", savedRoom);
             } else {
                 response.put("success", false);
@@ -434,9 +473,12 @@ public class ManagerBranchController {
         
         try {
             if (roomService.existsById(id)) {
+                // Delete seats first
+                seatService.deleteSeatsByRoomId(id);
+                // Then delete room
                 roomService.deleteRoom(id);
                 response.put("success", true);
-                response.put("message", "Room deleted successfully!");
+                response.put("message", "Room and seats deleted successfully!");
             } else {
                 response.put("success", false);
                 response.put("message", "Room not found");
@@ -464,84 +506,48 @@ public class ManagerBranchController {
         return ResponseEntity.ok(roomTypes);
     }
     
-    @PostMapping("/api/rooms/preview-layout")
+    @PostMapping("/api/rooms/validate-vip-seats")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> generateSeatLayoutPreview(@RequestBody Map<String, Object> layoutData) {
+    public ResponseEntity<Map<String, Object>> validateVipSeats(@RequestBody Map<String, Object> requestData) {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            int capacity = Integer.parseInt(layoutData.get("capacity").toString());
-            int rowCount = Integer.parseInt(layoutData.get("rowCount").toString());
+            int capacity = Integer.parseInt(requestData.get("capacity").toString());
+            int rowCount = Integer.parseInt(requestData.get("rowCount").toString());
+            String vipSeatsInput = (String) requestData.get("vipSeats");
             
-            if (capacity <= 0 || rowCount <= 0) {
+            // Generate all possible seat names
+            List<String> allSeatNames = seatService.generateAllSeatNames(capacity, rowCount);
+            
+            // Parse VIP seats input
+            List<String> vipSeatNames = seatService.parseVipSeats(vipSeatsInput);
+            
+            // Validate VIP seats
+            List<String> invalidSeats = vipSeatNames.stream()
+                    .filter(seatName -> !allSeatNames.contains(seatName))
+                    .collect(Collectors.toList());
+            
+            if (!invalidSeats.isEmpty()) {
                 response.put("success", false);
-                response.put("message", "Invalid capacity or row count");
-                return ResponseEntity.badRequest().body(response);
+                response.put("message", "Invalid VIP seats: " + String.join(", ", invalidSeats));
+                response.put("invalidSeats", invalidSeats);
+            } else {
+                response.put("success", true);
+                response.put("message", "All VIP seats are valid");
+                response.put("validVipSeats", vipSeatNames);
+                response.put("totalSeats", allSeatNames.size());
+                response.put("vipSeatsCount", vipSeatNames.size());
             }
-            
-            if (capacity < rowCount) {
-                response.put("success", false);
-                response.put("message", "Capacity must be at least equal to row count");
-                return ResponseEntity.badRequest().body(response);
-            }
-            
-            // Calculate seat layout
-            int seatsPerRow = capacity / rowCount;
-            int extraSeats = capacity % rowCount;
-            
-            // Generate layout data
-            Map<String, Object> layoutInfo = new HashMap<>();
-            layoutInfo.put("capacity", capacity);
-            layoutInfo.put("rowCount", rowCount);
-            layoutInfo.put("seatsPerRow", seatsPerRow);
-            layoutInfo.put("extraSeats", extraSeats);
-            layoutInfo.put("layout", generateSeatLayout(capacity, rowCount, seatsPerRow, extraSeats));
-            
-            response.put("success", true);
-            response.put("layout", layoutInfo);
             
         } catch (NumberFormatException e) {
             response.put("success", false);
-            response.put("message", "Invalid input values");
+            response.put("message", "Invalid capacity or row count");
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error generating layout: " + e.getMessage());
+            response.put("message", "Error validating VIP seats: " + e.getMessage());
         }
         
         return ResponseEntity.ok(response);
-    }
-    
-    private List<Map<String, Object>> generateSeatLayout(int capacity, int rowCount, int seatsPerRow, int extraSeats) {
-        List<Map<String, Object>> layout = new ArrayList<>();
-        int seatCounter = 1;
-        
-        for (int row = 0; row < rowCount; row++) {
-            Map<String, Object> rowData = new HashMap<>();
-            char rowLetter = (char) ('A' + row);
-            
-            // Calculate seats in this row (extra seats go to first few rows)
-            int seatsInThisRow = seatsPerRow + (row < extraSeats ? 1 : 0);
-            
-            List<Map<String, Object>> seats = new ArrayList<>();
-            for (int seat = 1; seat <= seatsInThisRow; seat++) {
-                Map<String, Object> seatData = new HashMap<>();
-                seatData.put("id", rowLetter + String.valueOf(seat));
-                seatData.put("row", String.valueOf(rowLetter));
-                seatData.put("number", seat);
-                seatData.put("type", "REGULAR"); // Default type
-                seatData.put("available", true);
-                seats.add(seatData);
-            }
-            
-            rowData.put("rowId", String.valueOf(rowLetter));
-            rowData.put("rowNumber", row + 1);
-            rowData.put("seats", seats);
-            rowData.put("seatCount", seatsInThisRow);
-            
-            layout.add(rowData);
-        }
-        
-        return layout;
     }
 
     // Validation methods
@@ -552,8 +558,11 @@ public class ManagerBranchController {
         if (branchData.get("name").length() > 255) {
             return "Branch name cannot exceed 255 characters";
         }
-        if (branchData.get("location") != null && branchData.get("location").length() > 500) {
-            return "location cannot exceed 500 characters";
+        if (branchData.get("location") != null && branchData.get("location").length() > 255) {
+            return "Location cannot exceed 255 characters";
+        }
+        if (branchData.get("locationDetail") != null && branchData.get("locationDetail").length() > 500) {
+            return "Address detail cannot exceed 500 characters";
         }
         if (branchData.get("phoneNo") != null && branchData.get("phoneNo").length() > 20) {
             return "Phone number cannot exceed 20 characters";

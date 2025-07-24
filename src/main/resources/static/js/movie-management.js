@@ -952,5 +952,23 @@ function convertEmbedToWatchUrl(url) {
         return '';
     }
 }
+function filterMoviesByStatus() {
+    const filter = document.getElementById('statusFilter').value;
+    const rows = document.querySelectorAll('.movie-table tbody tr');
 
+    rows.forEach(row => {
+        const statusBadge = row.querySelector('.status-badge');
+        const statusText = statusBadge.textContent.trim();
+
+        if (filter === 'all') {
+            row.style.display = '';
+        } else if (filter === 'showing' && statusText === 'Showing') {
+            row.style.display = '';
+        } else if (filter === 'not-showing' && statusText === 'Not Showing') {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
 // ... existing code ... 

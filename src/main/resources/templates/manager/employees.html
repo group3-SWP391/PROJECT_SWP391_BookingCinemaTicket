@@ -34,7 +34,6 @@
                             <th>Full Name</th>
                             <th>Username</th>
                             <th>Contact</th>
-                            <th>Role</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -58,11 +57,8 @@
                                 <small class="text-muted" th:text="${e.email}" th:if="${e.email != null}">email@example.com</small>
                             </td>
                             <td>
-                                <span class="room-badge" th:text="${e.role.name}">Role</span>
-                            </td>
-                            <td>
-                                <span th:if="${e.active}" class="badge badge-success">Active</span>
-                                <span th:unless="${e.active}" class="badge badge-danger">Inactive</span>
+                                <span th:if="${e.status}" class="badge badge-success">Active</span>
+                                <span th:unless="${e.status}" class="badge badge-danger">Inactive</span>
                             </td>
                             <td>
                                 <div class="action-buttons">
@@ -71,13 +67,13 @@
                                             onclick="editEmployee(this.dataset.employeeId)">
                                         <i class="fa fa-edit"></i> Edit
                                     </button>
-                                    <button type="button" th:if="${e.active}" class="btn-action btn-delete" 
+                                    <button type="button" th:if="${e.status}" class="btn-action btn-delete" 
                                             th:data-employee-id="${e.id}"
                                             th:data-employee-name="${e.fullname}"
                                             onclick="fireEmployee(this.dataset.employeeId, this.dataset.employeeName)">
                                         <i class="fa fa-user-times"></i> Fire
                                     </button>
-                                    <button type="button" th:unless="${e.active}" class="btn-action btn-success" 
+                                    <button type="button" th:unless="${e.status}" class="btn-action btn-success" 
                                             th:data-employee-id="${e.id}"
                                             th:data-employee-name="${e.fullname}"
                                             onclick="activateEmployee(this.dataset.employeeId, this.dataset.employeeName)">
@@ -145,12 +141,11 @@
                                         <small class="form-text text-muted" id="passwordHelp" style="display: none;">Leave empty to keep current password</small>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="confirmPasswordField">
                                     <div class="form-group">
-                                        <label for="employeeRole">Role *</label>
-                                        <select class="form-control" id="employeeRole" name="roleId" required>
-                                            <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}">Role Name</option>
-                                        </select>
+                                        <label for="employeeConfirmPassword">Confirm Password <span id="confirmPasswordRequired">*</span></label>
+                                        <input type="password" class="form-control" id="employeeConfirmPassword" name="confirmPassword">
+                                        <small class="form-text text-danger" id="passwordMismatch" style="display: none;">Passwords do not match</small>
                                     </div>
                                 </div>
                             </div>
@@ -217,9 +212,13 @@
             document.getElementById('employeeId').value = '';
             document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-user-plus"></i> Add New Employee';
             document.getElementById('passwordField').style.display = 'block';
+            document.getElementById('confirmPasswordField').style.display = 'block';
             document.getElementById('passwordRequired').style.display = 'inline';
+            document.getElementById('confirmPasswordRequired').style.display = 'inline';
             document.getElementById('passwordHelp').style.display = 'none';
+            document.getElementById('passwordMismatch').style.display = 'none';
             document.getElementById('employeePassword').required = true;
+            document.getElementById('employeeConfirmPassword').required = true;
             $('#employeeModal').modal('show');
         }
 
@@ -232,13 +231,15 @@
                     document.getElementById('employeeUsername').value = data.username;
                     document.getElementById('employeePhone').value = data.phone;
                     document.getElementById('employeeEmail').value = data.email;
-                    document.getElementById('employeeRole').value = data.role.id;
                     document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-edit"></i> Edit Employee';
                     document.getElementById('passwordField').style.display = 'block';
+                    document.getElementById('confirmPasswordField').style.display = 'none';
                     document.getElementById('passwordRequired').style.display = 'none';
                     document.getElementById('passwordHelp').style.display = 'block';
+                    document.getElementById('passwordMismatch').style.display = 'none';
                     document.getElementById('employeePassword').required = false;
                     document.getElementById('employeePassword').value = '';
+                    document.getElementById('employeeConfirmPassword').value = '';
                     $('#employeeModal').modal('show');
                 })
                 .catch(error => {
@@ -249,17 +250,26 @@
 
         function saveEmployee() {
             const id = document.getElementById('employeeId').value;
+            const password = document.getElementById('employeePassword').value;
+            const confirmPassword = document.getElementById('employeeConfirmPassword').value;
+            
+            // Password validation for new employees
+            if (!id && password !== confirmPassword) {
+                document.getElementById('passwordMismatch').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('passwordMismatch').style.display = 'none';
+            }
+
             const employee = {
                 fullname: document.getElementById('employeeFullname').value,
                 username: document.getElementById('employeeUsername').value,
                 phone: document.getElementById('employeePhone').value,
-                email: document.getElementById('employeeEmail').value,
-                roleId: parseInt(document.getElementById('employeeRole').value)
+                email: document.getElementById('employeeEmail').value
             };
 
             if (id) {
                 // Update existing employee
-                const password = document.getElementById('employeePassword').value;
                 if (password && password.trim() !== '') {
                     employee.password = password;
                 }
@@ -284,7 +294,7 @@
                 });
             } else {
                 // Create new employee
-                employee.password = document.getElementById('employeePassword').value;
+                employee.password = password;
                 fetch('/manager/employees', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},

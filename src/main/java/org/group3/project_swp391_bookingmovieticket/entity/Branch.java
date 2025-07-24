@@ -30,6 +30,9 @@ public class Branch {
     @Column(name = "description", length = 1000)
     private String description;
 
+    @Column(name = "location_detail", length = 500)
+    private String locationDetail;
+
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -38,13 +41,14 @@ public class Branch {
     public Branch() {
     }
 
-    public Branch(Integer id, String location, String imgUrl, String name, String phoneNo, String description, List<Room> rooms) {
+    public Branch(Integer id, String location, String imgUrl, String name, String phoneNo, String description, String locationDetail, List<Room> rooms) {
         this.id = id;
         this.location = location;
         this.imgUrl = imgUrl;
         this.name = name;
         this.phoneNo = phoneNo;
         this.description = description;
+        this.locationDetail = locationDetail;
         this.rooms = rooms;
     }
     
@@ -96,6 +100,14 @@ public class Branch {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLocationDetail() {
+        return locationDetail;
+    }
+
+    public void setLocationDetail(String locationDetail) {
+        this.locationDetail = locationDetail;
     }
 
     public List<Room> getRooms() {
