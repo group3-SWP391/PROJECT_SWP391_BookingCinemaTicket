@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.manager;
 
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.entity.Branch;
@@ -20,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,24 +41,24 @@ public class ManagerBranchController {
     private ISeatService seatService;
 
     private static final String UPLOAD_DIR = "uploads/branchs/";
-    
+
     private String saveFile(MultipartFile file, String type) throws IOException {
         if (file == null || file.isEmpty()) {
             return null;
         }
-        
+
         Path uploadPath = Paths.get(UPLOAD_DIR + type);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
-        
+
         String originalFilename = file.getOriginalFilename();
         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String filename = UUID.randomUUID().toString() + extension;
-        
+
         Path filePath = uploadPath.resolve(filename);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        
+
         return "/" + UPLOAD_DIR + type + "/" + filename;
     }
 
@@ -108,9 +107,9 @@ public class ManagerBranchController {
             @RequestParam(value = "locationDetail", required = false) String locationDetail,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "imgUrl", required = false) String imgUrl) {
-        
+
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             // Create validation data map
             Map<String, String> branchData = new HashMap<>();
@@ -119,7 +118,7 @@ public class ManagerBranchController {
             branchData.put("phoneNo", phoneNo);
             branchData.put("description", description);
             branchData.put("locationDetail", locationDetail);
-            
+
             // Validation
             String validationError = validateBranchData(branchData);
             if (validationError != null) {
@@ -134,20 +133,20 @@ public class ManagerBranchController {
             branch.setPhoneNo(phoneNo);
             branch.setDescription(description);
             branch.setLocationDetail(locationDetail);
-            
+
             // Handle image upload
             try {
                 String imagePath = saveFile(imageFile, "images");
-                
+
                 if (imagePath != null) {
-                    branch.setImgUrl(imagePath);
+                    branch.setImgURL(imagePath);
                 }
             } catch (IOException e) {
                 response.put("success", false);
                 response.put("message", "Error uploading file: " + e.getMessage());
                 return ResponseEntity.ok(response);
             }
-            
+
             Branch savedBranch = branchService.saveBranch(branch);
 
             response.put("success", true);
@@ -165,14 +164,14 @@ public class ManagerBranchController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getBranch(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             Optional<Branch> Branch = branchService.getBranchById(id);
             if (Branch.isPresent()) {
                 List<Room> rooms = roomService.getRoomsByBranchId(id);
                 Long roomCount = roomService.countRoomsByBranchId(id);
                 Long totalCapacity = roomService.getTotalCapacityByBranchId(id);
-                
+
                 response.put("success", true);
                 response.put("Branch", Branch.get());
                 response.put("rooms", rooms);
@@ -201,9 +200,9 @@ public class ManagerBranchController {
             @RequestParam(value = "locationDetail", required = false) String locationDetail,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "imgUrl", required = false) String imgUrl) {
-        
+
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             Optional<Branch> branchOpt = branchService.getBranchById(id);
             if (branchOpt.isPresent()) {
@@ -214,7 +213,7 @@ public class ManagerBranchController {
                 branchData.put("phoneNo", phoneNo);
                 branchData.put("description", description);
                 branchData.put("locationDetail", locationDetail);
-                
+
                 // Validation
                 String validationError = validateBranchData(branchData);
                 if (validationError != null) {
@@ -233,12 +232,12 @@ public class ManagerBranchController {
                 // Handle image upload
                 try {
                     String imagePath = saveFile(imageFile, "images");
-                    
+
                     if (imagePath != null) {
-                        branch.setImgUrl(imagePath);
+                        branch.setImgURL(imagePath);
                     } else {
                         // Keep existing image if no new file uploaded
-                        branch.setImgUrl(imgUrl);
+                        branch.setImgURL(imgUrl);
                     }
                 } catch (IOException e) {
                     response.put("success", false);
@@ -267,7 +266,7 @@ public class ManagerBranchController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deleteBranch(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             if (branchService.existsById(id)) {
                 branchService.deleteBranch(id);
@@ -290,7 +289,7 @@ public class ManagerBranchController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> saveRoom(@PathVariable Integer branchId, @RequestBody Map<String, Object> roomData) {
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             // Validation
             String validationError = validateRoomData(roomData, branchId);
@@ -309,22 +308,22 @@ public class ManagerBranchController {
 
             Room room = new Room();
             room.setName((String) roomData.get("name"));
-            
+
             // Get capacity and row count from user input
             int capacity = Integer.parseInt(roomData.get("capacity").toString());
             int rowCount = Integer.parseInt(roomData.get("rowCount").toString());
-            
+
             // Auto-calculate seats per row
             int seatsPerRow = capacity / rowCount;
             int extraSeats = capacity % rowCount;
-            
+
             room.setCapacity(capacity);
             room.setRowCount(rowCount);
             room.setSeatsPerRow(seatsPerRow); // Calculated value
             room.setRoomType((String) roomData.get("roomType"));
             room.setDescription((String) roomData.get("description"));
             room.setBranch(Branch.get());
-            
+
             // Handle VIP seats data
             if (roomData.get("vipSeats") != null) {
                 String vipSeats = roomData.get("vipSeats").toString();
@@ -332,13 +331,10 @@ public class ManagerBranchController {
             } else {
                 room.setVipSeats(""); // Default to no VIP seats
             }
-            
+
             // Add isActive status
-            if (roomData.get("isActive") != null) {
-                room.setIsActive(Integer.parseInt(roomData.get("isActive").toString()));
-            } else {
-                room.setIsActive(1); // Default to active
-            }
+
+            room.setActive(true); // Default to active
 
             Room savedRoom = roomService.saveRoom(room);
 
@@ -361,18 +357,18 @@ public class ManagerBranchController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getRoom(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             Optional<Room> roomOpt = roomService.getRoomById(id);
             if (roomOpt.isPresent()) {
                 Room room = roomOpt.get();
-                
+
                 // Get VIP seats for this room and reconstruct the comma-separated string
                 List<Seat> vipSeats = seatService.getVipSeatsByRoomId(id);
                 String vipSeatsString = vipSeats.stream()
                         .map(Seat::getName)
                         .collect(Collectors.joining(","));
-                
+
                 // Create room data with VIP seats
                 Map<String, Object> roomData = new HashMap<>();
                 roomData.put("id", room.getId());
@@ -381,9 +377,9 @@ public class ManagerBranchController {
                 roomData.put("capacity", room.getCapacity());
                 roomData.put("rowCount", room.getRowCount());
                 roomData.put("description", room.getDescription());
-                roomData.put("isActive", room.getIsActive());
+                roomData.put("isActive", room.isActive());
                 roomData.put("vipSeats", vipSeatsString);
-                
+
                 response.put("success", true);
                 response.put("room", roomData);
             } else {
@@ -402,12 +398,12 @@ public class ManagerBranchController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateRoom(@PathVariable Integer id, @RequestBody Map<String, Object> roomData) {
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             Optional<Room> roomOpt = roomService.getRoomById(id);
             if (roomOpt.isPresent()) {
                 Room room = roomOpt.get();
-                
+
                 // Validation
                 String validationError = validateRoomData(roomData, room.getBranch().getId());
                 if (validationError != null) {
@@ -417,21 +413,21 @@ public class ManagerBranchController {
                 }
 
                 room.setName((String) roomData.get("name"));
-                
+
                 // Get capacity and row count from user input
                 int capacity = Integer.parseInt(roomData.get("capacity").toString());
                 int rowCount = Integer.parseInt(roomData.get("rowCount").toString());
-                
+
                 // Auto-calculate seats per row
                 int seatsPerRow = capacity / rowCount;
                 int extraSeats = capacity % rowCount;
-                
+
                 room.setCapacity(capacity);
                 room.setRowCount(rowCount);
                 room.setSeatsPerRow(seatsPerRow); // Calculated value
                 room.setRoomType((String) roomData.get("roomType"));
                 room.setDescription((String) roomData.get("description"));
-                
+
                 // Handle VIP seats data
                 if (roomData.get("vipSeats") != null) {
                     String vipSeats = roomData.get("vipSeats").toString();
@@ -439,10 +435,10 @@ public class ManagerBranchController {
                 } else {
                     room.setVipSeats(""); // Default to no VIP seats
                 }
-                
+
                 // Update isActive status
                 if (roomData.get("isActive") != null) {
-                    room.setIsActive(Integer.parseInt(roomData.get("isActive").toString()));
+                    room.setActive(true);
                 }
 
                 Room savedRoom = roomService.updateRoom(room);
@@ -470,7 +466,7 @@ public class ManagerBranchController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deleteRoom(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             if (roomService.existsById(id)) {
                 // Delete seats first
@@ -505,28 +501,28 @@ public class ManagerBranchController {
         List<String> roomTypes = roomService.getAllRoomTypes();
         return ResponseEntity.ok(roomTypes);
     }
-    
+
     @PostMapping("/api/rooms/validate-vip-seats")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> validateVipSeats(@RequestBody Map<String, Object> requestData) {
         Map<String, Object> response = new HashMap<>();
-        
+
         try {
             int capacity = Integer.parseInt(requestData.get("capacity").toString());
             int rowCount = Integer.parseInt(requestData.get("rowCount").toString());
             String vipSeatsInput = (String) requestData.get("vipSeats");
-            
+
             // Generate all possible seat names
             List<String> allSeatNames = seatService.generateAllSeatNames(capacity, rowCount);
-            
+
             // Parse VIP seats input
             List<String> vipSeatNames = seatService.parseVipSeats(vipSeatsInput);
-            
+
             // Validate VIP seats
             List<String> invalidSeats = vipSeatNames.stream()
                     .filter(seatName -> !allSeatNames.contains(seatName))
                     .collect(Collectors.toList());
-            
+
             if (!invalidSeats.isEmpty()) {
                 response.put("success", false);
                 response.put("message", "Invalid VIP seats: " + String.join(", ", invalidSeats));
@@ -538,7 +534,7 @@ public class ManagerBranchController {
                 response.put("totalSeats", allSeatNames.size());
                 response.put("vipSeatsCount", vipSeatNames.size());
             }
-            
+
         } catch (NumberFormatException e) {
             response.put("success", false);
             response.put("message", "Invalid capacity or row count");
@@ -546,7 +542,7 @@ public class ManagerBranchController {
             response.put("success", false);
             response.put("message", "Error validating VIP seats: " + e.getMessage());
         }
-        
+
         return ResponseEntity.ok(response);
     }
 
@@ -570,7 +566,7 @@ public class ManagerBranchController {
         if (branchData.get("description") != null && branchData.get("description").length() > 1000) {
             return "Description cannot exceed 1000 characters";
         }
-        
+
         return null;
     }
 
@@ -584,7 +580,7 @@ public class ManagerBranchController {
         if (roomData.get("capacity") == null) {
             return "Room capacity is required";
         }
-        
+
         try {
             int capacity = Integer.parseInt(roomData.get("capacity").toString());
             if (capacity <= 0) {
@@ -593,18 +589,18 @@ public class ManagerBranchController {
         } catch (NumberFormatException e) {
             return "Invalid capacity value";
         }
-        
+
         // Validate row count (now required)
         if (roomData.get("rowCount") == null) {
             return "Row count is required";
         }
-        
+
         try {
             int rowCount = Integer.parseInt(roomData.get("rowCount").toString());
             if (rowCount <= 0) {
                 return "Row count must be greater than 0";
             }
-            
+
             int capacity = Integer.parseInt(roomData.get("capacity").toString());
             if (capacity < rowCount) {
                 return "Capacity must be at least equal to row count";
@@ -612,14 +608,16 @@ public class ManagerBranchController {
         } catch (NumberFormatException e) {
             return "Invalid row count value";
         }
-        
+
         if (roomData.get("roomType") != null && roomData.get("roomType").toString().length() > 50) {
             return "Room type cannot exceed 50 characters";
         }
         if (roomData.get("description") != null && roomData.get("description").toString().length() > 500) {
             return "Description cannot exceed 500 characters";
         }
-        
+
         return null;
     }
+
+
 } 

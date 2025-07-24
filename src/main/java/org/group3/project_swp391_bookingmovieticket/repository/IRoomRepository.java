@@ -12,11 +12,12 @@ import java.util.Optional;
 public interface IRoomRepository extends JpaRepository<Room, Integer> {
 
     @Query("SELECT s.room FROM Schedule s WHERE s.id = :scheduleId")
-    Room findRoomBySchedule(@Param("scheduleId")Integer scheduleId);
+    Room findRoomBySchedule(@Param("scheduleId") Integer scheduleId);
+
     List<Room> findByBranchId(Integer branchId);
 
     // Find active rooms by Branch ID
-    List<Room> findByBranchIdAndIsActive(Integer branchId, Integer isActive);
+    //List<Room> findByBranchIdAndActive(Integer branchId, Boolean isActive);
 
     // Find room by name and Branch ID
     Optional<Room> findByNameAndBranchId(String name, Integer branchId);
@@ -34,7 +35,7 @@ public interface IRoomRepository extends JpaRepository<Room, Integer> {
     List<Room> findByCapacityGreaterThanEqualAndBranchId(Integer capacity, Integer branchId);
 
     // Find all active rooms
-    List<Room> findByIsActive(Integer isActive);
+    List<Room> findAllByIsActive(Boolean isActive);
 
     // Custom query to find rooms with Branch details
     @Query("SELECT r FROM Room r JOIN FETCH r.branch WHERE r.isActive = :isActive")
@@ -57,6 +58,6 @@ public interface IRoomRepository extends JpaRepository<Room, Integer> {
     Long getTotalCapacityByBranchId(@Param("branchId") Integer branchId);
 
     // Find rooms by room type and active status
-    List<Room> findByRoomTypeAndIsActive(String roomType, Integer isActive);
+    List<Room> findByRoomTypeAndIsActive(String roomType, boolean isActive);
 }
 

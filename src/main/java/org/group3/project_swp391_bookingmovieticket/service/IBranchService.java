@@ -22,7 +22,7 @@ public interface IBranchService  extends IGeneralService<BranchDTO> {
     void deleteBranch(Integer id);
 
     List<Branch> getBranchsByCity(String city);
-    Optional<Branch> getBranchByName(String name);
+    List<Branch> getBranchByName(String name);
     Optional<Branch> getBranchByPhone(String phone);
 
     // Branch with rooms

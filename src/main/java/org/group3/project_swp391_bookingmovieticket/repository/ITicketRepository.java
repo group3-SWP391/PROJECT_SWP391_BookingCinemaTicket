@@ -39,5 +39,5 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
 
     // Thêm method custom nếu cần, ví dụ:
     List<Ticket> findByBillId(Integer billId);
-    List<Ticket> findByScheduleId(Integer scheduleId
+    List<Ticket> findByScheduleId(Integer scheduleId);
 }

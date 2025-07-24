@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,6 @@ public class Room {
 
     @Column(name = "capacity")
     private int capacity;
-
-    @Column(name = "total_area")
-    private double totalArea;
 
     @Column(name = "imgurl", length = 1000)
     private String imgURL;
@@ -51,6 +49,7 @@ public class Room {
     @ManyToOne
     @JoinColumn(nullable = false,name = "branch_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
     private Branch branch;
 
     @Override

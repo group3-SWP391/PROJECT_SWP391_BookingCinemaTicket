@@ -39,5 +39,5 @@ public interface IUserService extends IGeneralService<User> {
     Optional<User> findById(Integer id); // Dùng cho chức năng Edit nhân viên
 
     List<User> findAllByRoleName(String roleName);
-    
+
 }

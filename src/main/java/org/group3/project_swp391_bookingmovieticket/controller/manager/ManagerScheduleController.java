@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.manager;
 
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.entity.*;
@@ -220,7 +220,7 @@ public class ManagerScheduleController {
                     roomId, schedule.getStartDate());
                 
                 boolean hasConflict = existingSchedules.stream()
-                        .filter(s -> !s.getId().equals(id))
+                        .filter(s -> s.getId() != id)
                         .anyMatch(existing -> 
                             isTimeOverlapping(schedule.getStartTime(), schedule.getEndTime(), 
                                             existing.getStartTime(), existing.getEndTime()));

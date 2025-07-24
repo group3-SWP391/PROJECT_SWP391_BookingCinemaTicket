@@ -10,7 +10,7 @@ import java.util.List;
 public interface IRatingRepository extends JpaRepository<Rating, Integer> {
     
     // Find all active ratings
-    List<Rating> findByIsActive(Integer isActive);
+    List<Rating> findByIsActive(Boolean isActive);
     
     // Find rating by name
     Rating findByName(String name);

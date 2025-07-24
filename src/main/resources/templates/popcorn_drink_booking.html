@@ -275,7 +275,7 @@ Author: Webstrot
 
         $("#btnCheckCode").click(function () {
             const voucherCode = $("#voucherInput").val().trim();
-            const userId = [[${session.userLogin?.id ? : 0}]];
+            const userId = [[${session.userLogin != null ? session.userLogin.id : 0}]]
             const rawPrice = Number($priceElement.data("price")) || 0;
             const totalPrice = appliedVoucher ? rawPrice / (1 - appliedVoucher.discountPercentage / 100) : rawPrice;
 

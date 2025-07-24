@@ -71,6 +71,7 @@ public class PopcornDrinkController {
         model.addAttribute("schedule", scheduleService.findById(scheduleId));
         model.addAttribute(USER_LOGIN_DTO, new UserLoginDTO());
         model.addAttribute(USER_REGISTER_DTO, new UserRegisterDTO());
+        System.out.println(new BookingRequestDTO(userId, scheduleId, listSeatId, totalPrice, movieId) + "bookingRequest" + seatService.findSeatNamesByIdList(listSeatId));
         return "popcorn_drink_booking";
     }
 }

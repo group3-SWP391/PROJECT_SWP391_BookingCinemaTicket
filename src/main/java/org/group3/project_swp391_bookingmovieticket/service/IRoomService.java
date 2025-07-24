@@ -23,7 +23,7 @@ public interface IRoomService extends IGeneralService<Room> {
     // Room by branch
     List<Room> getRoomsByBranchId(Integer branchId);
 
-    List<Room> getActiveRoomsByBranchId(Integer branchId);
+    //List<Room> getActiveRoomsByBranchId(Integer branchId);
 
     Optional<Room> getRoomByNameAndBranchId(String name, Integer branchId);
 
@@ -39,7 +39,7 @@ public interface IRoomService extends IGeneralService<Room> {
     // Active rooms
     List<Room> getActiveRooms();
 
-    List<Room> getActiveRoomsWithBranch();
+    //List<Room> getActiveRoomsWithBranch();
 
     // Room statistics
     Long countRoomsByBranchId(Integer branchId);

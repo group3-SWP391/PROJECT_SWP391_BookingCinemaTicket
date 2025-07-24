@@ -28,7 +28,11 @@ public class MovieService implements IMovieService {
         return movieRepository.findAll()
                 .stream()
                 .map(movie -> modelMapper.map(movie, MovieDTO.class))
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    public List<Movie> findAllMovie() {
+        return movieRepository.findAll();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.group3.project_swp391_bookingmovieticket.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,10 +39,31 @@ public class Branch {
     private String map;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "branch",fetch = FetchType.LAZY)
+    @JsonBackReference
+    @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;
 
     @ToString.Exclude
+    @JsonBackReference
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
     private List<Room> roomList;
+
+    public Integer getTotalCapacity() {
+        if (roomList == null || roomList.isEmpty()) {
+            return 0;
+        }
+        return roomList.stream()
+                .filter(Room::isActive)
+                .mapToInt(Room::getCapacity)
+                .sum();
+    }
+
+    public Integer getActiveRoomCount() {
+        if (roomList == null || roomList.isEmpty()) {
+            return 0;
+        }
+        return (int) roomList.stream()
+                .filter(Room::isActive)
+                .count();
+    }
 }

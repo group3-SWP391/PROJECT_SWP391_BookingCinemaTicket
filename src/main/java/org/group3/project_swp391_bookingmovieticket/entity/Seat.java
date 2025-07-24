@@ -1,6 +1,9 @@
 package org.group3.project_swp391_bookingmovieticket.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
@@ -10,6 +13,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "seat")
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +32,7 @@ public class Seat {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "room_id", nullable = false)
+    @JsonBackReference
     private Room room;
 
 //    @ManyToOne

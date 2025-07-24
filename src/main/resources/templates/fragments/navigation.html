@@ -65,11 +65,16 @@
                                 <div th:if="${session.userLogin != null}">
                                     <a style="background: #1b1b1b" class="btn"
                                        th:if="${session.userLogin.role.name == 'ADMIN'}" th:href="@{/admin}">
-                                        <span style="color: white">Quản trị</span>
+                                        <span style="color: white">Admin</span>
                                     </a>
                                     <a style="background: #1b1b1b" class="btn"
                                        th:if="${session.userLogin.role.name == 'STAFF'}" th:href="@{/staff}">
-                                        <span style="color: white">Quản trị</span>
+                                        <span style="color: white">Nhân viên</span>
+                                    </a>
+                                    <a style="background: #1b1b1b" class="btn"
+                                       th:if="${session.userLogin.role.name == 'MANAGER'}"
+                                       th:href="@{/manager/dashboard}">
+                                        <span style="color: white">Quản lý</span>
                                     </a>
                                     <a style="background: #1b1b1b" class="btn" th:href="@{/my-account}">
                                         <span style="color: white" th:text="${session.userLogin.username}">User</span>

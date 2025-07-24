@@ -33,7 +33,7 @@ public interface IBranchRepository extends JpaRepository<Branch, Integer> {
     List<Branch> findBranchsWithRooms();
 
     // Count total rooms in a Branch
-    @Query("SELECT COUNT(r) FROM Room r WHERE r.branch.id = :cinemaId AND r.isActive = 1")
+    @Query("SELECT COUNT(r) FROM Room r WHERE r.branch.id = :cinemaId AND r.isActive = true ")
     Long countActiveRoomsByBranchId(@Param("branchId") Integer branchId);
 
     // Find Branchs by city/region (assuming address contains city)

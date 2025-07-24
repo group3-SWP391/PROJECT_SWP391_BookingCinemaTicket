@@ -84,10 +84,10 @@ public class RoomService implements IRoomService {
         return roomRepository.findByBranchId(branchId);
     }
 
-    @Override
-    public List<Room> getActiveRoomsByBranchId(Integer branchId) {
-        return roomRepository.findByBranchIdAndIsActive(branchId, 1);
-    }
+//    @Override
+//    public List<Room> getActiveRoomsByBranchId(Integer branchId) {
+//        return roomRepository.findByBranchIdAndActive(branchId, true);
+//    }
 
     @Override
     public Optional<Room> getRoomByNameAndBranchId(String name, Integer branchId) {
@@ -116,13 +116,13 @@ public class RoomService implements IRoomService {
 
     @Override
     public List<Room> getActiveRooms() {
-        return roomRepository.findByIsActive(1);
+        return roomRepository.findAllByIsActive(true);
     }
 
-    @Override
-    public List<Room> getActiveRoomsWithBranch() {
-        return roomRepository.findActiveRoomsWithBranch(1);
-    }
+//    @Override
+//    public List<Room> getActiveRoomsWithBranch() {
+//        return roomRepository.findActiveRoomsWithBranch(1);
+//    }
 
     @Override
     public Long countRoomsByBranchId(Integer branchId) {
@@ -147,7 +147,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public List<Room> getActiveRoomsByType(String roomType) {
-        return roomRepository.findByRoomTypeAndIsActive(roomType, 1);
+        return roomRepository.findByRoomTypeAndIsActive(roomType, true);
     }
 
     @Override
