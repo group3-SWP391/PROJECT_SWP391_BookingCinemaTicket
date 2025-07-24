@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 @RequestMapping("/employee")
 public class VerifyTicketController {
     @Autowired
-    private ITicketService iTicketService;
+    private ITicketService ticketService;
     @Autowired
-    private IPaymentLinkService iPaymentLinkService;
+    private IPaymentLinkService paymentLinkService;
     @GetMapping("/verifyticket")
     public String showPageVerifyTicket(){
         return "employee/verifyticket";
@@ -28,12 +28,12 @@ public class VerifyTicketController {
             model.addAttribute("error", "Bạn chưa nhập mã code để tìm kiếm thông tin vé.");
             return "employee/verifyticket";
         }
-        PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Integer.parseInt(orderCode));
+        PaymentLink paymentLink = paymentLinkService.findByOrderCode(Integer.parseInt(orderCode));
         if(paymentLink != null){
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime endTime = LocalDateTime.of(paymentLink.getSchedule().getStartDate(), paymentLink.getSchedule().getEndTime());
             Integer id = paymentLink.getBill().getId();
-            boolean check = iTicketService.verifyEffectiveOrderCode(id);
+            boolean check = ticketService.verifyEffectiveOrderCode(id);
             //Vé đó đã được sử dụng rồi
             if(check){
                 model.addAttribute("error", "Mã code này đã được sử dụng, xác nhận trước đó rồi!!!");
@@ -68,17 +68,17 @@ public class VerifyTicketController {
     }
     @PostMapping("/confirmation")
     public String showMessage(@RequestParam("idordercode") String id,   RedirectAttributes redirectAttributes){
-        PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Integer.parseInt(id));
+        PaymentLink paymentLink = paymentLinkService.findByOrderCode(Integer.parseInt(id));
         if(paymentLink != null){
             Integer idBill = paymentLink.getBill().getId();
-            iTicketService.confirmTicket(idBill);
+            ticketService.confirmTicket(idBill);
         }
         redirectAttributes.addFlashAttribute("ordercode", id);
         return "redirect:/employee/showinforticket";
     }
     @GetMapping("/showinforticket")
     public String showPrintTicketPage(@ModelAttribute("ordercode") Integer orderCode, Model model){
-        PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(orderCode);
+        PaymentLink paymentLink = paymentLinkService.findByOrderCode(orderCode);
         if(paymentLink != null){
             model.addAttribute("paymentLink", paymentLink);
         }

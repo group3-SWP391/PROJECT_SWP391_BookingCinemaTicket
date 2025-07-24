@@ -22,13 +22,13 @@ import java.util.Optional;
 @RequestMapping("/employee")
 public class StaffHomePageController {
     @Autowired
-    private IScheduleService iScheduleService;
+    private IScheduleService scheduleService;
     @Autowired
-    private IMovieService iMovieService;
+    private IMovieService movieService;
     @Autowired
-    private IBranchService iBranchService;
+    private IBranchService branchService;
     @Autowired
-    private ITicketService iTicketService;
+    private ITicketService ticketService;
     @GetMapping("/page")
     public String showHomPage(Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
@@ -37,7 +37,7 @@ public class StaffHomePageController {
         }else{
             User user = (User)session.getAttribute("userLogin");
             if(user != null){
-                model.addAttribute("branch", iBranchService.findById(user.getBranch().getId()).get());
+                model.addAttribute("branch", branchService.findById(user.getBranch().getId()).get());
                 return "employee/dashboard";
             }else{
                 return "redirect:/";
@@ -51,10 +51,10 @@ public class StaffHomePageController {
         if(user == null){
             return "redirect:/";
         }
-        Optional<Movie> optionalMovie = iMovieService.getMovieByName(movie);
+        Optional<Movie> optionalMovie = movieService.getMovieByName(movie);
         if (optionalMovie.isPresent()) {
             //Sau khi có được tên phim rồi thì cần xác định với tên phim như thế thì có những lịch trình nào.
-            Optional<Branch> optionalBranch = iBranchService.findById(branchId);
+            Optional<Branch> optionalBranch = branchService.findById(branchId);
             //Có với branch đó.
             if (optionalBranch.isPresent()) {
                 Integer idBranch = optionalBranch.get().getId();
@@ -62,17 +62,17 @@ public class StaffHomePageController {
                 //Lấy lịch trình của ngày hiện tại cùng với 3 ngày sau đó
                 LocalDate today = LocalDate.now();
                 LocalDate threeDay = today.plusDays(10);
-                List<Schedule> scheduleList = iScheduleService.findSchedulesByBranchMovieAndDateRange(idBranch, idMovie, today, threeDay);
-                HashMap<Schedule, Integer> ticketIntegerHashMap = iScheduleService.getTicketCountBySchedule(scheduleList);
+                List<Schedule> scheduleList = scheduleService.findSchedulesByBranchMovieAndDateRange(idBranch, idMovie, today, threeDay);
+                HashMap<Schedule, Integer> ticketIntegerHashMap = scheduleService.getTicketCountBySchedule(scheduleList);
                 model.addAttribute("moviesearch", movie);
                 model.addAttribute("movieTicketCount", ticketIntegerHashMap.entrySet());
-                model.addAttribute("branch", iBranchService.findById(user.getBranch().getId()).get());
+                model.addAttribute("branch", branchService.findById(user.getBranch().getId()).get());
             //Có phim đó nhưng ở branch khác.
             }
 
         }else{
             model.addAttribute("message", "Rất tiếc, không có suất chiếu nào cho phim "+movie+" bạn đang tìm kiếm");
-            model.addAttribute("branch", iBranchService.findById(user.getBranch().getId()).get());
+            model.addAttribute("branch", branchService.findById(user.getBranch().getId()).get());
             model.addAttribute("moviesearch", movie);
             return "employee/dashboard";
 
@@ -81,7 +81,7 @@ public class StaffHomePageController {
     }
     @GetMapping("/movie/detail/{id}")
     public String showMovieDetail(@PathVariable("id") int idMovie, Model model){
-        Optional<Movie> movie = iMovieService.findById(idMovie);
+        Optional<Movie> movie = movieService.findById(idMovie);
         if(movie.isEmpty()){
             model.addAttribute("messageerror", "Không tìm thấy bộ phim với ID đã cung cấp. Vui lòng kiểm tra lại!!!");
             return "employee/error";
@@ -90,10 +90,6 @@ public class StaffHomePageController {
             return "employee/movieDetail";
 
         }
-
-
-
-
     }
 
 

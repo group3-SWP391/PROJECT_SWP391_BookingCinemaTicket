@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FoodOrderController {
     @Autowired
-    private IPopcornDrinkService iPopcornDrinkService;
+    private IPopcornDrinkService popcornDrinkService;
     @PostMapping("/foodorder")
     public String showFoodPage(@RequestParam Integer scheduleId,
                                  @RequestParam String selectedSeats,
@@ -25,7 +25,7 @@ public class FoodOrderController {
         session.setAttribute("schedulemovie", scheduleId);
         session.setAttribute("listseat",selectedSeats);
 
-        List<PopcornDrink> popcornDrinkList = iPopcornDrinkService.findAll();
+        List<PopcornDrink> popcornDrinkList = popcornDrinkService.findAll();
         model.addAttribute("listfood", popcornDrinkList);
         return "employee/food";
 

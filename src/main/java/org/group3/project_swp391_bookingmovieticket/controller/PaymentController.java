@@ -26,7 +26,7 @@ public class PaymentController {
     @Autowired
     private PayOS payOS;
     @Autowired
-    private ITicketService iTicketService;
+    private ITicketService ticketService;
 
     @Autowired
     private ISeatService seatService;
@@ -35,10 +35,10 @@ public class PaymentController {
     private ScheduleService scheduleService;
 
     @Autowired
-    private IPopcornDrinkService iPopcornDrinkService;
+    private IPopcornDrinkService popcornDrinkService;
 
     @Autowired
-    private IPaymentLinkService iPaymentLinkService;
+    private IPaymentLinkService paymentLinkService;
 
     @PostMapping("/checkout")
     public String handleCheckout(HttpServletRequest request, Model model, @RequestParam Map<String, String> items, RedirectAttributes redirectAttributes)
@@ -55,7 +55,7 @@ public class PaymentController {
         for (Map.Entry<String, String> entry : items.entrySet()){
             String quantity = entry.getValue();
             if(Integer.parseInt(quantity) > 0){
-                Optional<PopcornDrink> popcornDrink = iPopcornDrinkService.findById(Integer.parseInt(entry.getKey()));
+                Optional<PopcornDrink> popcornDrink = popcornDrinkService.findById(Integer.parseInt(entry.getKey()));
                 if (popcornDrink.isPresent()){
                     totalPriceFood += popcornDrink.get().getPrice();
                     popcorn_drink = popcorn_drink + popcornDrink.get().getName() + "(x"+quantity+")" + ",";
@@ -83,7 +83,7 @@ public class PaymentController {
         List<Seat> seats = seatService.findSeatsByIds(seatIds);
 
         // Lấy danh sách ghế đã đặt trước đó để đối chiếu với ghế người dùng đã chọn xem có trùng ko
-        HashSet<Integer> bookedSeatIds = iTicketService.findBookedSeatIdsBySchedule(scheduleId);
+        HashSet<Integer> bookedSeatIds = ticketService.findBookedSeatIdsBySchedule(scheduleId);
         System.out.println(bookedSeatIds);
 
         // Nếu có bất kỳ ghế nào trùng thì báo lỗi
@@ -130,7 +130,7 @@ public class PaymentController {
         long orderCode = Long.parseLong(combined);
 
         String baseUrl = getBaseUrl(request);
-        String returnUrl = baseUrl + "/bill/createbill"; // localhost:8080/bill/create_bill
+        String returnUrl = baseUrl + "/bill/createbill";
         String cancelUrl = baseUrl + "/bill/cancelbill";
 
         PaymentData paymentData = PaymentData.builder()
@@ -152,7 +152,7 @@ public class PaymentController {
             paymentLink.setTotalPrice((int)total);
             paymentLink.setCreatedAt(LocalDateTime.now());
             paymentLink.setListPopcornDrinkName(popcorn_drink);
-            iPaymentLinkService.save(paymentLink);
+            paymentLinkService.save(paymentLink);
             return "redirect:"+responseData.getCheckoutUrl();
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -19,20 +19,20 @@ import java.util.*;
 @RequestMapping("/employee")
 public class BookingController {
     @Autowired
-    private IScheduleService iScheduleService;
+    private IScheduleService scheduleService;
     @Autowired
-    private ISeatService iSeatService;
+    private ISeatService seatService;
     @Autowired
-    private ITicketService iTicketService;
+    private ITicketService ticketService;
 
 
     @GetMapping("/schedule/selectseat/{id}")
     public String showListSeat(@PathVariable int id, Model model){
-        Optional<Schedule> schedule = iScheduleService.findById(id);
+        Optional<Schedule> schedule = scheduleService.findById(id);
         if(schedule.isPresent()){
 
-            List<Seat> seatList = iSeatService.getListSeatById(schedule.get().getRoom().getId());
-            HashSet<Integer> bookedSeatIds = iTicketService.findBookedSeatIdsBySchedule(id);
+            List<Seat> seatList = seatService.getListSeatById(schedule.get().getRoom().getId());
+            HashSet<Integer> bookedSeatIds = ticketService.findBookedSeatIdsBySchedule(id);
             List<SeatDTO> seatDTOList = new ArrayList<>();
             for (Seat seat : seatList) {
                 SeatDTO dto = new SeatDTO();

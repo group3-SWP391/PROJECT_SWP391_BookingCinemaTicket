@@ -23,22 +23,22 @@ import java.util.Optional;
 @Controller
 public class TransactionController {
     @Autowired
-    private ITicketService iTicketService;
+    private ITicketService ticketService;
     @Autowired
     private ISeatService seatService;
     @Autowired
-    private IPopcornDrinkService iPopcornDrinkService;
+    private IPopcornDrinkService popcornDrinkService;
     @Autowired
-    private IMovieService iMovieService;
+    private IMovieService movieService;
     @Autowired
-    private IBillService iBillService;
+    private IBillService billService;
     @Autowired
-    private IPaymentLinkService iPaymentLinkService;
+    private IPaymentLinkService paymentLinkService;
     @GetMapping("/bill/createbill")
     public String handlePayment(@RequestParam("orderCode") String orderCode, @RequestParam("status") String status, @RequestParam("cancel") String cancel, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
         HttpSession session = request.getSession();
         //Từ orderCode check xem tình trạng sao để tránh giả mạo sau này.
-        PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Long.parseLong(orderCode));
+        PaymentLink paymentLink = paymentLinkService.findByOrderCode(Long.parseLong(orderCode));
         //Nếu tồn tại thì phair check cả status của nó nếu như nó còn là pending thì mới xử lý tiếp
         //Nếu như đã về trạng thái cancel rồi mà còn gửi giả mạo thanh toán thì từ chối xử lý
         if(paymentLink != null){
@@ -49,14 +49,14 @@ public class TransactionController {
                 billInitial.setCreatedTime(LocalDateTime.now());
                 billInitial.setUser((User)session.getAttribute("userLogin"));
                 billInitial.setPrice(paymentLink.getTotalPrice());
-                Bill bill = iBillService.save(billInitial);
+                Bill bill = billService.save(billInitial);
                 paymentLink.setBill(bill);
-                iPaymentLinkService.update(paymentLink);
+                paymentLinkService.update(paymentLink);
 
                 //Tăng lượt view lên cho phim.
                 Movie movie = paymentLink.getSchedule().getMovie();
                 movie.setViews(movie.getViews() + 1);
-                iMovieService.update(movie);
+                movieService.update(movie);
                 //Trừ đi số lượng food.
                 Map<String, String> listitems = (Map<String, String>)session.getAttribute("listitems");
                 if(listitems == null){
@@ -65,11 +65,11 @@ public class TransactionController {
                 for (Map.Entry<String, String> entry : listitems.entrySet()){
                     String quantity = entry.getValue();
                     if(Integer.parseInt(quantity) > 0){
-                        Optional<PopcornDrink> popcornDrinkOptional = iPopcornDrinkService.findById(Integer.parseInt(entry.getKey()));
+                        Optional<PopcornDrink> popcornDrinkOptional = popcornDrinkService.findById(Integer.parseInt(entry.getKey()));
                         if (popcornDrinkOptional.isPresent()){
                             PopcornDrink popcornDrink = popcornDrinkOptional.get();
                             popcornDrink.setQuantity(popcornDrink.getQuantity() - Integer.parseInt(quantity));
-                            iPopcornDrinkService.update(popcornDrink);
+                            popcornDrinkService.update(popcornDrink);
                         }
                     }
                 }
@@ -78,7 +78,7 @@ public class TransactionController {
                 for (Map.Entry<String, String> entry : listitems.entrySet()){
                     String quantity = entry.getValue();
                     if(Integer.parseInt(quantity) > 0){
-                        Optional<PopcornDrink> popcornDrink = iPopcornDrinkService.findById(Integer.parseInt(entry.getKey()));
+                        Optional<PopcornDrink> popcornDrink = popcornDrinkService.findById(Integer.parseInt(entry.getKey()));
                         if (popcornDrink.isPresent()){
                             popcorn_drink = popcorn_drink + popcornDrink.get().getName() + "(x"+quantity+")" + ",";
                         }
@@ -104,7 +104,7 @@ public class TransactionController {
                     ticket.setSeat(seat);
                     ticket.setListPopcornDrinkName(popcorn_drink);
                     ticket.setStatus(true);
-                    iTicketService.save(ticket);
+                    ticketService.save(ticket);
                 }
                 redirectAttributes.addFlashAttribute("ordercode", orderCode);
                 return "redirect:/successpayment";
@@ -121,7 +121,7 @@ public class TransactionController {
     }
     @GetMapping("/successpayment")
     public String showPageSuccess(@ModelAttribute("ordercode") String orderCode, Model model){
-        PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Long.parseLong(orderCode));
+        PaymentLink paymentLink = paymentLinkService.findByOrderCode(Long.parseLong(orderCode));
         if(paymentLink != null){
             model.addAttribute("paymentLink", paymentLink);
         }
@@ -130,10 +130,10 @@ public class TransactionController {
 
     @GetMapping("/bill/cancelbill")
     public String cancelPayment(@RequestParam("orderCode") String orderCode){
-        PaymentLink paymentLink = iPaymentLinkService.findByOrderCode(Long.parseLong(orderCode));
+        PaymentLink paymentLink = paymentLinkService.findByOrderCode(Long.parseLong(orderCode));
         if(paymentLink != null){
             paymentLink.setStatus("CANCELLED");
-            iPaymentLinkService.update(paymentLink);
+            paymentLinkService.update(paymentLink);
         }
         return "redirect:/cancelpayment";
 
