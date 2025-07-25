@@ -65,7 +65,7 @@
                             <td>
                                 <strong th:text="${movie.name}">Tên Phim</strong>
                                 <br>
-                                <small class="text-muted" th:text="${movie.rating != null ? movie.rating.name : movie.rated}">PG-13</small>
+                                <small class="text-muted" th:text="${movie.rating != null ? movie.rating.name : ''}">PG-13</small>
                             </td>
                             <td>
                                 <span class="director-badge" th:if="${movie.director != null}" th:text="${movie.director.name}">Đạo Diễn</span>

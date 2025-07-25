@@ -28,7 +28,6 @@ public class Movie {
     private String longDescription;
 
     private String name;
-    private String rated;
 
     @ManyToOne
     @JoinColumn(name = "rating_id")
