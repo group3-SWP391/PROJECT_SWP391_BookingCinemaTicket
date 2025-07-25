@@ -42,6 +42,9 @@ public class AdvertisingContactRequest {
     @Column(name = "rental_date")
     private LocalDate rentalDate;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

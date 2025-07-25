@@ -5,6 +5,9 @@ import org.group3.project_swp391_bookingmovieticket.repository.IAdvertisingConta
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class AdvertisingContactRequestService {
 
@@ -13,5 +16,17 @@ public class AdvertisingContactRequestService {
 
     public void save(AdvertisingContactRequest ad) {
         advertisingContactRequestRepository.save(ad);
+    }
+
+    public List<AdvertisingContactRequest> findAll() {
+        return advertisingContactRequestRepository.findAll();
+    }
+
+    public Optional<AdvertisingContactRequest> findById(Integer id) {
+        return advertisingContactRequestRepository.findById(id.longValue());
+    }
+
+    public void update(AdvertisingContactRequest advertisingContactRequest) {
+        advertisingContactRequestRepository.save(advertisingContactRequest);
     }
 }
