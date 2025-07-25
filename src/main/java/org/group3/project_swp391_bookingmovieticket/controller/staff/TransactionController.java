@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.staff;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
