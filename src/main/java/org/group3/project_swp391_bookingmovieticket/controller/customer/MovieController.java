@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.customer;
 
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dto.MovieDTO;
@@ -8,7 +8,6 @@ import org.group3.project_swp391_bookingmovieticket.entity.Comment;
 import org.group3.project_swp391_bookingmovieticket.entity.Movie;
 import org.group3.project_swp391_bookingmovieticket.entity.Review;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
-import org.group3.project_swp391_bookingmovieticket.repository.IPaymentLinkRepository;
 import org.group3.project_swp391_bookingmovieticket.service.ICommentReactionService;
 import org.group3.project_swp391_bookingmovieticket.service.ICommentService;
 import org.group3.project_swp391_bookingmovieticket.service.impl.*;
@@ -49,8 +48,9 @@ public class MovieController {
 
     @Autowired
     private ICommentService commentService;
+
     @Autowired
-    private IPaymentLinkRepository IPaymentLinkRepository;
+    private PaymentLinkService paymentLinkService;
 
     @Autowired
     private FavoriteService favoriteService;
@@ -120,7 +120,7 @@ public class MovieController {
         boolean isFavorite = false;
 
         if (user != null) {
-            hasOrdered = IPaymentLinkRepository.existsByUser_IdAndSchedule_Movie_Name(user.getId(), movieService.findMovieById(movieId).getName());
+            hasOrdered = paymentLinkService.existsByUser_IdAndSchedule_Movie_Name(user.getId(), movieService.findMovieById(movieId).getName());
             isFavorite = favoriteService.isFavorite(user, modelMapper.map(movieService.findMovieById(movieId), Movie.class));
         }
         model.addAttribute("hasOrdered", hasOrdered);

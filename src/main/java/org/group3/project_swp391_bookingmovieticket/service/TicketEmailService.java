@@ -46,24 +46,26 @@ public class TicketEmailService {
                                  String seatName,
                                  String movieFormat,
                                  String listPopcornAndDrinkName,
+                                 String orderCode,
                                  byte[] qrBytes) throws MessagingException {
         System.out.println(listPopcornAndDrinkName + "send email");
 
         String htmlContent = """
-                <h2>🎬 Thank you, %s, for booking your ticket with us!</h2>
-                <p>Here are your ticket details:</p>
+                <h2>🎬 Cảm ơn, %s, đã sử dụng dịch vụ của chúng tôi!</h2>
+                <p>Dưới đây là thông tin chi tiết:</p>
                 <table style="border-collapse: collapse;">
-                    <tr><td><strong>🎥 Movie:</strong></td><td>%s</td></tr>
-                    <tr><td><strong>📅 Date:</strong></td><td>%s</td></tr>
-                    <tr><td><strong>⏰ Time:</strong></td><td>%s</td></tr>
-                    <tr><td><strong>🏢 Cinema:</strong></td><td>%s</td></tr>
-                    <tr><td><strong>💺 Seat:</strong></td><td>%s</td></tr>
-                    <tr><td><strong>🎞️ Format:</strong></td><td>%s</td></tr>
-                     <tr><td><strong>🍿🍹 Popcorn & Drinks:</strong></td><td>%s</td></tr>
+                    <tr><td><strong>🎥 Phim:</strong></td><td>%s</td></tr>
+                    <tr><td><strong>📅 Ngày:</strong></td><td>%s</td></tr>
+                    <tr><td><strong>⏰ Thời gian:</strong></td><td>%s</td></tr>
+                    <tr><td><strong>🏢 Rạp:</strong></td><td>%s</td></tr>
+                    <tr><td><strong>💺 Ghế:</strong></td><td>%s</td></tr>
+                    <tr><td><strong>🎞️ Định dạng:</strong></td><td>%s</td></tr>
+                    <tr><td><strong> Mã đặt vé:</strong></td><td>%s</td></tr>
+                     <tr><td><strong>🍿🍹 Bỏng và nước:</strong></td><td>%s</td></tr>
                 </table>
-                <p style="margin-top: 15px;">🎟️ Your QR code ticket is attached. Please present it at the cinema entrance.</p>
-                <p style="color: gray;">Enjoy your movie experience!</p>
-                """.formatted(customerName, movieName, showDate, showTime, branchName, seatName, movieFormat, listPopcornAndDrinkName);
+                <p style="margin-top: 15px;">🎟️ Vé của bạn mã QR được đính kèm. Vui lòng xuất trình nó tại lối vào rạp chiếu phim.</p>
+                <p style="color: gray;">Chúc bạn có trải nghiệm xem phim thú vị!</p>
+                """.formatted(customerName, movieName, showDate, showTime, branchName, seatName, movieFormat,orderCode, listPopcornAndDrinkName);
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true); // multipart=true

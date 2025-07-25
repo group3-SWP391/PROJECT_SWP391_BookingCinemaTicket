@@ -126,4 +126,8 @@ public class VoucherService implements IVoucherService {
     public List<Voucher> getVouchersByUser(User user) {
         return voucherRepository.findValidVouchers(LocalDateTime.now());
     }
+
+    public List<Voucher> findAll() {
+        return voucherRepository.findAll();
+    }
 }

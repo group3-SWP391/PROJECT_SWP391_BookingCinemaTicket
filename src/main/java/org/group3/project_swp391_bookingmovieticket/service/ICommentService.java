@@ -5,6 +5,8 @@ import org.group3.project_swp391_bookingmovieticket.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public interface ICommentService {
     void addComment(Integer movieId, User user, String content);
 
@@ -14,4 +16,5 @@ public interface ICommentService {
 
     Page<Comment> getCommentsByMovieId(Integer movieId, Pageable pageable);
 
+    Page<Comment> findByMovieId(Integer movieId, Pageable pageable);
 }

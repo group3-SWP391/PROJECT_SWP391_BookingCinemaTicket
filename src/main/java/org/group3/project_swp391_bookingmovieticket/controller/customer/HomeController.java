@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.customer;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -7,10 +7,6 @@ import org.group3.project_swp391_bookingmovieticket.dto.UserDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserLoginDTO;
 import org.group3.project_swp391_bookingmovieticket.dto.UserRegisterDTO;
 import org.group3.project_swp391_bookingmovieticket.entity.*;
-import org.group3.project_swp391_bookingmovieticket.repository.*;
-import org.group3.project_swp391_bookingmovieticket.service.ICommentReactionService;
-import org.group3.project_swp391_bookingmovieticket.service.ICommentService;
-import org.group3.project_swp391_bookingmovieticket.service.IRatingService;
 import org.group3.project_swp391_bookingmovieticket.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -34,7 +28,7 @@ import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.
 public class HomeController {
 
     @Autowired
-    private INotificationRepository INotificationRepository;
+    private NotificationService notificationService;
 
     @Autowired
     private EmailService emailService;
@@ -54,38 +48,20 @@ public class HomeController {
     @Autowired
     private VoucherService voucherService;
 
-    @Autowired
-    private IAdvertisingContactRequestRepository IAdvertisingContactRequestRepository;
-
-    @Autowired
-    private ReviewService reviewService;
+    @Autowired AdvertisingContactRequestService advertisingContactRequestService;
 
     @Autowired
     private PaymentLinkService orderService;
 
     @Autowired
-    private NotificationService notificationService;
-
-    @Autowired
-    private IContactRequestRepository IContactRequestRepository;
-
-    @Autowired
-    private ICommentService commentService;
+    private ContactRequestService contactRequestService;
 
     @Autowired
     private FavoriteService favoriteService;
 
     @Autowired
-    private ICommentReactionService reactionService;
+    private PaymentLinkService paymentLinkService;
 
-    @Autowired
-    private IVoucherRepository IVoucherRepository;
-
-    @Autowired
-    private IPaymentLinkRepository IPaymentLinkRepository;
-
-    @Autowired
-    private IMovieRepository movieRepository;
 
     @GetMapping("/home")
     public String displayHomePage(@RequestParam(value = "redirectUrl", required = false) String redirectUrl,
@@ -105,7 +81,7 @@ public class HomeController {
             model.addAttribute("notifications", Collections.emptyList());
         } else {
             // Lay tb o database
-            List<Notification> notifications = INotificationRepository
+            List<Notification> notifications = notificationService
                     .findByUserIdAndIsReadFalseOrderByCreatedAtDesc(user.getId());
 
             // Chuyển sang DTO để hiển thị gọn trong giao diện
@@ -179,7 +155,7 @@ public class HomeController {
             advertisingContactRequest.setCreatedAt(LocalDateTime.now());
 
             System.out.println("Saving AdvertisingContactRequest to database...");
-            IAdvertisingContactRequestRepository.save(advertisingContactRequest);
+            advertisingContactRequestService.save(advertisingContactRequest);
             System.out.println("Successfully saved to database. ID: " + advertisingContactRequest.getId());
 
             String emailSubject = "Xác Nhận Yêu Cầu Liên Hệ Quảng Cáo";
@@ -264,7 +240,7 @@ public class HomeController {
             List<PaymentLink> paidPaymentLinks = orderService.getPaidOrdersByUserId(user.getId());
 
             // List voucher voi yeu thich
-            List<Voucher> vouchers = IVoucherRepository.findAll();
+            List<Voucher> vouchers = voucherService.findAll();
             List<Favorite> favoriteList = favoriteService.getFavorites(user);
             System.out.println(favoriteList + "favoriteList.size(): " + favoriteList.size());
 
@@ -301,7 +277,7 @@ public class HomeController {
             }
 
             // Kiểm tra xem da dat ve bao h chua
-            boolean hasOrder = IPaymentLinkRepository.existsByUser_Id(user.getId());
+            boolean hasOrder = paymentLinkService.existsByUser_Id(user.getId());
             if (!hasOrder) {
                 model.addAttribute("errorMessage", "Bạn cần từng đặt vé trước khi gửi khiếu nại hoặc góp ý.");
                 model.addAttribute("userDTO", new UserDTO());
@@ -318,7 +294,7 @@ public class HomeController {
             contactRequest.setCreatedAt(LocalDateTime.now());
             contactRequest.setUser(user);
 
-            IContactRequestRepository.save(contactRequest);
+            contactRequestService.save(contactRequest);
             System.out.println("Contact request saved successfully. CreatedAt: " + contactRequest.getCreatedAt());
 
             // gui lại ndung theo ycau

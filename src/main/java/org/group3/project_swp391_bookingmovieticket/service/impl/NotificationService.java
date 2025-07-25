@@ -49,4 +49,16 @@ public class NotificationService implements INotificationService {
         notification.setCreatedAt(new Date());
         INotificationRepository.save(notification);
     }
+
+    public List<Notification> findByUserIdAndIsReadFalseOrderByCreatedAtDesc(int userId){
+        return INotificationRepository.findByUserIdAndIsReadFalseOrderByCreatedAtDesc(userId);
+    }
+
+    public List<Notification> findAllByUserIdAndMovieIdAndIsReadFalse(int userId, int movieId){
+        return INotificationRepository.findAllByUserIdAndMovieIdAndIsReadFalse(userId, movieId);
+    }
+
+    public void saveAll(List<Notification> notifications) {
+        INotificationRepository.saveAll(notifications);
+    }
 }

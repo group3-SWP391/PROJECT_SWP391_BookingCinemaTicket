@@ -1,11 +1,11 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.customer;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.entity.Comment;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
 import org.group3.project_swp391_bookingmovieticket.repository.ICommentRepository;
-import org.group3.project_swp391_bookingmovieticket.service.ICommentService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 public class CommentController {
 
     @Autowired
-    private ICommentService commentService;
+    private CommentService commentService;
 
     @Autowired
-    private ICommentRepository ICommentRepository;
+    private ICommentRepository commentRepository;
 
 
 
@@ -75,11 +75,11 @@ public class CommentController {
                               HttpSession session) {
         User user = (User) session.getAttribute("userLogin");
         if (user != null) {
-            Comment comment = ICommentRepository.findById(commentId).orElse(null);
+            Comment comment = commentService.findById(commentId);
             if (comment != null && comment.getUser().getId() == user.getId()) {
                 comment.setContent(content);
                 comment.setUpdatedAt(LocalDateTime.now());
-                ICommentRepository.save(comment);
+                commentService.save(comment);
             }
         }
         return "redirect:/movie/detail?movieId=" + movieId;
@@ -92,13 +92,13 @@ public class CommentController {
         User user = (User) session.getAttribute("userLogin");
 
         if (user != null) {
-            Comment comment = ICommentRepository.findById(commentId).orElse(null);
+            Comment comment = commentService.findById(commentId);
             if (comment != null) {
                 boolean isOwner = comment.getUser().getId() == user.getId();
                 boolean isAdmin = "ADMIN".equalsIgnoreCase(user.getRole().getName());
 
                 if (isOwner || isAdmin) {
-                    ICommentRepository.delete(comment);
+                    commentService.delete(comment);
                     System.out.println("Xóa comment: " + commentId + " của phim " + movieId);
                 }
             }

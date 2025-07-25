@@ -107,4 +107,12 @@ public class PaymentLinkService implements IPaymentLinkService {
         }
     }
 
+    public boolean existsByUser_Id(Integer userId) {
+        return paymentLinkRepository.existsByUser_Id(userId);
+    }
+
+    public boolean existsByUser_IdAndSchedule_Movie_Name(Integer userId, String movieName){
+        return paymentLinkRepository.existsByUser_IdAndSchedule_Movie_Name(userId, movieName);
+    }
+
 }

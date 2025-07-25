@@ -9,5 +9,4 @@ import org.springframework.data.domain.Pageable;
 @Repository
 public interface ICommentRepository extends JpaRepository<Comment, Integer> {
     Page<Comment> findByMovieId(Integer movieId, Pageable pageable);
-
 }

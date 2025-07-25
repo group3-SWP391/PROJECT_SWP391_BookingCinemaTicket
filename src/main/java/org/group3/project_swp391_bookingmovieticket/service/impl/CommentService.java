@@ -23,7 +23,7 @@ public class CommentService implements ICommentService {
     private ICommentReactionRepository reactionRepository;
 
     @Autowired
-    private ICommentRepository ICommentRepository;
+    private ICommentRepository commentRepository;
 
     @Autowired
     private IPaymentLinkRepository IPaymentLinkRepository;
@@ -47,7 +47,7 @@ public class CommentService implements ICommentService {
         comment.setCreatedAt(LocalDateTime.now());
         comment.setParent(null);
 
-        ICommentRepository.save(comment);
+        commentRepository.save(comment);
     }
 
     @Override
@@ -70,7 +70,12 @@ public class CommentService implements ICommentService {
 
     @Override
     public Page<Comment> getCommentsByMovieId(Integer movieId, Pageable pageable) {
-        return ICommentRepository.findByMovieId(movieId, pageable);
+        return commentRepository.findByMovieId(movieId, pageable);
+    }
+
+    @Override
+    public Page<Comment> findByMovieId(Integer movieId, Pageable pageable) {
+        return commentRepository.findByMovieId(movieId, pageable);
     }
 
     @Override
@@ -82,7 +87,7 @@ public class CommentService implements ICommentService {
             throw new IllegalStateException("Bạn cần mua vé và xem phim để trả lời bình luận.");
         }
 
-        Comment parent = ICommentRepository.findById(parentCommentId)
+        Comment parent = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new IllegalArgumentException("Bình luận cha không tồn tại."));
 
         Comment reply = new Comment();
@@ -92,11 +97,11 @@ public class CommentService implements ICommentService {
         reply.setCreatedAt(LocalDateTime.now());
         reply.setParent(parent);
 
-        ICommentRepository.save(reply);
+        commentRepository.save(reply);
     }
 
     public void deleteCommentById(Integer commentId) {
-        Optional<Comment> commentOpt = ICommentRepository.findById(commentId);
+        Optional<Comment> commentOpt = commentRepository.findById(commentId);
         if (commentOpt.isPresent()) {
             Comment comment = commentOpt.get();
 
@@ -108,13 +113,29 @@ public class CommentService implements ICommentService {
             // Xóa replies (nếu có)
             if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
                 for (Comment reply : comment.getReplies()) {
-                    ICommentRepository.delete(reply);
+                    commentRepository.delete(reply);
                 }
             }
 
             // Xóa comment chính
-            ICommentRepository.delete(comment);
+            commentRepository.delete(comment);
         }
+    }
+
+    public void save(Comment comment) {
+        commentRepository.save(comment);
+    }
+
+    public Comment findById(Integer commentId) {
+        return commentRepository.findById(commentId).orElse(null);
+    }
+
+    public void delete(Comment comment) {
+        commentRepository.delete(comment);
+    }
+
+    public Optional<Comment> findByIdOptional(Integer commentId) {
+        return commentRepository.findById(commentId);
     }
 
 }

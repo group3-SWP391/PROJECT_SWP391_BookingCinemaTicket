@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.customer;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -44,6 +44,7 @@ public class LoginRegisterController {
 
     @Autowired
     private FacebookAccountService facebookAccountService;
+    private User user;
 
     @GetMapping("/login")
     public String userLoginGet(Model model) {
@@ -88,6 +89,13 @@ public class LoginRegisterController {
                     return "redirect:" + redirectUrl;
                 }
                 System.out.println("Đã đăng nhập thành công");
+                if (userExist.get().getRole().getName().equals("ADMIN") && userExist.get() != null) {
+                    return "redirect:/admin";
+                } else if (userExist.get().getRole().getName().equals("STAFF") && userExist.get() != null) {
+                    return "redirect:/staff";
+                } else if (userExist.get().getRole().getName().equals("MANAGER") && userExist.get() != null) {
+                    return "redirect:/manager/dashboard";
+                }
                 return "redirect:/home";  // Chuyển hướng về trang chủ
             } else {
                 redirectAttributes.addFlashAttribute("errorLogin", "Invalid password!");
@@ -112,8 +120,9 @@ public class LoginRegisterController {
     }
 
     @GetMapping("/log-out")
-    public String signOut(HttpSession session) {
+    public String signOut(HttpSession session, RedirectAttributes redirectAttributes) {
         session.removeAttribute("userLogin");
+        redirectAttributes.addFlashAttribute("showLoginModal", true);
         return "redirect:/home";
     }
 
@@ -197,6 +206,7 @@ public class LoginRegisterController {
                     new User(userRegisterDTO.getUserName(), hashedPassword,
                             userRegisterDTO.getFullName(), userRegisterDTO.getEmail(), userRegisterDTO.getPhone());
             user.setRole(customerRole);
+            user.setStatus(true);
             userService.save(user);
             redirectAttributes.addFlashAttribute("successMessageRegister", "Registration successful! You can now proceed to your account.");
             redirectAttributes.addFlashAttribute("showLoginModal", true);
@@ -283,6 +293,7 @@ public class LoginRegisterController {
                 user.setEmail(googleUser.getEmail());
                 user.setFullname(googleUser.getName());
                 user.setUsername(googleUser.getEmail().split("@")[0]);
+                user.setStatus(true);
                 user.setPassword(""); // Không cần mật khẩu
                 Role role = new Role();
                 role.setId(2); // Role "customer"
@@ -294,10 +305,11 @@ public class LoginRegisterController {
             session.setAttribute("userLogin", user);
             if (user.getRole().getName().equals("ADMIN") && user != null) {
                 return "redirect:/admin";
+            } else if (user.getRole().getName().equals("STAFF") && user != null) {
+                return "redirect:/staff";
+            } else if (user.getRole().getName().equals("MANAGER") && user != null) {
+                return "redirect:/manager/dashboard";
             }
-//            else if (user.getRole().getName().equals("STAFF") && user != null) {
-//                return "redirect:/staff";
-//            }
             return "redirect:/home";
 
         } catch (Exception e) {
@@ -319,18 +331,25 @@ public class LoginRegisterController {
             User user;
             if (userService.existsByEmail(fbUser.getEmail())) {
                 user = userService.findByEmail(fbUser.getEmail()).get();
+                if (user.getRole().getName().equals("ADMIN") && user != null) {
+                    return "redirect:/admin";
+                } else if (user.getRole().getName().equals("STAFF") && user != null) {
+                    return "redirect:/staff";
+                } else if (user.getRole().getName().equals("MANAGER") && user != null) {
+                    return "redirect:/manager/dashboard";
+                }
             } else {
                 user = new User();
                 user.setEmail(fbUser.getEmail());
                 user.setFullname(fbUser.getName());
                 user.setUsername(fbUser.getEmail().split("@")[0]);
+                user.setStatus(true);
                 user.setPassword("");
                 Role role = new Role();
                 role.setId(2); // customer
                 user.setRole(role);
                 userService.save(user);
             }
-
             session.setAttribute("userLogin", user);
             return "redirect:/home";
         } catch (Exception e) {

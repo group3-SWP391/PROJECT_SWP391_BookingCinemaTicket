@@ -171,6 +171,10 @@ public class ScheduleService implements IScheduleService {
         // They don't overlap if one ends before the other starts
         return !(end1.isBefore(start2) || end1.equals(start2) || start1.isAfter(end2) || start1.equals(end2));
     }
+
+    public List<Schedule> findByBranchIdSchedule(Integer branchId){
+        return scheduleRepository.findByBranchId(branchId);
+    }
 }
 
 

@@ -2,9 +2,7 @@ package org.group3.project_swp391_bookingmovieticket.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +10,9 @@ import java.util.List;
 @Data
 @Table(name = "branch")
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Branch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

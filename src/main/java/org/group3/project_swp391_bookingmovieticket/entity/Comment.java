@@ -50,5 +50,11 @@ public class Comment {
     private List<CommentReaction> reactions = new ArrayList<>();
 
 
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +// <-- Gây đệ quy nếu movie cũng có comment
+                '}';
+    }
 }
 

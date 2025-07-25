@@ -1,9 +1,9 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.customer;
 
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.entity.Notification;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
-import org.group3.project_swp391_bookingmovieticket.repository.INotificationRepository;
+import org.group3.project_swp391_bookingmovieticket.service.impl.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import java.util.List;
 public class NotificationController {
 
     @Autowired
-    private INotificationRepository INotificationRepository;
+    private NotificationService notificationService;
 
     @GetMapping("/read/{movieId}")
     public String markNotificationAsReadAndRedirect(@PathVariable("movieId") int movieId,
@@ -25,13 +25,13 @@ public class NotificationController {
         User user = (User) session.getAttribute("userLogin");
         if (user == null) return "redirect:/login";
 
-        List<Notification> notifications = INotificationRepository
+        List<Notification> notifications = notificationService
                 .findAllByUserIdAndMovieIdAndIsReadFalse(user.getId(), movieId);
 
         for (Notification n : notifications) {
             n.setRead(true);
         }
-        INotificationRepository.saveAll(notifications);
+        notificationService.saveAll(notifications);
 
 
         return "redirect:/movie/detail?movieId=" + movieId;

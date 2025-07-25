@@ -259,4 +259,8 @@ public class BranchService implements IBranchService {
             branchRepository.save(existingBranch);
         }
     }
+
+    public List<Branch> findByName(String name){
+        return branchRepository.findByName(name);
+    }
 }

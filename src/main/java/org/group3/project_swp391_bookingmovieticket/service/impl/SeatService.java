@@ -97,7 +97,7 @@ public class SeatService implements ISeatService {
 
         // thay đổi trạng thái các link đã quá 5 phút
         List<PaymentLink> expiredLinks = allPendingLinks.stream()
-                .filter(link -> Duration.between(link.getCreatedAt(), LocalDateTime.now()).toMinutes() > 5)
+                .filter(link -> Duration.between(link.getCreatedAt(), LocalDateTime.now()).toMinutes() > 2)
                 .toList();
         expiredLinks.forEach(link -> link.setStatus("CANCELLED"));
         paymentLinkRepository.saveAll(expiredLinks);

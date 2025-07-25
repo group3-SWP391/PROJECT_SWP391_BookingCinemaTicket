@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.customer;
 
 import jakarta.servlet.http.HttpSession;
 import org.group3.project_swp391_bookingmovieticket.dto.BranchDTO;
@@ -7,12 +7,15 @@ import org.group3.project_swp391_bookingmovieticket.entity.*;
 import org.group3.project_swp391_bookingmovieticket.repository.IBranchRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.IScheduleRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.IRoomRepository;
+import org.group3.project_swp391_bookingmovieticket.service.impl.BranchService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.RoomService;
+import org.group3.project_swp391_bookingmovieticket.service.impl.ScheduleService;
 import org.group3.project_swp391_bookingmovieticket.service.impl.SeatService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,31 +30,36 @@ import java.util.stream.Collectors;
 public class TheaterController {
 
     @Autowired
-    private IBranchRepository branchRepository;
+    private BranchService branchService;
 
     @Autowired
-    private IRoomRepository IRoomRepository;
+    private RoomService roomService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private IScheduleRepository scheduleRepository;
 
     @Autowired
     private SeatService seatService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping("/select-theater")
     public String selectTheater(Model model,
                                 @RequestParam(value = "name", required = false) String selectedName,
                                 @RequestParam(value = "branchId", required = false) Integer branchId) {
 
-        List<String> branchNames = branchRepository.findAll()
+        List<String> branchNames = branchService.findAll()
                 .stream()
-                .map(Branch::getName)
+                .map(BranchDTO::getName)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
         model.addAttribute("branchNames", branchNames);
 
         if (selectedName != null && !selectedName.isEmpty()) {
-            List<BranchDTO> addresses = branchRepository.findByName(selectedName)
+            List<BranchDTO> addresses = branchService.findByName(selectedName)
                     .stream()
                     .map(branch -> new BranchDTO(branch.getId(), branch.getName(), branch.getLocation()))
                     .collect(Collectors.toList());
@@ -80,7 +88,7 @@ public class TheaterController {
         logger.info("▶️ Fetching theater detail for branchId: {}", branchId);
 
         // Lấy rap detail
-        Branch branch = branchRepository.findById(branchId).orElse(null);
+        Branch branch = modelMapper.map(branchService.findById(branchId), Branch.class);
         if (branch == null) {
             logger.error("⛔ Branch with id {} not found", branchId);
             return "redirect:/select-theater";
@@ -103,7 +111,7 @@ public class TheaterController {
         model.addAttribute("selectedDate", selectedDate);
 
         // Lấy danh sách lịch chiếu tại rạp
-        List<Schedule> schedules = scheduleRepository.findByBranchId(branchId);
+        List<Schedule> schedules = scheduleService.findByBranchIdSchedule(branchId);
         model.addAttribute("schedules", schedules != null ? schedules : List.of());
 
         if (schedules != null && !schedules.isEmpty()) {
@@ -168,7 +176,7 @@ public class TheaterController {
         }
 
         // Thêm dlist phong de hien thi dropdow
-        List<Room> availableRooms = IRoomRepository.findByBranchId(branchId);
+        List<Room> availableRooms = roomService.findByBranchId(branchId);
         model.addAttribute("availableRooms", availableRooms);
 
         model.addAttribute("selectedRoomId", roomId);

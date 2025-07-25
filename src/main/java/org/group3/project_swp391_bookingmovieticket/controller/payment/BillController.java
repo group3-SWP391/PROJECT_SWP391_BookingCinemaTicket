@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.payment;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.group3.project_swp391_bookingmovieticket.constant.CommonConst;
@@ -126,12 +126,7 @@ public class BillController {
                             .collect(Collectors.joining(", "));
 
                     // Tạo QR code
-                    String qrContent = "localhost:8080/ticket-detail?movieId="
-                            + sampleTicket.getSchedule().getMovie().getId()
-                            + "&ticketId="
-                            + sampleTicket.getId()
-                            + "&orderCode="
-                            + orderCode;
+                    String qrContent = "Mã đặt vé của bạn là: " + orderCode;
                     byte[] qrBytes = QRCodeGenerator.generateQRCodeAsBytes(qrContent, 1000, 1000);
                     String qrFileName = "qr_bill_" + bill.getId() + ".png";
                     String qrImageUrl = QRCodeGenerator.saveQrToLocal(qrBytes, qrFileName);
@@ -152,6 +147,7 @@ public class BillController {
                             seatNames,
                             movieFormat,
                             listPopcornAndDrinkName,
+                            String.valueOf(orderCode),
                             qrBytes
                     );
                 }

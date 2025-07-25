@@ -7,6 +7,7 @@ import org.group3.project_swp391_bookingmovieticket.repository.ICommentReactionR
 import org.group3.project_swp391_bookingmovieticket.service.ICommentReactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentReactionService implements ICommentReactionService {
@@ -14,6 +15,7 @@ public class CommentReactionService implements ICommentReactionService {
     @Autowired
     private ICommentReactionRepository reactionRepo;
 
+    @Transactional
     @Override
     public void toggleReaction(Comment comment, User user, boolean isLike) {
         reactionRepo.deleteByCommentAndUser(comment, user);
@@ -21,6 +23,7 @@ public class CommentReactionService implements ICommentReactionService {
         reaction.setComment(comment);
         reaction.setUser(user);
         reaction.setLiked(isLike);
+        System.out.println(reaction + "like service");
         reactionRepo.save(reaction);
     }
 

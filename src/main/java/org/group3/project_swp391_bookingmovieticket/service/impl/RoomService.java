@@ -221,4 +221,8 @@ public class RoomService implements IRoomService {
         // Check if calculated capacity matches provided capacity
         return capacity.equals(rowCount * seatsPerRow);
     }
+
+    public List<Room> findByBranchId(Integer branchId){
+        return roomRepository.findByBranchId(branchId);
+    }
 }

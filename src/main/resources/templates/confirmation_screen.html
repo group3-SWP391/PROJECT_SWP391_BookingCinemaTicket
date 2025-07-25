@@ -152,33 +152,6 @@ Author: Webstrot
 								<img th:src="@{${qrTicket.qrImageURL}}" alt="qr image" style="height: 150px; width: 150px"/>
 								<h4>QR vé ở đây</h4>
 							</div>
-							<div class="st_bcc_teckt_bot_inner_img_cont" style="padding-top: 30px;">
-								<div class="ticket-detail-wrapper">
-									<h3>
-										<br>
-										<span th:text="'Ghế: ' + ${paymentLink.getSeatList().toString()}"></span>
-									</h3>
-
-									<h4 class="section-title">Bỏng và nước</h4>
-
-									<table class="ticket-table">
-										<thead>
-										<tr>
-											<th>Sản phẩm</th>
-											<th>Số lượng</th>
-											<th>Giá (VND)</th>
-										</tr>
-										</thead>
-										<tbody>
-										<tr th:each="popcornAndDrink : ${session.bookingRequestDTO.listPopcornDrink}">
-											<td th:text="${popcornAndDrink.name}"></td>
-											<td th:text="${popcornAndDrink.quantity}"></td>
-											<td class="price" th:attr="data-price=${popcornAndDrink.price}" th:text="${popcornAndDrink.price}"></td>
-										</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
 							<div class="st_bcc_tecket_bottom_left_price_wrapper" style="padding-top: 20px">
 								<h4>Tổng hóa đơn</h4>
 								<h5  th:text="${session.bookingRequestDTO.totalPrice}"></h5>

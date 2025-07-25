@@ -1,4 +1,4 @@
-package org.group3.project_swp391_bookingmovieticket.controller;
+package org.group3.project_swp391_bookingmovieticket.controller.payment;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.group3.project_swp391_bookingmovieticket.dto.BookingRequestDTO;
@@ -115,7 +115,7 @@ public class CheckoutController {
             final String description = "Seat " + listSeatNameBank;
             final String returnUrl = baseUrl + "/bill/create_bill";
             final String cancelUrl = baseUrl + "/bill/cancel_bill";
-            final int price = bookingRequestDTO.getTotalPrice();
+            final int price = 5000;
 
             String currentTimeString = String.valueOf(System.currentTimeMillis());
             int randomPart = new Random().nextInt(900) + 100; // random 3 chữ số từ 100–999
