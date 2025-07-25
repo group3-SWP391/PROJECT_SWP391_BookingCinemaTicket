@@ -9,6 +9,7 @@ import org.group3.project_swp391_bookingmovieticket.entity.Schedule;
 import org.group3.project_swp391_bookingmovieticket.repository.IBranchRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.IMovieRepository;
 import org.group3.project_swp391_bookingmovieticket.repository.IScheduleRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.ITicketRepository;
 import org.group3.project_swp391_bookingmovieticket.service.IScheduleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +31,9 @@ public class ScheduleService implements IScheduleService {
 
     @Autowired
     private IBranchRepository branchRepository;
+
+    @Autowired
+    private ITicketRepository ticketRepository;
 
     @Autowired
     private IMovieRepository movieRepository;
@@ -174,6 +179,28 @@ public class ScheduleService implements IScheduleService {
 
     public List<Schedule> findByBranchIdSchedule(Integer branchId){
         return scheduleRepository.findByBranchId(branchId);
+    }
+
+    @Override
+    public List<Schedule> findSchedulesByBranchAndDay(Integer branchId, LocalDate today) {
+        return scheduleRepository.findByBranchIdAndStartDate(branchId, today);
+    }
+
+    @Override
+    public HashMap<Schedule, Integer> getTicketCountBySchedule(List<Schedule> scheduleList) {
+        HashMap<Schedule, Integer> scheduleTicketCountMap = new HashMap<>();
+
+        for (Schedule schedule : scheduleList) {
+            int count = ticketRepository.countTicketsByScheduleId(schedule.getId());
+            scheduleTicketCountMap.put(schedule, count);
+        }
+
+        return scheduleTicketCountMap;
+    }
+
+    @Override
+    public List<Schedule> findSchedulesByBranchMovieAndDateRange(Integer branchId, String movieId, LocalDate today, LocalDate threeDay) {
+        return scheduleRepository.findByBranchMovieANDRange(branchId, movieId, today, threeDay);
     }
 }
 

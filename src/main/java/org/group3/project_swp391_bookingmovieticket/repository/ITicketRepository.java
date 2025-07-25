@@ -40,4 +40,10 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     // Thêm method custom nếu cần, ví dụ:
     List<Ticket> findByBillId(Integer billId);
     List<Ticket> findByScheduleId(Integer scheduleId);
+
+//phu
+@Query(value = "SELECT COUNT(bill_id) FROM ticket WHERE schedule_id = :scheduleId", nativeQuery = true)
+int countTicketsByScheduleId(@Param("scheduleId") Integer scheduleId);
+    List<Ticket> findByScheduleId(int id);
+
 }

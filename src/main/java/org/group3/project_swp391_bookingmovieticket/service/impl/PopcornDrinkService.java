@@ -33,7 +33,7 @@ public class PopcornDrinkService implements IPopcornDrinkService {
 
     @Override
     public void update(PopcornDrink popcornDrink) {
-
+        popcornDrinkRepository.save(popcornDrink);
     }
 
     @Override
@@ -49,5 +49,10 @@ public class PopcornDrinkService implements IPopcornDrinkService {
     @Override
     public Page<PopcornDrink> findAllPagination(Pageable pageable) {
         return popcornDrinkRepository.findAllPagination(pageable);
+    }
+
+    @Override
+    public List<PopcornDrink> getPopcornDrink(Integer quantity) {
+        return popcornDrinkRepository.findByQuantityGreaterThan(quantity);
     }
 }

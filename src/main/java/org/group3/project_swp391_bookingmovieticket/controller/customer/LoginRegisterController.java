@@ -92,7 +92,7 @@ public class LoginRegisterController {
                 if (userExist.get().getRole().getName().equals("ADMIN") && userExist.get() != null) {
                     return "redirect:/admin";
                 } else if (userExist.get().getRole().getName().equals("STAFF") && userExist.get() != null) {
-                    return "redirect:/staff";
+                    return "redirect:/employee/page";
                 } else if (userExist.get().getRole().getName().equals("MANAGER") && userExist.get() != null) {
                     return "redirect:/manager/dashboard";
                 }
@@ -306,7 +306,7 @@ public class LoginRegisterController {
             if (user.getRole().getName().equals("ADMIN") && user != null) {
                 return "redirect:/admin";
             } else if (user.getRole().getName().equals("STAFF") && user != null) {
-                return "redirect:/staff";
+                return "redirect:/employee/page";
             } else if (user.getRole().getName().equals("MANAGER") && user != null) {
                 return "redirect:/manager/dashboard";
             }
@@ -334,7 +334,7 @@ public class LoginRegisterController {
                 if (user.getRole().getName().equals("ADMIN") && user != null) {
                     return "redirect:/admin";
                 } else if (user.getRole().getName().equals("STAFF") && user != null) {
-                    return "redirect:/staff";
+                    return "redirect:/employee/page";
                 } else if (user.getRole().getName().equals("MANAGER") && user != null) {
                     return "redirect:/manager/dashboard";
                 }

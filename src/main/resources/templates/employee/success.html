@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Success</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-100 font-sans">
+<div class="max-w-md mx-auto mt-20 text-center bg-white p-6 rounded shadow">
+  <h2 class="text-2xl font-bold text-green-600 mb-4">Booking Successful!</h2>
+  <p class="text-gray-700" th:text="${message}"></p>
+  <a th:href="@{/employee/page}" class="text-blue-500 underline mt-4 inline-block">Back to Home</a>
+</div>
+</body>
+</html>

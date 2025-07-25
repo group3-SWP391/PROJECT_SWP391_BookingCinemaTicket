@@ -34,4 +34,6 @@ public interface IMovieService extends IGeneralService<MovieDTO> {
     Optional<Movie> findMovieEntityById(Integer id);
 
     void save (Movie movie);
+
+    Optional<Movie> getMovieByName(String movieName);
 }

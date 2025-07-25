@@ -12,8 +12,13 @@ public interface IPaymentLinkService extends IGeneralService<PaymentLink>{
     PaymentLink findByOrderCode(long orderCode);
     boolean existsByOrderCodeAndStatus(long orderCode, String status);
     boolean existsBySchedule_IdAndSeatListAndStatus(int scheduleId, String id);
+
+
+
     List<PaymentLink> getPaidOrdersByUserId(Integer userId);
     List<PaymentLink> getOrdersByUserId(Integer userId);
     List<PaymentLink> getPendingOrdersByUserId(Integer userId);
+
+
 
 }

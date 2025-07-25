@@ -37,7 +37,7 @@ public class PaymentLinkService implements IPaymentLinkService {
 
     @Override
     public void update(PaymentLink paymentLink) {
-
+        paymentLinkRepository.save(paymentLink);
     }
 
     @Override
@@ -114,5 +114,4 @@ public class PaymentLinkService implements IPaymentLinkService {
     public boolean existsByUser_IdAndSchedule_Movie_Name(Integer userId, String movieName){
         return paymentLinkRepository.existsByUser_IdAndSchedule_Movie_Name(userId, movieName);
     }
-
 }

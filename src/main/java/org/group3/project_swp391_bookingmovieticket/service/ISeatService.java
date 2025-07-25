@@ -22,4 +22,8 @@ public interface ISeatService extends IGeneralService<Seat> {
     void updateSeatsForRoom(Room room, String vipSeatsInput);
     List<String> parseVipSeats(String vipSeatsInput);
     List<String> generateAllSeatNames(int capacity, int rowCount);
+
+//phu
+List<Seat> getListSeatById(int roomId);
+    List<Seat> findSeatsByIds(List<Integer> ids);
 }

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     Page<Movie> findByNameContainingIgnoreCase(String movieName, Pageable pageable);
@@ -41,4 +42,7 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     Page<Movie> findByDirectorId(@Param("directorId") int directorId, Pageable pageable);
 
     Page<Movie> findByRating_Id(int ratingId, Pageable pageable);
+
+//phu
+Optional<Movie> findByNameIgnoreCase(String movieName);
 }

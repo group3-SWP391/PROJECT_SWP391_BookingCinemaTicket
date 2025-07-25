@@ -18,10 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TicketService implements ITicketService {
@@ -49,7 +46,7 @@ public class TicketService implements ITicketService {
 
     @Override
     public void update(Ticket ticket) {
-
+        ticketRepository.save(ticket);
     }
 
     @Override
@@ -114,6 +111,54 @@ public class TicketService implements ITicketService {
                     notificationService.sendNotificationIfNotWatched(user, movie);
                 }
             }
+        }
+    }
+
+    @Override
+    public HashSet<Integer> findBookedSeatIdsBySchedule(int id) {
+        HashSet<Integer> integerHashSet = new HashSet<>();
+        List<Ticket> ticketList = findByScheduleId(id);
+        for (Ticket ticket: ticketList){
+            integerHashSet.add(ticket.getSeat().getId());
+        }
+        return integerHashSet;
+    }
+
+    @Override
+    public List<Ticket> findByScheduleId(int id) {
+        return ticketRepository.findByScheduleId(id);
+    }
+
+    @Override
+    public void save(Ticket ticket) {
+        ticketRepository.save(ticket);
+    }
+
+    @Override
+    public List<Ticket> getListTicketByBillId(Integer id) {
+        return ticketRepository.findByBillId(id);
+    }
+
+
+    @Override
+    public boolean verifyEffectiveOrderCode(Integer id) {
+        List<Ticket> ticketList = ticketRepository.findByBillId(id);
+        for (Ticket ticket: ticketList){
+            //Trường hợp status của vé đó, của bill đó đã về 1 -> tức là xác nhận trước đó rồi
+            if(ticket.getStatus()){
+                return true; //xác nhận trước đó rồi
+            }
+        }
+        return false; // chưa xác nhận trước đó
+
+    }
+
+    @Override
+    public void confirmTicket(Integer id) {
+        List<Ticket> ticketList = ticketRepository.findByBillId(id);
+        for(Ticket ticket: ticketList){
+            ticket.setStatus(true);
+            update(ticket);
         }
     }
 

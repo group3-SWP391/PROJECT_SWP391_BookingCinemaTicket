@@ -66,7 +66,7 @@ Author: Webstrot
 	<!-- Display user email -->
 	<div class="user-information">
 		<div>
-			<label for="fullname">Full Name:</label>
+			<label for="fullname">Họ và tên:</label>
 			<input type="text" id="fullname" th:value="${session.userRegisterDTO.fullName}" readonly="true" class="form-control custom-input" />
 		</div>
 
@@ -76,12 +76,12 @@ Author: Webstrot
 		</div>
 
 		<div>
-			<label for="phone">Phone:</label>
+			<label for="phone">Số điện thoại:</label>
 			<input type="text" id="phone" th:value="${session.userRegisterDTO.phone}" readonly="true" class="form-control custom-input" />
 		</div>
 
 		<div>
-			<label for="password">Password:</label>
+			<label for="password">Mật khẩu:</label>
 			<input type="password" id="password" th:value="${session.userRegisterDTO.password}" readonly="true" class="form-control custom-input" />
 		</div>
 	</div>
@@ -89,14 +89,14 @@ Author: Webstrot
 	<!-- Form nhập mã xác nhận -->
 	<form action="/verify-register" method="post">
 		<div class="form-group">
-			<label for="code">Enter verification code:</label>
-			<input type="text" name="code" id="code" placeholder="Enter verification code" class="form-control custom-input"/>
+			<label for="code">Nhập mã xác nhận</label>
+			<input type="text" name="code" id="code" placeholder="Nhập tại đây...." class="form-control custom-input"/>
 		</div>
-		<button type="submit" class="btn btn-primary">Verify</button>
+		<button type="submit" class="btn btn-primary">Xác nhận</button>
 
 		<div class="confirmation-message" style="margin-top: 10px; color: red">
-			<h5>A verification code has been sent to your email. Please check your email.
-				The verification code only exists for 5 minutes, if you haven't received it, please click the resend button to receive the code.</h5>
+			<h5>Một mã xác minh đã được gửi đến email của bạn. Vui lòng kiểm tra email của bạn.
+				Mã xác minh chỉ tồn tại trong 5 phút, nếu bạn chưa nhận được, vui lòng nhấp vào nút gửi lại để nhận mã.</h5>
 		</div>
 		<div class="confirmation-message" style="margin-top: 10px;">
 			<h5 th:text="${errorWrongCode}" style="color: red"></h5>
@@ -104,7 +104,7 @@ Author: Webstrot
 	</form>
 	<div class="resend-form" style="margin-top: 20px;">
 		<form action="/resend-verification-code" method="post">
-			<button type="submit" class="btn btn-primary">Resend Verification Code</button>
+			<button type="submit" class="btn btn-primary">Gửi lại mã xác nhận</button>
 		</form>
 		<div class="confirmation-message" style="margin-top: 10px;">
 			<h5 th:text="${successMessage}" style="color: blue"></h5>

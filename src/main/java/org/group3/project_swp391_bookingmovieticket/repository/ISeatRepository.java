@@ -19,4 +19,8 @@ public interface ISeatRepository extends JpaRepository<Seat, Integer> {
     List<Seat> findByRoomId(Integer roomId);
     List<Seat> findByIsActive(Boolean isActive);
     List<Seat> findByIsVip(Boolean isVip);
+
+//phu
+    List<Seat> findByRoomId(int roomId);
+    List<Seat> findByIdIn(List<Integer> ids);
 }

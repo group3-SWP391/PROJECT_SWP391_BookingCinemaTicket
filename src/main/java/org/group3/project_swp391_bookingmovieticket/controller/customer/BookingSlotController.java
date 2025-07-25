@@ -27,7 +27,7 @@ import static org.group3.project_swp391_bookingmovieticket.constant.CommonConst.
 
 @Controller
 @RequestMapping("/booking")
-public class BookingController {
+public class BookingSlotController {
 
     @Autowired
     private ScheduleService scheduleService;

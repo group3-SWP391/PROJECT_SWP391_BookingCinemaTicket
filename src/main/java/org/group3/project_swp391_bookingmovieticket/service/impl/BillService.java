@@ -9,6 +9,7 @@ import org.group3.project_swp391_bookingmovieticket.entity.Ticket;
 import org.group3.project_swp391_bookingmovieticket.entity.User;
 import org.group3.project_swp391_bookingmovieticket.repository.*;
 import org.group3.project_swp391_bookingmovieticket.repository.IBillRepository;
+import org.group3.project_swp391_bookingmovieticket.repository.ITicketRepository;
 import org.group3.project_swp391_bookingmovieticket.service.IBillService;
 import org.group3.project_swp391_bookingmovieticket.service.IPaymentLinkService;
 import org.modelmapper.ModelMapper;
@@ -18,9 +19,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class BillService implements IBillService {
 
@@ -49,6 +49,11 @@ public class BillService implements IBillService {
     public boolean existsBillByUserId(Integer userId) {
         return billRepository.existsByUserId(userId);
 
+    }
+
+    @Override
+    public Bill save(Bill bill) {
+        return billRepository.save(bill);
     }
 
     @Override
@@ -131,6 +136,22 @@ public class BillService implements IBillService {
 
         // Nhờ cascade = ALL, save bill sẽ tự save ticket
         return billRepository.save(bill);
+    }
+
+    @Override
+    public List<Bill> findAllByUserIdAndCreatedTimeBetween(Integer userId, LocalDateTime start, LocalDateTime end) {
+        return billRepository.findAllByUserIdAndCreatedTimeBetween(userId, start, end);
+    }
+
+    @Override
+    public Map<Bill, Integer> countBill(List<Bill> billList) {
+        List<Integer> integerList = new ArrayList<>();
+        Map<Bill, Integer> billIntegerHashMap = new HashMap<>();
+        for (Bill bill : billList) {
+            List<Ticket> ticketList = ticketRepository.findByBillId(bill.getId());
+            billIntegerHashMap.put(bill, ticketList.size());
+        }
+        return billIntegerHashMap;
     }
 
 }

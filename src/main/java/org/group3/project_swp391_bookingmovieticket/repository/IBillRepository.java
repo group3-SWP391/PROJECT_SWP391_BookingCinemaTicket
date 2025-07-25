@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -61,4 +62,7 @@ public interface IBillRepository extends JpaRepository<Bill, Integer> {
            "ORDER BY FORMAT(s.startTime, 'yyyy-MM-dd') DESC, FORMAT(s.startTime, 'HH:mm') DESC")
     List<Map<String, Object>> getMovieRevenueBreakdownByMovieId(@Param("movieId") int movieId);
 
+
+    //phu
+    List<Bill> findAllByUserIdAndCreatedTimeBetween(Integer userId, LocalDateTime start, LocalDateTime end);
 }

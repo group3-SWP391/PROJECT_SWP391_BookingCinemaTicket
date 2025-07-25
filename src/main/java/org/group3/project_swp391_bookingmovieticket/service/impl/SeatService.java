@@ -308,4 +308,14 @@ public class SeatService implements ISeatService {
 
         return seatNames;
     }
+
+    @Override
+    public List<Seat> getListSeatById(int roomId) {
+        return seatRepository.findByRoomId(roomId);
+    }
+
+    @Override
+    public List<Seat> findSeatsByIds(List<Integer> ids) {
+        return seatRepository.findByIdIn(ids);
+    }
 }

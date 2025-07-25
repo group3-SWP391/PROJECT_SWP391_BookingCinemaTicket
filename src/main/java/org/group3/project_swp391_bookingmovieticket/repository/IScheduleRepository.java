@@ -41,4 +41,8 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     @Query("SELECT MAX(s.startDate) FROM Schedule s WHERE s.movie.id = :movieId")
     Date getLastShowDateByMovie(@Param("movieId") Integer movieId);
+
+//phu
+@Query("SELECT s FROM Schedule s WHERE s.branch.id = :branchId AND s.movie.name = :movieName AND s.startDate Between :startDate AND :endDate")
+List<Schedule> findByBranchMovieANDRange(@Param("branchId") Integer branchId, @Param("movieName") String movieName, @Param("startDate") LocalDate startTime, @Param("endDate") LocalDate endTime);
 }

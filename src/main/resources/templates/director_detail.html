@@ -48,12 +48,12 @@
           <div class="row">
             <div class="col-md-12">
               <div class="st_md_summ_pera float_left">
-                <h1 style="padding-bottom: 10px; color: #ff4444">Director</h1>
+                <h1 style="padding-bottom: 10px; color: #ff4444">Đạo diễn</h1>
                 <p th:text="${director.get().name}" style="padding-bottom: 20px; font-weight: 700; color: black; font-size: 30px"></p>
                 <img th:src="@{${director.get().imageUrl}}" alt="img" class="director-img">
-                <p th:text="'Birth date: ' + ${director.get().birthDate}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
-                <p th:text="'Nationality: ' + ${director.get().nationality}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
-                <p th:text="'Awards: ' + ${director.get().awards}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
+                <p th:text="'Ngày sinh: ' + ${director.get().birthDate}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
+                <p th:text="'Quốc tịch: ' + ${director.get().nationality}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
+                <p th:text="'Giải thưởng: ' + ${director.get().awards}" style="padding-top: 10px; font-weight: 500; color: black; font-size: 20px"></p>
                 <p th:text="${director.get().description}" style="color: #555;font-weight: 500"></p>
               </div>
             </div>
@@ -61,7 +61,7 @@
             <div class="col-md-12" style="margin-top: 50px;">
               <div class="ne_busness_main_slider_wrapper float_left">
                 <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
-                  <h2 style="font-size: 27px; color: #ff4444; padding-bottom: 15px;">Movies by Director</h2>
+                  <h2 style="font-size: 27px; color: #ff4444; padding-bottom: 15px;">Phim bởi đạo diễn</h2>
                 </div>
               </div>
             </div>
@@ -88,7 +88,7 @@
                           <h2 th:text="${movie.name}" style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px"></h2>
                           <div style="font-size: 0.9rem; color: #333;">
                             <p><strong>Thể loại: </strong> <span th:text="${movie.categories}">Movie category</span></p>
-                            <p><strong>Thời gian: </strong><span th:text="${movie.duration + ' minutes'}">Movie duration</span></p>
+                            <p><strong>Thời gian: </strong><span th:text="${movie.duration + ' phút'}">Movie duration</span></p>
                             <p><strong>Khởi chiếu: </strong><span th:text="${movie.releaseDate}">Movie releaseDate</span></p>
                           </div>
                         </div>

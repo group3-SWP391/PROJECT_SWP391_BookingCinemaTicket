@@ -6,7 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface IPopcornDrinkRepository extends JpaRepository<PopcornDrink, Integer> {
     @Query("SELECT p FROM PopcornDrink p where p.quantity > 0")
     Page<PopcornDrink> findAllPagination(Pageable pageable);
+//phu
+List<PopcornDrink> findByQuantityGreaterThan(Integer quantity);
 }

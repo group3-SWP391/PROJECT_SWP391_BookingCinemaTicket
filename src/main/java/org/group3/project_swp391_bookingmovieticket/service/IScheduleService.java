@@ -5,6 +5,7 @@ import org.group3.project_swp391_bookingmovieticket.entity.Schedule;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,4 +44,9 @@ public interface IScheduleService extends IGeneralService<Schedule> {
     List<Schedule> getSchedulesByBranchAndDate(Integer branchId, LocalDate date);
 
     boolean hasTimeConflict(Integer roomId, LocalDate date, LocalTime startTime, LocalTime endTime, Integer excludeScheduleId);
+
+//phu
+List<Schedule> findSchedulesByBranchMovieAndDateRange(Integer branchId, String  movieId, LocalDate today, LocalDate threeDay);
+    HashMap<Schedule, Integer> getTicketCountBySchedule(List<Schedule> scheduleList);
+    List<Schedule> findSchedulesByBranchAndDay(Integer branchId, LocalDate today);
 }

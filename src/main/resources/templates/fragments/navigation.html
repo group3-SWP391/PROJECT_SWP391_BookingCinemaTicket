@@ -24,7 +24,7 @@
                                 <li class="parent">
                                     <a th:href="@{/select-theater}">Chi nhánh</a>
                                 </li>
-                                <li class="parent"><a th:href="@{/}" onclick="return false;">Mác phim</a>
+                                <li class="parent"><a th:href="@{/}" onclick="return false;">Nhãn phim</a>
                                     <ul class="lg-submenu">
                                         <li th:each="rate: ${session.rates}">
                                             <a th:href="@{/movie/rating(ratingId=${rate.id})}"
@@ -68,7 +68,7 @@
                                         <span style="color: white">Admin</span>
                                     </a>
                                     <a style="background: #1b1b1b" class="btn"
-                                       th:if="${session.userLogin.role.name == 'STAFF'}" th:href="@{/staff}">
+                                       th:if="${session.userLogin.role.name == 'STAFF'}" th:href="@{/employee/page}">
                                         <span style="color: white">Nhân viên</span>
                                     </a>
                                     <a style="background: #1b1b1b" class="btn"

@@ -15,4 +15,5 @@ public class SeatDTO {
     private boolean isOccupied;
     private boolean isChecked;
 
+
 }

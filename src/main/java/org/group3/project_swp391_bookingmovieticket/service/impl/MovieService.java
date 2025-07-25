@@ -41,8 +41,10 @@ public class MovieService implements IMovieService {
                 .map(movie -> modelMapper.map(movie, MovieDTO.class));
     }
 
+
     @Override
     public void update(MovieDTO movieDTO) {
+        movieRepository.save(modelMapper.map(movieDTO, Movie.class));
     }
 
     @Override
@@ -123,5 +125,11 @@ public class MovieService implements IMovieService {
 
     public Movie findEntityById(Integer id) {
         return movieRepository.findById(id).orElse(null);
+    }
+
+
+    @Override
+    public Optional<Movie> getMovieByName(String movieName) {
+        return movieRepository.findByNameIgnoreCase(movieName);
     }
 }

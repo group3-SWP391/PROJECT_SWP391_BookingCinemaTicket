@@ -4,71 +4,45 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_1">
-                        <h2>LANGUAGE MOVIES</h2>
+                        <h2>Phim hay</h2>
                         <ul>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">English movie</a>
+                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a
+                                    th:href="@{/movie/showing(status='now-showing')}">Đang chiếu</a>
                             </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Tamil movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Punjabi Movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Hindi movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Malyalam movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">English Action movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Hindi Action movie</a>
+                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a
+                                    th:href="@{/movie/showing(status='coming-soon')}">Tamil movie</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_2">
-                        <h2>MOVIES by presenter</h2>
+                        <h2>Nhãn phim</h2>
                         <ul>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Action movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Romantic movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Adult movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Comedy movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Drama movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Musical movie</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">Classical movie</a>
+                            <li th:each="rate: ${session.rates}">
+                                <i class="fa fa-circle"></i> &nbsp;&nbsp;
+                                <a th:href="@{/movie/rating(ratingId=${rate.id})}"
+                                   th:text="${rate.name}"></a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_3">
-                        <h2>BOOKING ONLINE</h2>
+                        <h2>Các thể loại phim chúng tôi đang có</h2>
                         <ul>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.example.com</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.hello.com</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.example.com</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.hello.com</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.example.com</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.hello.com</a>
-                            </li>
-                            <li><i class="fa fa-circle"></i> &nbsp;&nbsp;<a th:href="@{none}">www.example.com</a>
+                            <li th:each="category: ${session.categoryAll}">
+                                <i class="fa fa-circle"></i>
+                                &nbsp;&nbsp;<a th:href="@{/movie/category/return-view(categoryName=${category})}"
+                                               th:text="${category}">movie category name</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="prs_footer_cont1_wrapper prs_footer_cont1_wrapper_4">
-                        <h2>Web available on</h2>
-                        <p>Access and Get Free Movie Ticket!</p>
+                        <h2>Cảm ơn đã tin tưởng chúng tôi</h2>
+                        <p>Truy cập và lấy các ưu đãi</p>
                         <ul>
                             <li>
                                 <a th:href="@{none}">
