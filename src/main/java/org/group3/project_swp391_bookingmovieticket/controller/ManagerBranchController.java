@@ -92,7 +92,7 @@ public class ManagerBranchController {
 
         List<Room> rooms = roomService.getRoomsByBranchId(id);
         response.put("success", true);
-        response.put("message", "Get rooms!");
+        response.put("message", "Lấy danh sách phòng thành công!");
         response.put("rooms", rooms);
         return ResponseEntity.ok(response);
     }
@@ -144,18 +144,18 @@ public class ManagerBranchController {
                 }
             } catch (IOException e) {
                 response.put("success", false);
-                response.put("message", "Error uploading file: " + e.getMessage());
+                response.put("message", "Lỗi khi tải tệp lên: " + e.getMessage());
                 return ResponseEntity.ok(response);
             }
             
             Branch savedBranch = branchService.saveBranch(branch);
 
             response.put("success", true);
-            response.put("message", "Branch added successfully!");
+            response.put("message", "Thêm chi nhánh thành công!");
             response.put("branch", savedBranch);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error saving branch: " + e.getMessage());
+            response.put("message", "Lỗi khi lưu chi nhánh: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
@@ -180,11 +180,11 @@ public class ManagerBranchController {
                 response.put("totalCapacity", totalCapacity);
             } else {
                 response.put("success", false);
-                response.put("message", "Branch not found");
+                response.put("message", "Không tìm thấy chi nhánh");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error retrieving Branch: " + e.getMessage());
+            response.put("message", "Lỗi khi lấy thông tin chi nhánh: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
@@ -215,8 +215,8 @@ public class ManagerBranchController {
                 branchData.put("description", description);
                 branchData.put("locationDetail", locationDetail);
                 
-                // Validation
-                String validationError = validateBranchData(branchData);
+                // Validation (exclude current branch from duplicate check)
+                String validationError = validateBranchData(branchData, id);
                 if (validationError != null) {
                     response.put("success", false);
                     response.put("message", validationError);
@@ -242,22 +242,22 @@ public class ManagerBranchController {
                     }
                 } catch (IOException e) {
                     response.put("success", false);
-                    response.put("message", "Error uploading file: " + e.getMessage());
+                    response.put("message", "Lỗi khi tải tệp lên: " + e.getMessage());
                     return ResponseEntity.ok(response);
                 }
 
                 Branch savedBranch = branchService.updateBranch(branch);
 
                 response.put("success", true);
-                response.put("message", "Branch updated successfully!");
+                response.put("message", "Cập nhật chi nhánh thành công!");
                 response.put("branch", savedBranch);
             } else {
                 response.put("success", false);
-                response.put("message", "Branch not found");
+                response.put("message", "Không tìm thấy chi nhánh");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error updating branch: " + e.getMessage());
+            response.put("message", "Lỗi khi cập nhật chi nhánh: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
@@ -272,14 +272,14 @@ public class ManagerBranchController {
             if (branchService.existsById(id)) {
                 branchService.deleteBranch(id);
                 response.put("success", true);
-                response.put("message", "Branch deleted successfully!");
+                response.put("message", "Xóa chi nhánh thành công!");
             } else {
                 response.put("success", false);
-                response.put("message", "Branch not found");
+                response.put("message", "Không tìm thấy chi nhánh");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error deleting Branch: " + e.getMessage());
+            response.put("message", "Lỗi khi xóa chi nhánh: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
@@ -288,10 +288,28 @@ public class ManagerBranchController {
     // Room CRUD Operations
     @PostMapping("/branchs/{branchId}/rooms")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> saveRoom(@PathVariable Integer branchId, @RequestBody Map<String, Object> roomData) {
+    public ResponseEntity<Map<String, Object>> saveRoom(
+            @PathVariable Integer branchId, 
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "roomType", required = false) String roomType,
+            @RequestParam(value = "capacity") String capacity,
+            @RequestParam(value = "rowCount") String rowCount,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "vipSeats", required = false) String vipSeats,
+            @RequestParam(value = "isActive", required = false) String isActive,
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+            @RequestParam(value = "imgUrl", required = false) String imgUrl) {
         Map<String, Object> response = new HashMap<>();
         
         try {
+            // Create validation data map
+            Map<String, Object> roomData = new HashMap<>();
+            roomData.put("name", name);
+            roomData.put("capacity", capacity);
+            roomData.put("rowCount", rowCount);
+            roomData.put("roomType", roomType);
+            roomData.put("description", description);
+            
             // Validation
             String validationError = validateRoomData(roomData, branchId);
             if (validationError != null) {
@@ -303,55 +321,64 @@ public class ManagerBranchController {
             Optional<Branch> Branch = branchService.getBranchById(branchId);
             if (!Branch.isPresent()) {
                 response.put("success", false);
-                response.put("message", "Branch not found");
+                response.put("message", "Không tìm thấy chi nhánh");
                 return ResponseEntity.badRequest().body(response);
             }
 
             Room room = new Room();
-            room.setName((String) roomData.get("name"));
+            room.setName(name);
             
             // Get capacity and row count from user input
-            int capacity = Integer.parseInt(roomData.get("capacity").toString());
-            int rowCount = Integer.parseInt(roomData.get("rowCount").toString());
+            int capacityInt = Integer.parseInt(capacity);
+            int rowCountInt = Integer.parseInt(rowCount);
             
             // Auto-calculate seats per row
-            int seatsPerRow = capacity / rowCount;
-            int extraSeats = capacity % rowCount;
+            int seatsPerRow = capacityInt / rowCountInt;
             
-            room.setCapacity(capacity);
-            room.setRowCount(rowCount);
+            room.setCapacity(capacityInt);
+            room.setRowCount(rowCountInt);
             room.setSeatsPerRow(seatsPerRow); // Calculated value
-            room.setRoomType((String) roomData.get("roomType"));
-            room.setDescription((String) roomData.get("description"));
+            room.setRoomType(roomType);
+            room.setDescription(description);
             room.setBranch(Branch.get());
             
             // Handle VIP seats data
-            if (roomData.get("vipSeats") != null) {
-                String vipSeats = roomData.get("vipSeats").toString();
+            if (vipSeats != null && !vipSeats.trim().isEmpty()) {
                 room.setVipSeats(vipSeats);
             } else {
                 room.setVipSeats(""); // Default to no VIP seats
             }
             
             // Add isActive status
-            if (roomData.get("isActive") != null) {
-                room.setIsActive(Integer.parseInt(roomData.get("isActive").toString()));
+            if (isActive != null) {
+                room.setIsActive(Integer.parseInt(isActive));
             } else {
                 room.setIsActive(1); // Default to active
+            }
+
+            // Handle image upload
+            try {
+                String imagePath = saveFile(imageFile, "rooms");
+                if (imagePath != null) {
+                    room.setImgUrl(imagePath);
+                }
+            } catch (IOException e) {
+                response.put("success", false);
+                response.put("message", "Lỗi khi tải tệp lên: " + e.getMessage());
+                return ResponseEntity.ok(response);
             }
 
             Room savedRoom = roomService.saveRoom(room);
 
             // Generate seats for the room with VIP marking
-            String vipSeatsInput = (String) roomData.get("vipSeats");
-            seatService.generateSeatsForRoom(savedRoom, vipSeatsInput);
+            seatService.generateSeatsForRoom(savedRoom, vipSeats);
 
             response.put("success", true);
-            response.put("message", "Room and seats added successfully!");
+            response.put("message", "Thêm phòng và ghế ngồi thành công!");
             response.put("room", savedRoom);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error saving room: " + e.getMessage());
+            response.put("message", "Lỗi khi lưu phòng: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
@@ -383,16 +410,17 @@ public class ManagerBranchController {
                 roomData.put("description", room.getDescription());
                 roomData.put("isActive", room.getIsActive());
                 roomData.put("vipSeats", vipSeatsString);
+                roomData.put("imgUrl", room.getImgUrl());
                 
                 response.put("success", true);
                 response.put("room", roomData);
             } else {
                 response.put("success", false);
-                response.put("message", "Room not found");
+                response.put("message", "Không tìm thấy phòng");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error retrieving room: " + e.getMessage());
+            response.put("message", "Lỗi khi lấy thông tin phòng: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
@@ -400,13 +428,31 @@ public class ManagerBranchController {
 
     @PutMapping("/rooms/{id}")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> updateRoom(@PathVariable Integer id, @RequestBody Map<String, Object> roomData) {
+    public ResponseEntity<Map<String, Object>> updateRoom(
+            @PathVariable Integer id,
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "roomType", required = false) String roomType,
+            @RequestParam(value = "capacity") String capacity,
+            @RequestParam(value = "rowCount") String rowCount,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "vipSeats", required = false) String vipSeats,
+            @RequestParam(value = "isActive", required = false) String isActive,
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+            @RequestParam(value = "imgUrl", required = false) String imgUrl) {
         Map<String, Object> response = new HashMap<>();
         
         try {
             Optional<Room> roomOpt = roomService.getRoomById(id);
             if (roomOpt.isPresent()) {
                 Room room = roomOpt.get();
+                
+                // Create validation data map
+                Map<String, Object> roomData = new HashMap<>();
+                roomData.put("name", name);
+                roomData.put("capacity", capacity);
+                roomData.put("rowCount", rowCount);
+                roomData.put("roomType", roomType);
+                roomData.put("description", description);
                 
                 // Validation
                 String validationError = validateRoomData(roomData, room.getBranch().getId());
@@ -416,51 +462,63 @@ public class ManagerBranchController {
                     return ResponseEntity.badRequest().body(response);
                 }
 
-                room.setName((String) roomData.get("name"));
+                room.setName(name);
                 
                 // Get capacity and row count from user input
-                int capacity = Integer.parseInt(roomData.get("capacity").toString());
-                int rowCount = Integer.parseInt(roomData.get("rowCount").toString());
+                int capacityInt = Integer.parseInt(capacity);
+                int rowCountInt = Integer.parseInt(rowCount);
                 
                 // Auto-calculate seats per row
-                int seatsPerRow = capacity / rowCount;
-                int extraSeats = capacity % rowCount;
+                int seatsPerRow = capacityInt / rowCountInt;
                 
-                room.setCapacity(capacity);
-                room.setRowCount(rowCount);
+                room.setCapacity(capacityInt);
+                room.setRowCount(rowCountInt);
                 room.setSeatsPerRow(seatsPerRow); // Calculated value
-                room.setRoomType((String) roomData.get("roomType"));
-                room.setDescription((String) roomData.get("description"));
+                room.setRoomType(roomType);
+                room.setDescription(description);
                 
                 // Handle VIP seats data
-                if (roomData.get("vipSeats") != null) {
-                    String vipSeats = roomData.get("vipSeats").toString();
+                if (vipSeats != null && !vipSeats.trim().isEmpty()) {
                     room.setVipSeats(vipSeats);
                 } else {
                     room.setVipSeats(""); // Default to no VIP seats
                 }
                 
                 // Update isActive status
-                if (roomData.get("isActive") != null) {
-                    room.setIsActive(Integer.parseInt(roomData.get("isActive").toString()));
+                if (isActive != null) {
+                    room.setIsActive(Integer.parseInt(isActive));
+                }
+
+                // Handle image upload
+                try {
+                    String imagePath = saveFile(imageFile, "rooms");
+                    if (imagePath != null) {
+                        room.setImgUrl(imagePath);
+                    } else {
+                        // Keep existing image if no new file uploaded
+                        room.setImgUrl(imgUrl);
+                    }
+                } catch (IOException e) {
+                    response.put("success", false);
+                    response.put("message", "Lỗi khi tải tệp lên: " + e.getMessage());
+                    return ResponseEntity.ok(response);
                 }
 
                 Room savedRoom = roomService.updateRoom(room);
 
                 // Update seats for the room with new VIP marking (preserves existing seats with tickets)
-                String vipSeatsInput = (String) roomData.get("vipSeats");
-                seatService.updateSeatsForRoom(savedRoom, vipSeatsInput);
+                seatService.updateSeatsForRoom(savedRoom, vipSeats);
 
                 response.put("success", true);
-                response.put("message", "Room and seats updated successfully!");
+                response.put("message", "Cập nhật phòng và ghế ngồi thành công!");
                 response.put("room", savedRoom);
             } else {
                 response.put("success", false);
-                response.put("message", "Room not found");
+                response.put("message", "Không tìm thấy phòng");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error updating room: " + e.getMessage());
+            response.put("message", "Lỗi khi cập nhật phòng: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
@@ -478,14 +536,14 @@ public class ManagerBranchController {
                 // Then delete room
                 roomService.deleteRoom(id);
                 response.put("success", true);
-                response.put("message", "Room and seats deleted successfully!");
+                response.put("message", "Xóa phòng và ghế ngồi thành công!");
             } else {
                 response.put("success", false);
-                response.put("message", "Room not found");
+                response.put("message", "Không tìm thấy phòng");
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error deleting room: " + e.getMessage());
+            response.put("message", "Lỗi khi xóa phòng: " + e.getMessage());
         }
 
         return ResponseEntity.ok(response);
@@ -497,6 +555,42 @@ public class ManagerBranchController {
     public ResponseEntity<List<Branch>> getActiveBranchs() {
         List<Branch> branchs = branchService.getAllBranchs();
         return ResponseEntity.ok(branchs);
+    }
+    
+    @PostMapping("/api/branchs/check-name")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkBranchNameDuplicate(@RequestBody Map<String, Object> requestData) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            String branchName = (String) requestData.get("name");
+            Object excludeIdObj = requestData.get("excludeId");
+            Integer excludeId = null;
+            
+            if (excludeIdObj != null && !excludeIdObj.toString().trim().isEmpty()) {
+                excludeId = Integer.parseInt(excludeIdObj.toString());
+            }
+            
+            if (branchName == null || branchName.trim().isEmpty()) {
+                response.put("exists", false);
+                return ResponseEntity.ok(response);
+            }
+            
+            Optional<Branch> existingBranch = branchService.getBranchByName(branchName.trim());
+            boolean exists = existingBranch.isPresent() && 
+                           (excludeId == null || !existingBranch.get().getId().equals(excludeId));
+            
+            response.put("exists", exists);
+            if (exists) {
+                response.put("message", "Tên chi nhánh đã tồn tại");
+            }
+            
+        } catch (Exception e) {
+            response.put("exists", false);
+            response.put("error", "Lỗi khi kiểm tra tên chi nhánh: " + e.getMessage());
+        }
+        
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/api/rooms/types")
@@ -529,7 +623,7 @@ public class ManagerBranchController {
             
             if (!invalidSeats.isEmpty()) {
                 response.put("success", false);
-                response.put("message", "Invalid VIP seats: " + String.join(", ", invalidSeats));
+                response.put("message", "Ghế VIP không hợp lệ: " + String.join(", ", invalidSeats));
                 response.put("invalidSeats", invalidSeats);
             } else {
                 response.put("success", true);
@@ -541,10 +635,10 @@ public class ManagerBranchController {
             
         } catch (NumberFormatException e) {
             response.put("success", false);
-            response.put("message", "Invalid capacity or row count");
+            response.put("message", "Sức chứa hoặc số hàng không hợp lệ");
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Error validating VIP seats: " + e.getMessage());
+            response.put("message", "Lỗi khi kiểm tra ghế VIP: " + e.getMessage());
         }
         
         return ResponseEntity.ok(response);
@@ -552,23 +646,38 @@ public class ManagerBranchController {
 
     // Validation methods
     private String validateBranchData(Map<String, String> branchData) {
+        return validateBranchData(branchData, null);
+    }
+    
+    private String validateBranchData(Map<String, String> branchData, Integer excludeBranchId) {
         if (branchData.get("name") == null || branchData.get("name").trim().isEmpty()) {
-            return "Branch name is required";
+            return "Tên chi nhánh là bắt buộc";
         }
         if (branchData.get("name").length() > 255) {
-            return "Branch name cannot exceed 255 characters";
+            return "Tên chi nhánh không được vượt quá 255 ký tự";
         }
+        
+        // Check for duplicate branch name
+        String branchName = branchData.get("name").trim();
+        Optional<Branch> existingBranch = branchService.getBranchByName(branchName);
+        if (existingBranch.isPresent()) {
+            // If we're updating and it's not the same branch, it's a duplicate
+            if (excludeBranchId == null || !existingBranch.get().getId().equals(excludeBranchId)) {
+                return "Tên chi nhánh '" + branchName + "' đã tồn tại. Vui lòng chọn tên khác.";
+            }
+        }
+        
         if (branchData.get("location") != null && branchData.get("location").length() > 255) {
-            return "Location cannot exceed 255 characters";
+            return "Vị trí không được vượt quá 255 ký tự";
         }
         if (branchData.get("locationDetail") != null && branchData.get("locationDetail").length() > 500) {
-            return "Address detail cannot exceed 500 characters";
+            return "Chi tiết địa chỉ không được vượt quá 500 ký tự";
         }
         if (branchData.get("phoneNo") != null && branchData.get("phoneNo").length() > 20) {
-            return "Phone number cannot exceed 20 characters";
+            return "Số điện thoại không được vượt quá 20 ký tự";
         }
         if (branchData.get("description") != null && branchData.get("description").length() > 1000) {
-            return "Description cannot exceed 1000 characters";
+            return "Mô tả không được vượt quá 1000 ký tự";
         }
         
         return null;
@@ -576,48 +685,48 @@ public class ManagerBranchController {
 
     private String validateRoomData(Map<String, Object> roomData, Integer branchId) {
         if (roomData.get("name") == null || roomData.get("name").toString().trim().isEmpty()) {
-            return "Room name is required";
+            return "Tên phòng là bắt buộc";
         }
         if (roomData.get("name").toString().length() > 100) {
-            return "Room name cannot exceed 100 characters";
+            return "Tên phòng không được vượt quá 100 ký tự";
         }
         if (roomData.get("capacity") == null) {
-            return "Room capacity is required";
+            return "Sức chứa phòng là bắt buộc";
         }
         
         try {
             int capacity = Integer.parseInt(roomData.get("capacity").toString());
             if (capacity <= 0) {
-                return "Room capacity must be greater than 0";
+                return "Sức chứa phòng phải lớn hơn 0";
             }
         } catch (NumberFormatException e) {
-            return "Invalid capacity value";
+            return "Giá trị sức chứa không hợp lệ";
         }
         
         // Validate row count (now required)
         if (roomData.get("rowCount") == null) {
-            return "Row count is required";
+            return "Số hàng là bắt buộc";
         }
         
         try {
             int rowCount = Integer.parseInt(roomData.get("rowCount").toString());
             if (rowCount <= 0) {
-                return "Row count must be greater than 0";
+                return "Số hàng phải lớn hơn 0";
             }
             
             int capacity = Integer.parseInt(roomData.get("capacity").toString());
             if (capacity < rowCount) {
-                return "Capacity must be at least equal to row count";
+                return "Sức chứa phải ít nhất bằng số hàng";
             }
         } catch (NumberFormatException e) {
-            return "Invalid row count value";
+            return "Giá trị số hàng không hợp lệ";
         }
         
         if (roomData.get("roomType") != null && roomData.get("roomType").toString().length() > 50) {
-            return "Room type cannot exceed 50 characters";
+            return "Loại phòng không được vượt quá 50 ký tự";
         }
         if (roomData.get("description") != null && roomData.get("description").toString().length() > 500) {
-            return "Description cannot exceed 500 characters";
+            return "Mô tả không được vượt quá 500 ký tự";
         }
         
         return null;

@@ -35,7 +35,7 @@
                     </svg>
                     <span style="color: #ffffff; font-size: 20px; font-weight: bold;">Movie Pro</span>
                 </a>
-                <span style="color: #ffffff; margin-left: 20px; font-size: 16px;">Manager Page</span>
+                <span style="color: #ffffff; margin-left: 20px; font-size: 16px;">Trang Quản Lý</span>
             </div>
             <div style="display: flex; align-items: center;">
                 <div th:if="${session.userLogin != null}" style="display: inline-block;">
@@ -48,19 +48,19 @@
                     <!-- Profile Button -->
                     <a href="/manager/profile" class="btn"
                         style="margin-right: 10px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 8px 15px;">
-                        <i class="fa fa-cog" style="margin-right: 5px;"></i>Profile
+                        <i class="fa fa-cog" style="margin-right: 5px;"></i>Hồ Sơ
                     </a>
                     <a class="btn"
                         style="background: rgba(231, 76, 60, 0.9); color: #fff; border: none; border-radius: 5px; padding: 8px 15px;"
                         th:href="@{/log-out}">
-                        <i class="fa fa-sign-out" style="margin-right: 5px;"></i>Log out
+                        <i class="fa fa-sign-out" style="margin-right: 5px;"></i>Đăng xuất
                     </a>
                 </div>
                 <div th:if="${session.userLogin == null}" style="display: inline-block;">
                     <a class="btn"
                         style="color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 8px 15px;"
                         data-toggle="modal" data-target="#myModal">
-                        <i class="fa fa-user-plus" style="margin-right: 5px;"></i>Sign up
+                        <i class="fa fa-user-plus" style="margin-right: 5px;"></i>Đăng ký
                     </a>
                 </div>
             </div>

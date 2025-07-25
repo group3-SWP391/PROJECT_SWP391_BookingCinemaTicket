@@ -36,6 +36,9 @@ public class Room {
     @Column(name = "vip_seats", columnDefinition = "TEXT")
     private String vipSeats; // Stores comma-separated VIP seat positions like "A1,A2,B1,B2"
     
+    @Column(name = "imgurl", length = 500)
+    private String imgUrl; // Image URL for room
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id", nullable = false)
     @JsonBackReference
@@ -127,6 +130,14 @@ public class Room {
     
     public void setVipSeats(String vipSeats) {
         this.vipSeats = vipSeats;
+    }
+    
+    public String getImgUrl() {
+        return imgUrl;
+    }
+    
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
     
     public Branch getBranch() {

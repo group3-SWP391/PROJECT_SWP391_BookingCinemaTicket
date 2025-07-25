@@ -14,14 +14,14 @@
         <div class="dashboard-content">
             <!-- Add Schedule Button -->
             <button type="button" class="btn-add-movie" id="addScheduleBtn">
-                <i class="fa fa-plus-circle"></i> Add New Schedule
+                <i class="fa fa-plus-circle"></i> Thêm Lịch Chiếu Mới
             </button>
 
             <!-- Schedule Management Header -->
             <div class="movie-management-header">
                 <h1>
                     <i class="fa fa-calendar"></i>
-                    Schedule Management System
+                    Hệ Thống Quản Lý Lịch Chiếu
                 </h1>
             </div>
 
@@ -30,13 +30,13 @@
                 <table class="table movie-table">
                     <thead>
                         <tr>
-                            <th>Movie</th>
-                            <th>Branch</th>
-                            <th>Room</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Price</th>
-                            <th>Actions</th>
+                            <th>Phim</th>
+                            <th>Chi Nhánh</th>
+                            <th>Phòng</th>
+                            <th>Ngày</th>
+                            <th>Giờ</th>
+                            <th>Giá</th>
+                            <th>Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +44,7 @@
                             <td>
                                 <strong th:text="${schedule.movie.name}">Movie Name</strong>
                                 <br>
-                                <small class="text-muted" th:text="${schedule.movie.duration + ' min'}">120 min</small>
+                                <small class="text-muted" th:text="${schedule.movie.duration + ' phút'}">120 phút</small>
                             </td>
                             <td>
                                 <span th:text="${schedule.branch.name}">Branch Name</span>
@@ -54,7 +54,7 @@
                             <td>
                                 <span class="room-badge" th:text="${schedule.room.name}">Room A</span>
                                 <br>
-                                <small class="text-muted" th:text="${schedule.room.capacity + ' seats'}">150 seats</small>
+                                <small class="text-muted" th:text="${schedule.room.capacity + ' ghế'}">150 ghế</small>
                             </td>
                             <td>
                                 <span class="date-badge" th:text="${#temporals.format(schedule.startDate, 'yyyy-MM-dd')}">2024-01-15</span>
@@ -74,13 +74,13 @@
                                     <button type="button" class="btn-action btn-edit" 
                                             th:data-schedule-id="${schedule.id}"
                                             onclick="editSchedule(this.dataset.scheduleId)">
-                                        <i class="fa fa-edit"></i> Edit
+                                        <i class="fa fa-edit"></i> Sửa
                                     </button>
                                     <button type="button" class="btn-action btn-delete" 
                                             th:data-schedule-id="${schedule.id}"
                                             th:data-schedule-name="${schedule.movie.name + ' - ' + #temporals.format(schedule.startDate, 'yyyy-MM-dd') + ' ' + #temporals.format(schedule.startTime, 'HH:mm')}"
                                             onclick="deleteSchedule(this.dataset.scheduleId, this.dataset.scheduleName)">
-                                        <i class="fa fa-trash"></i> Delete
+                                        <i class="fa fa-trash"></i> Xóa
                                     </button>
                                 </div>
                             </td>
@@ -96,9 +96,9 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="scheduleModalLabel">
-                            <i class="fa fa-calendar"></i> Add New Schedule
+                            <i class="fa fa-calendar"></i> Thêm Lịch Chiếu Mới
                         </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;" onclick="closeScheduleModal()">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Đóng" style="color: white; opacity: 0.8;" onclick="closeScheduleModal()">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -109,18 +109,18 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="scheduleBranch">Branch *</label>
+                                        <label for="scheduleBranch">Chi Nhánh *</label>
                                         <select class="form-control" id="scheduleBranch" name="branchId" required onchange="loadRoomsByBranch()">
-                                            <option value="">Select Branch</option>
+                                            <option value="">Chọn Chi Nhánh</option>
                                             <option th:each="branch : ${branches}" th:value="${branch.id}" th:text="${branch.name}">Branch Name</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="scheduleMovie">Movie *</label>
+                                        <label for="scheduleMovie">Phim *</label>
                                         <select class="form-control" id="scheduleMovie" name="movieId" required>
-                                            <option value="">Select Movie</option>
+                                            <option value="">Chọn Phim</option>
                                             <option th:each="movie : ${movies}" th:value="${movie.id}" th:text="${movie.name}">Movie Name</option>
                                         </select>
                                     </div>
@@ -128,42 +128,42 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="scheduleRoom">Room *</label>
+                                <label for="scheduleRoom">Phòng *</label>
                                 <select class="form-control" id="scheduleRoom" name="roomId" required>
-                                    <option value="">Select Room (Choose branch first)</option>
+                                    <option value="">Chọn Phòng (Chọn chi nhánh trước)</option>
                                 </select>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="scheduleDate">Date *</label>
+                                        <label for="scheduleDate">Ngày *</label>
                                         <input type="date" class="form-control" id="scheduleDate" name="startDate" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="scheduleStartTime">Start Time *</label>
+                                        <label for="scheduleStartTime">Giờ Bắt Đầu *</label>
                                         <input type="time" class="form-control" id="scheduleStartTime" name="startTime" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="scheduleEndTime">End Time *</label>
+                                        <label for="scheduleEndTime">Giờ Kết Thúc *</label>
                                         <input type="time" class="form-control" id="scheduleEndTime" name="endTime" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="schedulePrice">Ticket Price * <small class="text-muted">(VND)</small></label>
-                                <input type="number" class="form-control" id="schedulePrice" name="price" step="1000" min="10000" required placeholder="e.g. 50000">
+                                <label for="schedulePrice">Giá Vé * <small class="text-muted">(VND)</small></label>
+                                <input type="number" class="form-control" id="schedulePrice" name="price" step="1000" min="10000" required placeholder="ví dụ: 50000">
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeScheduleModal()">Cancel</button>
-                        <button type="button" class="btn-save-movie" onclick="saveSchedule()">Save Schedule</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeScheduleModal()">Hủy</button>
+                        <button type="button" class="btn-save-movie" onclick="saveSchedule()">Lưu Lịch Chiếu</button>
                     </div>
                 </div>
             </div>

@@ -116,7 +116,9 @@
                             
                             <div class="form-group">
                                 <label for="branchName">Tên chi nhánh * <small class="text-muted">(max 255 chars)</small></label>
-                                <input type="text" class="form-control" id="branchName" name="name" maxlength="255" required>
+                                <input type="text" class="form-control" id="branchName" name="name" maxlength="255" required
+                                       onblur="checkBranchNameDuplicate()">
+                                <div id="branchNameError" class="text-danger" style="display: none; margin-top: 5px;"></div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -300,6 +302,45 @@
                                                 <option value="1">Hoạt động</option>
                                                 <option value="0">Không hoạt động</option>
                                             </select>
+                                        </div>
+
+                                        <!-- Room Image Upload Section -->
+                                        <div class="media-upload-section">
+                                            <h5 class="section-title">
+                                                <i class="fa fa-image"></i> Ảnh phòng chiếu
+                                            </h5>
+                                            
+                                            <div class="form-group">
+                                                <label for="roomImage">Ảnh phòng</label>
+                                                <div class="file-upload-container">
+                                                    <div class="file-upload-area" id="roomImageUploadArea">
+                                                        <div class="upload-icon">
+                                                            <i class="fa fa-image"></i>
+                                                        </div>
+                                                        <div class="upload-text">
+                                                            <span class="upload-title">Thả hình ảnh vào đây hoặc nhấp để duyệt</span>
+                                                            <span class="upload-subtitle">PNG, JPG, GIF lên tới 10MB</span>
+                                                        </div>
+                                                        <input type="file" class="file-input" id="roomImage" 
+                                                               name="imageFile" accept="image/*">
+                                                    </div>
+                                                    
+                                                    <div class="file-preview" id="roomImagePreview" style="display: none;">
+                                                        <img class="preview-image" alt="Room Image Preview">
+                                                        <div class="preview-overlay">
+                                                            <button type="button" class="btn-remove-file" 
+                                                                    onclick="removeRoomFilePreview('image')">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="file-info">
+                                                            <span class="file-name"></span>
+                                                            <span class="file-size"></span>
+                                                        </div>
+                                                        <input type="hidden" name="imgUrl" data-current-image="room">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="form-group">

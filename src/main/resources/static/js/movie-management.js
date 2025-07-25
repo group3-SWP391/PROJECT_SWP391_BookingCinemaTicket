@@ -108,7 +108,7 @@ function openAddMovieModal() {
     const actorsContainer = document.getElementById('actorsContainer');
     
     if (!modalLabel || !movieForm || !movieId || !actorsContainer) {
-        alert('Error: Modal components are not ready. Please refresh the page.');
+        alert('Lỗi: Các thành phần modal chưa sẵn sàng. Vui lòng làm mới trang.');
         return;
     }
     
@@ -243,12 +243,12 @@ function saveMovie() {
             $('#movieModal').modal('hide');
             location.reload();
         } else {
-            alert('Error saving movie: ' + data.message);
+            alert('Lỗi khi lưu phim: ' + data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error saving movie');
+        alert('Lỗi khi lưu phim');
     });
 }
 
@@ -311,17 +311,17 @@ function editMovie(movieId) {
                 
                 $('#movieModal').modal('show');
             } else {
-                alert('Error loading movie data');
+                alert('Lỗi khi tải dữ liệu phim');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error loading movie data');
+            alert('Lỗi khi tải dữ liệu phim');
         });
 }
 
 function deleteMovie(movieId, movieName) {
-    if (confirm(`Are you sure you want to delete "${movieName}"?`)) {
+    if (confirm(`Bạn có chắc chắn muốn xóa phim "${movieName}" không?`)) {
         fetch(`/manager/movies/${movieId}`, {
             method: 'DELETE'
         })
@@ -330,12 +330,12 @@ function deleteMovie(movieId, movieName) {
             if (data.success) {
                 location.reload();
             } else {
-                alert('Error deleting movie: ' + data.message);
+                alert('Lỗi khi xóa phim: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting movie');
+            alert('Lỗi khi xóa phim');
         });
     }
 }
@@ -378,12 +378,12 @@ function saveDirector() {
             
             $('#directorModal').modal('hide');
         } else {
-            alert('Error saving director: ' + data.message);
+            alert('Lỗi khi lưu đạo diễn: ' + data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error saving director');
+        alert('Lỗi khi lưu đạo diễn');
     });
 }
 
@@ -424,12 +424,12 @@ function saveActor() {
             
             $('#actorModal').modal('hide');
         } else {
-            alert('Error saving actor: ' + data.message);
+            alert('Lỗi khi lưu diễn viên: ' + data.message);
         }
     })
             .catch(error => {
             console.error('Error:', error);
-            alert('Error saving actor');
+            alert('Lỗi khi lưu diễn viên');
         });
 }
 
@@ -472,12 +472,12 @@ function saveRating() {
             
             $('#ratingModal').modal('hide');
         } else {
-            alert('Error saving rating: ' + data.message);
+            alert('Lỗi khi lưu xếp hạng: ' + data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error saving rating');
+        alert('Lỗi khi lưu xếp hạng');
     });
 }
 
@@ -531,12 +531,12 @@ function handleFileSelect(file, config) {
         file.type.startsWith('video/');
 
     if (!isValidType) {
-        alert(`Please select a valid ${config.type} file.`);
+        alert(`Vui lòng chọn một tệp ${config.type === 'image' ? 'hình ảnh' : 'video'} hợp lệ.`);
         return;
     }
     const maxSize = config.type === 'image' ? 10 * 1024 * 1024 : 50 * 1024 * 1024;
     if (file.size > maxSize) {
-        alert(`File size must be less than ${config.type === 'image' ? '10MB' : '50MB'}.`);
+        alert(`Kích thước tệp phải nhỏ hơn ${config.type === 'image' ? '10MB' : '50MB'}.`);
         return;
     }
     showFilePreview(file, config);
@@ -800,7 +800,7 @@ function validateMovieForm() {
 
     // Show validation errors
     if (!isValid) {
-        alert('Please fix the following errors:\n\n' + errors.join('\n'));
+        alert('Vui lòng sửa các lỗi sau:\n\n' + errors.join('\n'));
     }
 
     return isValid;
@@ -811,17 +811,17 @@ function validateDirectorForm() {
     const description = document.getElementById('directorBio').value.trim();
     
     if (name.length > 255) {
-        alert('Director name cannot exceed 255 characters');
+        alert('Tên đạo diễn không được vượt quá 255 ký tự');
         return false;
     }
     
     if (description.length > 255) {
-        alert('Director description cannot exceed 255 characters');
+        alert('Mô tả đạo diễn không được vượt quá 255 ký tự');
         return false;
     }
     
     if (!name) {
-        alert('Director name is required');
+        alert('Tên đạo diễn là bắt buộc');
         return false;
     }
     
@@ -832,12 +832,12 @@ function validateActorForm() {
     const name = document.getElementById('actorName').value.trim();
     
     if (name.length > 255) {
-        alert('Actor name cannot exceed 255 characters');
+        alert('Tên diễn viên không được vượt quá 255 ký tự');
         return false;
     }
     
     if (!name) {
-        alert('Actor name is required');
+        alert('Tên diễn viên là bắt buộc');
         return false;
     }
     
@@ -850,22 +850,22 @@ function validateRatingForm() {
     const ageLimit = document.getElementById('ratingAgeLimit').value.trim();
     
     if (!name) {
-        alert('Rating name is required');
+        alert('Tên xếp hạng là bắt buộc');
         return false;
     }
     
     if (name.length > 50) {
-        alert('Rating name cannot exceed 50 characters');
+        alert('Tên xếp hạng không được vượt quá 255 ký tự');
         return false;
     }
     
     if (description.length > 255) {
-        alert('Rating description cannot exceed 255 characters');
+        alert('Mô tả xếp hạng không được vượt quá 255 ký tự');
         return false;
     }
     
     if (ageLimit && (isNaN(ageLimit) || ageLimit < 0 || ageLimit > 25)) {
-        alert('Age limit must be a number between 0 and 25');
+        alert('Giới hạn tuổi phải là số từ 0 đến 25');
         return false;
     }
     

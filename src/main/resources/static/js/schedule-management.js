@@ -17,8 +17,7 @@ function initializeScheduleManagement() {
         addScheduleBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log('Add Schedule button clicked');
-            
+
             // Small delay to ensure all elements are ready
             setTimeout(() => {
                 openAddScheduleModal();
@@ -64,9 +63,7 @@ function openAddScheduleModal() {
     const inputs = scheduleForm.querySelectorAll('.is-invalid');
     inputs.forEach(input => input.classList.remove('is-invalid'));
     
-    // Show modal using Bootstrap
-    console.log('Opening schedule modal...');
-    
+
     // Try multiple approaches to open the modal
     const modalElement = document.getElementById('scheduleModal');
     
@@ -113,7 +110,7 @@ function loadRoomsByBranch() {
     const roomSelect = document.getElementById('scheduleRoom');
     
     if (!branchSelect || !roomSelect) {
-        console.error('Branch or room select elements not found');
+        console.error('Không tìm thấy chi nhánh hoặc phòng liên quan');
         return;
     }
     
@@ -145,7 +142,7 @@ function loadRoomsByBranch() {
             console.error('Error loading rooms:', error);
             roomSelect.innerHTML = '<option value="">Error loading rooms</option>';
             roomSelect.disabled = false;
-            alert('Error loading rooms. Please try again.');
+            alert('Lỗi khi tải phòng. Vui lòng thử lại.');
         });
 }
 
@@ -185,12 +182,12 @@ function saveSchedule() {
             showSuccessMessage(data.message);
             setTimeout(() => location.reload(), 1000);
         } else {
-            alert('Error saving schedule: ' + data.message);
+            alert('Lỗi khi lưu lịch chiếu: ' + data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error saving schedule. Please try again.');
+        alert('Lỗi khi lưu lịch chiếu. Vui lòng thử lại.');
     })
     .finally(() => {
         saveBtn.textContent = originalText;
@@ -223,17 +220,17 @@ function editSchedule(scheduleId) {
 
                 $('#scheduleModal').modal('show');
             } else {
-                alert('Error loading schedule data: ' + data.message);
+                alert('Lỗi khi tải dữ liệu lịch chiếu: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error loading schedule data. Please try again.');
+            alert('Lỗi khi tải dữ liệu lịch chiếu. Vui lòng thử lại.');
         });
 }
 
 function deleteSchedule(scheduleId, scheduleName) {
-    if (confirm(`Are you sure you want to delete "${scheduleName}"?\n\nThis action cannot be undone.`)) {
+    if (confirm(`Bạn có chắc chắn muốn xóa lịch chiếu "${scheduleName}" không?\n\nHành động này không thể hoàn tác.`)) {
         fetch(`/manager/schedules/${scheduleId}`, {
             method: 'DELETE'
         })
@@ -243,12 +240,12 @@ function deleteSchedule(scheduleId, scheduleName) {
                 showSuccessMessage(data.message);
                 setTimeout(() => location.reload(), 1000);
             } else {
-                alert('Error deleting schedule: ' + data.message);
+                alert('Lỗi khi xóa lịch chiếu: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting schedule. Please try again.');
+            alert('Lỗi khi xóa lịch chiếu. Vui lòng thử lại.');
         });
     }
 }
@@ -300,22 +297,22 @@ function validateScheduleForm() {
         
         if (end <= start) {
             isValid = false;
-            errors.push('End time must be after start time');
+            errors.push('Giờ kết thúc phải sau giờ bắt đầu');
             document.getElementById('scheduleEndTime').classList.add('is-invalid');
         } else {
             // Check if duration is reasonable (at least 30 minutes, max 8 hours)
             const durationMs = end - start;
             const durationMinutes = durationMs / (1000 * 60);
             
-            if (durationMinutes < 30) {
-                isValid = false;
-                errors.push('Schedule duration must be at least 30 minutes');
-                document.getElementById('scheduleEndTime').classList.add('is-invalid');
-            } else if (durationMinutes > 480) { // 8 hours
-                isValid = false;
-                errors.push('Schedule duration cannot exceed 8 hours');
-                document.getElementById('scheduleEndTime').classList.add('is-invalid');
-            }
+            // if (durationMinutes < 30) {
+            //     isValid = false;
+            //     errors.push('Schedule duration must be at least 30 minutes');
+            //     document.getElementById('scheduleEndTime').classList.add('is-invalid');
+            // } else if (durationMinutes > 480) { // 8 hours
+            //     isValid = false;
+            //     errors.push('Schedule duration cannot exceed 8 hours');
+            //     document.getElementById('scheduleEndTime').classList.add('is-invalid');
+            // }
         }
     }
 
@@ -323,16 +320,16 @@ function validateScheduleForm() {
     const price = parseFloat(document.getElementById('schedulePrice').value);
     if (isNaN(price) || price <= 0) {
         isValid = false;
-        errors.push('Price must be a valid number greater than 0');
+        errors.push('Giá phải lớn hơn 0 VND');
         document.getElementById('schedulePrice').classList.add('is-invalid');
-    } else if (price > 100000) {
+    } else if (price > 1000000000) {
         isValid = false;
-        errors.push('Price cannot exceed 100000 VND');
+        errors.push('Giá không được vượt quá 1.000.000.000 VND');
         document.getElementById('schedulePrice').classList.add('is-invalid');
     }
 
     if (!isValid) {
-        alert('Please fix the following errors:\n\n' + errors.join('\n'));
+        alert('Vui lòng sửa các lỗi sau:\n\n' + errors.join('\n'));
     }
 
     return isValid;

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Manager Profile</title>
+  <title>Hồ Sơ Quản Lý</title>
 </head>
 <body>
 <div th:fragment="content" class="employee-stage">
@@ -10,7 +10,7 @@
 
   <div class="dashboard-content">
     <div class="movie-management-header">
-      <h1><i class="fa fa-id-card"></i> My Profile</h1>
+      <h1><i class="fa fa-id-card"></i> Hồ Sơ Của Tôi</h1>
     </div>
 
     <div class="movie-table-container" style="max-width: 700px; margin: auto; padding: 20px;">
@@ -22,39 +22,39 @@
         <input type="hidden" th:field="*{id}" />
 
         <div class="form-group">
-          <label for="fullname">Full Name</label>
+          <label for="fullname">Họ và Tên</label>
           <input type="text" id="fullname" th:field="*{fullname}" class="form-control profile-field" readonly>
         </div>
 
         <div class="form-group">
-          <label for="phone">Phone</label>
+          <label for="phone">Số Điện Thoại</label>
           <input type="text" id="phone" th:field="*{phone}" class="form-control" readonly>
         </div>
 
         <div class="form-group">
-          <label for="username">Username</label>
+          <label for="username">Tên Đăng Nhập</label>
           <input type="text" id="username" th:field="*{username}" class="form-control profile-field" readonly>
         </div>
 
         <div class="form-group mt-4">
-          <button type="button" id="editBtn" class="btn btn-secondary" onclick="enableProfileEdit()">Edit</button>
-          <button type="submit" id="saveBtn" class="btn btn-primary" style="display: none;">Save</button>
+          <button type="button" id="editBtn" class="btn btn-secondary" onclick="enableProfileEdit()">Chỉnh Sửa</button>
+          <button type="submit" id="saveBtn" class="btn btn-primary" style="display: none;">Lưu</button>
         </div>
       </form>
 
       <hr>
 
-      <h4>Change Password</h4>
+      <h4>Đổi Mật Khẩu</h4>
       <form th:action="@{/manager/profile/change-password}" method="post">
         <div class="form-group">
-          <label for="oldPassword">Old Password</label>
+          <label for="oldPassword">Mật Khẩu Cũ</label>
           <input type="password" id="oldPassword" name="oldPassword" class="form-control" required>
         </div>
         <div class="form-group">
-          <label for="newPassword">New Password</label>
+          <label for="newPassword">Mật Khẩu Mới</label>
           <input type="password" id="newPassword" name="newPassword" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-warning">Change Password</button>
+        <button type="submit" class="btn btn-warning">Đổi Mật Khẩu</button>
       </form>
     </div>
   </div>

@@ -16,14 +16,14 @@
         <div class="dashboard-content">
             <!-- Add Movie Button -->
             <button type="button" class="btn-add-movie" data-toggle="modal" data-target="#movieModal" id="addMovieBtn">
-                <i class="fa fa-plus-circle"></i> Add New Movie
+                <i class="fa fa-plus-circle"></i> Thêm Phim Mới
             </button>
 
             <!-- Movie Management Header -->
             <div class="movie-management-header">
                 <h1>
                     <i class="fa fa-film"></i>
-                    Movie Management System
+                    Hệ Thống Quản Lý Phim
                 </h1>
             </div>
 
@@ -31,11 +31,11 @@
             <div class="filter-section" style="margin-bottom: 20px;">
                 <div class="row">
                     <div class="col-md-3">
-                        <label for="statusFilter" style="color: #000000; margin-bottom: 5px;">Filter by Status:</label>
+                        <label for="statusFilter" style="color: #000000; margin-bottom: 5px;">Lọc theo Trạng thái:</label>
                         <select class="form-control" id="statusFilter" onchange="filterMoviesByStatus()">
-                            <option value="all">All Movies</option>
-                            <option value="showing">Currently Showing</option>
-                            <option value="not-showing">Not Showing</option>
+                            <option value="all">Tất cả Phim</option>
+                            <option value="showing">Đang Chiếu</option>
+                            <option value="not-showing">Ngừng Chiếu</option>
                         </select>
                     </div>
                 </div>
@@ -47,38 +47,38 @@
                     <thead>
                         <tr>
                             <th>Poster</th>
-                            <th>Movie Name</th>
-                            <th>Director</th>
-                            <th>Duration</th>
-                            <th>Category</th>
-                            <th>Language</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Tên Phim</th>
+                            <th>Đạo Diễn</th>
+                            <th>Thời Lượng</th>
+                            <th>Thể Loại</th>
+                            <th>Ngôn Ngữ</th>
+                            <th>Trạng Thái</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="movie : ${movies}">
                             <td>
                                 <img th:src="${movie.smallImageUrl != null ? movie.smallImageUrl : '/images/default-movie.jpg'}" 
-                                     alt="Movie Poster" class="movie-poster" />
+                                     alt="Poster Phim" class="movie-poster" />
                             </td>
                             <td>
-                                <strong th:text="${movie.name}">Movie Name</strong>
+                                <strong th:text="${movie.name}">Tên Phim</strong>
                                 <br>
                                 <small class="text-muted" th:text="${movie.rating != null ? movie.rating.name : movie.rated}">PG-13</small>
                             </td>
                             <td>
-                                <span class="director-badge" th:if="${movie.director != null}" th:text="${movie.director.name}">Director</span>
-                                <span class="text-muted" th:if="${movie.director == null}">No Director</span>
+                                <span class="director-badge" th:if="${movie.director != null}" th:text="${movie.director.name}">Đạo Diễn</span>
+                                <span class="text-muted" th:if="${movie.director == null}">Chưa có Đạo Diễn</span>
                             </td>
-                            <td th:text="${movie.duration + ' min'}">120 min</td>
-                            <td th:text="${movie.categories}">Action, Drama</td>
-                            <td th:text="${movie.language}">English</td>
+                            <td th:text="${movie.duration + ' phút'}">120 phút</td>
+                            <td th:text="${movie.categories}">Hành Động, Chính Kịch</td>
+                            <td th:text="${movie.language}">Tiếng Anh</td>
                             <td>
                                 <span class="status-badge" 
                                       th:classappend="${movie.isShowing == 1 ? 'status-showing' : 'status-not-showing'}"
-                                      th:text="${movie.isShowing == 1 ? 'Showing' : 'Not Showing'}">
-                                    Showing
+                                      th:text="${movie.isShowing == 1 ? 'Đang Chiếu' : 'Ngừng Chiếu'}">
+                                    Đang Chiếu
                                 </span>
                             </td>
                             <td>
@@ -86,13 +86,13 @@
                                     <button type="button" class="btn-action btn-edit" 
                                             th:data-movie-id="${movie.id}"
                                             onclick="editMovie(this.dataset.movieId)">
-                                        <i class="fa fa-edit"></i> Edit
+                                        <i class="fa fa-edit"></i> Sửa
                                     </button>
                                     <button type="button" class="btn-action btn-delete" 
                                             th:data-movie-id="${movie.id}"
                                             th:data-movie-name="${movie.name}"
                                             onclick="deleteMovie(this.dataset.movieId, this.dataset.movieName)">
-                                        <i class="fa fa-trash"></i> Delete
+                                        <i class="fa fa-trash"></i> Xóa
                                     </button>
                                 </div>
                             </td>
@@ -108,7 +108,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="movieModalLabel">
-                        <i class="fa fa-film"></i> Add New Movie
+                        <i class="fa fa-film"></i> Thêm Phim Mới
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
                         <span aria-hidden="true">&times;</span>
@@ -121,13 +121,13 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="movieName">Movie Name * <small class="text-muted">(max 255 chars)</small></label>
+                                    <label for="movieName">Tên Phim * <small class="text-muted">(tối đa 255 ký tự)</small></label>
                                     <input type="text" class="form-control" id="movieName" name="name" maxlength="255" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="movieDuration">Duration (minutes) *</label>
+                                    <label for="movieDuration">Thời Lượng (phút) *</label>
                                     <input type="number" class="form-control" id="movieDuration" name="duration" required>
                                 </div>
                             </div>
@@ -136,19 +136,19 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="movieCategories">Categories * <small class="text-muted">(max 100 chars)</small></label>
+                                    <label for="movieCategories">Thể Loại * <small class="text-muted">(tối đa 100 ký tự)</small></label>
                                     <input type="text" class="form-control" id="movieCategories" name="categories" 
-                                           placeholder="e.g. Action, Drama, Comedy" maxlength="100" required>
+                                           placeholder="ví dụ: Hành Động, Chính Kịch, Hài Kịch" maxlength="100" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="movieLanguage">Language *</label>
+                                    <label for="movieLanguage">Ngôn Ngữ *</label>
                                     <select class="form-control" id="movieLanguage" name="language" required>
-                                        <option value="">Select Language</option>
-                                        <option value="Vietnamese Subtitles">Vietnamese Subtitles</option>
-                                        <option value="Vietnamese Dubbed">Vietnamese Dubbed</option>
-                                        <option value="English Subtitles">English Subtitles</option>
+                                        <option value="">Chọn Ngôn Ngữ</option>
+                                        <option value="Vietnamese Subtitles">Phụ Đề Tiếng Việt</option>
+                                        <option value="Vietnamese Dubbed">Lồng Tiếng Việt</option>
+                                        <option value="English Subtitles">Phụ Đề Tiếng Anh</option>
                                     </select>
                                 </div>
                             </div>
@@ -157,21 +157,21 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="movieRated">Rating</label>
+                                    <label for="movieRated">Xếp Hạng</label>
                                     <select class="form-control" id="movieRated" name="ratingId">
-                                        <option value="">Select Rating</option>
-                                        <option th:each="rating : ${ratings}" th:value="${rating.id}" th:text="${rating.name + ' - ' + rating.description}">Rating</option>
+                                        <option value="">Chọn Xếp Hạng</option>
+                                        <option th:each="rating : ${ratings}" th:value="${rating.id}" th:text="${rating.name + ' - ' + rating.description}">Xếp Hạng</option>
                                     </select>
                                     <button type="button" class="btn btn-sm btn-success" style="margin-top: 5px;" onclick="openAddRatingModal()">
-                                        <i class="fa fa-plus"></i> Add New Rating
+                                        <i class="fa fa-plus"></i> Thêm Xếp Hạng Mới
                                     </button>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="movieFormat">Format</label>
+                                    <label for="movieFormat">Định Dạng</label>
                                     <select class="form-control" id="movieFormat" name="format">
-                                        <option value="">Select Format</option>
+                                        <option value="">Chọn Định Dạng</option>
                                         <option value="2D">2D</option>
                                         <option value="3D">3D</option>
                                         <option value="IMAX">IMAX</option>
@@ -181,50 +181,50 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="movieStatus">Status</label>
+                                    <label for="movieStatus">Trạng Thái</label>
                                     <select class="form-control" id="movieStatus" name="isShowing">
-                                        <option value="1">Currently Showing</option>
-                                        <option value="0">Not Showing</option>
+                                        <option value="1">Đang Chiếu</option>
+                                        <option value="0">Ngừng Chiếu</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="movieDirector">Director</label>
+                            <label for="movieDirector">Đạo Diễn</label>
                             <select class="form-control" id="movieDirector" name="directorId">
-                                <option value="">Select Director</option>
-                                <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.name}">Director Name</option>
+                                <option value="">Chọn Đạo Diễn</option>
+                                <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.name}">Tên Đạo Diễn</option>
                             </select>
                             <button type="button" class="btn btn-sm btn-success" style="margin-top: 5px;" onclick="openAddDirectorModal()">
-                                <i class="fa fa-plus"></i> Add New Director
+                                <i class="fa fa-plus"></i> Thêm Đạo Diễn Mới
                             </button>
                         </div>
 
                         <!-- Media Upload Section -->
                         <div class="media-upload-section">
                             <h5 class="section-title">
-                                <i class="fa fa-image"></i> Movie Media
+                                <i class="fa fa-image"></i> Hình Ảnh Phim
                             </h5>
                             
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="movieSmallImage">Poster Image (Small)</label>
+                                        <label for="movieSmallImage">Hình Poster (Nhỏ)</label>
                                         <div class="file-upload-container">
                                             <div class="file-upload-area" id="smallImageUploadArea">
                                                 <div class="upload-icon">
                                                     <i class="fa fa-image"></i>
                                                 </div>
                                                 <div class="upload-text">
-                                                    <span class="upload-title">Drop image here or click to browse</span>
-                                                    <span class="upload-subtitle">PNG, JPG, GIF up to 10MB</span>
+                                                    <span class="upload-title">Thả hình ảnh vào đây hoặc nhấn để chọn</span>
+                                                    <span class="upload-subtitle">PNG, JPG, GIF tối đa 10MB</span>
                                                 </div>
                                                 <input type="file" class="file-input" id="movieSmallImage" 
                                                        name="smallImageFile" accept="image/*">
                                             </div>
                                             <div class="file-preview" id="smallImagePreview" style="display: none;">
-                                                <img class="preview-image" alt="Small Image Preview">
+                                                <img class="preview-image" alt="Xem Trước Hình Nhỏ">
                                                 <div class="preview-overlay">
                                                     <button type="button" class="btn-remove-file" 
                                                             onclick="removeFilePreview('smallImage')">
@@ -243,21 +243,21 @@
                                 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="movieLargeImage">Banner Image (Large)</label>
+                                        <label for="movieLargeImage">Hình Banner (Lớn)</label>
                                         <div class="file-upload-container">
                                             <div class="file-upload-area" id="largeImageUploadArea">
                                                 <div class="upload-icon">
                                                     <i class="fa fa-image"></i>
                                                 </div>
                                                 <div class="upload-text">
-                                                    <span class="upload-title">Drop image here or click to browse</span>
-                                                    <span class="upload-subtitle">PNG, JPG, GIF up to 10MB</span>
+                                                    <span class="upload-title">Thả hình ảnh vào đây hoặc nhấn để chọn</span>
+                                                    <span class="upload-subtitle">PNG, JPG, GIF tối đa 10MB</span>
                                                 </div>
                                                 <input type="file" class="file-input" id="movieLargeImage" 
                                                        name="largeImageFile" accept="image/*">
                                             </div>
                                             <div class="file-preview" id="largeImagePreview" style="display: none;">
-                                                <img class="preview-image" alt="Large Image Preview">
+                                                <img class="preview-image" alt="Xem Trước Hình Lớn">
                                                 <div class="preview-overlay">
                                                     <button type="button" class="btn-remove-file" 
                                                             onclick="removeFilePreview('largeImage')">
@@ -278,14 +278,14 @@
                             <!-- Trailer Section -->
                             <div class="trailer-section">
                                 <div class="form-group">
-                                    <label>Trailer URL (YouTube)</label>
+                                    <label>URL Trailer (YouTube)</label>
                                     <div id="trailerYoutubeContainer">
                                         <input type="text" class="form-control" id="trailerYoutubeUrl" 
-                                               name="trailerUrl" placeholder="Enter YouTube URL"
+                                               name="trailerUrl" placeholder="Nhập URL YouTube"
                                                maxlength="1000">
                                         <small class="form-text text-muted">
                                             <i class="fa fa-info-circle"></i> 
-                                            Enter the full YouTube URL (e.g., https://www.youtube.com/watch?v=...)
+                                            Nhập URL YouTube đầy đủ (ví dụ: https://www.youtube.com/watch?v=...)
                                         </small>
                                         <div id="youtubePreview" class="mt-3"></div>
                                     </div>
@@ -294,33 +294,33 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="movieShortDescription">Short Description <small class="text-muted">(max 500 chars)</small></label>
+                            <label for="movieShortDescription">Mô Tả Ngắn <small class="text-muted">(tối đa 500 ký tự)</small></label>
                             <textarea class="form-control" id="movieShortDescription" name="shortDescription" rows="2" maxlength="500"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label for="movieLongDescription">Long Description <small class="text-muted">(max 1000 chars)</small></label>
+                            <label for="movieLongDescription">Mô Tả Chi Tiết <small class="text-muted">(tối đa 1000 ký tự)</small></label>
                             <textarea class="form-control" id="movieLongDescription" name="longDescription" rows="4" maxlength="1000"></textarea>
                         </div>
 
                         <!-- Actors Section -->
                         <div class="form-group">
-                            <label>Actors & Characters</label>
+                            <label>Diễn Viên & Nhân Vật</label>
                             <div id="actorsContainer">
-                                <!-- Actor rows will be added here dynamically -->
+                                <!-- Các hàng diễn viên sẽ được thêm ở đây một cách động -->
                             </div>
                             <button type="button" class="btn-add-actor" onclick="addActorRow()">
-                                <i class="fa fa-plus"></i> Add Actor
+                                <i class="fa fa-plus"></i> Thêm Diễn Viên
                             </button>
                             <button type="button" class="btn btn-sm btn-info" style="margin-left: 10px;" data-toggle="modal" data-target="#actorModal">
-                                <i class="fa fa-user-plus"></i> Create New Actor
+                                <i class="fa fa-user-plus"></i> Tạo Diễn Viên Mới
                             </button>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn-save-movie" onclick="saveMovie()">Save Movie</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn-save-movie" onclick="saveMovie()">Lưu Phim</button>
                 </div>
             </div>
         </div>
@@ -332,7 +332,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="directorModalLabel">
-                        <i class="fa fa-user-plus"></i> Add New Director
+                        <i class="fa fa-user-plus"></i> Thêm Đạo Diễn Mới
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
                         <span aria-hidden="true">&times;</span>
@@ -341,18 +341,18 @@
                 <div class="modal-body">
                     <form id="directorForm">
                         <div class="form-group">
-                            <label for="directorName">Director Name * <small class="text-muted">(max 255 chars)</small></label>
+                            <label for="directorName">Tên Đạo Diễn * <small class="text-muted">(tối đa 255 ký tự)</small></label>
                             <input type="text" class="form-control" id="directorName" name="name" maxlength="255" required>
                         </div>
                         <div class="form-group">
-                            <label for="directorBio">Description <small class="text-muted">(max 255 chars)</small></label>
-                            <textarea class="form-control" id="directorBio" name="biography" rows="3" maxlength="255" placeholder="Brief description of the director"></textarea>
+                            <label for="directorBio">Mô Tả <small class="text-muted">(tối đa 255 ký tự)</small></label>
+                            <textarea class="form-control" id="directorBio" name="biography" rows="3" maxlength="255" placeholder="Mô tả ngắn về đạo diễn"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="saveDirector()">Save Director</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="saveDirector()">Lưu Đạo Diễn</button>
                 </div>
             </div>
         </div>
@@ -364,7 +364,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="actorModalLabel">
-                        <i class="fa fa-user-plus"></i> Add New Actor
+                        <i class="fa fa-user-plus"></i> Thêm Diễn Viên Mới
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
                         <span aria-hidden="true">&times;</span>
@@ -373,14 +373,14 @@
                 <div class="modal-body">
                     <form id="actorForm">
                         <div class="form-group">
-                            <label for="actorName">Actor Name * <small class="text-muted">(max 255 chars)</small></label>
+                            <label for="actorName">Tên Diễn Viên * <small class="text-muted">(tối đa 255 ký tự)</small></label>
                             <input type="text" class="form-control" id="actorName" name="name" maxlength="255" required>
                         </div> 
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="saveActor()">Save Actor</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="saveActor()">Lưu Diễn Viên</button>
                 </div>
             </div>
         </div>
@@ -392,7 +392,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="ratingModalLabel">
-                        <i class="fa fa-star-o"></i> Add New Rating
+                        <i class="fa fa-star-o"></i> Thêm Xếp Hạng Mới
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
                         <span aria-hidden="true">&times;</span>
@@ -401,22 +401,22 @@
                 <div class="modal-body">
                     <form id="ratingForm">
                         <div class="form-group">
-                            <label for="ratingName">Rating Name * <small class="text-muted">(max 50 chars)</small></label>
-                            <input type="text" class="form-control" id="ratingName" name="name" maxlength="50" required placeholder="e.g., PG-13, R, G">
+                            <label for="ratingName">Tên Xếp Hạng * <small class="text-muted">(tối đa 50 ký tự)</small></label>
+                            <input type="text" class="form-control" id="ratingName" name="name" maxlength="50" required placeholder="ví dụ: PG-13, R, G">
                         </div>
                         <div class="form-group">
-                            <label for="ratingDescription">Description <small class="text-muted">(max 255 chars)</small></label>
-                            <textarea class="form-control" id="ratingDescription" name="description" rows="3" maxlength="255" placeholder="Brief description of the rating"></textarea>
+                            <label for="ratingDescription">Mô Tả <small class="text-muted">(tối đa 255 ký tự)</small></label>
+                            <textarea class="form-control" id="ratingDescription" name="description" rows="3" maxlength="255" placeholder="Mô tả ngắn về xếp hạng"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="ratingAgeLimit">Age Limit <small class="text-muted">(optional)</small></label>
-                            <input type="number" class="form-control" id="ratingAgeLimit" name="ageLimit" min="0" max="25" placeholder="Minimum age required (optional)">
+                            <label for="ratingAgeLimit">Giới Hạn Tuổi <small class="text-muted">(tùy chọn)</small></label>
+                            <input type="number" class="form-control" id="ratingAgeLimit" name="ageLimit" min="0" max="25" placeholder="Tuổi tối thiểu yêu cầu (tùy chọn)">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="saveRating()">Save Rating</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="saveRating()">Lưu Xếp Hạng</button>
                 </div>
             </div>
         </div>

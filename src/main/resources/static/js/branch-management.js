@@ -51,7 +51,51 @@ function editBranch(branchId) {
         });
 }
 
+function checkBranchNameDuplicate() {
+    const branchName = document.getElementById('branchName').value.trim();
+    const branchId = document.getElementById('branchId').value; // For edit mode
+    const errorDiv = document.getElementById('branchNameError');
+    
+    if (!branchName) {
+        errorDiv.style.display = 'none';
+        return;
+    }
+    
+    // Check for duplicate name via API
+    fetch('/manager/api/branchs/check-name', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: branchName,
+            excludeId: branchId || null
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.exists) {
+            errorDiv.textContent = 'Tên chi nhánh đã tồn tại. Vui lòng chọn tên khác.';
+            errorDiv.style.display = 'block';
+            document.getElementById('branchName').classList.add('is-invalid');
+        } else {
+            errorDiv.style.display = 'none';
+            document.getElementById('branchName').classList.remove('is-invalid');
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi kiểm tra tên chi nhánh:', error);
+    });
+}
+
 function saveBranch() {
+    // Check for duplicate name error before submitting
+    const errorDiv = document.getElementById('branchNameError');
+    if (errorDiv.style.display !== 'none') {
+        alert('Vui lòng sửa lỗi trước khi lưu.');
+        return;
+    }
+    
     const form = document.getElementById('branchForm');
     const formData = new FormData(form);
     const branchId = document.getElementById('branchId').value;
@@ -183,6 +227,17 @@ function editRoom(roomId) {
                 document.getElementById('roomStatus').value = room.isActive;
                 document.getElementById('roomVipSeats').value = room.vipSeats || '';
 
+                // Set hidden input value for existing image
+                const imageUrlInput = document.querySelector('input[name="imgUrl"][data-current-image="room"]');
+                if (imageUrlInput) {
+                    imageUrlInput.value = room.imgUrl || '';
+                }
+                
+                // Show current image if it exists
+                if (room.imgUrl) {
+                    showRoomCurrentFileInfo(room.imgUrl, 'image');
+                }
+
                 document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-edit"></i> Sửa phòng';
                 document.getElementById('roomFormContainer').style.display = 'block';
                 currentRoomId = roomId;
@@ -200,17 +255,10 @@ function saveRoom() {
     const url = roomId ? `/manager/rooms/${roomId}` : `/manager/branchs/${currentBranchId}/rooms`;
     const method = roomId ? 'PUT' : 'POST';
 
-    const data = {};
-    formData.forEach((value, key) => {
-        data[key] = value;
-    });
-
+    // Send FormData directly for file uploads (no JSON conversion)
     fetch(url, {
         method: method,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
+        body: formData  // Send FormData directly
     })
         .then(response => response.json())
         .then(data => {
@@ -218,6 +266,11 @@ function saveRoom() {
                 alert(data.message);
                 cancelRoomForm();
                 loadRooms(currentBranchId);
+                
+                // Refresh the main page to update branch statistics (room count, capacity)
+                setTimeout(() => {
+                    location.reload();
+                }, 1000); // Small delay to allow user to see the success message
             } else {
                 alert('Lỗi: ' + data.message);
             }
@@ -238,6 +291,11 @@ function deleteRoom(roomId, roomName) {
                 if (data.success) {
                     alert(data.message);
                     loadRooms(currentBranchId);
+                    
+                    // Refresh the main page to update branch statistics (room count, capacity)
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000); // Small delay to allow user to see the success message
                 } else {
                     alert('Lỗi: ' + data.message);
                 }
@@ -249,61 +307,6 @@ function deleteRoom(roomId, roomName) {
     }
 }
 
-// Room Management Functions
-function manageRooms(branchId) {
-    currentBranchId = branchId;
-    
-    // Get branch name for modal title
-    fetch(`/manager/branchs/${branchId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById('roomModalBranchName').textContent = data.Branch?.name;
-                document.getElementById('roomBranchId').value = branchId;
-                loadRooms(branchId);
-                $('#roomModal').modal('show');
-            }
-        });
-}
-
-function viewRooms(branchId) {
-    manageRooms(branchId);
-}
-
-function loadRooms(branchId) {
-    fetch(`/manager/branchs/${branchId}/rooms`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const tbody = document.getElementById('roomsTableBody');
-                tbody.innerHTML = '';
-                
-                data.rooms.forEach(room => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td><strong>${room.name}</strong></td>
-                        <td><span class="badge badge-info">${room.roomType || 'N/A'}</span></td>
-                        <td>${room.capacity} seats</td>
-                        <td>${room.rowCount && room.seatsPerRow ? `${room.rowCount}x${room.seatsPerRow}` : 'N/A'}</td>
-                        <td>
-                            <span class="status-badge ${room.isActive == 1 ? 'trạng thái- Đang chiếu' : 'trạng thái- Không chiếu'}">
-                                ${room.isActive == 1 ? 'Hoạt động' : 'Không hoạt động'}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick="editRoom(${room.id})">
-                                <i class="fa fa-edit"></i> Sửa
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteRoom(${room.id}, '${room.name}')">
-                                <i class="fa fa-trash"></i> Xóa
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
-        });
-}
 
 function showAddRoomForm() {
     document.getElementById('roomForm').reset();
@@ -318,67 +321,7 @@ function showAddRoomForm() {
     currentRoomId = null;
 }
 
-function editRoom(roomId) {
-    fetch(`/manager/rooms/${roomId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const room = data.room;
-                document.getElementById('roomId').value = room.id;
-                document.getElementById('roomName').value = room.name || '';
-                document.getElementById('roomType').value = room.roomType || '';
-                document.getElementById('roomCapacity').value = room.capacity || '';
-                document.getElementById('roomRowCount').value = room.rowCount || '';
-                document.getElementById('roomDescription').value = room.description || '';
-                document.getElementById('roomStatus').value = room.isActive;
-                document.getElementById('roomVipSeats').value = room.vipSeats || '';
-                
-                document.getElementById('roomFormTitle').innerHTML = '<i class="fa fa-edit"></i> Sửa phòng';
-                document.getElementById('roomFormContainer').style.display = 'block';
-                currentRoomId = roomId;
-            } else {
-                alert('Error loading room: ' + data.message);
-            }
-        });
-}
 
-function saveRoom() {
-    const form = document.getElementById('roomForm');
-    const formData = new FormData(form);
-    const roomId = document.getElementById('roomId').value;
-    
-    const url = roomId ? `/manager/rooms/${roomId}` : `/manager/branchs/${currentBranchId}/rooms`;
-    const method = roomId ? 'PUT' : 'POST';
-    
-    const data = {};
-    formData.forEach((value, key) => {
-        data[key] = value;
-    });
-
-
-
-    fetch(url, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            cancelRoomForm();
-            loadRooms(currentBranchId);
-        } else {
-            alert('Lỗi: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Lỗi:', error);
-        alert('Lỗi lưu phòng');
-    });
-}
 
 function deleteRoom(roomId, roomName) {
     if (confirm(`Bạn có chắc muốn xóa phòng "${roomName}"?`)) {
@@ -703,7 +646,7 @@ function showBranchCurrentFileInfo(fileUrl, type) {
     
     const fileName = preview.querySelector('.file-name');
     if (fileName) {
-        fileName.textContent = fileUrl.split('/').pop() || 'Current file';
+        fileName.textContent = fileUrl.split('/').pop() || 'Tệp hiện tại';
     }
 
     uploadArea.style.display = 'none';
@@ -718,10 +661,150 @@ function formatFileSize(bytes) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
+// Room file upload handling
+function setupRoomFileUpload() {
+    const fileInputs = [
+        { id: 'roomImage', type: 'image', preview: 'roomImagePreview', area: 'roomImageUploadArea' }
+    ];
+
+    fileInputs.forEach(config => {
+        const input = document.getElementById(config.id);
+        const uploadArea = document.getElementById(config.area);
+        const preview = document.getElementById(config.preview);
+
+        if (!input || !uploadArea || !preview) return;
+        
+        input.addEventListener('change', function(e) {
+            handleRoomFileSelect(e.target.files[0], config);
+        });
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleRoomFileSelect(files[0], config);
+                const dt = new DataTransfer();
+                dt.items.add(files[0]);
+                input.files = dt.files;
+            }
+        });
+    });
+}
+
+function handleRoomFileSelect(file, config) {
+    if (!file) return;
+    
+    if (!file.type.startsWith('image/')) {
+        alert('Vui lòng chọn một tệp hình ảnh hợp lệ.');
+        return;
+    }
+    
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+        alert('Kích thước tệp phải nhỏ hơn 10MB.');
+        return;
+    }
+    
+    showRoomFilePreview(file, config);
+}
+
+function showRoomFilePreview(file, config) {
+    const uploadArea = document.getElementById(config.area);
+    const preview = document.getElementById(config.preview);
+    
+    if (!uploadArea || !preview) return;
+
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        const img = preview.querySelector('.preview-image');
+        img.src = e.target.result;
+
+        const fileName = preview.querySelector('.file-name');
+        const fileSize = preview.querySelector('.file-size');
+        
+        if (fileName) fileName.textContent = file.name;
+        if (fileSize) fileSize.textContent = formatFileSize(file.size);
+        
+        uploadArea.style.display = 'none';
+        preview.style.display = 'block';
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function removeRoomFilePreview(type) {
+    const configs = {
+        'image': { id: 'roomImage', preview: 'roomImagePreview', area: 'roomImageUploadArea' }
+    };
+
+    const config = configs[type];
+    if (!config) return;
+
+    const input = document.getElementById(config.id);
+    const uploadArea = document.getElementById(config.area);
+    const preview = document.getElementById(config.preview);
+
+    if (input) input.value = '';
+    if (uploadArea) uploadArea.style.display = 'block';
+    if (preview) {
+        preview.style.display = 'none';
+        
+        // Clear preview content
+        const img = preview.querySelector('.preview-image');
+        if (img) img.src = '';
+    }
+}
+
+function showRoomCurrentFileInfo(fileUrl, type) {
+    if (!fileUrl) return;
+
+    const configs = {
+        'image': { preview: 'roomImagePreview', area: 'roomImageUploadArea' }
+    };
+
+    const config = configs[type];
+    if (!config) return;
+
+    const uploadArea = document.getElementById(config.area);
+    const preview = document.getElementById(config.preview);
+
+    if (!uploadArea || !preview) return;
+
+    const img = preview.querySelector('.preview-image');
+    if (img) {
+        img.src = fileUrl;
+    }
+    
+    const fileName = preview.querySelector('.file-name');
+    if (fileName) {
+        fileName.textContent = fileUrl.split('/').pop() || 'Tệp hiện tại';
+    }
+
+    uploadArea.style.display = 'none';
+    preview.style.display = 'block';
+}
+
 // Document ready and modal event handlers
 $(document).ready(function() {
     // Setup file upload functionality
     setupBranchFileUpload();
+    setupRoomFileUpload();
     
     // Reset form when branch modal is closed
     $('#branchModal').on('hidden.bs.modal', function () {
@@ -731,11 +814,21 @@ $(document).ready(function() {
         
         // Reset file preview
         removeBranchFilePreview('image');
+        
+        // Clear validation error
+        const errorDiv = document.getElementById('branchNameError');
+        if (errorDiv) {
+            errorDiv.style.display = 'none';
+            document.getElementById('branchName').classList.remove('is-invalid');
+        }
     });
 
     // Reset room form when room modal is closed
     $('#roomModal').on('hidden.bs.modal', function () {
         cancelRoomForm();
         currentBranchId = null;
+        
+        // Reset room file preview
+        removeRoomFilePreview('image');
     });
 }); 

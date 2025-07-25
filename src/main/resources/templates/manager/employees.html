@@ -14,14 +14,14 @@
         <div class="dashboard-content">
             <!-- Add Employee Button -->
             <button type="button" class="btn-add-movie" id="addEmployeeBtn">
-                <i class="fa fa-plus-circle"></i> Add New Employee
+                <i class="fa fa-plus-circle"></i> Thêm Nhân viên Mới
             </button>
 
             <!-- Employee Management Header -->
             <div class="movie-management-header">
                 <h1>
                     <i class="fa fa-users"></i>
-                    Employee Management System
+                    Hệ thống Quản lý Nhân viên
                 </h1>
             </div>
 
@@ -31,11 +31,11 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Full Name</th>
-                            <th>Username</th>
-                            <th>Contact</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Họ và Tên</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Liên hệ</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,27 +57,27 @@
                                 <small class="text-muted" th:text="${e.email}" th:if="${e.email != null}">email@example.com</small>
                             </td>
                             <td>
-                                <span th:if="${e.status}" class="badge badge-success">Active</span>
-                                <span th:unless="${e.status}" class="badge badge-danger">Inactive</span>
+                                <span th:if="${e.status}" class="badge badge-success">Hoạt động</span>
+                                <span th:unless="${e.status}" class="badge badge-danger">Không hoạt động</span>
                             </td>
                             <td>
                                 <div class="action-buttons">
                                     <button type="button" class="btn-action btn-edit" 
                                             th:data-employee-id="${e.id}"
                                             onclick="editEmployee(this.dataset.employeeId)">
-                                        <i class="fa fa-edit"></i> Edit
+                                        <i class="fa fa-edit"></i> Sửa
                                     </button>
                                     <button type="button" th:if="${e.status}" class="btn-action btn-delete" 
                                             th:data-employee-id="${e.id}"
                                             th:data-employee-name="${e.fullname}"
                                             onclick="fireEmployee(this.dataset.employeeId, this.dataset.employeeName)">
-                                        <i class="fa fa-user-times"></i> Fire
+                                        <i class="fa fa-user-times"></i> Sa thải
                                     </button>
                                     <button type="button" th:unless="${e.status}" class="btn-action btn-success" 
                                             th:data-employee-id="${e.id}"
                                             th:data-employee-name="${e.fullname}"
                                             onclick="activateEmployee(this.dataset.employeeId, this.dataset.employeeName)">
-                                        <i class="fa fa-user-plus"></i> Activate
+                                        <i class="fa fa-user-plus"></i> Kích hoạt
                                     </button>
                                 </div>
                             </td>
@@ -93,7 +93,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="employeeModalLabel">
-                            <i class="fa fa-user-plus"></i> Add New Employee
+                            <i class="fa fa-user-plus"></i> Thêm Nhân viên Mới
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;" onclick="closeEmployeeModal()">
                             <span aria-hidden="true">&times;</span>
@@ -106,13 +106,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="employeeFullname">Full Name *</label>
+                                        <label for="employeeFullname">Họ và Tên *</label>
                                         <input type="text" class="form-control" id="employeeFullname" name="fullname" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="employeeUsername">Username *</label>
+                                        <label for="employeeUsername">Tên đăng nhập *</label>
                                         <input type="text" class="form-control" id="employeeUsername" name="username" required>
                                     </div>
                                 </div>
@@ -121,7 +121,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="employeePhone">Phone *</label>
+                                        <label for="employeePhone">Số điện thoại *</label>
                                         <input type="text" class="form-control" id="employeePhone" name="phone" required>
                                     </div>
                                 </div>
@@ -136,24 +136,24 @@
                             <div class="row">
                                 <div class="col-md-6" id="passwordField">
                                     <div class="form-group">
-                                        <label for="employeePassword">Password <span id="passwordRequired">*</span></label>
+                                        <label for="employeePassword">Mật khẩu <span id="passwordRequired">*</span></label>
                                         <input type="password" class="form-control" id="employeePassword" name="password">
-                                        <small class="form-text text-muted" id="passwordHelp" style="display: none;">Leave empty to keep current password</small>
+                                        <small class="form-text text-muted" id="passwordHelp" style="display: none;">Để trống để giữ mật khẩu hiện tại</small>
                                     </div>
                                 </div>
                                 <div class="col-md-6" id="confirmPasswordField">
                                     <div class="form-group">
-                                        <label for="employeeConfirmPassword">Confirm Password <span id="confirmPasswordRequired">*</span></label>
+                                        <label for="employeeConfirmPassword">Xác nhận Mật khẩu <span id="confirmPasswordRequired">*</span></label>
                                         <input type="password" class="form-control" id="employeeConfirmPassword" name="confirmPassword">
-                                        <small class="form-text text-danger" id="passwordMismatch" style="display: none;">Passwords do not match</small>
+                                        <small class="form-text text-danger" id="passwordMismatch" style="display: none;">Mật khẩu không khớp</small>
                                     </div>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEmployeeModal()">Cancel</button>
-                        <button type="button" class="btn-save-movie" onclick="saveEmployee()">Save Employee</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEmployeeModal()">Hủy</button>
+                        <button type="button" class="btn-save-movie" onclick="saveEmployee()">Lưu Nhân viên</button>
                     </div>
                 </div>
             </div>
@@ -164,16 +164,16 @@
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title">Confirm Fire Employee</h5>
+                        <h5 class="modal-title">Xác nhận Sa thải Nhân viên</h5>
                         <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to fire this employee?</p>
+                        <p>Bạn có chắc chắn muốn sa thải nhân viên này không?</p>
                         <p><strong id="employeeNameToFire"></strong></p>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button id="confirmFireBtn" class="btn btn-danger">Fire Employee</button>
+                        <button class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="confirmFireBtn" class="btn btn-danger">Sa thải Nhân viên</button>
                     </div>
                 </div>
             </div>
@@ -184,16 +184,16 @@
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title">Confirm Activate Employee</h5>
+                        <h5 class="modal-title">Xác nhận Kích hoạt Nhân viên</h5>
                         <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to activate this employee?</p>
+                        <p>Bạn có chắc chắn muốn kích hoạt nhân viên này không?</p>
                         <p><strong id="employeeNameToActivate"></strong></p>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button id="confirmActivateBtn" class="btn btn-success">Activate Employee</button>
+                        <button class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="confirmActivateBtn" class="btn btn-success">Kích hoạt Nhân viên</button>
                     </div>
                 </div>
             </div>
@@ -210,7 +210,7 @@
         function openCreateEmployeeModal() {
             document.getElementById('employeeForm').reset();
             document.getElementById('employeeId').value = '';
-            document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-user-plus"></i> Add New Employee';
+            document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-user-plus"></i> Thêm Nhân viên Mới';
             document.getElementById('passwordField').style.display = 'block';
             document.getElementById('confirmPasswordField').style.display = 'block';
             document.getElementById('passwordRequired').style.display = 'inline';
@@ -231,7 +231,7 @@
                     document.getElementById('employeeUsername').value = data.username;
                     document.getElementById('employeePhone').value = data.phone;
                     document.getElementById('employeeEmail').value = data.email;
-                    document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-edit"></i> Edit Employee';
+                    document.getElementById('employeeModalLabel').innerHTML = '<i class="fa fa-edit"></i> Sửa Nhân viên';
                     document.getElementById('passwordField').style.display = 'block';
                     document.getElementById('confirmPasswordField').style.display = 'none';
                     document.getElementById('passwordRequired').style.display = 'none';
@@ -244,7 +244,7 @@
                 })
                 .catch(error => {
                     console.error('Error fetching employee:', error);
-                    alert('Error loading employee data');
+                    alert('Lỗi khi tải dữ liệu nhân viên');
                 });
         }
 
@@ -285,12 +285,12 @@
                         $('#employeeModal').modal('hide');
                         location.reload();
                     } else {
-                        alert(data.message || 'Error updating employee');
+                        alert(data.message || 'Lỗi khi cập nhật nhân viên');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error updating employee');
+                    alert('Lỗi khi cập nhật nhân viên');
                 });
             } else {
                 // Create new employee
@@ -306,12 +306,12 @@
                         $('#employeeModal').modal('hide');
                         location.reload();
                     } else {
-                        alert(data.message || 'Error creating employee');
+                        alert(data.message || 'Lỗi khi tạo nhân viên');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error creating employee');
+                    alert('Lỗi khi tạo nhân viên');
                 });
             }
         }
@@ -344,12 +344,12 @@
                         $('#confirmFireModal').modal('hide');
                         location.reload();
                     } else {
-                        alert(data.message || 'Error firing employee');
+                        alert(data.message || 'Lỗi khi sa thải nhân viên');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error firing employee');
+                    alert('Lỗi khi sa thải nhân viên');
                 });
             }
         });
@@ -366,12 +366,12 @@
                         $('#confirmActivateModal').modal('hide');
                         location.reload();
                     } else {
-                        alert(data.message || 'Error activating employee');
+                        alert(data.message || 'Lỗi khi kích hoạt nhân viên');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error activating employee');
+                    alert('Lỗi khi kích hoạt nhân viên');
                 });
             }
         });
