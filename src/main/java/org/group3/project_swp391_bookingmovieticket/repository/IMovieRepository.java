@@ -16,7 +16,7 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
     Page<Movie> findByNameContainingIgnoreCase(String movieName, Pageable pageable);
 
     @Query("SELECT DISTINCT m.categories FROM Movie m")
-    List<String>getMovieCategories();
+    List<String> getMovieCategories();
 
     @Query("SELECT m FROM Movie m WHERE m.releaseDate >= CURRENT_DATE  AND m.endDate >= CURRENT_DATE ")
     Page<Movie> findMovieComingSoon(Pageable pageable);
@@ -43,6 +43,6 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer> {
 
     Page<Movie> findByRating_Id(int ratingId, Pageable pageable);
 
-//phu
-Optional<Movie> findByNameIgnoreCase(String movieName);
+    //phu
+    Optional<Movie> findByNameIgnoreCase(String movieName);
 }

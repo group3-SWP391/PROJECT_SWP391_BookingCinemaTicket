@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- 
+<!--
 Template Name: Movie Pro
 Version: 1.0.0
 Author: Webstrot
@@ -19,7 +19,7 @@ Author: Webstrot
 <meta http-equiv="content-type" content="text/html;charset=utf-8"/><!-- /Added by HTTrack -->
 <head>
     <meta charset="utf-8"/>
-    <title>Movie Pro Responsive HTML Template</title>
+    <title>Thông tin phim</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="description" content="Movie Pro"/>
     <meta name="keywords" content="Movie Pro"/>
@@ -42,6 +42,56 @@ Author: Webstrot
     <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{none}"/>
     <!-- favicon links -->
     <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+    <style>
+        .tab-button {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            background-color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .tab-button.active {
+            background-color: black;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .pagination ul {
+            list-style: none;
+            display: flex;
+            gap: 5px;
+            padding: 0;
+        }
+
+        .pagination li a {
+            padding: 6px 12px;
+            text-decoration: none;
+            background-color: #f0f0f0;
+            color: #333;
+            border-radius: 4px;
+        }
+
+        .pagination li.active a {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .tab-button {
+            min-width: 100px;
+            text-align: center;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -70,37 +120,9 @@ Author: Webstrot
                            class="test-popup-link">
                             <img th:src="@{/images/index_III/icon.png}" alt="img">
                         </a>
-                        <h3 th:text="${movieDetail.name}">Movie name</h3>
-                        <p th:text="${movieDetail.language}">Movie language</p>
+                        <h3 th:text="${movieDetail.name}">Tên phim</h3>
+                        <p th:text="${movieDetail.language}">Ngôn ngữ phim</p>
                         <h4 th:text="'Thể loại: ' + ${movieDetail.categories}">Movie category</h4>
-                    </div>
-                    <div class="st_video_slide_social float_left">
-                        <div class="st_slider_rating_btn_heart st_slider_rating_btn_heart_5th">
-                            <h5><i class="fa fa-heart"></i> 85%</h5>
-                            <h4>52,291 votes</h4>
-                        </div>
-                        <div class="st_video_slide_social_left float_left">
-                            <ul>
-                                <li><a th:href="@{none}"><i class="fa fa-facebook-f"></i></a>
-                                </li>
-                                <li><a th:href="@{none}"><i class="fa fa-linkedin"></i></a>
-                                </li>
-                                <li><a th:href="@{none}"><i class="fa fa-youtube"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="st_video_slide_social_right float_left">
-                            <ul>
-                                <li th:text="${movieDetail.releaseDate.toString()}" data-animation="animated fadeInUp"
-                                    class=""><i class="far fa-calendar-alt"></i>
-                                    releaseDate
-                                </li>
-                                <li th:text="${movieDetail.duration + ' phút'}" data-animation="animated fadeInUp"
-                                    class=""><i class="far fa-clock"></i> 2 hrs
-                                    duration
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -112,86 +134,6 @@ Author: Webstrot
 <!-- st slider rating wrapper Start -->
 <div class="st_slider_rating_main_wrapper float_left">
     <div class="container">
-        <div class="st_slider_rating_left">
-            <div class="st_rating_box">
-                <fieldset class="rating">
-                    <h3>3</h3>
-                    <input type="radio" name="rating" value="5"/>
-                    <label class="full" title="5 stars"></label>
-                    <input type="radio" name="rating" value="4 and a half"/>
-                    <label class="half" title="4.5 stars"></label>
-                    <input type="radio" name="rating" value="4"/>
-                    <label class="full" title="4 stars"></label>
-                    <input type="radio" name="rating" value="3 and a half"/>
-                    <label class="half" title="3.5 stars"></label>
-                    <input type="radio" name="rating" value="3"/>
-                    <label class="full" title="3 stars"></label>
-                    <input type="radio" name="rating" value="2 and a half"/>
-                    <label class="half" title="2.5 stars"></label>
-                    <input type="radio" name="rating" value="2"/>
-                    <label class="full" title="2 stars"></label>
-                    <input type="radio" name="rating" value="1 and a half"/>
-                    <label class="half" title="1.5 stars"></label>
-                    <input type="radio" name="rating" value="1"/>
-                    <label class="full" title="1 star"></label>
-                    <input type="radio" name="rating" value="half"/>
-                    <label class="half" title="0.5 stars"></label>
-                </fieldset>
-                <h4>Đánh giá của nhà phát hành</h4>
-            </div>
-            <div class="st_rating_box st_rating_box2">
-                <fieldset class="rating">
-                    <h3>4.5&nbsp;&nbsp;</h3>
-                    <input type="radio" name="rating" value="5"/>
-                    <label class="full" title="5 stars"></label>
-                    <input type="radio" name="rating" value="4 and a half"/>
-                    <label class="half" title="4.5 stars"></label>
-                    <input type="radio" name="rating" value="4"/>
-                    <label class="full" title="4 stars"></label>
-                    <input type="radio" name="rating" value="3 and a half"/>
-                    <label class="half" title="3.5 stars"></label>
-                    <input type="radio" name="rating" value="3"/>
-                    <label class="full" title="3 stars"></label>
-                    <input type="radio" name="rating" value="2 and a half"/>
-                    <label class="half" title="2.5 stars"></label>
-                    <input type="radio" name="rating" value="2"/>
-                    <label class="full" title="2 stars"></label>
-                    <input type="radio" name="rating" value="1 and a half"/>
-                    <label class="half" title="1.5 stars"></label>
-                    <input type="radio" name="rating" value="1"/>
-                    <label class="full" title="1 star"></label>
-                    <input type="radio" name="rating" value="half"/>
-                    <label class="half" title="0.5 stars"></label>
-                </fieldset>
-                <h4>Đánh giá của người dùng</h4>
-            </div>
-            <div class="st_rating_box st_rating_box2">
-                <fieldset class="rating">
-                    <h3>0&nbsp;&nbsp;</h3>
-                    <input type="radio" name="rating" value="5"/>
-                    <label class="full" title="5 stars"></label>
-                    <input type="radio" name="rating" value="4 and a half"/>
-                    <label class="half" title="4.5 stars"></label>
-                    <input type="radio" name="rating" value="4"/>
-                    <label class="full" title="4 stars"></label>
-                    <input type="radio" name="rating" value="3 and a half"/>
-                    <label class="half" title="3.5 stars"></label>
-                    <input type="radio" name="rating" value="3"/>
-                    <label class="full" title="3 stars"></label>
-                    <input type="radio" name="rating" value="2 and a half"/>
-                    <label class="half" title="2.5 stars"></label>
-                    <input type="radio" name="rating" value="2"/>
-                    <label class="full" title="2 stars"></label>
-                    <input type="radio" name="rating" value="1 and a half"/>
-                    <label class="half" title="1.5 stars"></label>
-                    <input type="radio" name="rating" value="1"/>
-                    <label class="full" title="1 star"></label>
-                    <input type="radio" name="rating" value="half"/>
-                    <label class="half" title="0.5 stars"></label>
-                </fieldset>
-                <h4>Đánh giá</h4>
-            </div>
-        </div>
         <div class="st_slider_rating_right">
             <div class="st_slider_rating_btn prs_animate_btn1">
                 <ul>
@@ -203,10 +145,6 @@ Author: Webstrot
                         </a>
                     </li>
                 </ul>
-            </div>
-            <div class="st_slider_rating_btn_heart">
-                <h5><i class="fa fa-heart"></i> 85%</h5>
-                <h4>52,291 votes</h4>
             </div>
         </div>
     </div>
@@ -225,63 +163,66 @@ Author: Webstrot
                                 <div class="col-md-12">
                                     <div class="tab-content">
                                         <div id="home" class="tab-pane active">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="st_md_summ_pera float_left">
-                                                        <h2 style="padding-bottom: -20px; color: #ff4444; font-weight: bold">
-                                                            Tóm tắt</h2>
-                                                        <p th:text="${movieDetail.longDescription}"> longDescription</p>
-                                                    </div>
-                                                    <form th:action="@{/favorite/toggle}" method="post"
-                                                          style="display: inline;">
-                                                        <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
-                                                        <button type="submit" style="background: none; border: none;">
-                                                            <i class="fa"
-                                                               th:classappend="${isFavorite} ? ' fa-heart text-danger' : ' fa-heart-o'"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="st_md_summ_pera float_left">
-                                                        <h4 style="padding-bottom: 20px; color: #ff4444">Đạo diễn</h4>
-                                                        <img th:src="@{https://maycamtay.net/wp-content/uploads/2023/05/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg}" style="width: 20%;" alt="img">
-                                                        <div style="padding-top: 10px; font-weight: 700; color: black;">
-                                                            <a th:href="@{/director-detail(directorId=${directorByMovie.id})}">
-                                                                <span th:text="${directorByMovie.name}"></span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="st_md_summ_client_slider float_left">
-                                                        <h4 style="padding-bottom: 20px; font-weight: bold; color: #ff4444">
-                                                            Diễn viên</h4>
-                                                        <div class="owl-carousel owl-theme">
-                                                            <div class="item" th:each="movieActor : ${actorByMovie}">
-                                                                <div class="st_summ_slider_cont float_left">
-                                                                    <img th:src="@{https://maycamtay.net/wp-content/uploads/2023/05/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg}" style="width: 70%;" alt="img">
-                                                                    <h4><a th:href="@{none}"
-                                                                           th:text="${movieActor.actor.name}"
-                                                                           style="color: black"></a></h4>
-                                                                    <h6>vào vai <span
-                                                                            th:text="${movieActor.nameInMovie}"></span>
-                                                                    </h6>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- THÔNG TIN PHIM CHI TIẾT -->
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-12">
+                                <!-- Tóm tắt -->
+                                <div class="st_md_summ_pera float_left">
+                                    <h2 style="color: #ff4444; font-weight: bold;">Tóm tắt</h2>
+                                    <p th:text="${movieDetail.longDescription}">longDescription</p>
+                                </div>
+
+                                <!-- Nút yêu thích -->
+                                <form th:action="@{/favorite/toggle}" method="post" style="display: inline;">
+                                    <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+                                    <button type="submit" style="background: none; border: none;">
+                                        <i class="fa"
+                                           th:classappend="${isFavorite} ? ' fa-heart text-danger' : ' fa-heart-o'"></i>
+                                    </button>
+                                </form>
+
+                                <!-- Đạo diễn -->
+                                <div class="st_md_summ_pera float_left" style="margin-top: 25px;">
+                                    <h4 style="color: #ff4444;">Đạo diễn</h4>
+                                    <img th:src="@{https://maycamtay.net/wp-content/uploads/2023/05/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg}"
+                                         style="width: 20%;" alt="img"/>
+                                    <div style="padding-top: 10px; font-weight: 700; color: black;">
+                                        <a th:href="@{/director-detail(directorId=${directorByMovie.id})}">
+                                            <span th:text="${directorByMovie.name}">Tên đạo diễn</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Diễn viên -->
+                                <div class="st_md_summ_client_slider float_left" style="margin-top: 25px;">
+                                    <h4 style="color: #ff4444; font-weight: bold;">Diễn viên</h4>
+                                    <div class="owl-carousel owl-theme">
+                                        <div class="item" th:each="movieActor : ${actorByMovie}">
+                                            <div class="st_summ_slider_cont float_left">
+                                                <img th:src="@{https://maycamtay.net/wp-content/uploads/2023/05/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg}"
+                                                     style="width: 70%;" alt="img"/>
+                                                <h4>
+                                                    <a th:text="${movieActor.actor.name}" style="color: black;">Tên diễn
+                                                        viên</a>
+                                                </h4>
+                                                <h6>vào vai <span th:text="${movieActor.nameInMovie}">vai diễn</span>
+                                                </h6>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-section">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <h3>Bình luận (<span th:text="${comments.size()}">0</span>)</h3>
-                                <h3>Đánh giá (<span th:text="${reviews.size()}">0</span>)</h3>
-                                <div style="margin-left: auto;">
+
+                        <div class="tab-section" style="margin-top: 20px; padding-top: 20px">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                                <div style="display: flex; gap: 10px;">
                                     <button onclick="showTab('comment')" id="btn-comment" class="tab-button active">Bình
                                         luận
                                     </button>
@@ -291,7 +232,7 @@ Author: Webstrot
                             </div>
 
                             <!-- COMMENT TAB -->
-                            <div id="comment-tab" class="tab-content active" style="margin-top: 100px; padding-top: 100px">
+                            <div id="comment-tab" class="tab-content active">
                                 <div th:if="${errorMessage}" class="alert alert-danger" role="alert"
                                      th:text="${errorMessage}"></div>
                                 <div th:if="${successMessage}" class="alert alert-success" role="alert"
@@ -302,7 +243,7 @@ Author: Webstrot
                                 </div>
 
                                 <div th:if="${session.userLogin == null}">
-                                    <p>Vui lòng đăng nhập để bình luận.</p>
+                                    <p>Vui lòng <a th:href="@{/login}">đăng nhập</a> để bình luận.</p>
                                 </div>
 
                                 <div th:if="${session.userLogin != null and !hasOrdered}">
@@ -312,6 +253,7 @@ Author: Webstrot
                                 <div th:if="${session.userLogin != null and hasOrdered}">
                                     <form th:action="@{/addComment}" method="post">
                                         <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+
                                         <label for="content">Viết bình luận:</label><br/>
                                         <textarea name="content" id="content" rows="4" cols="50"
                                                   required></textarea><br/>
@@ -365,6 +307,7 @@ Author: Webstrot
                                                   style="display: none; margin-top: 10px;">
                                                 <input type="hidden" name="commentId" th:value="${comment.id}"/>
                                                 <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+
                                                 <textarea name="content" rows="3" cols="50" th:text="${comment.content}"
                                                           required></textarea><br/>
                                                 <button type="submit">Lưu chỉnh sửa</button>
@@ -380,6 +323,7 @@ Author: Webstrot
                                                   th:attr="id=|reply-form-${comment.id}|"
                                                   style="display: none; margin-top: 10px;">
                                                 <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+
                                                 <input type="hidden" name="parentCommentId" th:value="${comment.id}"/>
                                                 <textarea name="content" rows="2" cols="50" required
                                                           placeholder="Trả lời bình luận..."></textarea><br/>
@@ -407,26 +351,26 @@ Author: Webstrot
                                     <ul>
                                         <!-- Nút 'Trang trước' -->
                                         <li th:if="${commentPage.hasPrevious()}">
-                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, commentPage=${commentPage.number - 1})}">&laquo;
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, commentPage=${commentPage.number - 1})}">&laquo;
                                                 Trước</a>
                                         </li>
 
                                         <!-- Các số trang -->
                                         <li th:each="i : ${#numbers.sequence(0, commentPage.totalPages - 1)}"
                                             th:classappend="${i == commentPage.number} ? 'active'">
-                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, commentPage=${i})}"
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, commentPage=${i})}"
                                                th:text="${i + 1}">1</a>
                                         </li>
 
                                         <!-- Nút 'Trang sau' -->
                                         <li th:if="${commentPage.hasNext()}">
-                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, commentPage=${commentPage.number + 1})}">Sau
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, commentPage=${commentPage.number + 1})}">Sau
                                                 &raquo;</a>
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
 
+                            </div>
 
                             <!-- REVIEW TAB -->
                             <div id="review-tab" class="tab-content">
@@ -437,6 +381,7 @@ Author: Webstrot
                                 <div th:if="${session.userLogin != null and hasOrdered}">
                                     <form th:action="@{/submitReview}" method="post">
                                         <input type="hidden" name="movieId" th:value="${movieDetail.id}"/>
+
                                         <label for="rating">Chọn số sao:</label>
                                         <select name="rating" id="rating" required>
                                             <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
@@ -474,120 +419,121 @@ Author: Webstrot
                                     <ul>
                                         <!-- Nút 'Trang trước' -->
                                         <li th:if="${reviewPage.hasPrevious()}">
-                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, reviewPage=${reviewPage.number - 1}, tab='review')}">&laquo;
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, reviewPage=${reviewPage.number - 1}, tab='review')}">&laquo;
                                                 Trước</a>
                                         </li>
 
                                         <!-- Các số trang -->
                                         <li th:each="i : ${#numbers.sequence(0, reviewPage.totalPages - 1)}"
                                             th:classappend="${i == reviewPage.number} ? 'active'">
-                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, reviewPage=${i}, tab='review')}"
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, reviewPage=${i}, tab='review')}"
                                                th:text="${i + 1}">1</a>
                                         </li>
 
                                         <!-- Nút 'Trang sau' -->
                                         <li th:if="${reviewPage.hasNext()}">
-                                            <a th:href="@{/movie/detail(id=${movieDetail.id}, reviewPage=${reviewPage.number + 1}, tab='review')}">Sau
+                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, reviewPage=${reviewPage.number + 1}, tab='review')}">Sau
                                                 &raquo;</a>
                                         </li>
-
                                     </ul>
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12" style="margin-top: 50px;">
-                        <div class="ne_busness_main_slider_wrapper float_left">
-                            <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
-                                <h2 style="font-size: 27px; color: #ff4444; padding-bottom: 15px;">Các phim liên
-                                    quan</h2>
-                            </div>
+                </div>
+                <div class="col-md-12" style="margin-top: 50px;">
+                    <div class="ne_busness_main_slider_wrapper float_left">
+                        <div class="ne_recent_heading_main_wrapper ne_recent_heading_main_wrapper_index_II float_left">
+                            <h2 style="font-size: 27px; color: #ff4444; padding-bottom: 15px;">Các phim liên
+                                quan</h2>
                         </div>
                     </div>
-                    <div class="col-12 tab-content">
-                        <div role="tabpanel" class="tab-pane active">
-                            <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
-                            <div class="row">
-                                <div th:each="movie : ${movieSameCategory}"
-                                     class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
-                                    <div class="prs_upcom_movie_box_wrapper"
-                                         style="height: 100%; display: flex; flex-direction: column;">
-                                        <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
-                                            <img th:src="${movie.smallImageURL}" alt="movie_img"
-                                                 style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
-                                            <div class="prs_upcom_movie_img_overlay"></div>
-                                            <div class="prs_upcom_movie_img_btn_wrapper">
-                                                <ul>
-                                                    <li><a title='title' rel='external'
-                                                           class="test-popup-link"
-                                                           th:href="${movie.trailerURLWatchLink}">Xem
-                                                        Trailer</a></li>
-                                                    <li>
-                                                        <a th:href="@{/movie/detail(movieId=${movie.id})}">Xem
-                                                            chi tiết</a></li>
-                                                </ul>
-                                            </div>
+                </div>
+                <div class="col-12">
+                    <div role="tabpanel" class="tab-pane active">
+                        <!-- Bỏ owl-carousel, dùng row + col tạo lưới -->
+                        <div class="row">
+                            <div th:each="movie : ${movieSameCategory}"
+                                 class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                <div class="prs_upcom_movie_box_wrapper"
+                                     style="height: 100%; display: flex; flex-direction: column;">
+                                    <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
+                                        <img th:src="${movie.smallImageURL}" alt="movie_img"
+                                             style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+                                        <div class="prs_upcom_movie_img_overlay"></div>
+                                        <div class="prs_upcom_movie_img_btn_wrapper">
+                                            <ul>
+                                                <li><a title='title' rel='external'
+                                                       class="test-popup-link"
+                                                       th:href="${movie.trailerURLWatchLink}">Xem
+                                                    Trailer</a></li>
+                                                <li>
+                                                    <a th:href="@{/movie/detail(movieId=${movie.id})}">Xem
+                                                        chi tiết</a></li>
+                                            </ul>
                                         </div>
-                                        <div class="prs_upcom_movie_content_box"
-                                             style="flex-grow: 1; margin-top: 10px;">
-                                            <div class="prs_upcom_movie_content_box_inner">
-                                                <h2 th:text="${movie.name}"
-                                                    style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px">
-                                                    Movie name
-                                                </h2>
-                                                <div style="font-size: 0.9rem; color: #333;">
-                                                    <p>
-                                                        <strong>Thể loại:</strong> <span th:text="${movie.categories}">Movie category</span>
-                                                    </p>
-                                                    <p>
-                                                        <strong>Thời lượng:</strong>
-                                                        <span th:text="${movie.duration + ' phút'}">Movie duration</span>
-                                                    </p>
-                                                    <p>
-                                                        <strong>Khởi chiếu:</strong>
-                                                        <span th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
-                                                    </p>
-                                                </div>
+                                    </div>
+                                    <div class="prs_upcom_movie_content_box"
+                                         style="flex-grow: 1; margin-top: 10px;">
+                                        <div class="prs_upcom_movie_content_box_inner">
+                                            <h2 th:text="${movie.name}"
+                                                style="font-size: 1.1rem; font-weight: bold; height: 40px; padding-bottom: 50px">
+                                                Movie name
+                                            </h2>
+                                            <div style="font-size: 0.9rem; color: #333;">
+                                                <p>
+                                                    <strong>Thể loại:</strong> <span th:text="${movie.categories}">Movie category</span>
+                                                </p>
+                                                <p>
+                                                    <strong>Thời lượng:</strong>
+                                                    <span th:text="${movie.duration + ' phút'}">Movie duration</span>
+                                                </p>
+                                                <p>
+                                                    <strong>Khởi chiếu:</strong>
+                                                    <span th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                </div> <!-- hết mỗi phim -->
-                            </div> <!-- hết row -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
-                                 style="display: flex; justify-content: center;">
-                                <div class="pager_wrapper gc_blog_pagination">
-                                    <ul class="pagination">
-                                        <!-- Nút Previous -->
-                                        <li th:if="${movieSameCategory.hasPrevious()}">
-                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number - 1})}">
-                                                <i class="flaticon-left-arrow"></i>
-                                            </a>
-                                        </li>
-
-                                        <!-- Các số trang -->
-                                        <li th:each="i : ${#numbers.sequence(0, movieSameCategory.totalPages - 1)}"
-                                            th:classappend="${i == movieSameCategory.number} ? 'active'">
-                                            <a th:href="@{/movie/detail(movieId=${movieDetail.getId()}, page=${i})}"
-                                               th:text="${i + 1}"></a>
-                                        </li>
-
-                                        <!-- Nút Next -->
-                                        <li th:if="${movieSameCategory.hasNext()}">
-                                            <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number + 1})}">
-                                                <i class="flaticon-right-arrow"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </div>
+                            </div> <!-- hết mỗi phim -->
+                        </div> <!-- hết row -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                             style="display: flex; justify-content: center;">
+                            <div class="pager_wrapper gc_blog_pagination">
+                                <ul class="pagination">
+                                    <!-- Nút Previous -->
+                                    <li th:if="${movieSameCategory.hasPrevious()}">
+                                        <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number - 1})}">
+                                            <i class="flaticon-left-arrow"></i>
+                                        </a>
+                                    </li>
+
+                                    <!-- Các số trang -->
+                                    <li th:each="i : ${#numbers.sequence(0, movieSameCategory.totalPages - 1)}"
+                                        th:classappend="${i == movieSameCategory.number} ? 'active'">
+                                        <a th:href="@{/movie/detail(movieId=${movieDetail.getId()}, page=${i})}"
+                                           th:text="${i + 1}"></a>
+                                    </li>
+
+                                    <!-- Nút Next -->
+                                    <li th:if="${movieSameCategory.hasNext()}">
+                                        <a th:href="@{/movie/detail(movieId=${movieDetail.id}, page=${movieSameCategory.number + 1})}">
+                                            <i class="flaticon-right-arrow"></i>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
-                        </div> <!-- hết tab-panel -->
-                    </div>
+                        </div>
+                    </div> <!-- hết tab-panel -->
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+
+
 <!-- st slider sidebar wrapper End -->
 
 <!-- prs footer Wrapper Start -->

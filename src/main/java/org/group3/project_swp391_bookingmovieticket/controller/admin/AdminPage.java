@@ -75,7 +75,6 @@ public class AdminPage {
     @PostMapping("/response")
     public String proccessResponse(@RequestParam("id") Integer id,
                                    @RequestParam("responseContent") String responseContent,
-                                   Model model,
                                    RedirectAttributes redirectAttributes) {
         Optional<AdvertisingContactRequest> contactRequestOptional = advertisingContactRequestService.findById(id);
         if (contactRequestOptional.isPresent()) {

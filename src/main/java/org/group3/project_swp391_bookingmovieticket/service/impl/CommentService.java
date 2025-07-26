@@ -70,12 +70,12 @@ public class CommentService implements ICommentService {
 
     @Override
     public Page<Comment> getCommentsByMovieId(Integer movieId, Pageable pageable) {
-        return commentRepository.findByMovieId(movieId, pageable);
+        return commentRepository.findByMovieIdAndParentIsNull(movieId, pageable);
     }
 
     @Override
     public Page<Comment> findByMovieId(Integer movieId, Pageable pageable) {
-        return commentRepository.findByMovieId(movieId, pageable);
+        return commentRepository.findByMovieIdAndParentIsNull(movieId, pageable);
     }
 
     @Override
