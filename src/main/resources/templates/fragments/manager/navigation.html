@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <nav th:fragment="navigation" class="h-100">
+        <!-- Admin Profile Section -->
+        <div class="admin-profile">
+            <div class="admin-avatar">
+                <i class="fa fa-user-circle"></i>
+            </div>
+            <div class="admin-title">Manager</div>
+            <div class="admin-role">Theater Management</div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div style="padding: 20px 0;">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/manager/dashboard}">
+                        <i class="fa fa-tachometer"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/manager/movies}">
+                        <i class="fa fa-film"></i> Manager Movies
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/manager/schedules}">
+                        <i class="fa fa-calendar"></i> Manage Schedules
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/manager/branchs}">
+                        <i class="fa fa-building"></i> Manage Branchs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/manager/employees}">
+                        <i class="fa fa-users"></i> Manage Staffs
+                    </a>
+                </li>
+                <li class="nav-item" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                    <a class="nav-link" th:href="@{/home}">
+                        <i class="fa fa-home"></i> HomePage
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html> 

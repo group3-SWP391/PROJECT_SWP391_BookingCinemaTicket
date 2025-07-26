@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn Đồ Ăn Xem Phim</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            max-width: 700px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+            max-height: 80vh;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #d32f2f;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 0;
+            z-index: 2;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .menu-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-right: 20px;
+            border: 3px solid #d32f2f;
+            transition: transform 0.3s ease;
+        }
+        .menu-item img:hover {
+            transform: scale(1.05);
+        }
+        .menu-item .info {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .menu-item .info label {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #222;
+        }
+        .menu-item .info .price {
+            font-size: 1.1em;
+            color: #d32f2f;
+            font-weight: 500;
+        }
+        .menu-item .info .description {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 5px;
+        }
+        .menu-item .quantity input[type="number"] {
+            width: 70px;
+            padding: 10px;
+            border: 2px solid #d32f2f;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .menu-item .quantity input[type="number"]:focus {
+            outline: none;
+            border-color: #b71c1c;
+            box-shadow: 0 0 5px rgba(211, 47, 47, 0.5);
+        }
+        .total {
+            margin-top: 25px;
+            font-size: 1.6em;
+            font-weight: 600;
+            color: #222;
+            background: rgba(211, 47, 47, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            position: sticky;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 2;
+        }
+        .total span {
+            color: #d32f2f;
+            font-weight: 700;
+        }
+        .order-button {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            padding: 12px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+        .order-button:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.6);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .menu-item img {
+                width: 80px;
+                height: 80px;
+            }
+            .menu-item .info label {
+                font-size: 1.1em;
+            }
+            .menu-item .info .price {
+                font-size: 0.9em;
+            }
+            .menu-item .info .description {
+                font-size: 0.8em;
+            }
+            .total {
+                font-size: 1.3em;
+            }
+            .order-button {
+                font-size: 1em;
+                padding: 10px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Chọn Đồ Ăn Xem Phim</h1>
+    <form th:action="@{/checkout}" method="POST">
+        <div th:each="item : ${listfood}" class="menu-item" th:data-id="${item.id}">
+            <img th:src="${item.imageUrl}" th:alt="${item.name}" />
+            <div class="info">
+                <label th:text="${item.name}"></label>
+                <div class="price" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'" th:data-price="${item.price}"></div>
+            </div>
+            <div class="quantity">
+                <input type="number" min="0" value="0" th:data-id="${item.id}" th:data-price="${item.price}" th:data-name="${item.name}" oninput="updateQuantity(this)" />
+                <input type="hidden" th:name="${item.id}" th:value="0" class="hidden-quantity" />
+            </div>
+        </div>
+        <div class="total">Tổng tiền: <span id="totalPrice">0 VNĐ</span></div>
+        <button type="submit" class="order-button">TIẾP TỤC</button>
+    </form>
+</div>
+
+<script>
+    function updateQuantity(input) {
+        let total = 0;
+        const inputs = document.querySelectorAll('.menu-item input[type="number"]');
+        inputs.forEach(numberInput => {
+            const qty = parseInt(numberInput.value) || 0;
+            const price = parseFloat(numberInput.getAttribute('data-price')) || 0;
+            const name = numberInput.getAttribute('data-name');
+            const itemId = numberInput.getAttribute('data-id');
+            const hiddenInput = numberInput.parentElement.querySelector('.hidden-quantity');
+            hiddenInput.value = qty; // Update hidden input value
+            console.log(`Item ID: ${itemId}, Name: ${name}, Quantity: ${qty}, Price: ${price}, Subtotal: ${qty * price}`); // Debugging
+            if (qty >= 0) {
+                total += qty * price;
+            }
+        });
+        console.log(`Total: ${total}`); // Debugging
+        document.getElementById('totalPrice').textContent = total.toLocaleString('vi-VN') + ' VNĐ';
+    }
+</script>
+</body>
+</html>

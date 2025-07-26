@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Movie Pro
+Version: 1.0.0
+Author: Webstrot
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--[endif]-->
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/event.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:13:56 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="utf-8" />
+	<title>Events</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta name="description" content="Movie Pro" />
+	<meta name="keywords" content="Movie Pro" />
+	<meta name="author" content="" />
+	<meta name="MobileOptimized" content="320" />
+	<!--Template style -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+	<link rel="stylesheet" id="theme-color" type="text/css" th:href="@{/css/slick-theme.css}"/>
+	<!-- favicon links -->
+	<link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+</head>
+
+<body>
+	<!-- preloader Start -->
+	<div id="preloader">
+		<div id="status">
+			<img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
+		</div>
+	</div>
+
+	<!-- prs navigation Start -->
+	<header lang="vi" th:include="fragments/navigation :: navigation"></header>
+	<!-- prs navigation End -->
+
+	<!-- prs title wrapper Start -->
+	<div class="prs_title_main_sec_wrapper">
+		<div class="prs_title_img_overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="prs_title_heading_wrapper">
+						<h2>Events</h2>
+						<ul>
+							<li><a th:href="@{/home}">Home</a>
+							</li>
+							<li>&nbsp;&nbsp; >&nbsp;&nbsp; Event</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- prs title wrapper End -->
+
+	<!-- prs ec ue wrapper Start -->
+	<div class="prs_ec_ue_main_section_wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="prs_heading_section_wrapper" style="padding-bottom: 30px">
+						<h2>Event</h2>
+					</div>
+				</div>
+				<div class="container text-center" style="padding-top: 30px">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center" style="padding-top: 30px; padding-left: 80px">
+						<div style="max-width: 1000px">
+							<img th:src="${eventDetail.imageLargeURL}" alt="event_img" style="width: 100%; height: auto">
+							<div class="prs_feature_img_cont prs_ec_ue_right_img_cont" style="padding-left: 15px; text-align: left">
+								<h3 th:text="${eventDetail.name}" style="padding-top: 15px"></h3>
+								<div class="prs_ft_small_cont_left">
+									<p>Time limit</p>
+								</div>
+								<div class="prs_ft_small_cont_right">
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-o"></i>
+								</div>
+								<ul>
+									<li>Start: <span th:text="${eventDetail.startDate} ?: 'N/A'"></span></li>
+									<li>End: <span th:text="${eventDetail.endDate} ?: 'N/A'"></span></li>
+								</ul>
+								<p class="prs_up_pera_sec" th:text="${eventDetail.description}">description</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- prs ec ue wrapper End -->
+
+	<!-- prs footer Wrapper Start -->
+	<header lang="vi" th:include="fragments/footer"></header>
+	<!-- prs footer Wrapper End -->
+
+	<!-- st login wrapper Start -->
+	<div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
+	<!-- st login wrapper End -->
+
+	<!--main js file start-->
+	<script th:src="@{/js/jquery_min.js}"></script>
+	<script th:src="@{/js/modernizr.js}"></script>
+	<script th:src="@{/js/bootstrap.js}"></script>
+	<script th:src="@{/js/owl.carousel.js}"></script>
+	<script th:src="@{/js/jquery.dlmenu.js}"></script>
+	<script th:src="@{/js/jquery.sticky.js}"></script>
+	<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+	<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+	<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+	<script th:src="@{/js/venobox.min.js}"></script>
+	<script th:src="@{/js/smothscroll_part1.js}"></script>
+	<script th:src="@{/js/smothscroll_part2.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+	<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+	<script th:src="@{/js/custom.js}"></script>
+	<!--main js file end-->
+</body>
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/event.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:14:02 GMT -->
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!-- 
+Template Name: Movie Pro
+Version: 1.0.0
+Author: Webstrot
+
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--[endif]-->
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/confirmation_screen.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="utf-8" />
+	<title>Confirmation</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta name="description" content="Movie Pro" />
+	<meta name="keywords" content="Movie Pro" />
+	<meta name="author" content="" />
+	<meta name="MobileOptimized" content="320" />
+	<!--Template style -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+	<style>
+		.custom-input {
+			width: 40%; /* Bạn có thể điều chỉnh giá trị này để phù hợp */
+		}
+	</style>
+</head>
+
+<body class="booking_type_back">
+<!-- preloader Start -->
+<div id="preloader">
+	<div id="status">
+		<img src="images/header/horoscope.gif" id="preloader_image" alt="loader">
+	</div>
+</div>
+
+<!-- prs navigation Start -->
+<header lang="vi" th:replace="fragments/navigation :: navigation"></header>
+<!-- prs navigation End -->
+
+<div class="container" style="padding-top: 150px; padding-bottom: 100px">
+
+	<!-- Display user email -->
+	<div class="user-information">
+		<div>
+			<label for="fullname">Họ và tên:</label>
+			<input type="text" id="fullname" th:value="${session.userRegisterDTO.fullName}" readonly="true" class="form-control custom-input" />
+		</div>
+
+		<div>
+			<label for="username">Username:</label>
+			<input type="text" id="username" th:value="${session.userRegisterDTO.email}" readonly="true" class="form-control custom-input" />
+		</div>
+
+		<div>
+			<label for="phone">Số điện thoại:</label>
+			<input type="text" id="phone" th:value="${session.userRegisterDTO.phone}" readonly="true" class="form-control custom-input" />
+		</div>
+
+		<div>
+			<label for="password">Mật khẩu:</label>
+			<input type="password" id="password" th:value="${session.userRegisterDTO.password}" readonly="true" class="form-control custom-input" />
+		</div>
+	</div>
+
+	<!-- Form nhập mã xác nhận -->
+	<form action="/verify-register" method="post">
+		<div class="form-group">
+			<label for="code">Nhập mã xác nhận</label>
+			<input type="text" name="code" id="code" placeholder="Nhập tại đây...." class="form-control custom-input"/>
+		</div>
+		<button type="submit" class="btn btn-primary">Xác nhận</button>
+
+		<div class="confirmation-message" style="margin-top: 10px; color: red">
+			<h5>Một mã xác minh đã được gửi đến email của bạn. Vui lòng kiểm tra email của bạn.
+				Mã xác minh chỉ tồn tại trong 5 phút, nếu bạn chưa nhận được, vui lòng nhấp vào nút gửi lại để nhận mã.</h5>
+		</div>
+		<div class="confirmation-message" style="margin-top: 10px;">
+			<h5 th:text="${errorWrongCode}" style="color: red"></h5>
+		</div>
+	</form>
+	<div class="resend-form" style="margin-top: 20px;">
+		<form action="/resend-verification-code" method="post">
+			<button type="submit" class="btn btn-primary">Gửi lại mã xác nhận</button>
+		</form>
+		<div class="confirmation-message" style="margin-top: 10px;">
+			<h5 th:text="${successMessage}" style="color: blue"></h5>
+			<h5 th:text="${errorMessage}" style="color: red"></h5>
+		</div>
+	</div>
+</div>
+
+<!-- prs footer Wrapper Start -->
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- prs footer Wrapper End -->
+
+<!-- Login Wrapper Start -->
+<div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
+<!-- Login Wrapper End -->
+
+<!--main js file start-->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/jquery.countTo.js}"></script>
+<script th:src="@{/js/jquery.inview.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/movie_showing.js}"></script>
+<!--main js file end-->
+</body>
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/confirmation_screen.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:07 GMT -->
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Movie Pro">
+    <meta name="keywords" content="Movie Pro">
+    <meta name="author" content="">
+    <meta name="MobileOptimized" content="320">
+    <!-- Template styles -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: none;
+            margin: 0 auto;
+            padding: 0;
+            background-color: #f4f4f9;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .account-info, .form-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .account-info p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .form-section label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-section input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-section button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-section button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            display: block;
+        }
+
+        .success {
+            color: green;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            display: block;
+        }
+
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: #2196F3;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .toggle-button {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+
+        .toggle-button:hover {
+            background-color: #1976D2;
+        }
+
+        #orderHistory table, #voucherHistory table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #orderHistory th, #orderHistory td, #voucherHistory th, #voucherHistory td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        #orderHistory th, #voucherHistory th {
+            background-color: #f2f2f2;
+        }
+
+        .favorite-list-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .favorite-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            padding: 15px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .favorite-card:hover {
+            transform: scale(1.02);
+        }
+
+        .favorite-card h4 {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .favorite-card p {
+            font-size: 14px;
+            color: #777;
+            margin: 5px 0 10px;
+        }
+
+        .favorite-card a {
+            display: inline-block;
+            margin: 8px 5px;
+            padding: 6px 12px;
+            background-color: #2196F3;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .favorite-card a:hover {
+            background-color: #1976D2;
+        }
+
+        .favorite-card form {
+            display: inline;
+        }
+
+        .favorite-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .payment-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .payment-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .payment-card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-item {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .card-item strong {
+            color: #333;
+        }
+
+        .card-item.action {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .account-info p span {
+            font-weight: bold;
+            color: #2E86C1;
+        }
+
+        .account-info ul {
+            margin-top: 5px;
+            padding-left: 20px;
+            color: #555;
+        }
+
+
+    </style>
+    <script>
+        function hideAllForms() {
+            document.getElementById('updateProfileSection').style.display = 'none';
+            document.getElementById('changePasswordForm').style.display = 'none';
+            document.getElementById('orderHistory').style.display = 'none';
+            document.getElementById('showFavoriteList').style.display = 'none';
+            document.getElementById('pendingPayment').style.display = 'none';
+        }
+
+        function showUpdateProfile() {
+            hideAllForms();
+            document.getElementById('updateProfileSection').style.display = 'block';
+        }
+
+        function showFavoriteList() {
+            hideAllForms();
+            document.getElementById('showFavoriteList').style.display = 'block';
+        }
+
+        function showChangePassword() {
+            hideAllForms();
+            document.getElementById('changePasswordForm').style.display = 'block';
+        }
+
+        function showOrder() {
+            hideAllForms();
+            document.getElementById('orderHistory').style.display = 'block';
+        }
+
+        function showPendingPayment() {
+            hideAllForms();
+            document.getElementById('pendingPayment').style.display = 'block';
+        }
+
+
+        function isValidPhoneNumber(phone) {
+            var phoneRegex = /^0\d{9}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function handleSubmit() {
+            var phoneInput = document.getElementById("phone").value;
+            var nameInput = document.getElementById("fullname").value;
+            var emailInput = document.getElementById("email").value;
+
+            if (!isValidPhoneNumber(phoneInput)) {
+                alert("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng (VD: 0912345678).");
+                return false;
+            }
+
+            if (nameInput.trim() === "" || emailInput.trim() === "") {
+                alert("Vui lòng kiểm tra lại thông tin. Thay đổi có thể sai hoặc thông tin đã tồn tại trên hệ thống.");
+                return false;
+            }
+
+            return true;
+        }
+
+
+        window.onload = function () {
+            document.getElementById('accountInfo').style.display = 'block';
+        };
+    </script>
+
+
+</head>
+<body>
+<!-- Navigation Start -->
+<header lang="vi" th:replace="~{fragments/navigation :: navigation}"></header>
+<!-- Navigation End -->
+
+<!-- Title Wrapper Start -->
+<div class="prs_title_main_sec_wrapper">
+    <div class="prs_title_img_overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="prs_title_heading_wrapper">
+                    <h2>Thông tin tài khoản</h2>
+                    <ul>
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li> > Thông tin tài khoản</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Title Wrapper End -->
+
+<h1>Tài khoản Cinema</h1>
+<div th:if="${session.userLogin}">
+    <div id="accountInfo" class="account-info">
+        <p><strong>Full Name:</strong> <span th:text="${user.fullname} ?: 'Not provided'"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${user.phone} ?: 'Not provided'"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email} ?: 'Not provided'"></span></p>
+    </div>
+
+    <button class="toggle-button" onclick="showUpdateProfile()">Đổi thông tin</button>
+    <button class="toggle-button" onclick="showChangePassword()">Đổi mật khẩu</button>
+    <button class="toggle-button" onclick="showOrder()">Lịch sử giao dịch</button>
+    <button class="toggle-button" onclick="showFavoriteList()">Yêu thích</button>
+    <button class="toggle-button" onclick="showPendingPayment()">Chờ thanh toán</button>
+
+    <div id="updateProfileSection" class="form-section">
+        <h3>Sửa thông tin</h3>
+        <form id="updateProfileForm" th:action="@{/initiate-update-profile}" method="post" onsubmit="return handleSubmit()">
+            <input type="hidden" name="id" th:value="${user.id} ?: ${session.userLogin?.id}"/>
+            <label for="fullname">Tên:</label>
+            <input type="text" id="fullname" name="fullname"
+                   th:value="${user.fullname} ?: ${session.userLogin?.fullname}" required/>
+            <label for="phone">Điện thoại:</label>
+            <input type="text" id="phone" name="phone"
+                   pattern="^0\d{9}$"
+                   title="Số điện thoại phải bắt đầu bằng 0 và gồm 10 chữ số (VD: 0912345678)"
+                   th:value="${user.phone} ?: ${session.userLogin?.phone}" required/>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:value="${user.email} ?: ${session.userLogin?.email}"
+                   required/>
+            <div>
+                <label>Chọn phương thức xác nhận:</label><br/>
+                <input type="radio" name="verifyMethod" value="email" checked/> Qua Email
+                <input type="radio" id="smsRadio" name="verifyMethod" value="sms"/> Qua Số điện thoại (OTP)
+            </div>
+            <button type="submit">Lưu thay đổi</button>
+            <label>Lưu ý: Kiểm tra kỹ lại thông tin trước khi đổi thông tin</label>
+        </form>
+
+    </div>
+
+    <div id="changePasswordForm" class="form-section">
+        <h3>Đổi mật khẩu</h3>
+        <form th:action="@{/initiate-change-password}" method="post" onsubmit="return validatePasswordChangeForm()">
+            <label for="currentPassword">Mật khẩu hiện tại:</label>
+            <input type="password" id="currentPassword" name="currentPassword" required>
+
+            <label for="newPassword">Mật khẩu mới:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+
+            <label for="confirmNewPassword">Nhập lại mật khẩu mới:</label>
+            <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+
+            <button type="submit">Lưu</button>
+            <label>Lưu ý: Mật khẩu mới phải được nhập chính xác hai lần.</label>
+        </form>
+    </div>
+
+
+    <div id="orderHistory" class="form-section">
+        <h3>Transaction History</h3>
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Phim</th>
+                <th>Ghế</th>
+                <th>Bỏng và nước</th>
+                <th>Tổng tiền(VND)</th>
+                <th>Ngày</th>
+                <th>Trạng thái</th>
+            </tr>
+            <tr th:each="paymentLink : ${paymentLinks}">
+                <td th:text="${paymentLink.id}"></td>
+                <td th:text="${paymentLink.schedule.movie.name}"></td>
+                <td th:text="${paymentLink.getSeatList()}"></td>
+                <td th:text="${paymentLink.getListPopcornDrinkName()}"></td>
+                <td th:text="${paymentLink.totalPrice}"></td>
+                <td th:text="${#temporals.format(paymentLink.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${paymentLink.status}"></td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div id="showFavoriteList" class="form-section">
+        <h3>Danh sách phim yêu thích</h3>
+
+        <!-- Nếu danh sách rỗng -->
+        <div th:if="${favoriteList != null and favoriteList.isEmpty()}" style="text-align: center;">
+            Chưa có phim nào yêu thích
+        </div>
+
+        <!-- Nếu có yêu thích -->
+        <div class="favorite-list-container" th:if="${favoriteList != null and !favoriteList.isEmpty()}">
+            <div class="favorite-card" th:each="fav : ${favoriteList}">
+                <h4 th:text="${fav.movie.name}">Tên phim</h4>
+
+                <img th:src="${fav.movie.smallImageURL}" alt="Poster"/>
+
+                <p><strong>Thể loại:</strong> <span th:text="${fav.movie.categories}">Thể loại</span></p>
+
+                <a th:href="@{/movie/detail(id=${fav.movie.id})}">Xem chi tiết</a>
+
+                <form th:action="@{/favorite/toggle}" method="post" style="display:inline-block; margin-top: 10px;">
+                    <input type="hidden" name="movieId" th:value="${fav.movie.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm">Bỏ thích</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="pendingPayment" class="form-section">
+        <h3>Wait to Payment</h3>
+        <div th:if="${pendingPaymentLinks == null or pendingPaymentLinks.isEmpty()}">
+            <p>Không có đơn nào đang chờ thanh toán.</p>
+        </div>
+        <div class="payment-cards" th:if="${pendingPaymentLinks != null and !pendingPaymentLinks.isEmpty()}">
+            <div class="payment-card" th:each="paymentLink : ${pendingPaymentLinks}">
+                <div class="card-item">
+                    <strong>Seat List:</strong>
+                    <span th:text="${paymentLink.seatList} ?: 'N/A'">Ghế</span>
+                </div>
+                <div class="card-item">
+                    <strong>Popcorn/Drink:</strong>
+                    <span th:text="${paymentLink.listPopcornDrinkName} ?: 'N/A'">Đồ ăn</span>
+                </div>
+                <div class="card-item">
+                    <strong>Total Price:</strong>
+                    <span th:text="${paymentLink.totalPrice != null ? paymentLink.totalPrice + ' VND' : 'N/A'}">100000 VND</span>
+                </div>
+                <div class="card-item">
+                    <strong>Status:</strong>
+                    <span th:text="${paymentLink.status} ?: 'N/A'">PENDING</span>
+                </div>
+                <div class="card-item action">
+                    <a th:href="${paymentLink.checkoutUrl != null ? paymentLink.checkoutUrl : '#'}"
+                       class="btn btn-success"
+                       target="_blank">Thanh toán ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <div th:if="${success}" class="success" th:text="${success}"></div>
+</div>
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- Main JS Files -->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/jquery.countTo.js}"></script>
+<script th:src="@{/js/jquery.inview.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script>
+    function validatePasswordChangeForm() {
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+        if (newPassword !== confirmNewPassword) {
+            alert("Mật khẩu mới không khớp. Vui lòng nhập lại.");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</body>
+</html>

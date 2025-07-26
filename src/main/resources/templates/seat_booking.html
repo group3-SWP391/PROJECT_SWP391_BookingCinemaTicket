@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Web site created using create-react-app">
+    <link rel="apple-touch-icon" href="logo192.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <title>Seat booking</title>
+    <link th:href="@{/css/2.fd207d57.chunk.css}" rel="stylesheet"/>
+    <link th:href="@{/css/main.ffa69c8e.chunk.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+    <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{/css/slick-theme.css}"/>
+    <!-- favicon links -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+    <style>
+        .checkOut__left .bookSlot .bookSlot__content .chooseSlot .picking .slot__picking .slot__row .slot__item {
+            font-size: 31px !important;
+            font-weight: 600 !important;
+        }
+
+        .item--checked {
+            cursor: no-drop !important;
+            color: gold !important;
+        }
+
+        .item--hidden {
+            cursor: no-drop !important;
+            color: #FFFF !important;
+        }
+    </style>
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1073.0" data-gr-ext-installed="" style="padding-top: 50px">
+<noscript>You need to enable JavaScript to run
+    this app.
+</noscript>
+<header lang="vi" th:include="fragments/navigation :: navigation"></header>
+
+<div id="root">
+    <div th:if="${errorMessageDuplicate != null}">
+        <script type="text/javascript">
+            alert('Bạn hãy hoàn thành thanh toán vừa tạo trước!');
+        </script>
+    </div>
+    <div class="container-fluid bg-light" style="padding-top: 20px;">
+        <div class="bookTicket__content row mt-5">
+            <div class="checkOut__left col-md-9 col-sm-12 p-0">
+                <div class="bookSlot">
+                    <div class="bookSlot__content" style="overflow-x: scroll;">
+                        <div class="theater__info d-flex justify-content-between">
+                            <div class="theater__img d-flex bg-light">
+                                <img th:src="${schedule.branch.imgURL}" style="width: 150px; height: 100px">
+                                <div class="theater__name">
+                                        	<span class="name">
+                                        		<span class="subname" th:text="'Phòng '+ ${schedule.room.name}"></span>
+                                        	</span>
+                                    <p class="showtime" th:text="'Ngày bắt đầu: '+${schedule.startDate}"
+                                       style="font-size: 15px"></p>
+                                    <p class="showtime" th:text="'Thời gian bắt đầu: '+${schedule.startTime}"
+                                       style="font-size: 15px"></p>
+                                    <p class="showtime" th:text="'Định dạng: ' + ${schedule.room.roomType}"
+                                       style="font-size: 15px"></p>
+                                </div>
+                            </div>
+                            <div class="timeKeepSlot">
+                                <p class="title__text mt-2" style="font-size: 20px; font-weight: bold">
+                                    Còn:
+                                    <span th:text="${availableSeats} + ' / ' + ${totalSeats}"></span>
+                                </p>
+                                <p class="title__text" style="font-size: 20px; font-weight: bold">Đếm ngược thời gian
+                                    kết thúc</p><span
+                                    class="time" style="font-size: 20px;"></span>
+                            </div>
+                        </div>
+                        <div class="chooseSlot" style="width: 1000px">
+                            <div class="screen__img"><img src="https://i.ibb.co/zWgWjtg/screen.png" alt="screen">
+                            </div>
+                            <div class="picking row" style="padding: 0 50px;">
+                                <div class="slot__picking col-12">
+                                    <div class="slot__row">
+                                        <div th:each="rowIdx : ${#numbers.sequence(0, rowLabels.size() - 1)}">
+                                            <span class="me-2 fw-bold" th:text="${rowLabels[rowIdx]}"
+                                                  style="font-weight: bold; padding-right: 10px"></span>
+                                            <!-- tên hàng -->
+                                            <th:block th:each="colIdx : ${#numbers.sequence(0, seatsPerRow - 1)}">
+                                                <th:block th:with="seat=${seats[rowIdx * seatsPerRow + colIdx]}">
+                                                    <i class="fa fa-couch slot__item"
+                                                       th:classappend="${seat.isActive} ?
+                                                (${seat.isChecked} ? 'item--checked':
+                                                (${seat.isOccupied} ? 'item--picked':
+                                                (${seat.isVip} ? 'item--vip':''))):
+                                                 'item--hiden'"
+                                                       th:data-seat="${seat.name}"
+                                                       th:data-price="${seat.isVip} ? ${schedule.price + 20000} : ${schedule.price}"
+                                                       th:data-seat-id="${seat.id}"></i>
+                                                </th:block>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slot__detail row">
+                                <div class="col-md-3 col-sm-6 col-xs-6"><i
+                                        class="fa fa-couch item--picking"></i><span
+                                        class="slot__text">Ghế bạn đang chọn</span>
+                                </div>
+                                <div class="col-md-2 col-sm-6 col-xs-6"><i
+                                        class="fa fa-couch item--picked"></i><span class="slot__text">Ghế đã được mua bởi người khác</span>
+                                </div>
+                                <div class="col-md-2 col-sm-6 col-xs-6"><i
+                                        class="fa fa-couch item--regular"></i><span
+                                        class="slot__text">Ghế thường</span>
+                                </div>
+                                <div class="col-md-2 col-sm-6 col-xs-6"><i class="fa fa-couch item--vip"></i><span
+                                        class="slot__text">Ghế vip</span></div>
+                                <div class="col-md-3 col-sm-6 col-xs-6"><i class="fa fa-couch item--checked"></i><span
+                                        class="slot__text">Ghế của bạn</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="checkOut__right col-md-3 col-sm-12">
+                <div class="checkout__form">
+                    <div class="total__price"><span class="price" data-price="0">0₫</span></div>
+                    <div class="film__info">
+                        <span class="film__age--C" th:text="'Phòng ' + ${schedule.room.name}"></span>
+                        <span class="film__name" th:text="${schedule.movie.name}"></span>
+                        <p class="film__detail" th:text="${schedule.startDate}+' - '+${schedule.startTime}"></p>
+                        <p class="film__detail" th:text="${schedule.room.getRoomType()}"></p>
+                        <p class="film__detail" th:text="${schedule.movie.getLanguage()}"></p>
+                        <p class="theater__name" th:text="${schedule.branch.name}"></p>
+                        <p class="film__address" th:text="${schedule.branch.locationDetail}"></p>
+                    </div>
+                    <div class="count__slot">
+                        <div style="font-weight: bold">Ghế bạn đang chọn:</div>
+                        <div class="slot"></div>
+                    </div>
+                    <div class="payForm">
+                        <a class="pay__link" href="/#">
+                            <p class="text__notification">Vui lòng chọn một chỗ ngồi để hiển thị phương thức thanh toán
+                                phù hợp.</p></a>
+                    </div>
+                </div>
+                <div class="textNotification text-center"><i class="fa fa-info-circle text-danger mr-1"></i><span
+                        class="noti__text">Vé đã mua không thể đổi hoặc hoàn tiền. Mã vé sẽ được gửi qua tin nhắn
+                                <span class="noti__link">SMS</span> and <span
+                            class="noti__link">Email</span>
+                                đã nhập. </span></div>
+                <div id="btn-booking" class="btnBook" type="button">Chọn bỏng và nước</div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer lang="vi" th:include="fragments/footer"></footer>
+
+<div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
+
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+<script th:inline="javascript">
+
+    $(document).ready(function () {
+        dataParameter = []
+        const price = $(".price");
+
+        // hiện ghế đang chọn
+        $(".slot__item").click(function () {
+            const priceSeat = Number($(this).data("price"))
+            const codeSeat = $(this).data("seat")
+            const seatId = $(this).data("seatId")
+            console.log(`Bạn vừa click vào ghế: ${codeSeat}, Giá: ${priceSeat}, Id: ${seatId}`);
+            if (!$(this).hasClass("item--picked") && !$(this).hasClass("item--checked"))
+                if ($(this).hasClass("item--picking")) {
+                    $(this).removeClass("item--picking");
+                    current = Number(price.data("price") - priceSeat)
+                    price.text(current.toLocaleString('en-US', {style: 'currency', currency: 'VND'}));
+                    price.data("price", current)
+                    $.each($(".mr-2"), function (index, seat) {
+
+                        if (seat.textContent == "Ghế: " + codeSeat + ",") {
+                            seat.remove()
+                        }
+                    })
+
+                    dataParameter.splice(dataParameter.indexOf(seatId), 1);
+
+                } else {
+                    $(this).addClass("item--picking");
+                    current = Number(price.data("price") + priceSeat)
+
+                    price.text(current.toLocaleString('vi-VN') + "₫");
+                    price.data("price", current)
+                    $(".slot").append('<span class="mr-2">Ghế: ' + codeSeat + ',</span>')
+                    dataParameter.push(seatId)
+
+                }
+        });
+
+        //clock time
+        var clock = setInterval(function () {
+            $('.time').text(remainingTime());
+            if (remainingTime() == null) {
+                clearInterval(clock);
+                $("#error-time").addClass("swal-overlay--show-modal")
+            }
+        }, 1000);
+
+        //submit form booking
+
+        // Xử lý sự kiện khi người dùng nhấn "Choose popcorn and drink"
+        $("#btn-booking").click(function () {
+            const selectedSeats = dataParameter;  // Lưu danh sách ghế đã chọn
+            const scheduleId = [[${schedule.id}]];  // ID lịch chiếu từ Thymeleaf
+            const userId = [[${session.userLogin.id}]];  // ID người dùng từ phiên đăng nhập
+            const totalPrice = Number($(".price").data("price"));  // Tổng giá trị từ trang
+            const movieId = [[${schedule.movie.id}]];
+
+            // Kiểm tra nếu không có ghế nào được chọn
+            if (selectedSeats.length === 0) {
+                alert("Bạn chưa chọn ghế. Vui lòng chọn ghế trước khi tiếp tục.");
+                return;
+            }
+
+            // Tạo đối tượng bookingRequest
+            const bookingRequest = {
+                userId: userId,
+                scheduleId: scheduleId,
+                listSeatId: selectedSeats,
+                totalPrice: totalPrice,
+                movieId: movieId
+            };
+
+            // Chuyển đối tượng bookingRequest thành chuỗi query string
+            const queryString = $.param(bookingRequest);
+
+            // Gửi yêu cầu GET với dữ liệu qua URL
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/pick-popcorn-drink?" + queryString,  // Truyền dữ liệu trong URL
+                success: function (data) {
+                    window.location.href = "http://localhost:8080/pick-popcorn-drink?" + queryString;  // Chuyển hướng tới trang chọn bỏng và nước
+                },
+                error: function (e) {
+                    console.error("Error during request:", e);
+                    alert("Có lỗi xảy ra khi gửi yêu cầu.");
+                }
+            });
+        });
+
+
+        //close notify
+        $(".notify").click(function (e) {
+            if (remainingTime() != null)
+                $(this).removeClass("swal-overlay--show-modal");
+        });
+        $("#notify-error").click(function () {
+            window.location.href = '/';
+        })
+    });
+
+    function remainingTime() {
+        const today = new Date();
+        const dateSchedule = new Date([[${schedule.startDate} + ' ' + ${schedule.startTime}]])
+        seconds = Math.floor((dateSchedule - today) / 1000);
+        if (seconds > 0) {
+            var h = Math.floor(seconds / 3600);
+            var m = Math.floor((seconds % 3600) / 60);
+            var s = seconds - h * 3600 - m * 60;
+        } else {
+            return null
+        }
+        return h + " giờ " + m + " phút " + s + " giây ";
+    }
+</script>
+
+<script>
+    !function (e) {
+        function r(r) {
+            for (var n, a, p = r[0], i = r[1], l = r[2], c = 0, s = []; c < p.length; c++) a = p[c], Object.prototype.hasOwnProperty.call(o, a) && o[a] && s.push(o[a][0]), o[a] = 0;
+            for (n in i) Object.prototype.hasOwnProperty.call(i, n) && (e[n] = i[n]);
+            for (f && f(r); s.length;) s.shift()();
+            return u.push.apply(u, l || []), t()
+        }
+
+        function t() {
+            for (var e, r = 0; r < u.length; r++) {
+                for (var t = u[r], n = !0, p = 1; p < t.length; p++) {
+                    var i = t[p];
+                    0 !== o[i] && (n = !1)
+                }
+                n && (u.splice(r--, 1), e = a(a.s = t[0]))
+            }
+            return e
+        }
+
+        var n = {}, o = {1: 0}, u = [];
+
+        function a(r) {
+            if (n[r]) return n[r].exports;
+            var t = n[r] = {i: r, l: !1, exports: {}};
+            return e[r].call(t.exports, t, t.exports, a), t.l = !0, t.exports
+        }
+
+        a.m = e, a.c = n, a.d = function (e, r, t) {
+            a.o(e, r) || Object.defineProperty(e, r, {enumerable: !0, get: t})
+        }, a.r = function (e) {
+            "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, {value: "Module"}), Object.defineProperty(e, "__esModule", {value: !0})
+        }, a.t = function (e, r) {
+            if (1 & r && (e = a(e)), 8 & r) return e;
+            if (4 & r && "object" == typeof e && e && e.__esModule) return e;
+            var t = Object.create(null);
+            if (a.r(t), Object.defineProperty(t, "default", {
+                enumerable: !0,
+                value: e
+            }), 2 & r && "string" != typeof e) for (var n in e) a.d(t, n, function (r) {
+                return e[r]
+            }.bind(null, n));
+            return t
+        }, a.n = function (e) {
+            var r = e && e.__esModule ? function () {
+                return e.default
+            } : function () {
+                return e
+            };
+            return a.d(r, "a", r), r
+        }, a.o = function (e, r) {
+            return Object.prototype.hasOwnProperty.call(e, r)
+        }, a.p = "/";
+        var p = this.webpackJsonpmoviereactapp = this.webpackJsonpmoviereactapp || [], i = p.push.bind(p);
+        p.push = r, p = p.slice();
+        for (var l = 0; l < p.length; l++) r(p[l]);
+        var f = i;
+        t()
+    }([])
+</script>
+
+</body>
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/seat_booking.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:12 GMT -->
+</html>

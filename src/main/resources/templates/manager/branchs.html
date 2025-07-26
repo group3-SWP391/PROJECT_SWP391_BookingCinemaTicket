@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div th:fragment="content" class="branch-stage">
+        <!-- Branch-themed Building Icon -->
+        <div class="movie-reel">
+            🏢
+        </div>
+        
+        <!-- Dashboard Content Wrapper -->
+        <div class="dashboard-content">
+            <!-- Add Branch Button -->
+            <button type="button" class="btn-add-movie" data-toggle="modal" data-target="#branchModal" id="addBranchBtn">
+                <i class="fa fa-plus-circle"></i> Add New Branch
+            </button>
+
+            <!-- Branch Management Header -->
+            <div class="movie-management-header">
+                <h1>
+                    <i class="fa fa-building"></i>
+                    Branch Management System
+                </h1>
+            </div>
+
+            <!-- Branch Table Container -->
+            <div class="movie-table-container">
+                <table class="table movie-table">
+                    <thead>
+                        <tr>
+                            <th>Branch Name</th>
+                            <th>Location</th>
+                            <th>Address</th>
+                            <th>Phone No</th>
+                            <th>Rooms</th>
+                            <th>Total Capacity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="branch : ${branchs}">
+                            <td>
+                                <strong th:text="${branch.name}">Branch Name</strong>
+                                <br>
+                                <small class="text-muted" th:text="${branch.description}" th:if="${branch.description != null}">Branch Description</small>
+                            </td>
+                            <td>
+                                <span th:text="${branch.location}" th:if="${branch.location != null}">Branch Location</span>
+                                <span class="text-muted" th:if="${branch.location == null}">No Location</span>
+                            </td>
+                            <td>
+                                <span th:text="${branch.locationDetail}" th:if="${branch.locationDetail != null}">Branch Address</span>
+                                <span class="text-muted" th:if="${branch.locationDetail == null}">No Address</span>
+                            </td>
+                            <td>
+                                <div th:if="${branch.phoneNo != null}">
+                                    <i class="fa fa-phoneNo"></i> <span th:text="${branch.phoneNo}">Phone</span>
+                                </div>
+                                <span class="text-muted" th:if="${branch.phoneNo == null}">No Contact</span>
+                            </td>
+                            <td>
+                                <span class="room-count-badge" th:text="${branch.activeRoomCount} + ' rooms'">5 rooms</span>
+                                <br>
+                                <button type="button" class="btn btn-sm btn-info" 
+                                        th:data-branch-id="${branch.id}"
+                                        onclick="viewRooms(this.dataset.branchId)">
+                                    <i class="fa fa-eye"></i> View Rooms
+                                </button>
+                            </td>
+                            <td>
+                                <span class="capacity-badge" th:text="${branch.totalCapacity} + ' seats'">500 seats</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button type="button" class="btn-action btn-edit" 
+                                            th:data-branch-id="${branch.id}"
+                                            onclick="editBranch(this.dataset.branchId)">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </button>
+<!--                                    <button type="button" class="btn-action btn-info" -->
+<!--                                            th:data-branch-id="${branch.id}"-->
+<!--                                            onclick="manageRooms(this.dataset.branchId)">-->
+<!--                                        <i class="fa fa-cogs"></i> Rooms-->
+<!--                                    </button>-->
+                                    <button type="button" class="btn-action btn-delete" 
+                                            th:data-branch-id="${branch.id}"
+                                            th:data-branch-name="${branch.name}"
+                                            onclick="deleteBranch(this.dataset.branchId, this.dataset.branchName)">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Branch Modal -->
+        <div class="modal fade" id="branchModal" tabindex="-1" role="dialog" aria-labelledby="branchModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="branchModalLabel">
+                            <i class="fa fa-building"></i> Add New Branch
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="branchForm">
+                            <input type="hidden" id="branchId" name="branchId">
+                            
+                            <div class="form-group">
+                                <label for="branchName">Branch Name * <small class="text-muted">(max 255 chars)</small></label>
+                                <input type="text" class="form-control" id="branchName" name="name" maxlength="255" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="branchLocation">Location (City/Province) <small class="text-muted">(max 255 chars)</small></label>
+                                        <input type="text" class="form-control" id="branchLocation" name="location" maxlength="255"
+                                               placeholder="e.g. Hà Nội, Đà Nẵng, TP.HCM">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="branchPhone">Phone <small class="text-muted">(max 20 chars)</small></label>
+                                        <input type="text" class="form-control" id="branchPhone" name="phoneNo" maxlength="20"
+                                               placeholder="e.g. 028-3822-3456">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="branchLocationDetail">Address Detail <small class="text-muted">(max 500 chars)</small></label>
+                                <textarea class="form-control" id="branchLocationDetail" name="locationDetail" rows="3" maxlength="500"
+                                          placeholder="e.g. Số 123, Tòa nhà ABC, Phường XYZ, Quận DEF"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="branchDescription">Description <small class="text-muted">(max 1000 chars)</small></label>
+                                <textarea class="form-control" id="branchDescription" name="description" rows="4" maxlength="1000" 
+                                          placeholder="Brief description of the branch"></textarea>
+                            </div>
+                            
+                            <!-- Branch Image Upload Section -->
+                            <div class="media-upload-section">
+                                <h5 class="section-title">
+                                    <i class="fa fa-image"></i> Branch Image
+                                </h5>
+                                
+                                <div class="form-group">
+                                    <label for="branchImage">Image</label>
+                                    <div class="file-upload-container">
+                                        <div class="file-upload-area" id="branchImageUploadArea">
+                                            <div class="upload-icon">
+                                                <i class="fa fa-image"></i>
+                                            </div>
+                                            <div class="upload-text">
+                                                <span class="upload-title">Drop image here or click to browse</span>
+                                                <span class="upload-subtitle">PNG, JPG, GIF up to 10MB</span>
+                                            </div>
+                                            <input type="file" class="file-input" id="branchImage" 
+                                                   name="imageFile" accept="image/*">
+                                        </div>
+                                        
+                                        <div class="file-preview" id="branchImagePreview" style="display: none;">
+                                            <img class="preview-image" alt="Image Preview">
+                                            <div class="preview-overlay">
+                                                <button type="button" class="btn-remove-file" 
+                                                        onclick="removeBranchFilePreview('image')">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div class="file-info">
+                                                <span class="file-name"></span>
+                                                <span class="file-size"></span>
+                                            </div>
+                                            <input type="hidden" name="imgUrl" data-current-image="image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn-save-movie" onclick="saveBranch()">Save Branch</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Management Modal -->
+        <div class="modal fade" id="roomModal" tabindex="-1" role="dialog" aria-labelledby="roomModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="roomModalLabel">
+                            <i class="fa fa-cogs"></i> Manage Rooms - <span id="roomModalBranchName">Branch Name</span>
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Add Room Button -->
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-success" onclick="showAddRoomForm()">
+                                <i class="fa fa-plus"></i> Add New Room
+                            </button>
+                        </div>
+
+                        <!-- Add/Edit Room Form -->
+                        <div id="roomFormContainer" style="display: none;" class="mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 id="roomFormTitle"><i class="fa fa-plus"></i> Add New Room</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="roomForm">
+                                        <input type="hidden" id="roomId" name="roomId">
+                                        <input type="hidden" id="roomBranchId" name="branchId">
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="roomName">Room Name * <small class="text-muted">(max 100 chars)</small></label>
+                                                    <input type="text" class="form-control" id="roomName" name="name" maxlength="100" required 
+                                                           placeholder="e.g. Screen 1, Hall A">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="roomType">Room Type <small class="text-muted">(max 50 chars)</small></label>
+                                                    <select class="form-control" id="roomType" name="roomType">
+                                                        <option value="">Select Type</option>
+                                                        <option value="STANDARD">Standard</option>
+                                                        <option value="VIP">VIP</option>
+                                                        <option value="IMAX">IMAX</option>
+                                                        <option value="4DX">4DX</option>
+                                                        <option value="PREMIUM">Premium</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="roomCapacity">Capacity * <small class="text-muted">(total seats)</small></label>
+                                                    <input type="number" class="form-control" id="roomCapacity" name="capacity" required min="1" 
+                                                           placeholder="e.g. 60" onchange="generateSeatLayout()">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="roomRowCount">Row Count * <small class="text-muted">(A, B, C...)</small></label>
+                                                    <input type="number" class="form-control" id="roomRowCount" name="rowCount" required min="1" max="26"
+                                                           placeholder="e.g. 10" onchange="generateSeatLayout()">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Auto-calculated values display -->
+                                        <div class="row" id="calculatedValues" style="display: none;">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-info">
+                                                    <strong>Total:</strong>
+                                                    <span id="seatsPerRowDisplay">0</span> seats per row
+                                                    <span id="extraSeatsDisplay" style="display: none;"> (with <span id="extraSeatsCount">0</span> extra seats in first rows)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="roomDescription">Description <small class="text-muted">(max 500 chars)</small></label>
+                                            <textarea class="form-control" id="roomDescription" name="description" rows="3" maxlength="500" 
+                                                      placeholder="Brief description of the room"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="roomVipSeats">VIP Seats <small class="text-muted">(comma-separated, e.g., A1,A2,B1,B2)</small></label>
+                                            <input type="text" class="form-control" id="roomVipSeats" name="vipSeats" 
+                                                   placeholder="Enter VIP seat names separated by commas (e.g., A1,A2,A3,B1,B2)"
+                                                   maxlength="1000">
+                                            <small class="form-text text-muted">
+                                                <i class="fa fa-info-circle"></i> 
+                                                Specify which seats should be marked as VIP. Leave empty if no VIP seats.
+                                            </small>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="roomStatus">Status</label>
+                                            <select class="form-control" id="roomStatus" name="isActive">
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" onclick="saveRoom()">
+                                                <i class="fa fa-save"></i> Save Room
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" onclick="cancelRoomForm()">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rooms List -->
+                        <div id="roomsList">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Room Name</th>
+                                            <th>Type</th>
+                                            <th>Capacity</th>
+                                            <th>Layout</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="roomsTableBody">
+                                        <!-- Rooms will be loaded here dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

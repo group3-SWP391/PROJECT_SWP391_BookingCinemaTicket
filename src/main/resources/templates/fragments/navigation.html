@@ -1,0 +1,106 @@
+<div th:fragment="navigation">
+    <div class="prs_navigation_main_wrapper">
+        <div class="container-fluid">
+            <div class="prs_navi_left_main_wrapper">
+                <div class="prs_logo_main_wrapper">
+                    <a th:href="@{home.html}">
+                        <img th:src="@{/images/header/logo.png}" alt="logo"/>
+                    </a>
+                </div>
+                <div class="prs_menu_main_wrapper">
+                    <nav class="navbar navbar-default">
+                        <div id="dl-menu" class="xv-menuwrapper responsive-menu">
+                            <div class="prs_mobail_searchbar_wrapper" id="search_button"><i class="fa fa-search"></i>
+                            </div>
+                            <div class="clearfix"></div>
+                            <ul class="dl-menu">
+                                <li class="parent"><a th:href="@{/home}">Trang chủ</a></li>
+                                <li class="parent"><a th:href="@{/}" onclick="return false">Phim</a>
+                                    <ul class="lg-submenu">
+                                        <li><a th:href="@{/movie/showing(status='now-showing')}">Đang chiếu</a></li>
+                                        <li><a th:href="@{/movie/showing(status='coming-soon')}">Sắp chiếu</a></li>
+                                    </ul>
+                                </li>
+                                <li class="parent">
+                                    <a th:href="@{/select-theater}">Chi nhánh</a>
+                                </li>
+                                <li class="parent"><a th:href="@{/}" onclick="return false;">Nhãn phim</a>
+                                    <ul class="lg-submenu">
+                                        <li th:each="rate: ${session.rates}">
+                                            <a th:href="@{/movie/rating(ratingId=${rate.id})}"
+                                               th:text="${rate.name}"></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="parent"><a th:href="@{/}" onclick="return false;">Thể loại</a>
+                                    <ul class="lg-submenu">
+                                        <li th:each="category: ${session.categoryAll}">
+                                            <a th:href="@{/movie/category/return-view(categoryName=${category})}"
+                                               th:text="${category}">movie category name</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="parent"><a th:href="@{/contact}">Hỗ trợ</a>
+                                    <ul class="lg-submenu">
+                                        <li><a th:href="@{/contact}">Dịch vụ khách hàng</a></li>
+                                        <li><a th:href="@{/advertising-contact}">Liên hệ quảng cáo</a></li>
+                                    </ul>
+                                </li>
+                                <li class="parent"><a th:href="@{/promotion}">Ưu đãi</a></li>
+                            </ul>
+                        </div>
+                        <!--dl-menuwrapper -->
+                    </nav>
+                </div>
+            </div>
+            <div class="prs_navi_right_main_wrapper">
+                <div class="prs_top_login_btn_wrapper">
+                    <div class="prs_animate_btn1">
+                        <ul>
+                            <li>
+                                <div th:if="${session.userLogin == null}">
+                                    <a class="button button--tamaya" data-text="Đăng nhập" data-toggle="modal"
+                                       data-target="#loginModal" href="#"><span>Đăng nhập</span></a>
+                                </div>
+                                <div th:if="${session.userLogin != null}">
+                                    <a style="background: #1b1b1b" class="btn"
+                                       th:if="${session.userLogin.role.name == 'ADMIN'}" th:href="@{/admin}">
+                                        <span style="color: white">Admin</span>
+                                    </a>
+                                    <a style="background: #1b1b1b" class="btn"
+                                       th:if="${session.userLogin.role.name == 'STAFF'}" th:href="@{/employee/page}">
+                                        <span style="color: white">Nhân viên</span>
+                                    </a>
+                                    <a style="background: #1b1b1b" class="btn"
+                                       th:if="${session.userLogin.role.name == 'MANAGER'}"
+                                       th:href="@{/manager/dashboard}">
+                                        <span style="color: white">Quản lý</span>
+                                    </a>
+                                    <a style="background: #1b1b1b" class="btn" th:href="@{/my-account}">
+                                        <span style="color: white" th:text="${session.userLogin.username}">User</span>
+                                    </a>
+                                    <a style="background: #1b1b1b;" class="btn" th:href="@{/log-out}">
+                                        <span style="color: white">Đăng xuất</span>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="product-heading">
+                    <div class="con">
+                        <form th:action="@{/movie/search}" method="get" class="search-form"
+                              style="display: inline-block">
+                            <input type="text" name="movieNameSearch" placeholder="Nhập tên phim..."
+                                   class="search-input"/>
+                            <button type="submit" class="search-btn">
+                                <i class="flaticon-tool"></i>
+                            </button>
+                        </form>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

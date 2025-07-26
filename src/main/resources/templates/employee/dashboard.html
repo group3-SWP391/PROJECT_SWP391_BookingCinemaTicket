@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Sales Interface</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: linear-gradient(to bottom, #f0f4f8, #e2e8f0);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover {
+            background-color: #2563eb;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab-button.active {
+            background-color: #2563eb;
+            color: white;
+            border-bottom: 3px solid #1e40af;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #2563eb, #1e40af);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        .btn-success {
+            background: linear-gradient(to right, #10b981, #059669);
+        }
+        .btn-success:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        .table th {
+            background: #f1f5f9;
+            color: #1e40af;
+        }
+        .table tr:hover {
+            background: #f8fafc;
+            transition: background 0.2s ease;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Hệ thống bán vé xem phim
+
+    </h2>
+
+    <!-- Tabs -->
+    <ul class="flex border-b-2 border-blue-600 mb-6" id="ticketTabs" role="tablist">
+        <li class="mr-2">
+            <button class="tab-button px-6 py-3 text-lg font-medium rounded-t-lg"
+                    :class="{'active': true}"
+                    id="schedule-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#schedule"
+                    type="button"
+                    role="tab">
+                <a th:href="@{/employee/page}" class="text-current no-underline">Lịch chiếu phim</a>
+            </button>
+        </li>
+
+        <li class="mr-2">
+            <button class="tab-button px-6 py-3 text-lg font-medium rounded-t-lg"
+                    id="available-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#available"
+                    type="button"
+                    role="tab">
+                <a th:href="@{/employee/available-movies}" class="text-current no-underline">Danh sách phim còn suất hôm nay</a>
+            </button>
+        </li>
+        <li class="mr-2">
+            <button class="tab-button px-6 py-3 text-lg font-medium rounded-t-lg"
+
+                    data-bs-toggle="tab"
+                    data-bs-target="#available"
+                    type="button"
+                    role="tab">
+                <a th:href="@{/employee/verifyticket}" class="text-current no-underline">Xác minh vé</a>
+            </button>
+        </li>
+        <li class="mr-2">
+            <button class="tab-button px-6 py-3 text-lg font-medium rounded-t-lg"
+
+                    data-bs-toggle="tab"
+                    data-bs-target="#available"
+                    type="button"
+                    role="tab">
+                <a th:href="@{/employee/revenue}" class="text-current no-underline">Số vé bán được trong ngày của bạn</a>
+            </button>
+        </li>
+
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content card p-6">
+        <!-- Showtimes Tab -->
+        <div class="tab-pane fade show active" id="schedule" role="tabpanel">
+            <h4 class="text-xl font-semibold text-gray-700 mb-6">Xem lịch chiếu</h4>
+            <h5 class="text-xl font-semibold text-gray-700 mb-6" th:text="${'Chi nhánh: ' + branch.name}"></h5>
+            <form th:action="@{/employee/searchmovie}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+
+                <div>
+                    <label for="filter-movie" class="block text-sm font-medium text-gray-700 mb-1">Tra cứu phim</label>
+                    <input type="text"
+                           id="filter-movie"
+                           name="movie"
+                           placeholder="Enter movie name" th:value="${moviesearch}"
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <input type="hidden" name = "branch" th:value="${branch.id}">
+                <div class="flex items-end">
+                    <button type="submit" class="btn-primary w-full py-3 px-6 text-white font-medium rounded-lg">Tìm kiếm</button>
+                </div>
+            </form>
+
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="table w-full text-sm text-gray-700">
+                    <thead>
+                    <tr>
+                        <th class="py-3 px-4 text-left">Phim</th>
+                        <th class="py-3 px-4 text-left">Ngày</th>
+                        <th class="py-3 px-4 text-left">Thời gian</th>
+                        <th class="py-3 px-4 text-left">Trạng thái</th>
+                        <th class="py-3 px-4 text-left">Phòng</th>
+                        <th class="py-3 px-4 text-left"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="schedulemovie : ${movieTicketCount}">
+                        <td class="py-3 px-4">
+                            <a th:href="@{/employee/movie/detail/{id}(id=${schedulemovie.key.movie.id})}"
+                               th:text="${schedulemovie.key.movie.name}"
+                               class="text-blue-600 hover:underline"></a>
+                        </td>
+                        <td class="py-3 px-4" th:text="${schedulemovie.key.startDate}"></td>
+                        <td class="py-3 px-4" th:text="${schedulemovie.key.startTime}"></td>
+                        <td class="py-3 px-4"
+                            th:text="${'Đã đặt: ' + schedulemovie.value + ' / ' + schedulemovie.key.room.capacity + ' ghế'}">
+                        </td>
+                        <td class="py-3 px-4" th:text="${schedulemovie.key.room.name}"></td>
+                        <td class="py-3 px-4">
+                            <a th:if="${schedulemovie.value < schedulemovie.key.room.capacity}"
+                               th:href="@{/employee/schedule/selectseat/{id}(id=${schedulemovie.key.id})}"
+                               class="btn-success py-2 px-4 text-white font-medium rounded-lg">Đặt vé</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${message != null}"
+                 th:text="${message}"
+                 class="mt-4 px-4 py-2 rounded border border-red-300 bg-red-100 text-red-700 font-medium shadow-sm">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (kept for tab functionality) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

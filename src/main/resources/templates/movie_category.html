@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Movie-Categories</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Movie Pro"/>
+    <meta name="keywords" content="Movie Pro"/>
+    <meta name="author" content=""/>
+    <meta name="MobileOptimized" content="320"/>
+    <!-- Template styles -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+</head>
+
+<body>
+<!-- Preloader Start -->
+<div id="preloader">
+    <div id="status">
+        <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader"/>
+    </div>
+</div>
+
+<!-- Navigation Start -->
+<header lang="vi" th:replace="fragments/navigation :: navigation"></header>
+<!-- Navigation End -->
+
+<!-- Title Wrapper Start -->
+<div class="prs_title_main_sec_wrapper">
+    <div class="prs_title_img_overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="prs_title_heading_wrapper">
+                    <ul>
+                        <li><a th:href="@{/home}">Trang chủ</a></li>
+                        <li> > Thể loại > <span th:text="${categoryName}"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Title Wrapper End -->
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+,
+<!-- MC Category Sidebar Start -->
+<div class="prs_mc_category_sidebar_main_wrapper" style="position: relative; left: -150px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 hidden-sm hidden-xs">
+                <div class="prs_mcc_left_side_wrapper">
+                    <div class="prs_mcc_left_searchbar_wrapper">
+                        <input id="movieSearchInput" type="text" placeholder="Nhập tên phim....">
+                        <button onclick="searchMovies()"><i class="flaticon-tool"></i>
+                        </button>
+                    </div>
+                    <div class="prs_mcc_bro_title_wrapper">
+                        <h2>Tình trạng phim</h2>
+                        <ul>
+                            <li>
+                                <i class="fa fa-play"></i>
+                                <a href="#" onclick="loadNowShowingMovies(); return false;">Đang chiếu</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-play"></i>
+                                <a href="#" onclick="loadNoComingShowingMovies(); return false;">Sắp chiếu</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="prs_mcc_bro_title_wrapper">
+                        <h2>Thể loại</h2>
+                        <ul>
+                            <li>
+                                <i class="fa fa-play"></i>
+                                <a th:text="${categoryName}">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                <div class="prs_mcc_right_side_wrapper">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="prs_mcc_right_side_heading_wrapper">
+                                <h2>Kết quả</h2>
+                            </div>
+                        </div>
+                        <!-- Web Series Slider Start -->
+                        <div class="prs_upcom_slider_main_wrapper">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-12 tab-content">
+                                            <div role="tabpanel" class="tab-pane active">
+                                                <!-- Sử dụng row + col để tạo lưới -->
+                                                <div class="row" id="movieListContainerCategory">
+                                                    <div th:each="movie : ${movieByCategory}"
+                                                         class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mb-4">
+                                                        <div class="prs_upcom_movie_box_wrapper"
+                                                             style="height: 100%; display: flex; flex-direction: column;">
+                                                            <div class="prs_upcom_movie_img_box"
+                                                                 style="flex-shrink: 0;">
+                                                                <img th:src="${movie.smallImageURL}" alt="movie_img"
+                                                                     style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+                                                                <div class="prs_upcom_movie_img_overlay"></div>
+                                                                <div class="prs_upcom_movie_img_btn_wrapper">
+                                                                    <ul>
+                                                                        <li><a title='title' rel='external'
+                                                                               class="test-popup-link"
+                                                                               th:href="${movie.trailerURLWatchLink}">Xem
+                                                                            Trailer</a></li>
+                                                                        <li>
+                                                                            <a th:href="@{/movie/detail(movieId=${movie.id})}">Xem
+                                                                                chi tiết</a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="prs_upcom_movie_content_box"
+                                                                 style="flex-grow: 1; margin-top: 10px;">
+                                                                <div class="prs_upcom_movie_content_box_inner">
+                                                                    <h2 th:text="${movie.name}"
+                                                                        style="font-size: 1.1rem; font-weight: bold; height: 40px">
+                                                                        Movie name</h2>
+                                                                    <div style="font-size: 0.9rem; color: #333;">
+                                                                        <p><strong>Thể loại:</strong> <span
+                                                                                th:text="${movie.categories}">Movie category</span>
+                                                                        </p>
+                                                                        <p><strong>Thời lượng:</strong> <span
+                                                                                th:text="${movie.duration + ' minutes'}">Movie duration</span>
+                                                                        </p>
+                                                                        <p><strong>Khởi chiếu:</strong> <span
+                                                                                th:text="${movie.releaseDate.toString()}">Movie releaseDate</span>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
+                                        <div class="pager_wrapper gc_blog_pagination">
+                                            <ul class="pagination">
+                                                <!-- Nút Previous -->
+                                                <li th:if="${movieByCategory.hasPrevious()}">
+                                                    <a th:href="@{/movie/category/return-view(categoryName=${categoryName}, page=${movieByCategory.number - 1})}">
+                                                        <i class="flaticon-left-arrow"></i>
+                                                    </a>
+                                                </li>
+
+                                                <!-- Các số trang -->
+                                                <li th:each="i : ${#numbers.sequence(0, movieByCategory.totalPages - 1)}"
+                                                    th:classappend="${i == movieByCategory.number} ? 'active'">
+                                                    <a th:href="@{/movie/category/return-view(categoryName=${categoryName}, page=${i})}" th:text="${i + 1}"></a>
+                                                </li>
+
+                                                <!-- Nút Next -->
+                                                <li th:if="${movieByCategory.hasNext()}">
+                                                    <a th:href="@{/movie/category/return-view(categoryName=${categoryName}, page=${movieByCategory.number + 1})}">
+                                                        <i class="flaticon-right-arrow"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Web Series Slider End -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MC Category Sidebar End -->
+
+<!-- prs footer Wrapper Start -->
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- prs footer Wrapper End -->
+
+<!-- Login Wrapper Start -->
+<div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
+<!-- Login Wrapper End -->
+
+<!-- Main JS Files -->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/jquery.countTo.js}"></script>
+<script th:src="@{/js/jquery.inview.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+
+<script th:inline="javascript">
+    var movieShowingData = /*[[${movieByCategory.content}]]*/ [];
+</script>
+
+<!-- js for search input -->
+<script>
+    function searchMovies() {
+        const keyword = document.getElementById('movieSearchInput').value.trim().toLowerCase();
+
+        if (!keyword) {
+            renderMovies(movieShowingData);
+            return;
+        }
+
+        const filteredMovies = movieShowingData.filter(movie => {
+            return movie.name.toLowerCase().includes(keyword);
+        });
+
+        renderMovies(filteredMovies);
+    }
+</script>
+
+<!-- js for render movies -->
+<script>
+    function renderMovies(movies) {
+        const container = document.getElementById('movieListContainerCategory');
+        container.innerHTML = ''; // Xóa nội dung phim cũ
+
+        movies.forEach(movie => {
+            const div = document.createElement('div');
+            div.className = 'col-lg-4 col-md-4 col-sm-4 col-xs-12 mb-4';
+
+            div.innerHTML = `
+          <div class="prs_upcom_movie_box_wrapper" style="height: 100%; display: flex; flex-direction: column;">
+            <div class="prs_upcom_movie_img_box" style="flex-shrink: 0;">
+              <img src="${movie.smallImageURL || ''}" alt="movie_img"
+                   style="width: 100%; height: 400px; object-fit: cover; border-radius: 4px; display: block;"/>
+              <div class="prs_upcom_movie_img_overlay"></div>
+              <div class="prs_upcom_movie_img_btn_wrapper">
+                <ul>
+                  <li><a href="${movie.trailerURLWatchLink || '#'}" target="_blank" rel="noopener noreferrer">View Trailer</a></li>
+                  <li><a href="/movie/detail?movieId=${movie.id}">View Details</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="prs_upcom_movie_content_box" style="flex-grow: 1; margin-top: 10px;">
+              <div class="prs_upcom_movie_content_box_inner">
+                <h2 style="font-size: 1.1rem; font-weight: bold; height: 40px;">
+                  Movie name: <a href="/movie/detail?movieId=${movie.id}">${movie.name || 'No Title'}</a>
+                </h2>
+                <div style="font-size: 0.9rem; color: #333;">
+                  <p><strong>Thể loại:</strong> <span>${movie.categories || 'N/A'}</span></p>
+                  <p><strong>Thời lượng:</strong> <span>${movie.duration ? movie.duration + ' minutes' : 'N/A'}</span></p>
+                  <p><strong>Khởi chiếu:</strong> <span>${movie.releaseDate || 'N/A'}</span></p>
+                </div>
+              </div>
+            </div>
+          </div>`;
+
+            container.appendChild(div);
+        });
+    }
+</script>
+
+<!-- js for choose now or comming movie-->
+<script>
+    function loadNowShowingMovies() {
+        let filteredMovies = movieShowingData.filter(movie => {
+            let currentDate = new Date();
+            return new Date(movie.releaseDate) <= currentDate && new Date(movie.endDate) >= currentDate;
+        });
+        renderMovies(filteredMovies);
+    }
+
+    function loadNoComingShowingMovies() {
+        let filteredMovies = movieShowingData.filter(movie => {
+            let currentDate = new Date();
+            return new Date(movie.releaseDate) > currentDate;
+        });
+        renderMovies(filteredMovies);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<!--
+Template Name: Movie Pro
+Version: 1.0.0
+Author: Webstrot
+
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx">
+<!--[endif]-->
+
+
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_booking.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:07 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8"/>
+    <title>Movie Pro Responsive HTML Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Movie Pro"/>
+    <meta name="keywords" content="Movie Pro"/>
+    <meta name="author" content=""/>
+    <meta name="MobileOptimized" content="320"/>
+    <!--Template style -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+    <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{/css/slick-theme.css}"/>
+    <!-- favicon links -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+
+</head>
+
+<body>
+<!-- preloader Start -->
+<div id="preloader">
+    <div id="status">
+        <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
+    </div>
+</div>
+
+<!-- prs navigation Start -->
+<header lang="vi" th:include="fragments/navigation :: navigation"></header>
+<!-- prs navigation End -->
+
+<!-- prs title wrapper Start -->
+<div class="prs_title_main_sec_wrapper">
+    <div class="prs_title_img_overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="prs_title_heading_wrapper">
+                    <h2>Chọn thời gian</h2>
+                    <ul>
+                        <li><a th:href="@{/home}">Trang chủ</a>
+                        </li>
+                        <li>&nbsp;&nbsp; >&nbsp;&nbsp; Chi tiết phim > <span th:text="${movieDetail.name}"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- prs title wrapper End -->
+
+<!-- prs video top Start -->
+<div class="prs_booking_main_div_section_wrapper">
+    <div class="prs_top_video_section_wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="st_video_slider_inner_wrapper float_left"
+                         th:style="'background-image: url(' + ${movieDetail.largeImageURL} + '); background-position: center 0; background-size: cover; background-repeat: no-repeat;'">
+                        <div class="st_video_slider_overlay"></div>
+                        <div class="st_video_slide_sec float_left">
+                            <a rel='external' th:href="${movieDetail.trailerURLWatchLink}" title='title'
+                               class="test-popup-link">
+                                <img th:src="@{/images/index_III/icon.png}" alt="img">
+                            </a>
+                            <h3 th:text="${movieDetail.name}">Movie name</h3>
+                            <p th:text="${movieDetail.language}">Movie language</p>
+                            <h4 th:text="${movieDetail.categories}">Movie category</h4>
+                            <h6 th:text="${movieDetail.format}" style="color: white; margin-top: 10px">Movie format</h6>
+                        </div>
+                        <div class="st_video_slide_social float_left">
+                            <div class="st_slider_rating_btn_heart st_slider_rating_btn_heart_5th">
+                                <h5><i class="fa fa-heart"></i> 85%</h5>
+                                <h4>52,291 votes</h4>
+                            </div>
+                            <div class="st_video_slide_social_left float_left">
+                                <ul>
+                                    <li><a th:href="@{none}"><i class="fa fa-facebook-f"></i></a>
+                                    </li>
+                                    <li>
+                                        <a th:href="@{none}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                <path
+                                                        d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li><a th:href="@{none}"><i class="fa fa-linkedin"></i></a>
+                                    </li>
+                                    <li><a th:href="@{none}"><i class="fa fa-youtube"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="st_video_slide_social_right float_left">
+                                <ul>
+                                    <li th:text="${movieDetail.releaseDate.toString()}"
+                                        data-animation="animated fadeInUp" class=""><i
+                                            class="far fa-calendar-alt"></i> 14 Dec, 2025
+                                    </li>
+                                    <li th:text="${movieDetail.duration + ' phút'}"
+                                        data-animation="animated fadeInUp" class=""><i class="far fa-clock"></i> 2
+                                        hrs 23 mins
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- prs video top End -->
+
+
+    <!-- st slider sidebar wrapper Start -->
+    <div class="st_slider_index_sidebar_main_wrapper st_slider_index_sidebar_main_wrapper_booking float_left">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+                    <div class="prs_mcc_left_side_wrapper" style="padding-top: 2px">
+                        <div class="prs_mcc_bro_title_wrapper">
+                            <h2 style="padding-top: -20px; margin-top: -20px">Địa điểm</h2>
+                            <ul id="locationList">
+                                <li>
+                                    <i class="fa fa-play" style="padding-right: 5px"></i>
+                                    <a href="#" data-location="all" onclick="showAllBranches(); return false;">Tất cả</a>
+                                </li>
+                                <li th:each="location : ${session.allLocationBranch}">
+                                    <i class="fa fa-play" style="padding-right: 5px"></i>
+                                    <a href="#" th:text="${location}" th:attr="data-location=${location}" onclick="filterBranchesByLocation(this); return false;"></a>
+                                </li>
+                                <li>
+                                    <i class="fa fa-play" style="padding-right: 5px"></i>
+                                    <a href="#" data-location="all" onclick="location.reload(); return false;">Back</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                    <div class="st_indx_slider_main_container float_left">
+                        <div class="row" id="branchListContainer">
+                            <div class="col-md-12">
+                                <div class="tab-content">
+                                    <div id="home" class="tab-pane active">
+                                        <div class="st_calender_contant_main_wrapper float_left">
+                                            <div class="st_calender_row_cont float_left">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                                     style="display: block">
+                                                    <form id="select-date-form" method="get"
+                                                          th:action="@{/schedule/branch-by-start-date}">
+                                                        <input type="hidden" name="movieId"
+                                                               th:value="${movieDetail.id}"/>
+                                                        <select name="startDate" id="select-date"
+                                                                onchange="document.getElementById('select-date-form').submit();">
+                                                            <option th:value="allDate" th:selected="${selectedDate == 'allDate'}">Tất cả ngày</option>
+                                                            <option th:each="startDate : ${allStartDateByMovie}"
+                                                                    th:value="${startDate}"
+                                                                    th:text="${startDate}"
+                                                                    th:selected="${selectedDate == startDate.toString()}">
+                                                            </option>
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                                <div class="col-md-12"
+                                                     th:each="branch : ${branchByMovie}"
+                                                     style="padding-top: 30px; padding-bottom: 30px">
+                                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="st_calender_asc ">
+                                                            <div class="st_calen_asc_heart_cont">
+                                                                <h3 th:text="${branch.name}"
+                                                                    style="font-weight: bold; font-size: 25px;color: #ff4444"></h3>
+                                                                <p th:text="${branch.locationDetail}"
+                                                                   style="width: 190%; padding-top: 5px; padding-bottom: 5px"></p>
+                                                                <img th:src="${branch.imgURL}"
+                                                                     style="width: 300px; height: 150px">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12"
+                                                         th:each="entry : ${branch.groupedScheduleByRoomName.entrySet()}"
+                                                         style="padding-top: 15px; margin-bottom: 20px; padding-left: 50px">
+                                                        <!-- Tên loại phòng (in 1 lần duy nhất) -->
+                                                        <p th:text="${entry.key}"
+                                                           style="font-weight: bold; margin-bottom: 10px;"></p>
+
+                                                        <!-- Danh sách lịch chiếu của loại phòng đó -->
+                                                        <div style="display: flex; flex-wrap: wrap;">
+                                                            <div th:each="schedule : ${entry.value}"
+                                                                 style="margin-right: 10px; margin-bottom: 10px; padding-right: 20px">
+                                                                <a th:href="@{'/booking/' + ${schedule.id}}"
+                                                                   th:text="${schedule.startTime}"
+                                                                   style="display: inline-block; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;"></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- st slider sidebar wrapper End -->
+
+
+<!-- prs footer Wrapper Start -->
+<header lang="vi" th:include="fragments/footer"></header>
+<!-- prs footer Wrapper End -->
+
+<!-- st login wrapper Start -->
+<div th:replace="fragments/modals_login_register_forgetPass :: modals_login_register_forgetPass"></div>
+<!-- st login wrapper End -->
+
+<!--main js file start-->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+
+<script th:inline="javascript">
+    let allBranches = /*[[${branchByMovie}]]*/ [];
+</script>
+<script>
+    function showAllBranches() {
+        // Render lại toàn bộ danh sách đã có
+        renderBranches(allBranches);
+    }
+    function filterBranchesByLocation(clickedElement) {
+        const selectedLocation = clickedElement.getAttribute('data-location');
+        console.log("Selected location:", selectedLocation);
+
+        // Lọc các branch có location đúng
+        const filteredBranches = allBranches.filter(branch => branch.location === selectedLocation);
+
+        // Hiển thị các branch lọc được
+        renderBranches(filteredBranches);
+    }
+</script>
+<script>
+    function renderBranches(branches) {
+        const container = document.getElementById('branchListContainer');
+        container.innerHTML = ''; // Xóa nội dung cũ
+
+        if (branches.length === 0) {
+            container.innerHTML = '<p>No branches found.</p>';
+            return;
+        }
+
+        branches.forEach(branch => {
+            // Tạo HTML cho từng branch
+            const branchHTML = `
+        <div class="col-md-12" style="padding-top: 30px; padding-bottom: 30px">
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                <div class="st_calender_asc ">
+                    <div class="st_calen_asc_heart_cont">
+                        <h3 style="font-weight: bold; font-size: 25px; color: #ff4444">${branch.name}</h3>
+                        <p style="width: 190%; padding-top: 5px; padding-bottom: 5px">${branch.locationDetail}</p>
+                        <img src="${branch.imgURL}" style="width: 300px; height: 150px">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px; margin-bottom: 20px; padding-left: 50px">
+                ${renderGroupedSchedules(branch.groupedScheduleByRoomName)}
+            </div>
+        </div>`;
+            container.innerHTML += branchHTML;
+        });
+    }
+
+    function renderGroupedSchedules(grouped) {
+        let html = '';
+        for (const roomName in grouped) {
+            html += `<p style="font-weight: bold; margin-bottom: 10px;">${roomName}</p>`;
+            html += `<div style="display: flex; flex-wrap: wrap;">`;
+            grouped[roomName].forEach(schedule => {
+                html += `
+                <div style="margin-right: 10px; margin-bottom: 10px; padding-right: 20px">
+                    <a href="/booking/${schedule.id}"  style="display: inline-block; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">${schedule.startTime.substring(0, 5)}</a>
+                </div>`;
+            });
+            html += `</div>`;
+        }
+        return html;
+    }
+
+</script>
+<!--main js file end-->
+</body>
+<!-- Mirrored from www.webstrot.com/html/moviepro/html/movie_booking.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 May 2025 13:15:11 GMT -->
+</html>
